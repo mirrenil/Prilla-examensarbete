@@ -1,3 +1,2 @@
-### Examensarbete, Prilla
-## FED21G
-# Av: Linnea och Miranda
+# Examensarbete, Prilla
+## Av: Linnea och Miranda, FED21G
