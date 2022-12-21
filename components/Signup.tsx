@@ -1,10 +1,17 @@
 import * as WebBrowser from "expo-web-browser";
 import { useState } from "react";
-import { Alert, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import {
+  Alert,
+  Button,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 
 import { Text, View } from "./Themed";
 import { Formik } from "formik";
 import * as yup from "yup";
+import { useAuth } from "../context/AuthContext";
 
 export default function Signup() {
   const [newUser, setNewUser] = useState({
@@ -13,21 +20,32 @@ export default function Signup() {
     password: "",
     passwordConfirmation: "",
   });
+  const { signup } = useAuth();
 
-  const handleOnChange = (name: string, value: string) => {
-    setNewUser({ ...newUser, [name]: value });
+  const handleSignup = async () => {
+    console.log(newUser, "hello");
+    if (newUser.password !== newUser.passwordConfirmation) {
+      Alert.alert("Passwords do not match");
+    }
+    try {
+      await signup(newUser.email, newUser.password, newUser.displayName);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <View>
       <Formik
         initialValues={newUser}
-        onSubmit={(values, formikActions) => {
+        onSubmit={(values, actions) => {
           setTimeout(() => {
+            setNewUser(values);
+            console.log(newUser, "in formik");
             handleSignup();
-            formikActions.resetForm();
-            formikActions.setSubmitting(false);
-          }, 2000);
+            alert(JSON.stringify(values, null, 2));
+            actions.setSubmitting(false);
+          }, 1000);
         }}
         validationSchema={yup.object().shape({
           name: yup.string().required("Please, provide a displayName!"),
@@ -58,6 +76,7 @@ export default function Signup() {
                 value={displayName}
                 onChangeText={handleChange("displayName")}
                 onBlur={handleBlur("displayName")}
+                autoCapitalize="none"
               />
               {touched.displayName && errors.displayName && (
                 <Text style={{ fontSize: 10, color: "red" }}>
@@ -69,6 +88,7 @@ export default function Signup() {
                 placeholder="Email"
                 value={email}
                 onChangeText={handleChange("email")}
+                autoCapitalize="none"
               />
               {touched.email && errors.email && (
                 <Text style={{ fontSize: 10, color: "red" }}>
@@ -82,6 +102,7 @@ export default function Signup() {
                 secureTextEntry
                 value={password}
                 onChangeText={handleChange("password")}
+                autoCapitalize="none"
                 onBlur={handleBlur("password")}
               />
               {touched.password && errors.password && (
@@ -96,6 +117,7 @@ export default function Signup() {
                 secureTextEntry
                 value={passwordConfirmation}
                 onChangeText={handleChange("passwordConfirmation")}
+                autoCapitalize="none"
                 onBlur={handleBlur("passwordConfirmation")}
               />
               {touched.passwordConfirmation && errors.passwordConfirmation && (
@@ -106,7 +128,11 @@ export default function Signup() {
 
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => handleSubmit}
+                onPress={() => {
+                  handleSubmit();
+                  console.log(values);
+                }}
+                disabled={!values.email || !values.password}
               >
                 <Text style={styles.buttonText}>Registrera dig</Text>
               </TouchableOpacity>

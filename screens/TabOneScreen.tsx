@@ -1,21 +1,30 @@
 import { StyleSheet } from "react-native";
 
-import EditScreenInfo from "../components/EditScreenInfo";
+import Signup from "../components/Signup";
 import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
+import { useFonts } from "expo-font";
 
 export default function TabOneScreen({
   navigation,
 }: RootTabScreenProps<"TabOne">) {
+  const [loaded] = useFonts({
+    OleoScript: require("../assets/fonts/OleoScript-Regular.ttf"),
+  });
+
+  if (!loaded) {
+    return null;
+  }
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Prilla</Text>
+      <Text style={styles.slogan}>GOTTA SNUS THEM ALL</Text>
       <View
         style={styles.separator}
         lightColor="#eee"
         darkColor="rgba(255,255,255,0.1)"
       />
-      <EditScreenInfo path="/screens/TabOneScreen.tsx" />
+      <Signup />
     </View>
   );
 }
@@ -27,8 +36,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   title: {
-    fontSize: 20,
+    fontFamily: "OleoScript",
+    fontStyle: "normal",
+    fontSize: 50,
     fontWeight: "bold",
+    color: "#FFFD54",
+  },
+  slogan: {
+    fontSize: 15,
+    fontWeight: "bold",
+    color: "#FFFD54",
   },
   separator: {
     marginVertical: 30,
