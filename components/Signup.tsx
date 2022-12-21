@@ -1,12 +1,6 @@
 import * as WebBrowser from "expo-web-browser";
 import { useState } from "react";
-import {
-  Alert,
-  Button,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
+import { Alert, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 
 import { Text, View } from "./Themed";
 import { Formik } from "formik";
@@ -24,9 +18,6 @@ export default function Signup() {
 
   const handleSignup = async () => {
     console.log(newUser, "hello");
-    if (newUser.password !== newUser.passwordConfirmation) {
-      Alert.alert("Passwords do not match");
-    }
     try {
       await signup(newUser.email, newUser.password, newUser.displayName);
     } catch (error) {
@@ -38,15 +29,7 @@ export default function Signup() {
     <View>
       <Formik
         initialValues={newUser}
-        onSubmit={(values, actions) => {
-          setTimeout(() => {
-            setNewUser(values);
-            console.log(newUser, "in formik");
-            handleSignup();
-            alert(JSON.stringify(values, null, 2));
-            actions.setSubmitting(false);
-          }, 1000);
-        }}
+        onSubmit={handleSignup}
         validationSchema={yup.object().shape({
           name: yup.string().required("Please, provide a displayName!"),
           email: yup.string().email().required("Please, provide an email!"),
@@ -61,10 +44,10 @@ export default function Signup() {
       >
         {({
           values,
-          handleChange,
           errors,
           touched,
           handleBlur,
+          handleChange,
           handleSubmit,
         }) => {
           const { email, displayName, password, passwordConfirmation } = values;
@@ -128,10 +111,7 @@ export default function Signup() {
 
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => {
-                  handleSubmit();
-                  console.log(values);
-                }}
+                onPress={() => handleSubmit()}
                 disabled={!values.email || !values.password}
               >
                 <Text style={styles.buttonText}>Registrera dig</Text>
