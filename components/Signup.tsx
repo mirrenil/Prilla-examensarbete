@@ -1,11 +1,11 @@
 import * as WebBrowser from "expo-web-browser";
 import { useEffect, useState } from "react";
-import { Alert, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import { StyleSheet, TextInput, TouchableOpacity } from "react-native";
 
 import { Text, View } from "./Themed";
 import { Formik } from "formik";
 import * as yup from "yup";
-import { createUserWithEmailAndPassword, updateProfile } from "@firebase/auth";
+import { createUserWithEmailAndPassword } from "@firebase/auth";
 import { auth, db } from "../firebase";
 import { setDoc, doc, addDoc, collection, Timestamp } from "firebase/firestore";
 
