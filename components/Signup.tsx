@@ -7,9 +7,10 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import { createUserWithEmailAndPassword, updateProfile } from "@firebase/auth";
 import { auth, db } from "../firebase";
-import { setDoc, doc } from "firebase/firestore";
+import { setDoc, doc, addDoc, collection, Timestamp } from "firebase/firestore";
 
 export default function Signup() {
+  const collectionRef = collection(db, "users");
   const [newUser, setNewUser] = useState({
     email: "",
     displayName: "",
@@ -24,42 +25,29 @@ export default function Signup() {
   };
 
   const signup = async () => {
-    console.log("firebase signup");
     try {
       const user = await createUserWithEmailAndPassword(
         auth,
         newUser.email,
         newUser.password
       );
-
-      console.log(user, "user with displayname");
+      await addDoc(collectionRef, {
+        email: newUser.email,
+        displayName: newUser.displayName,
+        userID: user.user.uid,
+        createdAt: Timestamp.now().toDate(),
+        photo: "",
+      });
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const handleSignup = () => {
-    console.log("in handleSignup");
-    signup();
-  };
-
-  const handleSubmits = () => {
-    console.log("in handlesubmis");
-    handleSignup();
   };
 
   return (
     <View>
       <Formik
         initialValues={newUser}
-        onSubmit={(values) => {
-          // setTimeout(() => {
-          //   setNewUser(values);
-          //   console.log(newUser, "in formik");
-          //   handleSignup();
-          //   alert(JSON.stringify(values, null, 2));
-          // }, 1000);
-        }}
+        onSubmit={(values) => {}}
         validationSchema={yup.object().shape({
           name: yup.string().required("Please, provide a displayName!"),
           email: yup.string().email().required("Please, provide an email!"),
@@ -81,7 +69,6 @@ export default function Signup() {
               displayName: displayName,
               password: password,
             });
-            console.log(newUser);
           }, [email, displayName, password]);
 
           return (
@@ -144,7 +131,7 @@ export default function Signup() {
 
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => handleSubmits()}
+                onPress={() => signup()}
                 disabled={!values.email || !values.password}
               >
                 <Text style={styles.buttonText}>Registrera dig</Text>
