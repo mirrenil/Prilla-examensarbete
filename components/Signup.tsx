@@ -1,35 +1,65 @@
 import * as WebBrowser from "expo-web-browser";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 
 import { Text, View } from "./Themed";
 import { Formik } from "formik";
 import * as yup from "yup";
-import { useAuth } from "../context/AuthContext";
+import { createUserWithEmailAndPassword, updateProfile } from "@firebase/auth";
+import { auth, db } from "../firebase";
+import { setDoc, doc } from "firebase/firestore";
 
 export default function Signup() {
   const [newUser, setNewUser] = useState({
     email: "",
     displayName: "",
     password: "",
-    passwordConfirmation: "",
   });
-  const { signup } = useAuth();
 
-  const handleSignup = async () => {
-    console.log(newUser, "hello");
+  const addUser = async (email: string, displayName: string, id: string) => {
+    await setDoc(doc(db, "users", id), {
+      email: email,
+      displayName: displayName,
+    });
+  };
+
+  const signup = async () => {
+    console.log("firebase signup");
     try {
-      await signup(newUser.email, newUser.password, newUser.displayName);
+      const user = await createUserWithEmailAndPassword(
+        auth,
+        newUser.email,
+        newUser.password
+      );
+
+      console.log(user, "user with displayname");
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleSignup = () => {
+    console.log("in handleSignup");
+    signup();
+  };
+
+  const handleSubmits = () => {
+    console.log("in handlesubmis");
+    handleSignup();
   };
 
   return (
     <View>
       <Formik
         initialValues={newUser}
-        onSubmit={handleSignup}
+        onSubmit={(values) => {
+          // setTimeout(() => {
+          //   setNewUser(values);
+          //   console.log(newUser, "in formik");
+          //   handleSignup();
+          //   alert(JSON.stringify(values, null, 2));
+          // }, 1000);
+        }}
         validationSchema={yup.object().shape({
           name: yup.string().required("Please, provide a displayName!"),
           email: yup.string().email().required("Please, provide an email!"),
@@ -37,20 +67,23 @@ export default function Signup() {
             .string()
             .min(6, "Password should be of minimum 6 characters length")
             .required(),
-          passwordConfirmation: yup
-            .string()
-            .oneOf([yup.ref("password"), null], "Passwords must match"),
+          // passwordConfirmation: yup
+          //   .string()
+          //   .oneOf([yup.ref("password"), null], "Passwords must match"),
         })}
       >
-        {({
-          values,
-          errors,
-          touched,
-          handleBlur,
-          handleChange,
-          handleSubmit,
-        }) => {
-          const { email, displayName, password, passwordConfirmation } = values;
+        {({ values, errors, touched, handleBlur, handleChange }) => {
+          const { email, displayName, password } = values;
+
+          useEffect(() => {
+            setNewUser({
+              email: email,
+              displayName: displayName,
+              password: password,
+            });
+            console.log(newUser);
+          }, [email, displayName, password]);
+
           return (
             <View style={styles.container}>
               <TextInput
@@ -94,7 +127,7 @@ export default function Signup() {
                 </Text>
               )}
 
-              <TextInput
+              {/* <TextInput
                 style={styles.input}
                 placeholder="Password"
                 secureTextEntry
@@ -107,11 +140,11 @@ export default function Signup() {
                 <Text style={{ fontSize: 10, color: "red" }}>
                   {errors.passwordConfirmation}
                 </Text>
-              )}
+              )} */}
 
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => handleSubmit()}
+                onPress={() => handleSubmits()}
                 disabled={!values.email || !values.password}
               >
                 <Text style={styles.buttonText}>Registrera dig</Text>
