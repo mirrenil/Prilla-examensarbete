@@ -20,6 +20,9 @@ import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
 import TabOneScreen from "../screens/TabOneScreen";
 import TabTwoScreen from "../screens/TabTwoScreen";
+import TabThreeScreen from "../screens/TabThreeScreen";
+import TabFourScreen from "../screens/TabFourScreen";
+
 import {
   RootStackParamList,
   RootTabParamList,
@@ -125,7 +128,7 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="Notifications"
-        component={TabTwoScreen}
+        component={TabThreeScreen}
         options={{
           title: "",
           tabBarIcon: ({ color }) => (
@@ -135,7 +138,7 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="Profile"
-        component={TabTwoScreen}
+        component={TabFourScreen}
         options={{
           title: "",
           tabBarIcon: ({ color }) => (
