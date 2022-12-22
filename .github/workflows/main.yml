@@ -1,8 +1,8 @@
-name: Create preview
+name: main
 on: [pull_request]
 jobs:
   preview:
-    name: Create preview
+    name: main
     runs-on: ubuntu-latest
     steps:
       - name: Set up repository
