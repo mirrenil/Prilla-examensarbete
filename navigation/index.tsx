@@ -27,6 +27,7 @@ import {
 } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 import { Ionicons, AntDesign } from '@expo/vector-icons';
+import { StartScreen } from '../screens/StartScreen';
 
 export default function Navigation({
 	colorScheme,
@@ -82,6 +83,7 @@ function BottomTabNavigator() {
 		<BottomTab.Navigator
 			initialRouteName="Home"
 			screenOptions={{
+        headerStyle: {backgroundColor: '#1B1324', height: 100},
 				tabBarActiveTintColor: 'white',
         tabBarInactiveTintColor: 'gray',
         tabBarStyle: {backgroundColor: '#1B1324', height: 70, padding: 15}
@@ -89,7 +91,7 @@ function BottomTabNavigator() {
 		>
 			<BottomTab.Screen
 				name="Home"
-				component={TabOneScreen}
+				component={StartScreen}
 				options={({ navigation }: RootTabScreenProps<'Home'>) => ({
 					title: '',
 					tabBarIcon: ({ color, focused }) => (
