@@ -18,13 +18,20 @@ import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
-import TabOneScreen from "../screens/TabOneScreen";
-import TabTwoScreen from "../screens/TabTwoScreen";
+import {StartScreen} from "../screens/StartScreen";
+import SearchScreen from "../screens/SearchScreen";
+import NotificationsScreen from "../screens/NotificationsScreen";
+import SigninScreen from "../screens/SigninScreen";
+import SignupScreen from "../screens/SignupScreen";
+import ProfileScreen from "../screens/ProfileScreen";
+
 import {
-	RootStackParamList,
-	RootTabParamList,
-	RootTabScreenProps,
-} from '../types';
+  RootStackParamList,
+  RootTabParamList,
+  RootTabScreenProps,
+} from "../types";
+import LinkingConfiguration from "./LinkingConfiguration";
+import { Ionicons, AntDesign } from "@expo/vector-icons";
 
 export default function Navigation({
   colorScheme,
@@ -50,6 +57,10 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function RootNavigator() {
   return (
     <Stack.Navigator>
+      <Stack.Screen name="Signin" component={SigninScreen} />
+
+      <Stack.Screen name="Signup" component={SignupScreen} />
+
       <Stack.Screen
         name="Root"
         component={BottomTabNavigator}
@@ -75,41 +86,24 @@ const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
   const colorScheme = useColorScheme();
+
   return (
     <BottomTab.Navigator
       initialRouteName="Home"
       screenOptions={{
         tabBarActiveTintColor: "white",
         tabBarInactiveTintColor: "gray",
-        tabBarStyle: { backgroundColor: "#1B1324", height: 70, padding: 15 },
+        tabBarStyle: { backgroundColor: "#1B1324", height: 100, padding: 15 },
       }}
     >
       <BottomTab.Screen
         name="Home"
-        component={TabOneScreen}
+        component={StartScreen}
         options={({ navigation }: RootTabScreenProps<"Home">) => ({
           title: "",
           tabBarIcon: ({ color, focused }) => (
             <Ionicons name="ios-home-outline" size={24} color={color} />
-          )
-	return (
-		<BottomTab.Navigator
-			initialRouteName="Home"
-			screenOptions={{
-        headerStyle: {backgroundColor: '#1B1324', height: 100},
-				tabBarActiveTintColor: 'white',
-        tabBarInactiveTintColor: 'gray',
-        tabBarStyle: {backgroundColor: '#1B1324', height: 70, padding: 15}
-			}}
-		>
-			<BottomTab.Screen
-				name="Home"
-				component={StartScreen}
-				options={({ navigation }: RootTabScreenProps<'Home'>) => ({
-					title: '',
-					tabBarIcon: ({ color, focused }) => (
-						<Ionicons name="ios-home-outline" size={24} color={color} />
-					)
+          ),
 
           headerRight: () => (
             <Pressable
@@ -130,7 +124,7 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="Search"
-        component={TabTwoScreen}
+        component={SearchScreen}
         options={{
           title: "",
           tabBarIcon: ({ color }) => (
@@ -140,7 +134,7 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="Notifications"
-        component={TabTwoScreen}
+        component={NotificationsScreen}
         options={{
           title: "",
           tabBarIcon: ({ color }) => (
@@ -150,7 +144,7 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="Profile"
-        component={TabTwoScreen}
+        component={ProfileScreen}
         options={{
           title: "",
           tabBarIcon: ({ color }) => (
@@ -170,4 +164,3 @@ function TabBarIcon(props: {
   color: string;
 }) {
   return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
-}
