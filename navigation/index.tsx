@@ -18,15 +18,19 @@ import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
-import { StartScreen } from "../screens/StartScreen";
-import TabOneScreen from "../screens/TabOneScreen";
-import TabTwoScreen from "../screens/TabTwoScreen";
+import StartScreen from "../screens/StartScreen";
+import SearchScreen from "../screens/SearchScreen";
+import NotificationsScreen from "../screens/NotificationsScreen";
+import SigninScreen from "../screens/SigninScreen";
+import SignupScreen from "../screens/SignupScreen";
+import ProfileScreen from "../screens/ProfileScreen";
+import LinkingConfiguration from "./LinkingConfiguration";
+
 import {
   RootStackParamList,
   RootTabParamList,
   RootTabScreenProps,
 } from "../types";
-import LinkingConfiguration from "./LinkingConfiguration";
 
 export default function Navigation({
   colorScheme,
@@ -52,6 +56,10 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function RootNavigator() {
   return (
     <Stack.Navigator>
+      <Stack.Screen name="Signin" component={SigninScreen} />
+
+      <Stack.Screen name="Signup" component={SignupScreen} />
+
       <Stack.Screen
         name="Root"
         component={BottomTabNavigator}
@@ -85,7 +93,7 @@ function BottomTabNavigator() {
         headerStyle: { backgroundColor: "#1B1324", height: 100 },
         tabBarActiveTintColor: "white",
         tabBarInactiveTintColor: "gray",
-        tabBarStyle: { backgroundColor: "#1B1324", height: 70, padding: 15 },
+        tabBarStyle: { backgroundColor: "#1B1324", height: 100, padding: 15 },
       }}
     >
       <BottomTab.Screen
@@ -116,7 +124,7 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="Search"
-        component={TabTwoScreen}
+        component={SearchScreen}
         options={{
           title: "",
           tabBarIcon: ({ color }) => (
@@ -126,7 +134,7 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="Notifications"
-        component={TabTwoScreen}
+        component={NotificationsScreen}
         options={{
           title: "",
           tabBarIcon: ({ color }) => (
@@ -136,7 +144,7 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="Profile"
-        component={TabTwoScreen}
+        component={ProfileScreen}
         options={{
           title: "",
           tabBarIcon: ({ color }) => (
@@ -153,4 +161,3 @@ function TabBarIcon(props: {
   color: string;
 }) {
   return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
-}
