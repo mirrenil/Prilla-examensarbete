@@ -37,6 +37,7 @@ export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
       );
       if (auth.currentUser) {
         setcurrentUser(auth.currentUser);
+        navigation.navigate("Root");
       } else {
         setcurrentUser(undefined);
       }
