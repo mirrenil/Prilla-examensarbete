@@ -21,12 +21,10 @@ import NotFoundScreen from "../screens/NotFoundScreen";
 import TabOneScreen from "../screens/TabOneScreen";
 import TabTwoScreen from "../screens/TabTwoScreen";
 import {
-  RootStackParamList,
-  RootTabParamList,
-  RootTabScreenProps,
-} from "../types";
-import LinkingConfiguration from "./LinkingConfiguration";
-import { Ionicons, AntDesign } from "@expo/vector-icons";
+	RootStackParamList,
+	RootTabParamList,
+	RootTabScreenProps,
+} from '../types';
 
 export default function Navigation({
   colorScheme,
@@ -77,7 +75,6 @@ const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
   const colorScheme = useColorScheme();
-
   return (
     <BottomTab.Navigator
       initialRouteName="Home"
@@ -94,7 +91,25 @@ function BottomTabNavigator() {
           title: "",
           tabBarIcon: ({ color, focused }) => (
             <Ionicons name="ios-home-outline" size={24} color={color} />
-          ),
+          )
+	return (
+		<BottomTab.Navigator
+			initialRouteName="Home"
+			screenOptions={{
+        headerStyle: {backgroundColor: '#1B1324', height: 100},
+				tabBarActiveTintColor: 'white',
+        tabBarInactiveTintColor: 'gray',
+        tabBarStyle: {backgroundColor: '#1B1324', height: 70, padding: 15}
+			}}
+		>
+			<BottomTab.Screen
+				name="Home"
+				component={StartScreen}
+				options={({ navigation }: RootTabScreenProps<'Home'>) => ({
+					title: '',
+					tabBarIcon: ({ color, focused }) => (
+						<Ionicons name="ios-home-outline" size={24} color={color} />
+					)
 
           headerRight: () => (
             <Pressable
