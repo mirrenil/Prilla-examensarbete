@@ -17,30 +17,31 @@ const linking: LinkingOptions<RootStackParamList> = {
         screens: {
           Home: {
             screens: {
-              TabOneScreen: "one",
+              HomeScreen: "one",
             },
           },
           Search: {
             screens: {
-              TabTwoScreen: "two",
+              SearchScreen: "two",
             },
           },
           Notifications: {
             screens: {
-              TabThreeScreen: "three",
+              NotificationScreen: "three",
             },
           },
           Profile: {
             screens: {
-              TabFourScreen: "four",
+              ProfileScreen: "four",
             },
           },
         },
       },
       Modal: "modal",
       NotFound: "*",
-      // SignIn: "signin",
-      // SignUp: "signup",
+      Loading: "loading",
+      Signup: "signup",
+      Signin: "signin",
     },
   },
 };

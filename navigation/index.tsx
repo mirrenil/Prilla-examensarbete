@@ -18,10 +18,12 @@ import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
-import TabOneScreen from "../screens/TabOneScreen";
-import TabTwoScreen from "../screens/TabTwoScreen";
-import TabThreeScreen from "../screens/TabThreeScreen";
-import TabFourScreen from "../screens/TabFourScreen";
+import StartScreen from "../screens/StartScreen";
+import SearchSreen from "../screens/SearchScreen";
+import NotificationsScreen from "../screens/NotificationsScreen";
+import SigninScreen from "../screens/SigninScreen";
+import SignupScreen from "../screens/SignupScreen";
+import ProfileScreen from "../screens/ProfileScreen";
 
 import {
   RootStackParamList,
@@ -55,6 +57,10 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function RootNavigator() {
   return (
     <Stack.Navigator>
+      <Stack.Screen name="Signin" component={SigninScreen} />
+
+      <Stack.Screen name="Signup" component={SignupScreen} />
+
       <Stack.Screen
         name="Root"
         component={BottomTabNavigator}
@@ -87,12 +93,12 @@ function BottomTabNavigator() {
       screenOptions={{
         tabBarActiveTintColor: "white",
         tabBarInactiveTintColor: "gray",
-        tabBarStyle: { backgroundColor: "#1B1324", height: 70, padding: 15 },
+        tabBarStyle: { backgroundColor: "#1B1324", height: 100, padding: 15 },
       }}
     >
       <BottomTab.Screen
         name="Home"
-        component={TabOneScreen}
+        component={StartScreen}
         options={({ navigation }: RootTabScreenProps<"Home">) => ({
           title: "",
           tabBarIcon: ({ color, focused }) => (
@@ -118,7 +124,7 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="Search"
-        component={TabTwoScreen}
+        component={SearchSreen}
         options={{
           title: "",
           tabBarIcon: ({ color }) => (
@@ -128,7 +134,7 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="Notifications"
-        component={TabThreeScreen}
+        component={NotificationsScreen}
         options={{
           title: "",
           tabBarIcon: ({ color }) => (
@@ -138,7 +144,7 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="Profile"
-        component={TabFourScreen}
+        component={ProfileScreen}
         options={{
           title: "",
           tabBarIcon: ({ color }) => (
