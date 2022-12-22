@@ -46,16 +46,15 @@ export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
   };
 
   return (
-    <View>
-      <View style={styles.screen}>
-        <Text style={styles.title}>Prilla</Text>
-        <Text style={styles.slogan}>GOTTA SNUS THEM ALL</Text>
-        <View
-          style={styles.separator}
-          lightColor="#eee"
-          darkColor="rgba(255,255,255,0.1)"
-        />
-      </View>
+    <View style={styles.screen}>
+      <Text style={styles.title}>Prilla</Text>
+      <Text style={styles.slogan}>GOTTA SNUS THEM ALL</Text>
+      <View
+        style={styles.separator}
+        lightColor="#eee"
+        darkColor="rgba(255,255,255,0.1)"
+      />
+
       <Formik
         initialValues={user}
         onSubmit={(values) => {}}
@@ -133,7 +132,7 @@ const styles = StyleSheet.create({
   screen: {
     alignItems: "center",
     justifyContent: "center",
-    height: 350,
+    height: "100%",
   },
   container: {
     alignItems: "center",

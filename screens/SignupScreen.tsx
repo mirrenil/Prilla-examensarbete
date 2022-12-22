@@ -47,16 +47,15 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
   };
 
   return (
-    <View>
-      <View style={styles.container}>
-        <Text style={styles.title}>Prilla</Text>
-        <Text style={styles.slogan}>GOTTA SNUS THEM ALL</Text>
-        <View
-          style={styles.separator}
-          lightColor="#eee"
-          darkColor="rgba(255,255,255,0.1)"
-        />
-      </View>
+    <View style={styles.screen}>
+      <Text style={styles.title}>Prilla</Text>
+      <Text style={styles.slogan}>GOTTA SNUS THEM ALL</Text>
+      <View
+        style={styles.separator}
+        lightColor="#eee"
+        darkColor="rgba(255,255,255,0.1)"
+      />
+
       <Formik
         initialValues={newUser}
         onSubmit={(values) => {}}
@@ -158,6 +157,11 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
 }
 
 const styles = StyleSheet.create({
+  screen: {
+    alignItems: "center",
+    justifyContent: "center",
+    height: "100%",
+  },
   container: {
     alignItems: "center",
     marginHorizontal: 50,
@@ -201,6 +205,6 @@ const styles = StyleSheet.create({
   separator: {
     marginVertical: 30,
     height: 1,
-    width: "80%",
+    width: "60%",
   },
 });
