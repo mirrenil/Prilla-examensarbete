@@ -5,7 +5,7 @@ import {
 	getDoc,
 	setDoc,
 } from 'firebase/firestore';
-import { db } from '../firebase';
+import { db } from './firebase';
 
 //Gets one document in a collection by doc id
 export const getOneDocById = async (collectionName, id) => {
