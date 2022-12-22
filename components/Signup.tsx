@@ -11,10 +11,12 @@ import { setDoc, doc, addDoc, collection, Timestamp } from "firebase/firestore";
 
 export default function Signup() {
   const collectionRef = collection(db, "users");
+
   const [newUser, setNewUser] = useState({
     email: "",
     displayName: "",
     password: "",
+    passwordConfirmation: "",
   });
 
   const addUser = async (email: string, displayName: string, id: string) => {
@@ -55,19 +57,20 @@ export default function Signup() {
             .string()
             .min(6, "Password should be of minimum 6 characters length")
             .required(),
-          // passwordConfirmation: yup
-          //   .string()
-          //   .oneOf([yup.ref("password"), null], "Passwords must match"),
+          passwordConfirmation: yup
+            .string()
+            .oneOf([yup.ref("password"), null], "Passwords must match"),
         })}
       >
         {({ values, errors, touched, handleBlur, handleChange }) => {
-          const { email, displayName, password } = values;
+          const { email, displayName, password, passwordConfirmation } = values;
 
           useEffect(() => {
             setNewUser({
               email: email,
               displayName: displayName,
               password: password,
+              passwordConfirmation: passwordConfirmation,
             });
           }, [email, displayName, password]);
 
@@ -114,7 +117,7 @@ export default function Signup() {
                 </Text>
               )}
 
-              {/* <TextInput
+              <TextInput
                 style={styles.input}
                 placeholder="Password"
                 secureTextEntry
@@ -127,7 +130,7 @@ export default function Signup() {
                 <Text style={{ fontSize: 10, color: "red" }}>
                   {errors.passwordConfirmation}
                 </Text>
-              )} */}
+              )}
 
               <TouchableOpacity
                 style={styles.button}
