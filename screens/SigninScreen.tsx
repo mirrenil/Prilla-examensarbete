@@ -14,7 +14,7 @@ import { auth } from "../firebase";
 import navigation from "../navigation";
 import { RootStackScreenProps } from "../types";
 
-export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
+export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
   const [currentUser, setcurrentUser] = useState<User>();
   const [user, setUser] = useState({
     email: "",

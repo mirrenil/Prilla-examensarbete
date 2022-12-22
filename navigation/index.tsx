@@ -57,7 +57,6 @@ function RootNavigator() {
   return (
     <Stack.Navigator>
       <Stack.Screen name="Signin" component={SigninScreen} />
-
       <Stack.Screen name="Signup" component={SignupScreen} />
 
       <Stack.Screen
@@ -156,8 +155,8 @@ function BottomTabNavigator() {
   );
 }
 
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>["name"];
-  color: string;
-}) {
-  return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
+// function TabBarIcon(props: {
+//   name: React.ComponentProps<typeof FontAwesome>["name"];
+//   color: string;
+// }) {
+//   return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;

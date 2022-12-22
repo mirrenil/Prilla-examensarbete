@@ -1,8 +1,11 @@
 import { StyleSheet } from "react-native";
 
 import { Text, View } from "../components/Themed";
+import { RootTabScreenProps } from "../types";
 
-export default function NotificationsScreen() {
+export default function NotificationsScreen({
+  navigation,
+}: RootTabScreenProps<"Notifications">) {
   return (
     <View style={styles.container}>
       <Text>Notifications</Text>
@@ -30,3 +33,4 @@ const styles = StyleSheet.create({
     height: 1,
     width: "80%",
   },
+});
