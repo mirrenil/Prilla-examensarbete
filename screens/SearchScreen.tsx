@@ -2,10 +2,10 @@ import { StyleSheet } from "react-native";
 
 import { Text, View } from "../components/Themed";
 
-export default function TabTwoScreen() {
+export default function SearchScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Profil hej</Text>
+      <Text>Search</Text>
       <View
         style={styles.separator}
         lightColor="#eee"

@@ -1,24 +1,14 @@
 import { StyleSheet } from "react-native";
 
-import Signup from "../components/Signup";
 import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
-import { useFonts } from "expo-font";
 
-export default function TabOneScreen({
+export default function StartScreen({
   navigation,
-}: RootTabScreenProps<"Notifications">) {
-  const [loaded] = useFonts({
-    OleoScript: require("../assets/fonts/OleoScript-Regular.ttf"),
-  });
-
-  if (!loaded) {
-    return null;
-  }
+}: RootTabScreenProps<"Home">) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Prilla</Text>
-      <Text style={styles.slogan}>GOTTA SNUS THEM ALL</Text>
+      <Text>HOME</Text>
       <View
         style={styles.separator}
         lightColor="#eee"

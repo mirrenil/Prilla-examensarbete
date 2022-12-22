@@ -1,12 +1,12 @@
 import { StyleSheet } from "react-native";
 
 import { Text, View } from "../components/Themed";
-import { RootTabScreenProps } from "../types";
+import { RootStackScreenProps } from "../types";
 import { useFonts } from "expo-font";
 
-export default function TabOneScreen({
+export default function LoadingScreen({
   navigation,
-}: RootTabScreenProps<"Home">) {
+}: RootStackScreenProps<"Loading">) {
   const [loaded] = useFonts({
     OleoScript: require("../assets/fonts/OleoScript-Regular.ttf"),
   });
