@@ -7,7 +7,7 @@ import { useFonts } from "expo-font";
 
 export default function TabOneScreen({
   navigation,
-}: RootTabScreenProps<"TabOne">) {
+}: RootTabScreenProps<"Home">) {
   const [loaded] = useFonts({
     OleoScript: require("../assets/fonts/OleoScript-Regular.ttf"),
   });

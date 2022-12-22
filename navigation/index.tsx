@@ -15,6 +15,7 @@ import * as React from "react";
 import { ColorSchemeName, Pressable } from "react-native";
 
 import Colors from "../constants/Colors";
+import useColorScheme from "../hooks/useColorScheme";
 import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
 import TabOneScreen from "../screens/TabOneScreen";
@@ -25,6 +26,7 @@ import {
   RootTabScreenProps,
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
+import { Ionicons, AntDesign } from "@expo/vector-icons";
 
 export default function Navigation({
   colorScheme,
@@ -74,13 +76,26 @@ function RootNavigator() {
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
+  const colorScheme = useColorScheme();
+
   return (
-    <BottomTab.Navigator initialRouteName="TabOne">
+    <BottomTab.Navigator
+      initialRouteName="Home"
+      screenOptions={{
+        tabBarActiveTintColor: "white",
+        tabBarInactiveTintColor: "gray",
+        tabBarStyle: { backgroundColor: "#1B1324", height: 70, padding: 15 },
+      }}
+    >
       <BottomTab.Screen
-        name="TabOne"
+        name="Home"
         component={TabOneScreen}
-        options={({ navigation }: RootTabScreenProps<"TabOne">) => ({
-          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
+        options={({ navigation }: RootTabScreenProps<"Home">) => ({
+          title: "",
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons name="ios-home-outline" size={24} color={color} />
+          ),
+
           headerRight: () => (
             <Pressable
               onPress={() => navigation.navigate("Modal")}
@@ -91,7 +106,7 @@ function BottomTabNavigator() {
               <FontAwesome
                 name="info-circle"
                 size={25}
-                color={"#fff"}
+                color={Colors[colorScheme].text}
                 style={{ marginRight: 15 }}
               />
             </Pressable>
@@ -99,10 +114,33 @@ function BottomTabNavigator() {
         })}
       />
       <BottomTab.Screen
-        name="TabTwo"
+        name="Search"
         component={TabTwoScreen}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="search" color={color} />,
+          title: "",
+          tabBarIcon: ({ color }) => (
+            <AntDesign name="search1" size={24} color={color} />
+          ),
+        }}
+      />
+      <BottomTab.Screen
+        name="Notifications"
+        component={TabTwoScreen}
+        options={{
+          title: "",
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="notifications-outline" size={24} color={color} />
+          ),
+        }}
+      />
+      <BottomTab.Screen
+        name="Profile"
+        component={TabTwoScreen}
+        options={{
+          title: "",
+          tabBarIcon: ({ color }) => (
+            <AntDesign name="user" size={24} color={color} />
+          ),
         }}
       />
     </BottomTab.Navigator>
