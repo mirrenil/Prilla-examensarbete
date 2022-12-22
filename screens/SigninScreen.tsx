@@ -1,6 +1,6 @@
 import * as WebBrowser from "expo-web-browser";
 import { useEffect, useState } from "react";
-import { StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import { Alert, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 
 import { Text, View } from "../components/Themed";
 import { Formik } from "formik";
@@ -41,7 +41,7 @@ export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
         setcurrentUser(undefined);
       }
     } catch (error) {
-      console.log(error);
+      Alert.alert("Wrong email or password");
     }
   };
 

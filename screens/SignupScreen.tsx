@@ -1,6 +1,6 @@
 import * as WebBrowser from "expo-web-browser";
 import { useEffect, useState } from "react";
-import { StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import { Alert, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 
 import { Text, View } from "../components/Themed";
 import { Formik } from "formik";
@@ -42,7 +42,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
       });
       addUserToDb();
     } catch (error) {
-      console.log(error);
+      Alert.alert("Email aldready in-use");
     }
   };
 
