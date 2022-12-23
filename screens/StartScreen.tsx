@@ -1,14 +1,14 @@
 import React from 'react';
 import { View, Image, Text, StyleSheet } from 'react-native';
 import { useFonts } from 'expo-font';
+import { RatingDots } from '../components/Rating';
 
 const styles = StyleSheet.create({
 	container: {
 		padding: 0,
 		position: 'relative',
-    justifyContent: 'center',
+		justifyContent: 'center',
 		alignItems: 'center',
-
 	},
 	heroImg: {},
 	heroTextWrapper: {
@@ -27,24 +27,24 @@ const styles = StyleSheet.create({
 	},
 	logosWrapper: {
 		flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    width: '100%'
+		justifyContent: 'space-around',
+		alignItems: 'center',
+		width: '100%',
 	},
-  numbers: {
-    fontSize: 40,
-    color: 'white',
-    lineHeight: 60,    
-  },
-  specialFont: {
-    fontFamily: 'Caramel',
-    height: 10,
-    fontSize: 70,
-  },
-  logo: {
-    height: 30,
-    width: 80
-  }
+	numbers: {
+		fontSize: 40,
+		color: 'white',
+		lineHeight: 60,
+	},
+	specialFont: {
+		fontFamily: 'Caramel',
+		height: 10,
+		fontSize: 70,
+	},
+	logo: {
+		height: 30,
+		width: 80,
+	},
 });
 
 export const StartScreen = () => {
@@ -54,22 +54,31 @@ export const StartScreen = () => {
 	});
 
 	return (
-		<View style={styles.container}>
-			<Image
-				style={styles.heroImg}
-				source={require('../assets/images/hero.png')}
-			/>
-			<View style={styles.heroTextWrapper}>
-				<Text style={styles.heroText}>äventyr väntar</Text>
-				<Text style={styles.numbers}>
-					20<Text style={styles.specialFont}>23</Text>
-				</Text>
-				<View style={styles.logosWrapper}>
-					<Image style={styles.logo} source={require('../assets/images/Prilla.png')} />
-					<Text style={{ color: 'white'}}>X</Text>
-					<Image style={styles.logo} source={require('../assets/images/loop.png')} />
+		<View>
+			{/* <View style={styles.container}>
+				<Image
+					style={styles.heroImg}
+					source={require('../assets/images/hero.png')}
+				/>
+				<View style={styles.heroTextWrapper}>
+					<Text style={styles.heroText}>äventyr väntar</Text>
+					<Text style={styles.numbers}>
+						20<Text style={styles.specialFont}>23</Text>
+					</Text>
+					<View style={styles.logosWrapper}>
+						<Image
+							style={styles.logo}
+							source={require('../assets/images/Prilla.png')}
+						/>
+						<Text style={{ color: 'white' }}>X</Text>
+						<Image
+							style={styles.logo}
+							source={require('../assets/images/loop.png')}
+						/>
+					</View>
 				</View>
-			</View>
+			</View> */}
+      <RatingDots />
 		</View>
 	);
 };
