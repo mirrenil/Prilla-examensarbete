@@ -9,7 +9,6 @@ import {
   NavigatorScreenParams,
 } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import ForgotPassword from "./screens/ForgotPassword";
 
 declare global {
   namespace ReactNavigation {

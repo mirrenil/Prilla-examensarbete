@@ -11,6 +11,7 @@ import {
   User,
 } from "@firebase/auth";
 import { auth } from "../firebase";
+
 import { RootStackScreenProps } from "../types";
 
 export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
@@ -107,7 +108,6 @@ export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
                 </Text>
               )}
 
-              {/* TODO: Add reset password */}
               <TouchableOpacity
                 onPress={() => navigation.navigate("ForgotPassword")}
               >
