@@ -9,10 +9,8 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
   User,
-  sendPasswordResetEmail,
 } from "@firebase/auth";
 import { auth } from "../firebase";
-import navigation from "../navigation";
 import { RootStackScreenProps } from "../types";
 
 export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
@@ -45,11 +43,6 @@ export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
     } catch (error) {
       Alert.alert("Wrong email or password");
     }
-  };
-
-  const resetPassword = async () => {
-    await sendPasswordResetEmail(auth, user.email);
-    Alert.alert("Password reset email sent");
   };
 
   return (
@@ -91,6 +84,7 @@ export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
                 value={email}
                 onChangeText={handleChange("email")}
                 autoCapitalize="none"
+                onBlur={handleBlur("email")}
               />
               {touched.email && errors.email && (
                 <Text style={{ fontSize: 10, color: "red" }}>
@@ -114,7 +108,9 @@ export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
               )}
 
               {/* TODO: Add reset password */}
-              <TouchableOpacity onPress={resetPassword}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("ForgotPassword")}
+              >
                 <Text style={styles.text}>Glömt lösenord?</Text>
               </TouchableOpacity>
 
