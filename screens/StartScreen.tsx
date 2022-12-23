@@ -1,38 +1,37 @@
-import React, { useEffect, useState } from 'react';
-import { Image, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from "react";
+import { Image, StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
-import { useFonts } from 'expo-font';
-import { ReviewCard } from '../components/ReviewCard';
-import { getAllDocsInCollection } from '../helper';
-import { Review } from '../Interfaces';
-import { RatingDots } from '../components/Rating';
+import { useFonts } from "expo-font";
+import { ReviewCard } from "../components/ReviewCard";
+import { getAllDocsInCollection } from "../helper";
+import { Review } from "../Interfaces";
+import { RatingDots } from "../components/Rating";
 import Tabbar from "../components/Tabbar";
 
 export const StartScreen = () => {
-	const [loaded] = useFonts({
-		Inter: require('../assets/fonts/Inter-VariableFont_slnt,wght.ttf'),
-		Caramel: require('../assets/fonts/Caramel-Regular.ttf'),
-     OleoScript: require("../assets/fonts/OleoScript-Regular.ttf"),
-	});
-	const [reviews, setReviews] = useState<Review[]>([]);
+  const [loaded] = useFonts({
+    Inter: require("../assets/fonts/Inter-VariableFont_slnt,wght.ttf"),
+    Caramel: require("../assets/fonts/Caramel-Regular.ttf"),
+    OleoScript: require("../assets/fonts/OleoScript-Regular.ttf"),
+  });
+  const [reviews, setReviews] = useState<Review[]>([]);
 
-	useEffect(() => {
-		getReviews();
-	}, []);
+  useEffect(() => {
+    getReviews();
+  }, []);
 
-	const getReviews = async () => {
+  const getReviews = async () => {
     let newData = [];
-		let data = await getAllDocsInCollection('recensioner');
+    let data = await getAllDocsInCollection("recensioner");
 
-		if (data?.length) {
-			newData = data;
-		}
-    setReviews(newData)
-	};
+    if (data?.length) {
+      newData = data;
+    }
+    setReviews(newData);
+  };
 
-
-	return (
-		<View style={styles.container}>
+  return (
+    <View style={styles.container}>
       <Image
         style={styles.heroImg}
         source={require("../assets/images/hero.png")}
@@ -52,13 +51,12 @@ export const StartScreen = () => {
           />
         </View>
       </View>
-			</View>
-          <Tabbar />
-			{reviews.map((review) => {
-				return <ReviewCard key={review.id} review={review}/>;
-			})}
-		</View>
-	);
+      <Tabbar />
+      {reviews.map((review) => {
+        return <ReviewCard key={review.id} review={review} />;
+      })}
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
