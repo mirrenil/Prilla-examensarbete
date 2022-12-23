@@ -1,4 +1,4 @@
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, Feather } from "@expo/vector-icons";
 import React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 
@@ -12,11 +12,11 @@ const Tabbar = () => {
               style={styles.logo}
               source={require("../assets/images/trending.png")}
             />
-            <AntDesign
+            <Feather
               style={styles.icon}
-              name="linechart"
-              size={24}
-              color={"white"}
+              name="trending-up"
+              size={30}
+              color="white"
             />
           </View>
           <Text style={styles.text}>Trendande sorter</Text>
@@ -30,11 +30,11 @@ const Tabbar = () => {
               style={styles.logo}
               source={require("../assets/images/toppbetyg.png")}
             />
-            <AntDesign
+            <Feather
               style={styles.icon}
-              name="like2"
-              size={24}
-              color={"white"}
+              name="bar-chart-2"
+              size={34}
+              color="white"
             />
           </View>
 
