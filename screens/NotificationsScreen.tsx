@@ -1,11 +1,14 @@
 import { StyleSheet } from "react-native";
 
 import { Text, View } from "../components/Themed";
+import { RootTabScreenProps } from "../types";
 
-export default function TabTwoScreen() {
+export default function NotificationsScreen({
+  navigation,
+}: RootTabScreenProps<"Notifications">) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Profil hej</Text>
+      <Text>Notifications</Text>
       <View
         style={styles.separator}
         lightColor="#eee"

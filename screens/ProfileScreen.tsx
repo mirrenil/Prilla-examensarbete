@@ -1,11 +1,14 @@
 import { StyleSheet } from "react-native";
 
 import { Text, View } from "../components/Themed";
+import { RootTabScreenProps } from "../types";
 
-export default function TabTwoScreen() {
+export default function ProfileScreen({
+  navigation,
+}: RootTabScreenProps<"Profile">) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Profil hej</Text>
+      <Text>Profile</Text>
       <View
         style={styles.separator}
         lightColor="#eee"
@@ -22,8 +25,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   title: {
-    fontSize: 20,
+    fontFamily: "OleoScript",
+    fontStyle: "normal",
+    fontSize: 50,
     fontWeight: "bold",
+    color: "#FFFD54",
+  },
+  slogan: {
+    fontSize: 15,
+    fontWeight: "bold",
+    color: "#FFFD54",
   },
   separator: {
     marginVertical: 30,
