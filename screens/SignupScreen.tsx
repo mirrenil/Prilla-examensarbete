@@ -47,7 +47,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
   };
 
   const isValid = () => {
-    if (newUser.email !== newUser.passwordConfirmation) {
+    if (newUser.password !== newUser.passwordConfirmation) {
       Alert.alert("Passwords don't match");
     } else {
       signup();
