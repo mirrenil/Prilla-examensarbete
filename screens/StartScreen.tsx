@@ -6,50 +6,6 @@ import { getAllDocsInCollection } from '../helper';
 import { Review } from '../Interfaces';
 import { RatingDots } from '../components/Rating';
 
-const styles = StyleSheet.create({
-	container: {
-		padding: 0,
-		position: 'relative',
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	heroImg: {},
-	heroTextWrapper: {
-		position: 'absolute',
-		width: '50%',
-		height: '100%',
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	heroText: {
-		color: 'white',
-		textTransform: 'uppercase',
-		fontFamily: '',
-		fontWeight: '700',
-		fontSize: 20,
-	},
-	logosWrapper: {
-		flexDirection: 'row',
-		justifyContent: 'space-around',
-		alignItems: 'center',
-		width: '100%',
-	},
-	numbers: {
-		fontSize: 40,
-		color: 'white',
-		lineHeight: 60,
-	},
-	specialFont: {
-		fontFamily: 'Caramel',
-		height: 10,
-		fontSize: 70,
-	},
-	logo: {
-		height: 30,
-		width: 80,
-	},
-});
-
 export const StartScreen = () => {
 	const [loaded] = useFonts({
 		Inter: require('../assets/fonts/Inter-VariableFont_slnt,wght.ttf'),
@@ -103,3 +59,48 @@ export const StartScreen = () => {
 		</View>
 	);
 };
+
+
+const styles = StyleSheet.create({
+	container: {
+		padding: 0,
+		position: 'relative',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	heroImg: {},
+	heroTextWrapper: {
+		position: 'absolute',
+		width: '50%',
+		height: '100%',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	heroText: {
+		color: 'white',
+		textTransform: 'uppercase',
+		fontFamily: '',
+		fontWeight: '700',
+		fontSize: 20,
+	},
+	logosWrapper: {
+		flexDirection: 'row',
+		justifyContent: 'space-around',
+		alignItems: 'center',
+		width: '100%',
+	},
+	numbers: {
+		fontSize: 40,
+		color: 'white',
+		lineHeight: 60,
+	},
+	specialFont: {
+		fontFamily: 'Caramel',
+		height: 10,
+		fontSize: 70,
+	},
+	logo: {
+		height: 30,
+		width: 80,
+	},
+});
