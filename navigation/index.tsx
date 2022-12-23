@@ -32,6 +32,7 @@ import {
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
+import ForgotPassword from "../screens/ForgotPassword";
 
 export default function Navigation({
   colorScheme,
@@ -60,6 +61,8 @@ function RootNavigator() {
       <Stack.Screen name="Signin" component={SigninScreen} />
 
       <Stack.Screen name="Signup" component={SignupScreen} />
+
+      <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
 
       <Stack.Screen
         name="Root"

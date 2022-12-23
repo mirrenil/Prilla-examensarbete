@@ -42,6 +42,7 @@ const linking: LinkingOptions<RootStackParamList> = {
       Loading: "loading",
       Signup: "signup",
       Signin: "signin",
+      ForgotPassword: "forgot-password",
     },
   },
 };

@@ -9,6 +9,7 @@ import {
   NavigatorScreenParams,
 } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import ForgotPassword from "./screens/ForgotPassword";
 
 declare global {
   namespace ReactNavigation {
@@ -23,6 +24,7 @@ export type RootStackParamList = {
   Loading: undefined;
   Signin: undefined;
   Signup: undefined;
+  ForgotPassword: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
