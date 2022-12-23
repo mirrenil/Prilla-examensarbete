@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Image, Text, StyleSheet } from "react-native";
-import { useFonts } from "expo-font";
 import { RootTabScreenProps } from "../types";
+import { useFonts } from "expo-font";
 import navigation from "../navigation";
 
 export default function StartScreen({
