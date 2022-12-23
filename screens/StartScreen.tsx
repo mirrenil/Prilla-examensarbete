@@ -1,57 +1,15 @@
 import React from "react";
-import { View, Image, Text, StyleSheet } from "react-native";
+import { Image, StyleSheet } from "react-native";
+import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import { useFonts } from "expo-font";
 import Tabbar from "../components/Tabbar";
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 0,
-    position: "relative",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  heroImg: {},
-  heroTextWrapper: {
-    position: "absolute",
-    width: "50%",
-    height: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  heroText: {
-    color: "white",
-    textTransform: "uppercase",
-    fontFamily: "Inter",
-    fontWeight: "700",
-    fontSize: 20,
-  },
-  logosWrapper: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
-    width: "100%",
-  },
-  numbers: {
-    fontSize: 40,
-    color: "white",
-    lineHeight: 60,
-  },
-  specialFont: {
-    fontFamily: "Caramel",
-    height: 10,
-    fontSize: 70,
-  },
-  logo: {
-    height: 30,
-    width: 80,
-  },
-});
 
 export const StartScreen = ({ navigation }: RootTabScreenProps<"Home">) => {
   const [loaded] = useFonts({
     Inter: require("../assets/fonts/Inter-VariableFont_slnt,wght.ttf"),
     Caramel: require("../assets/fonts/Caramel-Regular.ttf"),
+    OleoScript: require("../assets/fonts/OleoScript-Regular.ttf"),
   });
 
   return (
@@ -65,11 +23,9 @@ export const StartScreen = ({ navigation }: RootTabScreenProps<"Home">) => {
         <Text style={styles.numbers}>
           20<Text style={styles.specialFont}>23</Text>
         </Text>
+        <View style={styles.separator} lightColor="#fff" darkColor="#fff" />
         <View style={styles.logosWrapper}>
-          <Image
-            style={styles.logo}
-            source={require("../assets/images/Prilla.png")}
-          />
+          <Text style={styles.prilla}>Prilla</Text>
           <Text style={{ color: "white" }}>X</Text>
           <Image
             style={styles.logo}
@@ -81,3 +37,67 @@ export const StartScreen = ({ navigation }: RootTabScreenProps<"Home">) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 0,
+    position: "relative",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  heroImg: {
+    width: "100%",
+    height: 200,
+  },
+  heroTextWrapper: {
+    position: "absolute",
+    width: "50%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "transparent",
+    left: 100,
+    bottom: 40,
+  },
+  heroText: {
+    color: "white",
+    textTransform: "uppercase",
+    fontFamily: "Inter",
+    fontWeight: "700",
+    fontSize: 20,
+  },
+  logosWrapper: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    width: "100%",
+    backgroundColor: "transparent",
+  },
+  numbers: {
+    fontSize: 40,
+    color: "white",
+    lineHeight: 60,
+    fontWeight: "700",
+  },
+  specialFont: {
+    fontFamily: "Caramel",
+    height: 10,
+    fontSize: 70,
+  },
+  logo: {
+    height: 30,
+    width: 80,
+  },
+  prilla: {
+    fontFamily: "OleoScript",
+    fontStyle: "normal",
+    fontSize: 35,
+    fontWeight: "bold",
+    color: "#FFFD54",
+  },
+  separator: {
+    marginVertical: 0.1,
+    height: 1,
+    width: "50%",
+  },
+});
