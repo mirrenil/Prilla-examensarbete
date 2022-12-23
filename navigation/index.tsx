@@ -18,7 +18,7 @@ import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
-import { StartScreen } from "../screens/StartScreen";
+import StartScreen from "../screens/StartScreen";
 import SearchSreen from "../screens/SearchScreen";
 import NotificationsScreen from "../screens/NotificationsScreen";
 import SigninScreen from "../screens/SigninScreen";
@@ -33,8 +33,6 @@ import {
 } from "../types";
 
 import LinkingConfiguration from "./LinkingConfiguration";
-import { Ionicons, AntDesign } from "@expo/vector-icons";
-
 
 export default function Navigation({
   colorScheme,
@@ -107,7 +105,7 @@ function BottomTabNavigator() {
         component={StartScreen}
         options={({ navigation }: RootTabScreenProps<"Home">) => ({
           title: "",
-          tabBarIcon: ({ color, focused }) => (
+          tabBarIcon: ({ color }) => (
             <Ionicons name="ios-home-outline" size={24} color={color} />
           ),
 

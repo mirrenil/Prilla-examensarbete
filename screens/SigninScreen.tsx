@@ -2,7 +2,7 @@ import * as WebBrowser from "expo-web-browser";
 import { useEffect, useState } from "react";
 import { Alert, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 
-import { Text, View } from "../components/Themed";
+import { Text, View, useThemeColor } from "../components/Themed";
 import { Formik } from "formik";
 import * as yup from "yup";
 import {
@@ -13,6 +13,10 @@ import {
 import { auth } from "../firebase";
 
 import { RootStackScreenProps } from "../types";
+import useColorScheme from "../hooks/useColorScheme";
+import Colors from "../constants/Colors";
+import defaultConfig from "../metro.config";
+import { DefaultTheme } from "@react-navigation/native";
 
 export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
   const [currentUser, setcurrentUser] = useState<User>();
@@ -79,9 +83,11 @@ export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
 
           return (
             <View style={styles.container}>
+              <Text style={styles.label} lightColor="#fff" darkColor="201A28">
+                Email
+              </Text>
               <TextInput
                 style={styles.input}
-                placeholder="Email"
                 value={email}
                 onChangeText={handleChange("email")}
                 autoCapitalize="none"
@@ -92,10 +98,11 @@ export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
                   {errors.email}
                 </Text>
               )}
-
+              <Text style={styles.label} lightColor="#fff" darkColor="201A28">
+                Password
+              </Text>
               <TextInput
                 style={styles.input}
-                placeholder="Password"
                 secureTextEntry
                 value={password}
                 onChangeText={handleChange("password")}
@@ -150,8 +157,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     height: 50,
     width: 300,
-    color: "#fff",
-    backgroundColor: "#413C48",
+    backgroundColor: DefaultTheme ? "#AF90D9" : "#201A28",
     marginBottom: 10,
     padding: 10,
     borderRadius: 6,
@@ -193,5 +199,10 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     height: 1,
     width: "60%",
+  },
+  label: {
+    fontSize: 15,
+    marginBottom: 10,
+    marginRight: 230,
   },
 });

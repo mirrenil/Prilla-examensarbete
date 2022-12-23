@@ -10,6 +10,7 @@ import { auth, db } from "../firebase";
 import { collection, Timestamp } from "firebase/firestore";
 import { setOneDoc } from "../helper";
 import { RootStackScreenProps } from "../types";
+import { DefaultTheme } from "@react-navigation/native";
 
 export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
   const [newUser, setNewUser] = useState({
@@ -95,9 +96,11 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
 
           return (
             <View style={styles.container}>
+              <Text style={styles.label} lightColor="#fff" darkColor="201A28">
+                Username
+              </Text>
               <TextInput
                 style={styles.input}
-                placeholder="Username"
                 value={displayName}
                 onChangeText={handleChange("displayName")}
                 onBlur={handleBlur("displayName")}
@@ -108,9 +111,11 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
                   {errors.displayName}
                 </Text>
               )}
+              <Text style={styles.label} lightColor="#fff" darkColor="201A28">
+                Email
+              </Text>
               <TextInput
                 style={styles.input}
-                placeholder="Email"
                 value={email}
                 onChangeText={handleChange("email")}
                 autoCapitalize="none"
@@ -120,10 +125,11 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
                   {errors.email}
                 </Text>
               )}
-
+              <Text style={styles.label} lightColor="#fff" darkColor="201A28">
+                Password
+              </Text>
               <TextInput
                 style={styles.input}
-                placeholder="Password"
                 secureTextEntry
                 value={password}
                 onChangeText={handleChange("password")}
@@ -135,10 +141,11 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
                   {errors.password}
                 </Text>
               )}
-
+              <Text style={styles.label} lightColor="#fff" darkColor="201A28">
+                Password
+              </Text>
               <TextInput
                 style={styles.input}
-                placeholder="Password"
                 secureTextEntry
                 value={passwordConfirmation}
                 onChangeText={handleChange("passwordConfirmation")}
@@ -181,7 +188,7 @@ const styles = StyleSheet.create({
     height: 50,
     width: 300,
     color: "#fff",
-    backgroundColor: "#413C48",
+    backgroundColor: DefaultTheme ? "#AF90D9" : "#201A28",
     marginBottom: 10,
     padding: 10,
     borderRadius: 6,
@@ -216,5 +223,10 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     height: 1,
     width: "60%",
+  },
+  label: {
+    fontSize: 15,
+    marginBottom: 10,
+    marginRight: 200,
   },
 });
