@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Image, StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
-import { RootTabScreenProps } from "../types";
 import { useFonts } from "expo-font";
-import { Review } from "../Interfaces";
-import { getAllDocsInCollection } from "../helper";
-import Tabbar from "../components/Tabbar";
 import { ReviewCard } from "../components/ReviewCard";
+import { getAllDocsInCollection } from "../helper";
+import { Review } from "../Interfaces";
+import { RatingDots } from "../components/Rating";
+import Tabbar from "../components/Tabbar";
+import { RootTabScreenProps } from "../types";
 
 export default function StartScreen({ navigation,}: RootTabScreenProps<"Home">) {
   const [loaded] = useFonts({
@@ -16,13 +17,13 @@ export default function StartScreen({ navigation,}: RootTabScreenProps<"Home">) 
   });
   const [reviews, setReviews] = useState<Review[]>([]);
 
-	useEffect(() => {
-		getReviews();
-	}, []);
+  useEffect(() => {
+    getReviews();
+  }, []);
 
-	const getReviews = async () => {
+  const getReviews = async () => {
     let newData = [];
-		let data = await getAllDocsInCollection('recensioner');
+    let data = await getAllDocsInCollection("recensioner");
 
 		if (data?.length) {
 			newData = data;
