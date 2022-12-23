@@ -41,7 +41,7 @@ export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
         setcurrentUser(undefined);
       }
     } catch (error) {
-      Alert.alert("Wrong email or password");
+      Alert.alert("Felaktig email eller lösenord");
     }
   };
 

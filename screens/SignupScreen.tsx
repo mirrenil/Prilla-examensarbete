@@ -41,14 +41,16 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
         }
       });
       addUserToDb();
+      Alert.alert("Registrering lyckades!");
+      navigation.navigate("Signin");
     } catch (error) {
-      Alert.alert("Email aldready in-use");
+      Alert.alert("Denna användare finns redan registrerad");
     }
   };
 
   const isValid = () => {
     if (newUser.password !== newUser.passwordConfirmation) {
-      Alert.alert("Passwords don't match");
+      Alert.alert("Lösenorden matchar inte");
     } else {
       signup();
     }
