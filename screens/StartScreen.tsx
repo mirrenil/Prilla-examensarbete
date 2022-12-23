@@ -63,11 +63,14 @@ export const StartScreen = () => {
 	const getReviews = async () => {
     let newData = [];
 		let data = await getAllDocsInCollection('recensioner');
+
 		if (data?.length) {
 			newData = data;
 		}
     setReviews(newData)
 	};
+
+
 	return (
 		<View>
 			<View style={styles.container}>
@@ -94,7 +97,7 @@ export const StartScreen = () => {
 				</View>
 			</View>
 			{reviews.map((review) => {
-				return <ReviewCard key={review.id}/>;
+				return <ReviewCard key={review.id} review={review}/>;
 			})}
 		</View>
 	);
