@@ -55,7 +55,7 @@ export const StartScreen = () => {
 
 	return (
 		<View>
-			{/* <View style={styles.container}>
+			<View style={styles.container}>
 				<Image
 					style={styles.heroImg}
 					source={require('../assets/images/hero.png')}
@@ -77,8 +77,7 @@ export const StartScreen = () => {
 						/>
 					</View>
 				</View>
-			</View> */}
-      <RatingDots />
+			</View>
 		</View>
 	);
 };
