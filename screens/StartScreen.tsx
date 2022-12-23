@@ -2,6 +2,7 @@ import React from "react";
 import { View, Image, Text, StyleSheet } from "react-native";
 import { RootTabScreenProps } from "../types";
 import { useFonts } from "expo-font";
+import Tabbar from "../components/Tabbar";
 
 const styles = StyleSheet.create({
   container: {
@@ -76,6 +77,7 @@ export const StartScreen = ({ navigation }: RootTabScreenProps<"Home">) => {
           />
         </View>
       </View>
+      <Tabbar />
     </View>
   );
 };
