@@ -11,7 +11,6 @@ import {
   User,
 } from "@firebase/auth";
 import { auth } from "../firebase";
-import navigation from "../navigation";
 import { RootStackScreenProps } from "../types";
 
 export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
@@ -42,7 +41,7 @@ export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
         setcurrentUser(undefined);
       }
     } catch (error) {
-      Alert.alert("Wrong email or password");
+      Alert.alert("Felaktig email eller lösenord");
     }
   };
 
@@ -85,6 +84,7 @@ export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
                 value={email}
                 onChangeText={handleChange("email")}
                 autoCapitalize="none"
+                onBlur={handleBlur("email")}
               />
               {touched.email && errors.email && (
                 <Text style={{ fontSize: 10, color: "red" }}>
@@ -106,6 +106,12 @@ export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
                   {errors.password}
                 </Text>
               )}
+
+              <TouchableOpacity
+                onPress={() => navigation.navigate("ForgotPassword")}
+              >
+                <Text style={styles.text}>Glömt lösenord?</Text>
+              </TouchableOpacity>
 
               <TouchableOpacity
                 style={styles.button}

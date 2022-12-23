@@ -1,13 +1,23 @@
 import { StyleSheet } from "react-native";
-import { Text, View } from "../components/Themed";
-import { RootTabScreenProps } from "../types";
 
-export default function ProfileScreen({
+import { Text, View } from "../components/Themed";
+import { RootStackScreenProps } from "../types";
+import { useFonts } from "expo-font";
+
+export default function LoadingScreen({
   navigation,
-}: RootTabScreenProps<"Profile">) {
+}: RootStackScreenProps<"Loading">) {
+  const [loaded] = useFonts({
+    OleoScript: require("../assets/fonts/OleoScript-Regular.ttf"),
+  });
+
+  if (!loaded) {
+    return null;
+  }
   return (
     <View style={styles.container}>
-      <Text>Profile</Text>
+      <Text style={styles.title}>Prilla</Text>
+      <Text style={styles.slogan}>GOTTA SNUS THEM ALL</Text>
       <View
         style={styles.separator}
         lightColor="#eee"

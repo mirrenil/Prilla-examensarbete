@@ -18,13 +18,14 @@ import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
-import {StartScreen} from "../screens/StartScreen";
+import { StartScreen } from "../screens/StartScreen";
 import SearchScreen from "../screens/SearchScreen";
 import NotificationsScreen from "../screens/NotificationsScreen";
 import SigninScreen from "../screens/SigninScreen";
 import SignupScreen from "../screens/SignupScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import LinkingConfiguration from "./LinkingConfiguration";
+import ForgotPassword from "../screens/ForgotPassword";
 
 import {
   RootStackParamList,
@@ -57,7 +58,10 @@ function RootNavigator() {
   return (
     <Stack.Navigator>
       <Stack.Screen name="Signin" component={SigninScreen} />
+
       <Stack.Screen name="Signup" component={SignupScreen} />
+
+      <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
 
       <Stack.Screen
         name="Root"

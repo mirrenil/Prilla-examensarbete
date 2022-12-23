@@ -6,8 +6,8 @@ import { Text, View } from "../components/Themed";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { createUserWithEmailAndPassword, updateProfile } from "@firebase/auth";
-import { auth } from "../firebase";
-import { Timestamp } from "firebase/firestore";
+import { auth, db } from "../firebase";
+import { collection, Timestamp } from "firebase/firestore";
 import { setOneDoc } from "../helper";
 import { RootStackScreenProps } from "../types";
 
@@ -41,8 +41,18 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
         }
       });
       addUserToDb();
+      Alert.alert("Registrering lyckades!");
+      navigation.navigate("Signin");
     } catch (error) {
-      Alert.alert("Email aldready in-use");
+      Alert.alert("Denna användare finns redan registrerad");
+    }
+  };
+
+  const isValid = () => {
+    if (newUser.password !== newUser.passwordConfirmation) {
+      Alert.alert("Lösenorden matchar inte");
+    } else {
+      signup();
     }
   };
 
@@ -143,7 +153,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
 
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => signup()}
+                onPress={() => isValid()}
                 disabled={!values.email || !values.password}
               >
                 <Text style={styles.buttonText}>Registrera dig</Text>
