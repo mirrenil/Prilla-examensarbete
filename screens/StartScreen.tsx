@@ -4,6 +4,7 @@ import { useFonts } from 'expo-font';
 import { ReviewCard } from '../components/ReviewCard';
 import { getAllDocsInCollection } from '../helper';
 import { Review } from '../Interfaces';
+import { RatingDots } from '../components/Rating';
 
 const styles = StyleSheet.create({
 	container: {
