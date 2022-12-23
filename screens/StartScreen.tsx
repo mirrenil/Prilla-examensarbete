@@ -3,7 +3,6 @@ import { Image, StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import { useFonts } from "expo-font";
-import navigation from "../navigation";
 import { Review } from "../Interfaces";
 import { getAllDocsInCollection } from "../helper";
 import Tabbar from "../components/Tabbar";
@@ -48,7 +47,6 @@ export default function StartScreen({ navigation,}: RootTabScreenProps<"Home">) 
             style={styles.logo}
             source={require("../assets/images/Prilla.png")}
           />
-
           <Image
             style={styles.logo}
             source={require("../assets/images/loop.png")}
