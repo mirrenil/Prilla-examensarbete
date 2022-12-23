@@ -46,6 +46,14 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
     }
   };
 
+  const isValid = () => {
+    if (newUser.email !== newUser.passwordConfirmation) {
+      Alert.alert("Passwords don't match");
+    } else {
+      signup();
+    }
+  };
+
   return (
     <View style={styles.screen}>
       <Text style={styles.title}>Prilla</Text>
@@ -143,7 +151,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
 
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => signup()}
+                onPress={() => isValid()}
                 disabled={!values.email || !values.password}
               >
                 <Text style={styles.buttonText}>Registrera dig</Text>
