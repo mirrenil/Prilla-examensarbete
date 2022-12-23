@@ -1,7 +1,6 @@
 import { RatingBar } from '@aashu-dubey/react-native-rating-bar';
 import React from 'react';
 import { View, StyleSheet, Text, Image } from 'react-native';
-import { Rating, AirbnbRating } from 'react-native-ratings';
 
 interface Props {
 	rating: number;
