@@ -1,8 +1,8 @@
 import * as WebBrowser from "expo-web-browser";
 import { useEffect, useState } from "react";
-import { Alert, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import { Alert, StyleSheet, TouchableOpacity } from "react-native";
 
-import { Text, View, useThemeColor } from "../components/Themed";
+import { Text, View, TextInput } from "../components/Themed";
 import { Formik } from "formik";
 import * as yup from "yup";
 import {
@@ -87,6 +87,8 @@ export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
                 Email
               </Text>
               <TextInput
+                lightColor="#AF90D9"
+                darkColor="#413C48"
                 style={styles.input}
                 value={email}
                 onChangeText={handleChange("email")}
@@ -102,6 +104,8 @@ export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
                 Password
               </Text>
               <TextInput
+                lightColor="#AF90D9"
+                darkColor="#413C48"
                 style={styles.input}
                 secureTextEntry
                 value={password}
@@ -157,7 +161,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     height: 50,
     width: 300,
-    backgroundColor: DefaultTheme ? "#AF90D9" : "#201A28",
+    //backgroundColor: DefaultTheme ? "#AF90D9" : "#413C48",
     marginBottom: 10,
     padding: 10,
     borderRadius: 6,

@@ -1,8 +1,8 @@
 import * as WebBrowser from "expo-web-browser";
 import { useEffect, useState } from "react";
-import { Alert, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import { Alert, StyleSheet, TouchableOpacity } from "react-native";
 
-import { Text, View } from "../components/Themed";
+import { Text, View, TextInput } from "../components/Themed";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { createUserWithEmailAndPassword, updateProfile } from "@firebase/auth";
@@ -100,6 +100,8 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
                 Username
               </Text>
               <TextInput
+                lightColor="#AF90D9"
+                darkColor="#413C48"
                 style={styles.input}
                 value={displayName}
                 onChangeText={handleChange("displayName")}
@@ -115,6 +117,8 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
                 Email
               </Text>
               <TextInput
+                lightColor="#AF90D9"
+                darkColor="#413C48"
                 style={styles.input}
                 value={email}
                 onChangeText={handleChange("email")}
@@ -129,6 +133,8 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
                 Password
               </Text>
               <TextInput
+                lightColor="#AF90D9"
+                darkColor="#413C48"
                 style={styles.input}
                 secureTextEntry
                 value={password}
@@ -188,7 +194,6 @@ const styles = StyleSheet.create({
     height: 50,
     width: 300,
     color: "#fff",
-    backgroundColor: DefaultTheme ? "#AF90D9" : "#201A28",
     marginBottom: 10,
     padding: 10,
     borderRadius: 6,
