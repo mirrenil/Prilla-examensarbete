@@ -94,9 +94,12 @@ function BottomTabNavigator() {
     <BottomTab.Navigator
       initialRouteName="Home"
       screenOptions={{
-        headerStyle: { backgroundColor: "#1B1324", height: 100 },
-        tabBarActiveTintColor: "white",
-        tabBarInactiveTintColor: "gray",
+        headerStyle: {
+          backgroundColor: Colors[colorScheme].background,
+          height: 100,
+        },
+        tabBarActiveTintColor: Colors[colorScheme].tint,
+        tabBarInactiveTintColor: Colors[colorScheme].tabIconDefault,
         tabBarStyle: { backgroundColor: "#1B1324", height: 100, padding: 15 },
       }}
     >
