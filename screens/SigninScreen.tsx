@@ -13,10 +13,6 @@ import {
 import { auth } from "../firebase";
 
 import { RootStackScreenProps } from "../types";
-import useColorScheme from "../hooks/useColorScheme";
-import Colors from "../constants/Colors";
-import defaultConfig from "../metro.config";
-import { DefaultTheme } from "@react-navigation/native";
 
 export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
   const [currentUser, setcurrentUser] = useState<User>();
@@ -83,12 +79,10 @@ export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
 
           return (
             <View style={styles.container}>
-              <Text style={styles.label} lightColor="#fff" darkColor="#fff">
-                Email
-              </Text>
               <TextInput
                 lightColor="#AF90D9"
                 darkColor="#413C48"
+                placeholder="Email"
                 style={styles.input}
                 value={email}
                 onChangeText={handleChange("email")}
@@ -96,16 +90,13 @@ export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
                 onBlur={handleBlur("email")}
               />
               {touched.email && errors.email && (
-                <Text style={{ fontSize: 10, color: "red" }}>
-                  {errors.email}
-                </Text>
+                <Text style={styles.error}>{errors.email}</Text>
               )}
-              <Text style={styles.label} lightColor="#fff" darkColor="#fff">
-                Password
-              </Text>
+
               <TextInput
                 lightColor="#AF90D9"
                 darkColor="#413C48"
+                placeholder="Password"
                 style={styles.input}
                 secureTextEntry
                 value={password}
@@ -114,9 +105,7 @@ export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
                 onBlur={handleBlur("password")}
               />
               {touched.password && errors.password && (
-                <Text style={{ fontSize: 10, color: "red" }}>
-                  {errors.password}
-                </Text>
+                <Text style={styles.error}>{errors.password}</Text>
               )}
 
               <TouchableOpacity
@@ -133,7 +122,6 @@ export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
                 <Text style={styles.buttonText}>Logga in</Text>
               </TouchableOpacity>
 
-              {/* TODO: Add navigation */}
               <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
                 <Text style={styles.text}>
                   Har du inget konto än? Skapa ett här!
@@ -203,9 +191,9 @@ const styles = StyleSheet.create({
     height: 1,
     width: "60%",
   },
-  label: {
-    fontSize: 15,
-    marginBottom: 10,
-    marginRight: 230,
+  error: {
+    fontSize: 10,
+    color: "red",
+    margin: 5,
   },
 });

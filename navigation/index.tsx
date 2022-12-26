@@ -24,7 +24,7 @@ import NotificationsScreen from "../screens/NotificationsScreen";
 import SigninScreen from "../screens/SigninScreen";
 import SignupScreen from "../screens/SignupScreen";
 import ProfileScreen from "../screens/ProfileScreen";
-import ForgotPassword from "../screens/ForgotPassword";
+import ForgotPasswordScreen from "../screens/ForgotPasswordScreen";
 
 import {
   RootStackParamList,
@@ -62,7 +62,7 @@ function RootNavigator() {
 
       <Stack.Screen name="Signup" component={SignupScreen} />
 
-      <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+      <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
 
       <Stack.Screen
         name="Root"

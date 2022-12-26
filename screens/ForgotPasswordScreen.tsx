@@ -1,19 +1,13 @@
-import { confirmPasswordReset, sendPasswordResetEmail } from "firebase/auth";
+import { sendPasswordResetEmail } from "firebase/auth";
 import { Formik } from "formik";
 import * as yup from "yup";
 import React, { useEffect, useState } from "react";
-import {
-  Text,
-  View,
-  StyleSheet,
-  Alert,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, Alert, TouchableOpacity } from "react-native";
+import { Text, View, TextInput } from "../components/Themed";
 import { RootStackScreenProps } from "../types";
 import { auth } from "../firebase";
 
-function ForgotPassword({
+function ForgotPasswordScreen({
   navigation,
 }: RootStackScreenProps<"ForgotPassword">) {
   const [email, setEmail] = useState("");
@@ -30,6 +24,14 @@ function ForgotPassword({
 
   return (
     <View style={styles.screen}>
+      <Text style={styles.title}>Prilla</Text>
+      <Text style={styles.slogan}>GOTTA SNUS THEM ALL</Text>
+      <View
+        style={styles.separator}
+        lightColor="#eee"
+        darkColor="rgba(255,255,255,0.1)"
+      />
+
       <Formik
         initialValues={{ email: "" }}
         onSubmit={(values) => {}}
@@ -45,8 +47,12 @@ function ForgotPassword({
 
           return (
             <View style={styles.container}>
-              <Text style={styles.text}>Forgot Password?</Text>
+              <Text style={styles.text} lightColor="#fff" darkColor="#fff">
+                Forgot Password?
+              </Text>
               <TextInput
+                lightColor="#AF90D9"
+                darkColor="#413C48"
                 style={styles.input}
                 placeholder="Email"
                 value={email}
@@ -55,9 +61,7 @@ function ForgotPassword({
                 onBlur={handleBlur("email")}
               />
               {touched.email && errors.email && (
-                <Text style={{ fontSize: 10, color: "red" }}>
-                  {errors.email}
-                </Text>
+                <Text style={styles.error}>{errors.email}</Text>
               )}
 
               <TouchableOpacity
@@ -92,8 +96,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     height: 50,
     width: 300,
-    color: "#fff",
-    backgroundColor: "#413C48",
     marginBottom: 10,
     padding: 10,
     borderRadius: 6,
@@ -113,12 +115,29 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 17,
   },
+  title: {
+    fontFamily: "OleoScript",
+    fontStyle: "normal",
+    fontSize: 50,
+    fontWeight: "bold",
+    color: "#FFFD54",
+  },
+  slogan: {
+    fontSize: 15,
+    fontWeight: "bold",
+    color: "#FFFD54",
+  },
   text: {
     color: "#fff",
     fontSize: 17,
     fontWeight: "bold",
     marginBottom: 20,
   },
+  error: {
+    fontSize: 10,
+    color: "red",
+    margin: 5,
+  },
 });
 
-export default ForgotPassword;
+export default ForgotPasswordScreen;

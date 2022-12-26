@@ -109,9 +109,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
                 autoCapitalize="none"
               />
               {touched.displayName && errors.displayName && (
-                <Text style={{ fontSize: 10, color: "red" }}>
-                  {errors.displayName}
-                </Text>
+                <Text style={styles.error}>{errors.displayName}</Text>
               )}
               <Text style={styles.label} lightColor="#fff" darkColor="#fff">
                 Email
@@ -125,9 +123,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
                 autoCapitalize="none"
               />
               {touched.email && errors.email && (
-                <Text style={{ fontSize: 10, color: "red" }}>
-                  {errors.email}
-                </Text>
+                <Text style={styles.error}>{errors.email}</Text>
               )}
               <Text style={styles.label} lightColor="#fff" darkColor="#fff">
                 Password
@@ -143,9 +139,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
                 onBlur={handleBlur("password")}
               />
               {touched.password && errors.password && (
-                <Text style={{ fontSize: 10, color: "red" }}>
-                  {errors.password}
-                </Text>
+                <Text style={styles.error}>{errors.password}</Text>
               )}
               <Text style={styles.label} lightColor="#fff" darkColor="#fff">
                 Password
@@ -161,9 +155,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
                 onBlur={handleBlur("passwordConfirmation")}
               />
               {touched.passwordConfirmation && errors.passwordConfirmation && (
-                <Text style={{ fontSize: 10, color: "red" }}>
-                  {errors.passwordConfirmation}
-                </Text>
+                <Text style={styles.error}>{errors.passwordConfirmation}</Text>
               )}
 
               <TouchableOpacity
@@ -235,5 +227,10 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginBottom: 10,
     marginRight: 200,
+  },
+  error: {
+    fontSize: 10,
+    color: "red",
+    margin: 5,
   },
 });
