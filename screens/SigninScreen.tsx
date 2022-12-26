@@ -83,7 +83,7 @@ export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
 
           return (
             <View style={styles.container}>
-              <Text style={styles.label} lightColor="#fff" darkColor="201A28">
+              <Text style={styles.label} lightColor="#fff" darkColor="#fff">
                 Email
               </Text>
               <TextInput
@@ -100,7 +100,7 @@ export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
                   {errors.email}
                 </Text>
               )}
-              <Text style={styles.label} lightColor="#fff" darkColor="201A28">
+              <Text style={styles.label} lightColor="#fff" darkColor="#fff">
                 Password
               </Text>
               <TextInput
@@ -161,7 +161,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     height: 50,
     width: 300,
-    //backgroundColor: DefaultTheme ? "#AF90D9" : "#413C48",
     marginBottom: 10,
     padding: 10,
     borderRadius: 6,

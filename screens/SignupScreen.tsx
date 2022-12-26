@@ -96,7 +96,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
 
           return (
             <View style={styles.container}>
-              <Text style={styles.label} lightColor="#fff" darkColor="201A28">
+              <Text style={styles.label} lightColor="#fff" darkColor="#fff">
                 Username
               </Text>
               <TextInput
@@ -113,7 +113,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
                   {errors.displayName}
                 </Text>
               )}
-              <Text style={styles.label} lightColor="#fff" darkColor="201A28">
+              <Text style={styles.label} lightColor="#fff" darkColor="#fff">
                 Email
               </Text>
               <TextInput
@@ -129,7 +129,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
                   {errors.email}
                 </Text>
               )}
-              <Text style={styles.label} lightColor="#fff" darkColor="201A28">
+              <Text style={styles.label} lightColor="#fff" darkColor="#fff">
                 Password
               </Text>
               <TextInput
@@ -147,10 +147,12 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
                   {errors.password}
                 </Text>
               )}
-              <Text style={styles.label} lightColor="#fff" darkColor="201A28">
+              <Text style={styles.label} lightColor="#fff" darkColor="#fff">
                 Password
               </Text>
               <TextInput
+                lightColor="#AF90D9"
+                darkColor="#413C48"
                 style={styles.input}
                 secureTextEntry
                 value={passwordConfirmation}
