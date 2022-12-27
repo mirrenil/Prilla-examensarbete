@@ -19,21 +19,20 @@ import useColorScheme from "../hooks/useColorScheme";
 import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
 import StartScreen from "../screens/StartScreen";
-import SearchSreen from "../screens/SearchScreen";
+import SearchScreen from "../screens/SearchScreen";
 import NotificationsScreen from "../screens/NotificationsScreen";
 import SigninScreen from "../screens/SigninScreen";
 import SignupScreen from "../screens/SignupScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import ForgotPasswordScreen from "../screens/ForgotPasswordScreen";
+import LinkingConfiguration from "./LinkingConfiguration";
+import AgeCheckScreen from "../screens/AgeCheckScreen";
 
 import {
   RootStackParamList,
   RootTabParamList,
   RootTabScreenProps,
 } from "../types";
-
-import LinkingConfiguration from "./LinkingConfiguration";
-import AgeCheckScreen from "../screens/AgeCheckScreen";
 
 export default function Navigation({
   colorScheme,
@@ -112,7 +111,7 @@ function BottomTabNavigator() {
         options={({ navigation }: RootTabScreenProps<"Home">) => ({
           title: "",
           tabBarIcon: ({ color }) => (
-            <Ionicons name="ios-home-outline" size={24} color={color} />
+            <Ionicons name="ios-home-outline" size={30} color={color} />
           ),
 
           headerRight: () => (
@@ -134,11 +133,11 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="Search"
-        component={SearchSreen}
+        component={SearchScreen}
         options={{
           title: "",
           tabBarIcon: ({ color }) => (
-            <AntDesign name="search1" size={24} color={color} />
+            <AntDesign name="search1" size={30} color={color} />
           ),
         }}
       />
@@ -148,7 +147,7 @@ function BottomTabNavigator() {
         options={{
           title: "",
           tabBarIcon: ({ color }) => (
-            <Ionicons name="notifications-outline" size={24} color={color} />
+            <Ionicons name="notifications-outline" size={30} color={color} />
           ),
         }}
       />
@@ -158,7 +157,7 @@ function BottomTabNavigator() {
         options={{
           title: "",
           tabBarIcon: ({ color }) => (
-            <AntDesign name="user" size={24} color={color} />
+            <AntDesign name="user" size={30} color={color} />
           ),
         }}
       />
