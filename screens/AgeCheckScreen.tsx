@@ -2,20 +2,37 @@ import React, { useState } from "react";
 import { StyleSheet, Alert, TouchableOpacity } from "react-native";
 import { Text, View } from "../components/Themed";
 import { RootStackScreenProps } from "../types";
-import BouncyCheckbox from "react-native-bouncy-checkbox";
+import RadioGroup, { RadioButtonProps } from "react-native-radio-buttons-group";
+
+const ageOptions: RadioButtonProps[] = [
+  {
+    id: "1",
+    label: "Jag är över 18 år",
+    value: "Över 18 år",
+  },
+  {
+    id: "2",
+    label: "Jag är inte över 18 år",
+    value: "Under 18 år",
+  },
+];
 
 function AgeCheckScreen({ navigation }: RootStackScreenProps<"AgeCheck">) {
-  const [isOver18, setisOver18] = useState(false);
+  const [radioButtons, setRadioButtons] =
+    useState<RadioButtonProps[]>(ageOptions);
 
-  const checkAge = () => {
-    if (isOver18 === true) {
+  const onPressRadioButton = (ageOption: RadioButtonProps[]) => {
+    setRadioButtons(ageOption);
+  };
+
+  const checkAge = (ageOption: RadioButtonProps[]) => {
+    if (ageOption[0].selected) {
       try {
         navigation.navigate("Signup");
       } catch (error) {
         console.log(error);
       }
     } else {
-      setisOver18(false);
       Alert.alert("Du är inte gammal nog för att använda Prilla");
     }
   };
@@ -33,19 +50,13 @@ function AgeCheckScreen({ navigation }: RootStackScreenProps<"AgeCheck">) {
         <Text style={styles.text} lightColor="#fff" darkColor="#fff">
           För att använda Prilla behöver du vara 18 år eller äldre.
         </Text>
-        <View style={styles.row}>
-          <BouncyCheckbox
-            size={30}
-            fillColor="#FFFD54"
-            isChecked={isOver18}
-            onPress={() => setisOver18(true)}
-          />
-          <Text style={styles.smallText} lightColor="#fff" darkColor="#fff">
-            Jag är över 18 år
-          </Text>
-        </View>
 
-        <TouchableOpacity style={styles.button} onPress={checkAge}>
+        <RadioGroup radioButtons={ageOptions} onPress={onPressRadioButton} />
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => checkAge(ageOptions)}
+        >
           <Text style={styles.buttonText}>Validera ålder</Text>
         </TouchableOpacity>
       </View>
@@ -114,16 +125,6 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: "red",
     margin: 5,
-  },
-  row: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 20,
-  },
-  smallText: {
-    color: "#fff",
-    fontSize: 15,
-    marginLeft: 10,
   },
 });
 
