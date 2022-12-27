@@ -32,3 +32,10 @@ export interface Product {
     type: string,
     weigth: number
 }
+
+export interface User {
+    createdAt: Date,
+    displayName: string,
+    email: string,
+    photo: string
+}
