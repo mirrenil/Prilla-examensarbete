@@ -48,7 +48,7 @@ function ForgotPasswordScreen({
           return (
             <View style={styles.container}>
               <Text style={styles.text} lightColor="#fff" darkColor="#fff">
-                Forgot Password?
+                För att återställa ditt lösenord behöver vi din email
               </Text>
               <TextInput
                 lightColor="#AF90D9"
@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     marginBottom: 50,
+    width: "70%",
   },
   separator: {
     marginVertical: 30,
@@ -130,8 +131,9 @@ const styles = StyleSheet.create({
   text: {
     color: "#fff",
     fontSize: 17,
-    fontWeight: "bold",
     marginBottom: 20,
+    textAlign: "center",
+    fontWeight: "bold",
   },
   error: {
     fontSize: 10,

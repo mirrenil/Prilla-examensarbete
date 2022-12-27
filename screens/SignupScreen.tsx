@@ -6,11 +6,10 @@ import { Text, View, TextInput } from "../components/Themed";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { createUserWithEmailAndPassword, updateProfile } from "@firebase/auth";
-import { auth, db } from "../firebase";
-import { collection, Timestamp } from "firebase/firestore";
+import { auth } from "../firebase";
+import { Timestamp } from "firebase/firestore";
 import { setOneDoc } from "../helper";
 import { RootStackScreenProps } from "../types";
-import { DefaultTheme } from "@react-navigation/native";
 
 export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
   const [newUser, setNewUser] = useState({
@@ -96,12 +95,10 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
 
           return (
             <View style={styles.container}>
-              <Text style={styles.label} lightColor="#fff" darkColor="#fff">
-                Username
-              </Text>
               <TextInput
                 lightColor="#AF90D9"
                 darkColor="#413C48"
+                placeholder="Username"
                 style={styles.input}
                 value={displayName}
                 onChangeText={handleChange("displayName")}
@@ -111,12 +108,11 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
               {touched.displayName && errors.displayName && (
                 <Text style={styles.error}>{errors.displayName}</Text>
               )}
-              <Text style={styles.label} lightColor="#fff" darkColor="#fff">
-                Email
-              </Text>
+
               <TextInput
                 lightColor="#AF90D9"
                 darkColor="#413C48"
+                placeholder="Email"
                 style={styles.input}
                 value={email}
                 onChangeText={handleChange("email")}
@@ -125,12 +121,11 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
               {touched.email && errors.email && (
                 <Text style={styles.error}>{errors.email}</Text>
               )}
-              <Text style={styles.label} lightColor="#fff" darkColor="#fff">
-                Password
-              </Text>
+
               <TextInput
                 lightColor="#AF90D9"
                 darkColor="#413C48"
+                placeholder="Password"
                 style={styles.input}
                 secureTextEntry
                 value={password}
@@ -141,12 +136,11 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
               {touched.password && errors.password && (
                 <Text style={styles.error}>{errors.password}</Text>
               )}
-              <Text style={styles.label} lightColor="#fff" darkColor="#fff">
-                Password
-              </Text>
+
               <TextInput
                 lightColor="#AF90D9"
                 darkColor="#413C48"
+                placeholder="Password Confirmation"
                 style={styles.input}
                 secureTextEntry
                 value={passwordConfirmation}
