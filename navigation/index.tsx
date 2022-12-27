@@ -18,12 +18,13 @@ import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
-import { StartScreen } from "../screens/StartScreen";
-import SearchSreen from "../screens/SearchScreen";
+import StartScreen  from "../screens/StartScreen";
+import SearchScreen from "../screens/SearchScreen";
 import NotificationsScreen from "../screens/NotificationsScreen";
 import SigninScreen from "../screens/SigninScreen";
 import SignupScreen from "../screens/SignupScreen";
 import ProfileScreen from "../screens/ProfileScreen";
+import LinkingConfiguration from "./LinkingConfiguration";
 import ForgotPassword from "../screens/ForgotPassword";
 
 import {
@@ -31,10 +32,6 @@ import {
   RootTabParamList,
   RootTabScreenProps,
 } from "../types";
-
-import LinkingConfiguration from "./LinkingConfiguration";
-import { Ionicons, AntDesign } from "@expo/vector-icons";
-
 
 export default function Navigation({
   colorScheme,
@@ -130,7 +127,7 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="Search"
-        component={SearchSreen}
+        component={SearchScreen}
         options={{
           title: "",
           tabBarIcon: ({ color }) => (
