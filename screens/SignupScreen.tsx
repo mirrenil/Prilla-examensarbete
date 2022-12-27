@@ -1,16 +1,15 @@
 import * as WebBrowser from "expo-web-browser";
 import { useEffect, useState } from "react";
-import { Alert, StyleSheet, TouchableOpacity } from "react-native";
+import { Alert, Keyboard, StyleSheet, TouchableOpacity } from "react-native";
 
 import { Text, View, TextInput } from "../components/Themed";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { createUserWithEmailAndPassword, updateProfile } from "@firebase/auth";
-import { auth, db } from "../firebase";
-import { collection, Timestamp } from "firebase/firestore";
+import { auth } from "../firebase";
+import { Timestamp } from "firebase/firestore";
 import { setOneDoc } from "../helper";
 import { RootStackScreenProps } from "../types";
-import { DefaultTheme } from "@react-navigation/native";
 
 export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
   const [newUser, setNewUser] = useState({
@@ -86,13 +85,14 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
           const { email, displayName, password, passwordConfirmation } = values;
 
           useEffect(() => {
+            console.log("values", values);
             setNewUser({
               email: email,
               displayName: displayName,
               password: password,
               passwordConfirmation: passwordConfirmation,
             });
-          }, [email, displayName, password]);
+          }, [email, displayName, password, passwordConfirmation]);
 
           return (
             <View style={styles.container}>
@@ -161,7 +161,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
               <TouchableOpacity
                 style={styles.button}
                 onPress={() => isValid()}
-                disabled={!values.email || !values.password}
+                disabled={!values.email}
               >
                 <Text style={styles.buttonText}>Registrera dig</Text>
               </TouchableOpacity>
