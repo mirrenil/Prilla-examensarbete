@@ -33,8 +33,6 @@ import {
 } from "../types";
 
 import LinkingConfiguration from "./LinkingConfiguration";
-import { Ionicons, AntDesign } from "@expo/vector-icons";
-
 
 export default function Navigation({
   colorScheme,
