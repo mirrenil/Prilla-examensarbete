@@ -7,7 +7,6 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import { createUserWithEmailAndPassword, updateProfile } from "@firebase/auth";
 import { auth, db } from "../firebase";
-import { collection, Timestamp } from "firebase/firestore";
 import { setOneDoc } from "../helper";
 import { RootStackScreenProps } from "../types";
 
@@ -23,8 +22,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
     const user = {
       email: newUser.email,
       displayName: newUser.displayName,
-      userID: auth.currentUser?.uid,
-      createdAt: Timestamp.now().toDate(),
+      createdAt: new Date(),
       photo: "",
     };
     setOneDoc("users", auth.currentUser?.uid, user);
