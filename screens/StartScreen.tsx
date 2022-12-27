@@ -5,61 +5,63 @@ import { useFonts } from "expo-font";
 import { ReviewCard } from "../components/ReviewCard";
 import { getAllDocsInCollection } from "../helper";
 import { Review } from "../Interfaces";
-import { RatingDots } from "../components/Rating";
 import Tabbar from "../components/Tabbar";
 import { RootTabScreenProps } from "../types";
 
 export default function StartScreen({ navigation,}: RootTabScreenProps<"Home">) {
-  const [loaded] = useFonts({
-    Inter: require("../assets/fonts/Inter-VariableFont_slnt,wght.ttf"),
-    Caramel: require("../assets/fonts/Caramel-Regular.ttf"),
-    OleoScript: require("../assets/fonts/OleoScript-Regular.ttf"),
-  });
-  const [reviews, setReviews] = useState<Review[]>([]);
+	const [loaded] = useFonts({
+		Inter: require('../assets/fonts/Inter-VariableFont_slnt,wght.ttf'),
+		Caramel: require('../assets/fonts/Caramel-Regular.ttf'),
+		OleoScript: require('../assets/fonts/OleoScript-Regular.ttf'),
+	});
+	const [reviews, setReviews] = useState<Review[]>([]);
 
-  useEffect(() => {
-    getReviews();
-  }, []);
+	useEffect(() => {
+		getReviews();
+	}, []);
 
-  const getReviews = async () => {
-    let newData = [];
-    let data = await getAllDocsInCollection("recensioner");
+	const getReviews = async () => {
+		let newData = [];
+		let data = await getAllDocsInCollection('recensioner');
 
 		if (data?.length) {
 			newData = data;
 		}
-    setReviews(newData)
+		setReviews(newData);
 	};
-  return (
-    <View style={styles.container}>
-      <Image
-        style={styles.heroImg}
-        source={require("../assets/images/hero.png")}
-      />
-      <View style={styles.heroTextWrapper}>
-        <Text style={styles.heroText}>äventyr väntar</Text>
-        <Text style={styles.numbers}>
-          20<Text style={styles.specialFont}>23</Text>
-        </Text>
-        <View style={styles.separator} lightColor="#fff" darkColor="#fff" />
-        <View style={styles.logosWrapper}>
-        <Text style={styles.prilla}>Prilla</Text>
-          <Image
-            style={styles.logo}
-            source={require("../assets/images/Prilla.png")}
-          />
-          <Image
-            style={styles.logo}
-            source={require("../assets/images/loop.png")}
-          />
-        </View>
-      </View>
-      <Tabbar />
-      {reviews.map((review) => {
-				return <ReviewCard key={review.id} review={review}/>;
+
+	return (
+		<View>
+			<View style={styles.container}>
+				<Image
+					style={styles.heroImg}
+					source={require('../assets/images/hero.png')}
+				/>
+				<View style={styles.heroTextWrapper}>
+					<Text style={styles.heroText}>äventyr väntar</Text>
+					<Text style={styles.numbers}>
+						20<Text style={styles.specialFont}>23</Text>
+					</Text>
+					<View style={styles.separator} lightColor="#fff" darkColor="#fff" />
+					<View style={styles.logosWrapper}>
+						<Text style={styles.prilla}>Prilla</Text>
+						<Image
+							style={styles.logo}
+							source={require('../assets/images/Prilla.png')}
+						/>
+						<Image
+							style={styles.logo}
+							source={require('../assets/images/loop.png')}
+						/>
+					</View>
+				</View>
+			</View>
+			<Tabbar />
+			{reviews.map((review) => {
+				return <ReviewCard key={review.id} review={review} />;
 			})}
-    </View>
-  );
+		</View>
+	);
 }
 
 const styles = StyleSheet.create({
