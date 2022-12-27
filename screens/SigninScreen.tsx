@@ -122,7 +122,7 @@ export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
                 <Text style={styles.buttonText}>Logga in</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
+              <TouchableOpacity onPress={() => navigation.navigate("AgeCheck")}>
                 <Text style={styles.text}>
                   Har du inget konto än? Skapa ett här!
                 </Text>
