@@ -1,11 +1,17 @@
 import { Feather } from "@expo/vector-icons";
 import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { StyleSheet, Image, View } from "react-native";
+import { Text } from "../components/Themed";
+import useColorScheme from "../hooks/useColorScheme";
 
 const Tabbar = () => {
+  const colorScheme = useColorScheme();
+  const themeContainerStyle =
+    colorScheme === "light" ? styles.lightContainer : styles.darkContainer;
+
   return (
     <View style={styles.container}>
-      <View style={styles.tabb}>
+      <View style={[styles.tabb, themeContainerStyle]}>
         <View style={styles.wrapper}>
           <View style={styles.logoWrapper}>
             <Image
@@ -23,7 +29,7 @@ const Tabbar = () => {
         </View>
       </View>
 
-      <View style={styles.tabb}>
+      <View style={[styles.tabb, themeContainerStyle]}>
         <View style={styles.wrapper}>
           <View style={styles.logoWrapper}>
             <Image
@@ -37,7 +43,6 @@ const Tabbar = () => {
               color="white"
             />
           </View>
-
           <Text style={styles.text}>Toppbetyg</Text>
         </View>
       </View>
@@ -60,7 +65,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     width: "100%",
     height: 50,
-    backgroundColor: "#3D3745",
     marginTop: 10,
     marginLeft: 10,
     borderTopLeftRadius: 6,
@@ -85,6 +89,12 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 10,
     right: 10,
+  },
+  lightContainer: {
+    backgroundColor: "#C6ADE8",
+  },
+  darkContainer: {
+    backgroundColor: "#3D3745",
   },
 });
 export default Tabbar;
