@@ -85,7 +85,6 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
           const { email, displayName, password, passwordConfirmation } = values;
 
           useEffect(() => {
-            console.log("values", values);
             setNewUser({
               email: email,
               displayName: displayName,
