@@ -33,6 +33,7 @@ import {
 } from "../types";
 
 import LinkingConfiguration from "./LinkingConfiguration";
+import AgeCheckScreen from "../screens/AgeCheckScreen";
 
 export default function Navigation({
   colorScheme,
@@ -63,6 +64,8 @@ function RootNavigator() {
       <Stack.Screen name="Signup" component={SignupScreen} />
 
       <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+
+      <Stack.Screen name="AgeCheck" component={AgeCheckScreen} />
 
       <Stack.Screen
         name="Root"
