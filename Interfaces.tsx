@@ -16,19 +16,20 @@ export interface Tag {
 }
 
 export interface Product {
-    brand: string,
-    description: string,
-    flavor: string[],
-    format: string,
-    manufacturer: string,
-    name: string,
-    nicotine: number,
-    photo: string,
-    pouches: number,
+    Brand: string,
+    Description: string,
+    Flavor: string[],
+    Format: string,
+    Manufacturer: string,
+    Name: string,
+    Nicotine: number,
+    Photo: string,
+    Pouches: number,
     // productID: string,
-    reviews: string[],
-    strength: number,
-    tags: Tag[],
-    type: string,
-    weigth: number
+    Reviews: string[],
+    Strength: number,
+    Tags: Tag[],
+    Type: string,
+    Weight: number,
+    Rating?: number
 }

@@ -13,9 +13,7 @@ import {
 import { RootStackScreenProps } from "../types";
 import { auth } from "../firebase";
 
-function ForgotPassword({
-  navigation,
-}: RootStackScreenProps<"ForgotPassword">) {
+function ForgotPassword({navigation,}: RootStackScreenProps<"ForgotPassword">) {
   const [email, setEmail] = useState("");
 
   const resetPassword = async (email: string) => {

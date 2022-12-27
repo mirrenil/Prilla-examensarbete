@@ -7,6 +7,7 @@ import { getAllDocsInCollection } from "../helper";
 import { Review } from "../Interfaces";
 import Tabbar from "../components/Tabbar";
 import { RootTabScreenProps } from "../types";
+import DetailScreen from "./DetailScreen";
 
 export default function StartScreen({ navigation,}: RootTabScreenProps<"Home">) {
 	const [loaded] = useFonts({
