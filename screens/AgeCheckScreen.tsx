@@ -33,7 +33,7 @@ function AgeCheckScreen({ navigation }: RootStackScreenProps<"AgeCheck">) {
         console.log(error);
       }
     } else {
-      Alert.alert("Du är inte gammal nog för att använda Prilla");
+      Alert.alert("Tyvärr är du inte gammal nog för att använda Prilla");
     }
   };
 
