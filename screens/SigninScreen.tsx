@@ -1,8 +1,8 @@
 import * as WebBrowser from "expo-web-browser";
 import { useEffect, useState } from "react";
-import { Alert, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import { Alert, StyleSheet, TouchableOpacity } from "react-native";
 
-import { Text, View } from "../components/Themed";
+import { Text, View, TextInput } from "../components/Themed";
 import { Formik } from "formik";
 import * as yup from "yup";
 import {
@@ -106,22 +106,24 @@ export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
           return (
             <View style={styles.container}>
               <TextInput
-                style={styles.input}
+                lightColor="#AF90D9"
+                darkColor="#413C48"
                 placeholder="Email"
+                style={styles.input}
                 value={email}
                 onChangeText={handleChange("email")}
                 autoCapitalize="none"
                 onBlur={handleBlur("email")}
               />
               {touched.email && errors.email && (
-                <Text style={{ fontSize: 10, color: "red" }}>
-                  {errors.email}
-                </Text>
+                <Text style={styles.error}>{errors.email}</Text>
               )}
 
               <TextInput
-                style={styles.input}
+                lightColor="#AF90D9"
+                darkColor="#413C48"
                 placeholder="Password"
+                style={styles.input}
                 secureTextEntry
                 value={password}
                 onChangeText={handleChange("password")}
@@ -129,9 +131,7 @@ export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
                 onBlur={handleBlur("password")}
               />
               {touched.password && errors.password && (
-                <Text style={{ fontSize: 10, color: "red" }}>
-                  {errors.password}
-                </Text>
+                <Text style={styles.error}>{errors.password}</Text>
               )}
 
               <TouchableOpacity
@@ -148,8 +148,7 @@ export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
                 <Text style={styles.buttonText}>Logga in</Text>
               </TouchableOpacity>
 
-              {/* TODO: Add navigation */}
-              <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
+              <TouchableOpacity onPress={() => navigation.navigate("AgeCheck")}>
                 <Text style={styles.text}>
                   Har du inget konto än? Skapa ett här!
                 </Text>
@@ -176,8 +175,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     height: 50,
     width: 300,
-    color: "#fff",
-    backgroundColor: "#413C48",
     marginBottom: 10,
     padding: 10,
     borderRadius: 6,
@@ -219,5 +216,10 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     height: 1,
     width: "60%",
+  },
+  error: {
+    fontSize: 10,
+    color: "red",
+    margin: 5,
   },
 });

@@ -1,42 +1,67 @@
-import React from "react";
-import { Image, StyleSheet } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Image, ScrollView, StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
-import { RootTabScreenProps } from "../types";
 import { useFonts } from "expo-font";
+import { ReviewCard } from "../components/ReviewCard";
+import { getAllDocsInCollection } from "../helper";
+import { Review } from "../Interfaces";
 import Tabbar from "../components/Tabbar";
+import { RootTabScreenProps } from "../types";
+import { ActivityCard } from "../components/ActivityCard";
+import { getAdditionalUserInfo } from "firebase/auth";
 
-export const StartScreen = ({ navigation }: RootTabScreenProps<"Home">) => {
-  const [loaded] = useFonts({
-    Inter: require("../assets/fonts/Inter-VariableFont_slnt,wght.ttf"),
-    Caramel: require("../assets/fonts/Caramel-Regular.ttf"),
-    OleoScript: require("../assets/fonts/OleoScript-Regular.ttf"),
-  });
+export default function StartScreen({ navigation,}: RootTabScreenProps<"Home">) {
+	const [loaded] = useFonts({
+		Inter: require('../assets/fonts/Inter-VariableFont_slnt,wght.ttf'),
+		Caramel: require('../assets/fonts/Caramel-Regular.ttf'),
+		OleoScript: require('../assets/fonts/OleoScript-Regular.ttf'),
+	});
+	const [reviews, setReviews] = useState<Review[]>([]);
 
-  return (
-    <View style={styles.container}>
-      <Image
-        style={styles.heroImg}
-        source={require("../assets/images/hero.png")}
-      />
-      <View style={styles.heroTextWrapper}>
-        <Text style={styles.heroText}>äventyr väntar</Text>
-        <Text style={styles.numbers}>
-          20<Text style={styles.specialFont}>23</Text>
-        </Text>
-        <View style={styles.separator} lightColor="#fff" darkColor="#fff" />
-        <View style={styles.logosWrapper}>
-          <Text style={styles.prilla}>Prilla</Text>
-          <Text style={{ color: "white" }}>X</Text>
-          <Image
-            style={styles.logo}
-            source={require("../assets/images/loop.png")}
-          />
-        </View>
-      </View>
-      <Tabbar />
-    </View>
-  );
-};
+
+	useEffect(() => {
+		getReviews();
+	}, []);
+
+	const getReviews = async () => {
+		let newData = [];
+		let data = await getAllDocsInCollection('recensioner');
+
+		if (data?.length) {
+			newData = data;
+		}
+		setReviews(newData);
+	};
+
+	return (
+		<ScrollView>
+			<View style={styles.container}>
+				<Image
+					style={styles.heroImg}
+					source={require('../assets/images/hero.png')}
+				/>
+				<View style={styles.heroTextWrapper}>
+					<Text style={styles.heroText}>äventyr väntar</Text>
+					<Text style={styles.numbers}>
+						20<Text style={styles.specialFont}>23</Text>
+					</Text>
+					<View style={styles.separator} lightColor="#fff" darkColor="#fff" />
+					<View style={styles.logosWrapper}>
+						<Text style={styles.prilla}>Prilla</Text>
+						<Image
+							style={styles.logo}
+							source={require('../assets/images/loop.png')}
+						/>
+					</View>
+				</View>
+			</View>
+			<Tabbar />
+			{reviews.map((review) => {
+        return <ActivityCard key={review.id} review={review}/>
+			})}
+		</ScrollView>
+	);
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -56,8 +81,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "transparent",
-    left: 100,
-    bottom: 40,
   },
   heroText: {
     color: "white",
