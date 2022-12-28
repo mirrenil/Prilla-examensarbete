@@ -15,6 +15,14 @@ export interface Tag {
     name: string
 }
 
+export interface User {
+    createdAt: Date,
+    displayName: string, 
+    email: string,
+    id: string,
+    photo: string
+}
+
 export interface Product {
     Brand: string,
     Description: string,

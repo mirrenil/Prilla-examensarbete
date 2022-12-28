@@ -13,6 +13,11 @@ import { RootStackParamList, RootStackScreenProps } from '../types';
 import { RatingDots } from '../components/Rating';
 import { AntDesign } from '@expo/vector-icons';
 import { StrengthBar } from '../components/StrengthBar';
+import { User } from '../Interfaces';
+
+interface ReviewWithAuthor extends Review {
+	author?: string;
+}
 
 function ProductDetailScreen({
 	navigation,
@@ -20,9 +25,10 @@ function ProductDetailScreen({
 }: RootStackScreenProps<'Product'>) {
 	const [product, setProduct] = useState<Product>();
 	const [activeTab, setActiveTab] = useState<number>(1);
-	const [reviews, setReviews] = useState<Review[]>([]);
+	const [reviews, setReviews] = useState<ReviewWithAuthor[]>([]);
 
 	useEffect(() => {
+    setReviews([])
 		getProductData();
 		getProductReviews();
 	}, []);
@@ -39,13 +45,26 @@ function ProductDetailScreen({
 	};
 
 	const getProductReviews = async () => {
-    try {
-      const reviews = await getDocsWithSpecificValue('recensioner', 'productID', product?.id);
-      setReviews(reviews as Review[])
-    }catch(err) {
-      console.log(err)
-    }
-  };
+		try {
+			const reviews = await getDocsWithSpecificValue(
+				'recensioner',
+				'productID',
+				product?.id
+			);
+			setReviews(reviews as Review[]);
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
+	const getReviewAuthor = async (id: string) => {
+		try {
+			const user = await getOneDocById('users', id);
+			return user
+		} catch (err) {
+			console.log(err);
+		}
+	};
 
 	const renderFolderContent = () => {
 		switch (activeTab) {
@@ -77,16 +96,20 @@ function ProductDetailScreen({
 					</>
 				);
 			case 3:
-				return (
-					<View>
+				reviews.forEach((rev) => {
+					let user = getReviewAuthor(rev.userID);
+          console.log(user)
+					return (
 						<View>
-							<Text></Text>
-							<Text></Text>
+							<View>
+								<Text>{}</Text>
+								<Text></Text>
+								<Text></Text>
+							</View>
 							<Text></Text>
 						</View>
-						<Text></Text>
-					</View>
-				);
+					);
+				});
 		}
 	};
 
