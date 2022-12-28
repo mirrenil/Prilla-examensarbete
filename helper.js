@@ -8,7 +8,7 @@ export const getOneDocById = async (collectionName, id) => {
 		const docSnap = await getDoc(docRef);
 		if (docSnap.exists()) {
 			const item = docSnap.data();
-			return {...item, id: docSnap.id};
+			return item
 		}
 	} catch (err) {
 		console.log(err);
@@ -21,7 +21,7 @@ export const getAllDocsInCollection = async (collectionName) => {
 	try {
 		const docs = await getDocs(collection(db, collectionName));
 		docs.forEach((doc) => {
-			documents.push({ ...doc.data(), id: doc.id });
+			documents.push(doc.data());
 		});
 		return documents;
 	} catch (err) {
