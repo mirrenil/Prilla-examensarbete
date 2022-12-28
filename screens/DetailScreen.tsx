@@ -5,6 +5,7 @@ import {
 	Image,
 	ImageBackground,
 	TouchableOpacity,
+	ActivityIndicator,
 } from 'react-native';
 import { View, Text } from '../components/Themed';
 import { getDocsWithSpecificValue, getOneDocById } from '../helper';
@@ -14,9 +15,10 @@ import { RatingDots } from '../components/Rating';
 import { AntDesign } from '@expo/vector-icons';
 import { StrengthBar } from '../components/StrengthBar';
 import { User } from '../Interfaces';
+import { connectFirestoreEmulator } from 'firebase/firestore';
 
 interface ReviewWithAuthor extends Review {
-	author?: string;
+	author: string;
 }
 
 function ProductDetailScreen({
@@ -24,13 +26,12 @@ function ProductDetailScreen({
 	route,
 }: RootStackScreenProps<'Product'>) {
 	const [product, setProduct] = useState<Product>();
-	const [activeTab, setActiveTab] = useState<number>(1);
+	const [activeTab, setActiveTab] = useState<number>(3);
 	const [reviews, setReviews] = useState<ReviewWithAuthor[]>([]);
 
 	useEffect(() => {
-    setReviews([])
-		getProductData();
 		getProductReviews();
+		getProductData();
 	}, []);
 
 	const getProductData = async () => {
@@ -45,13 +46,20 @@ function ProductDetailScreen({
 	};
 
 	const getProductReviews = async () => {
+		let newList = [];
 		try {
-			const reviews = await getDocsWithSpecificValue(
+			const reviewsDocs = await getDocsWithSpecificValue(
 				'recensioner',
 				'productID',
-				product?.id
+				route.params.id
 			);
-			setReviews(reviews as Review[]);
+			if (reviewsDocs) {
+				for (let rev of reviewsDocs) {
+					let name = await getReviewAuthor(rev.userID);
+					newList.push({ ...rev, author: name });
+				}
+				setReviews(newList);
+			}
 		} catch (err) {
 			console.log(err);
 		}
@@ -60,7 +68,10 @@ function ProductDetailScreen({
 	const getReviewAuthor = async (id: string) => {
 		try {
 			const user = await getOneDocById('users', id);
-			return user
+			if (user) {
+				let name = user?.displayName;
+				return name;
+			}
 		} catch (err) {
 			console.log(err);
 		}
@@ -96,114 +107,126 @@ function ProductDetailScreen({
 					</>
 				);
 			case 3:
-				reviews.forEach((rev) => {
-					let user = getReviewAuthor(rev.userID);
-          console.log(user)
+				return reviews.map((rev) => {
 					return (
-						<View>
-							<View>
-								<Text>{}</Text>
-								<Text></Text>
-								<Text></Text>
+						<View style={styles.reviewWrapper}>
+							<View style={styles.reviewTop}>
+								<Text style={[styles.fatText, styles.capitalize]}>
+									{rev.author}
+								</Text>
+								<RatingDots
+									rating={rev.rating}
+									dotSize={10}
+									single={15}
+									width={80}
+								/>
+								<Text>{rev.rating}</Text>
 							</View>
-							<Text></Text>
+							<Text>{rev.description}</Text>
 						</View>
 					);
 				});
 		}
 	};
 
-	return (
-		<ScrollView>
-			<ImageBackground
-				style={styles.background}
-				source={require('../assets/images/detail_Bg.png')}
-			>
-				<Image
-					style={styles.waves}
-					source={require('../assets/images/waves_dark.png')}
-				/>
-			</ImageBackground>
-			<View style={styles.screenContainer}>
-				<View style={styles.productDataContainer}>
-					<Image style={styles.productImg} source={{ uri: product?.Photo }} />
-					<View style={styles.productInfo}>
-						<Text style={styles.title}>
-							{product?.Brand + ' ' + product?.Name}
-						</Text>
-						<Text style={styles.manufacturer}>{product?.Manufacturer}</Text>
-						<View style={styles.ratingContainer}>
-							<RatingDots rating={product?.Rating ? product.Rating : 0} />
-							<Text style={styles.ratingText}>
-								{product?.Rating ? product.Rating : 0}
+	if (product && reviews) {
+		return (
+			<ScrollView>
+				<ImageBackground
+					style={styles.background}
+					source={require('../assets/images/detail_Bg.png')}
+				>
+					<Image
+						style={styles.waves}
+						source={require('../assets/images/waves_dark.png')}
+					/>
+				</ImageBackground>
+				<View style={styles.screenContainer}>
+					<View style={styles.productDataContainer}>
+						<Image style={styles.productImg} source={{ uri: product?.Photo }} />
+						<View style={styles.productInfo}>
+							<Text style={styles.title}>
+								{product?.Brand + ' ' + product?.Name}
 							</Text>
+							<Text style={styles.manufacturer}>{product?.Manufacturer}</Text>
+							<View style={styles.ratingContainer}>
+								<RatingDots rating={product?.Rating ? product.Rating : 0} />
+								<Text style={styles.ratingText}>
+									{product?.Rating ? product.Rating : 0}
+								</Text>
+							</View>
+							<Text>{product?.Reviews.length} Ratings</Text>
+							<View style={styles.interactions}>
+								<TouchableOpacity>
+									<View style={styles.button}>
+										<Text>Lägg till recension</Text>
+									</View>
+								</TouchableOpacity>
+								<AntDesign name="hearto" size={24} color="white" />
+							</View>
 						</View>
-						<Text>{product?.Reviews.length} Ratings</Text>
-						<View style={styles.interactions}>
-							<TouchableOpacity>
-								<View style={styles.button}>
-									<Text>Lägg till recension</Text>
-								</View>
+					</View>
+
+					<View style={styles.tableDataContainer}>
+						<View style={styles.tableRow}>
+							<Text>Styrka</Text>
+							<StrengthBar strength={product?.Strength} />
+						</View>
+						<View style={styles.tableRow}>
+							<Text>Antal</Text>
+							<Text>{product?.Pouches} st per dosa</Text>
+						</View>
+						<View style={styles.tableRow}>
+							<Text>Typ</Text>
+							<Text>{product?.Type}</Text>
+						</View>
+						<View style={styles.tableRow}>
+							<Text>Format</Text>
+							<Text>{product?.Format}</Text>
+						</View>
+					</View>
+
+					<View style={styles.folder}>
+						<View style={styles.tabs}>
+							<TouchableOpacity
+								onPress={() => setActiveTab(1)}
+								style={[styles.tab, activeTab === 1 ? styles.activeTab : null]}
+							>
+								<Text>Beskrivning</Text>
 							</TouchableOpacity>
-							<AntDesign name="hearto" size={24} color="white" />
+							<TouchableOpacity
+								onPress={() => setActiveTab(2)}
+								style={[
+									styles.tab,
+									activeTab === 2 ? styles.activeTab : null,
+									{ marginLeft: 10, marginRight: 10 },
+								]}
+							>
+								<Text>Fakta</Text>
+							</TouchableOpacity>
+							<TouchableOpacity
+								onPress={() => setActiveTab(3)}
+								style={[styles.tab, activeTab === 3 ? styles.activeTab : null]}
+							>
+								<Text>Recensioner</Text>
+							</TouchableOpacity>
 						</View>
+						<View style={styles.folderContent}>{renderFolderContent()}</View>
 					</View>
 				</View>
-
-				<View style={styles.tableDataContainer}>
-					<View style={styles.tableRow}>
-						<Text>Styrka</Text>
-						<StrengthBar strength={product?.Strength} />
-					</View>
-					<View style={styles.tableRow}>
-						<Text>Antal</Text>
-						<Text>{product?.Pouches} st per dosa</Text>
-					</View>
-					<View style={styles.tableRow}>
-						<Text>Typ</Text>
-						<Text>{product?.Type}</Text>
-					</View>
-					<View style={styles.tableRow}>
-						<Text>Format</Text>
-						<Text>{product?.Format}</Text>
-					</View>
-				</View>
-
-				<View style={styles.folder}>
-					<View style={styles.tabs}>
-						<TouchableOpacity
-							onPress={() => setActiveTab(1)}
-							style={[styles.tab, activeTab === 1 ? styles.activeTab : null]}
-						>
-							<Text>Beskrivning</Text>
-						</TouchableOpacity>
-						<TouchableOpacity
-							onPress={() => setActiveTab(2)}
-							style={[
-								styles.tab,
-								activeTab === 2 ? styles.activeTab : null,
-								{ marginLeft: 10, marginRight: 10 },
-							]}
-						>
-							<Text>Fakta</Text>
-						</TouchableOpacity>
-						<TouchableOpacity
-							onPress={() => setActiveTab(3)}
-							style={[styles.tab, activeTab === 3 ? styles.activeTab : null]}
-						>
-							<Text>Recensioner</Text>
-						</TouchableOpacity>
-					</View>
-					<View style={styles.folderContent}>{renderFolderContent()}</View>
-				</View>
-			</View>
-		</ScrollView>
-	);
+			</ScrollView>
+		);
+	} else {
+		return <ActivityIndicator size="small" color="#0000ff" />;
+	}
 }
 
 const styles = StyleSheet.create({
 	fatText: {
 		fontWeight: 'bold',
+	},
+	capitalize: {
+		textTransform: 'capitalize',
 	},
 	background: {
 		position: 'relative',
@@ -293,6 +316,15 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		height: 50,
+	},
+	reviewTop: {
+		flexDirection: 'row',
+		width: '50%',
+		justifyContent: 'space-between',
+	},
+	reviewWrapper: {
+		width: '90%',
+		marginBottom: 10,
 	},
 });
 
