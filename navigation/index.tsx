@@ -27,6 +27,7 @@ import ProfileScreen from "../screens/ProfileScreen";
 import ForgotPasswordScreen from "../screens/ForgotPasswordScreen";
 
 import LinkingConfiguration from "./LinkingConfiguration";
+import AgeCheckScreen from "../screens/AgeCheckScreen";
 
 import {
   RootStackParamList,
@@ -64,6 +65,9 @@ function RootNavigator() {
 
       <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
 
+      <Stack.Screen name="AgeCheck" component={AgeCheckScreen} />
+
+
       <Stack.Screen
         name="Root"
         component={BottomTabNavigator}
@@ -96,15 +100,11 @@ function BottomTabNavigator() {
       screenOptions={{
         headerStyle: {
           backgroundColor: Colors[colorScheme].background,
-          height: 90,
+          height: 100,
         },
         tabBarActiveTintColor: Colors[colorScheme].tint,
         tabBarInactiveTintColor: Colors[colorScheme].tabIconDefault,
-        tabBarStyle: {
-          backgroundColor: Colors[colorScheme].background,
-          height: 100,
-          padding: 15,
-        },
+        tabBarStyle: { backgroundColor: "#1B1324", height: 100, padding: 15 },
       }}
     >
       <BottomTab.Screen

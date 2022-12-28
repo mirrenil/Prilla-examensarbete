@@ -43,6 +43,7 @@ const linking: LinkingOptions<RootStackParamList> = {
       Signup: "signup",
       Signin: "signin",
       ForgotPassword: "forgot-password",
+      AgeCheck: "age-check",
     },
   },
 };

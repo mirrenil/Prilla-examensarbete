@@ -90,10 +90,11 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
               password: password,
               passwordConfirmation: passwordConfirmation,
             });
-          }, [email, displayName, password]);
+          }, [email, displayName, password, passwordConfirmation]);
 
           return (
             <View style={styles.container}>
+          
               <TextInput
                 lightColor="#AF90D9"
                 darkColor="#413C48"
@@ -120,7 +121,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
               {touched.email && errors.email && (
                 <Text style={styles.error}>{errors.email}</Text>
               )}
-
+            
               <TextInput
                 lightColor="#AF90D9"
                 darkColor="#413C48"
@@ -135,7 +136,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
               {touched.password && errors.password && (
                 <Text style={styles.error}>{errors.password}</Text>
               )}
-
+            
               <TextInput
                 lightColor="#AF90D9"
                 darkColor="#413C48"
@@ -154,7 +155,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
               <TouchableOpacity
                 style={styles.button}
                 onPress={() => isValid()}
-                disabled={!values.email || !values.password}
+                disabled={!values.email}
               >
                 <Text style={styles.buttonText}>Registrera dig</Text>
               </TouchableOpacity>
