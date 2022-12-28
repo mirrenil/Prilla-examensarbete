@@ -4,11 +4,27 @@ import { View, StyleSheet, Text, Image } from 'react-native';
 
 interface Props {
 	rating: number;
+	dotSize?: number,
+	single?: number,
+	width?: number
 }
-export const RatingDots = ({ rating }: Props) => {
+export const RatingDots = ({ rating, dotSize, single, width }: Props) => {
 	const handleRating = (value: number) => {
 		console.log(value);
 	};
+
+	const styles = StyleSheet.create({
+		circle: {
+			width: dotSize ? dotSize : 20,
+			height: dotSize ? dotSize : 20,
+		},
+		container: {
+			width: width ? width : 120,
+		},
+		single: {
+			width: single ? single : 25,
+		}
+	});
 
 	return (
 		<RatingBar
@@ -47,15 +63,3 @@ export const RatingDots = ({ rating }: Props) => {
 	);
 };
 
-const styles = StyleSheet.create({
-	circle: {
-		width: 20,
-		height: 20,
-	},
-	container: {
-		width: 120,
-	},
-	single: {
-		width: 25,
-	}
-});
