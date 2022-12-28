@@ -13,6 +13,9 @@ import {
 import { auth } from "../firebase";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { RootStackScreenProps } from "../types";
+import navigation from "../navigation";
+import { setUser, login } from "../redux/actions";
+import user from "../redux/reducers/users";
 
 export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
   const [currentUser, setcurrentUser] = useState<User>();
