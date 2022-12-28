@@ -31,9 +31,9 @@ export const ActivityCard = ({ review }: Props) => {
 				style={styles.image}
 			>
 				<View style={styles.userInfo}>
-          <Text>User Pic</Text>
-          <Text style={styles.username}>{author?.displayName}</Text>
-        </View>
+					<Text>User Pic</Text>
+					<Text style={styles.username}>{author?.displayName}</Text>
+				</View>
 				<ReviewCard key={review.id} review={review} />
 			</ImageBackground>
 		</View>
@@ -41,20 +41,20 @@ export const ActivityCard = ({ review }: Props) => {
 };
 const styles = StyleSheet.create({
 	image: {
-    marginTop: 10,
-    marginBottom: 10,
-    paddingTop: 10,
-    paddingBottom: 10,
+		marginTop: 10,
+		marginBottom: 10,
+		paddingTop: 10,
+		paddingBottom: 10,
 		minHeight: 230,
-    justifyContent: 'space-between',
-    alignItems: 'center'
+		justifyContent: 'space-between',
+		alignItems: 'center',
 	},
 	userInfo: {
-    flexDirection: 'row',
-    width: '100%'
-  },
-  username: {
-    fontWeight: 'bold',
-    marginLeft: 10
-  }
+		flexDirection: 'row',
+		width: '100%',
+	},
+	username: {
+		fontWeight: 'bold',
+		marginLeft: 10,
+	},
 });
