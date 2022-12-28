@@ -25,6 +25,7 @@ export type RootStackParamList = {
   Signup: undefined;
   ForgotPassword: undefined;
   Product: { id: string }
+  AgeCheck: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =

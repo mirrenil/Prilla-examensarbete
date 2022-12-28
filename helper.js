@@ -51,10 +51,10 @@ export const getDocsWithSpecificValue = async (
 
 // Checks if document with id already exists. if so, existing doc updates with new data. if not, new doc is added.
 export const setOneDoc = async (collectionName, id, newData) => {
-	try {
-		let response = await setDoc(doc(db, collectionName, id), newData);
-		return response;
-	} catch (err) {
-		console.log(err);
-	}
+  try {
+    let response = await setDoc(doc(db, collectionName, id), newData);
+    return response;
+  } catch (err) {
+    console.log(err);
+  }
 };
