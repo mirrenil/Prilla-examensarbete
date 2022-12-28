@@ -4,11 +4,11 @@ import { db } from './firebase';
 //Gets one document in a collection by doc id
 export const getOneDocById = async (collectionName, id) => {
 	try {
-		const productDocRef = doc(db, 'produkter', id);
-		const docSnap = await getDoc(productDocRef);
+		const docRef = doc(db, collectionName, id);
+		const docSnap = await getDoc(docRef);
 		if (docSnap.exists()) {
-			const product = docSnap.data();
-			return {...product, id: docSnap.id};
+			const item = docSnap.data();
+			return {...item, id: docSnap.id};
 		}
 	} catch (err) {
 		console.log(err);
@@ -41,7 +41,6 @@ export const getDocsWithSpecificValue = async (
 	try {
 		const data = await getDocs(q);
 		data.forEach((doc) => {
-      console.log(doc.data())
 			documents.push(doc.data());
 		});
     return documents;
