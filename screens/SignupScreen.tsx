@@ -23,7 +23,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
     const user = {
       email: newUser.email,
       displayName: newUser.displayName,
-      userID: auth.currentUser?.uid,
+      id: auth.currentUser?.uid,
       createdAt: Timestamp.now().toDate(),
       photo: "",
     };
