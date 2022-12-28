@@ -25,9 +25,9 @@ export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
   const loadLoginState = async () => {
     try {
       const loggedInString = await AsyncStorage.getItem("loggedIn");
-      if (loggedInString === "true") {
+      if (loggedInString) {
         navigation.navigate("Root");
-        return loggedInString === "true";
+        return loggedInString;
       } else {
         return false;
       }
