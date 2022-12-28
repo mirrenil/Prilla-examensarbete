@@ -13,6 +13,8 @@ import {
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
 import { ColorSchemeName, Pressable } from "react-native";
+import { Provider } from "react-redux";
+import store from "../redux/store";
 
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
@@ -25,9 +27,8 @@ import SigninScreen from "../screens/SigninScreen";
 import SignupScreen from "../screens/SignupScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import ForgotPasswordScreen from "../screens/ForgotPasswordScreen";
-
-import LinkingConfiguration from "./LinkingConfiguration";
 import AgeCheckScreen from "../screens/AgeCheckScreen";
+import LinkingConfiguration from "./LinkingConfiguration";
 
 import {
   RootStackParamList,
@@ -41,12 +42,14 @@ export default function Navigation({
   colorScheme: ColorSchemeName;
 }) {
   return (
-    <NavigationContainer
-      linking={LinkingConfiguration}
-      theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-    >
-      <RootNavigator />
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer
+        linking={LinkingConfiguration}
+        theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+      >
+        <RootNavigator />
+      </NavigationContainer>
+    </Provider>
   );
 }
 
@@ -66,7 +69,6 @@ function RootNavigator() {
       <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
 
       <Stack.Screen name="AgeCheck" component={AgeCheckScreen} />
-
 
       <Stack.Screen
         name="Root"

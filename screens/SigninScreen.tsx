@@ -11,21 +11,47 @@ import {
   User,
 } from "@firebase/auth";
 import { auth } from "../firebase";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { RootStackScreenProps } from "../types";
 
 export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
   const [currentUser, setcurrentUser] = useState<User>();
+
   const [user, setUser] = useState({
     email: "",
     password: "",
   });
 
+  const loadLoginState = async () => {
+    try {
+      const loggedInString = await AsyncStorage.getItem("loggedIn");
+      if (loggedInString) {
+        navigation.navigate("Root");
+        return loggedInString;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
+    loadLoginState();
     const unsubrcribe = onAuthStateChanged(auth, (user) => {
       setcurrentUser(user as User);
     });
     return unsubrcribe;
-  }, [auth, onAuthStateChanged]);
+  }, [auth, onAuthStateChanged, loadLoginState]);
+
+  // this function should be called saveLoginState(false) to sign out!
+  const saveLoginState = async (loggedIn: boolean) => {
+    try {
+      await AsyncStorage.setItem("loggedIn", loggedIn.toString());
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const login = async () => {
     try {
@@ -36,6 +62,7 @@ export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
       );
       if (auth.currentUser) {
         setcurrentUser(auth.currentUser);
+        saveLoginState(true);
         navigation.navigate("Root");
       } else {
         setcurrentUser(undefined);
