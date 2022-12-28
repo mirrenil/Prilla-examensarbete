@@ -10,7 +10,6 @@ import { auth, db } from "../firebase";
 import { collection, Timestamp } from "firebase/firestore";
 import { setOneDoc } from "../helper";
 import { RootStackScreenProps } from "../types";
-import { useDispatch, useSelector } from "react-redux";
 
 export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
   const [newUser, setNewUser] = useState({
@@ -19,8 +18,6 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
     password: "",
     passwordConfirmation: "",
   });
-  const dispatch = useDispatch();
-  const state = useSelector((state: any) => state);
 
   const addUserToDb = async () => {
     const user = {
@@ -32,6 +29,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
     };
     setOneDoc("users", auth.currentUser?.uid, user);
   };
+
   const signup = async () => {
     try {
       const user = await createUserWithEmailAndPassword(
@@ -88,6 +86,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
           const { email, displayName, password, passwordConfirmation } = values;
 
           useEffect(() => {
+            console.log(newUser);
             setNewUser({
               email: email,
               displayName: displayName,
