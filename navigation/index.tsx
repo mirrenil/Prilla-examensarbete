@@ -15,6 +15,7 @@ import * as React from "react";
 import { ColorSchemeName, Pressable } from "react-native";
 import { Provider } from "react-redux";
 import store from "../redux/store";
+import { User } from "../Interfaces";
 
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
@@ -90,7 +91,9 @@ function RootNavigator() {
 /**
  * A bottom tab navigator displays tab buttons on the bottom of the display to switch screens.
  * https://reactnavigation.org/docs/bottom-tab-navigator
+ *
  */
+
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
@@ -158,6 +161,7 @@ function BottomTabNavigator() {
       <BottomTab.Screen
         name="Profile"
         component={ProfileScreen}
+        // initialParams={{ id: currentUser.id }}
         options={{
           title: "",
           tabBarIcon: ({ color }) => (
@@ -168,9 +172,3 @@ function BottomTabNavigator() {
     </BottomTab.Navigator>
   );
 }
-
-// function TabBarIcon(props: {
-//   name: React.ComponentProps<typeof FontAwesome>["name"];
-//   color: string;
-// }) {
-//   return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
