@@ -43,8 +43,10 @@ export const ReviewCard = ({ review }: Props) => {
 								<Text>{product.Type}</Text>
 							</View>
 						</TouchableOpacity>
-
-						<RatingDots rating={review.rating} />
+						<View style={{flexDirection: 'row'}}>
+							<RatingDots rating={review.rating} />
+							<Text style={{marginLeft: 10}}>{review.rating}</Text>
+						</View>
 					</View>
 				</View>
 				<View style={styles.description}>
@@ -78,10 +80,10 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 	},
 	textAndRating: {
+		marginLeft: 10,
 		flex: 4,
 	},
 	productText: {
-		marginLeft: 10,
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 	},
