@@ -85,7 +85,6 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
           const { email, displayName, password, passwordConfirmation } = values;
 
           useEffect(() => {
-            console.log(newUser);
             setNewUser({
               email: email,
               displayName: displayName,
@@ -96,7 +95,6 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
 
           return (
             <View style={styles.container}>
-          
               <TextInput
                 lightColor="#AF90D9"
                 darkColor="#413C48"
@@ -123,7 +121,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
               {touched.email && errors.email && (
                 <Text style={styles.error}>{errors.email}</Text>
               )}
-            
+
               <TextInput
                 lightColor="#AF90D9"
                 darkColor="#413C48"
@@ -138,7 +136,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
               {touched.password && errors.password && (
                 <Text style={styles.error}>{errors.password}</Text>
               )}
-            
+
               <TextInput
                 lightColor="#AF90D9"
                 darkColor="#413C48"
