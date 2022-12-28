@@ -25,6 +25,7 @@ import SigninScreen from "../screens/SigninScreen";
 import SignupScreen from "../screens/SignupScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import ForgotPasswordScreen from "../screens/ForgotPasswordScreen";
+
 import LinkingConfiguration from "./LinkingConfiguration";
 import AgeCheckScreen from "../screens/AgeCheckScreen";
 
@@ -65,6 +66,7 @@ function RootNavigator() {
       <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
 
       <Stack.Screen name="AgeCheck" component={AgeCheckScreen} />
+
 
       <Stack.Screen
         name="Root"

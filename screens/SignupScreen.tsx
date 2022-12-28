@@ -1,6 +1,6 @@
 import * as WebBrowser from "expo-web-browser";
 import { useEffect, useState } from "react";
-import { Alert, Keyboard, StyleSheet, TouchableOpacity } from "react-native";
+import { Alert, StyleSheet, TouchableOpacity } from "react-native";
 
 import { Text, View, TextInput } from "../components/Themed";
 import { Formik } from "formik";
@@ -23,8 +23,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
     const user = {
       email: newUser.email,
       displayName: newUser.displayName,
-      userID: auth.currentUser?.uid,
-      createdAt: Timestamp.now().toDate(),
+      createdAt: new Date(),
       photo: "",
     };
     setOneDoc("users", auth.currentUser?.uid, user);
@@ -95,12 +94,11 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
 
           return (
             <View style={styles.container}>
-              <Text style={styles.label} lightColor="#fff" darkColor="#fff">
-                Username
-              </Text>
+          
               <TextInput
                 lightColor="#AF90D9"
                 darkColor="#413C48"
+                placeholder="Username"
                 style={styles.input}
                 value={displayName}
                 onChangeText={handleChange("displayName")}
@@ -110,12 +108,11 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
               {touched.displayName && errors.displayName && (
                 <Text style={styles.error}>{errors.displayName}</Text>
               )}
-              <Text style={styles.label} lightColor="#fff" darkColor="#fff">
-                Email
-              </Text>
+
               <TextInput
                 lightColor="#AF90D9"
                 darkColor="#413C48"
+                placeholder="Email"
                 style={styles.input}
                 value={email}
                 onChangeText={handleChange("email")}
@@ -124,12 +121,11 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
               {touched.email && errors.email && (
                 <Text style={styles.error}>{errors.email}</Text>
               )}
-              <Text style={styles.label} lightColor="#fff" darkColor="#fff">
-                Password
-              </Text>
+            
               <TextInput
                 lightColor="#AF90D9"
                 darkColor="#413C48"
+                placeholder="Password"
                 style={styles.input}
                 secureTextEntry
                 value={password}
@@ -140,12 +136,11 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
               {touched.password && errors.password && (
                 <Text style={styles.error}>{errors.password}</Text>
               )}
-              <Text style={styles.label} lightColor="#fff" darkColor="#fff">
-                Password
-              </Text>
+            
               <TextInput
                 lightColor="#AF90D9"
                 darkColor="#413C48"
+                placeholder="Password Confirmation"
                 style={styles.input}
                 secureTextEntry
                 value={passwordConfirmation}

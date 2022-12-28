@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Image, StyleSheet } from "react-native";
+import { Image, ScrollView, StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
 import { useFonts } from "expo-font";
 import { ReviewCard } from "../components/ReviewCard";
@@ -7,6 +7,8 @@ import { getAllDocsInCollection } from "../helper";
 import { Review } from "../Interfaces";
 import Tabbar from "../components/Tabbar";
 import { RootTabScreenProps } from "../types";
+import { ActivityCard } from "../components/ActivityCard";
+import { getAdditionalUserInfo } from "firebase/auth";
 
 export default function StartScreen({ navigation,}: RootTabScreenProps<"Home">) {
 	const [loaded] = useFonts({
@@ -15,6 +17,7 @@ export default function StartScreen({ navigation,}: RootTabScreenProps<"Home">) 
 		OleoScript: require('../assets/fonts/OleoScript-Regular.ttf'),
 	});
 	const [reviews, setReviews] = useState<Review[]>([]);
+
 
 	useEffect(() => {
 		getReviews();
@@ -31,7 +34,7 @@ export default function StartScreen({ navigation,}: RootTabScreenProps<"Home">) 
 	};
 
 	return (
-		<View>
+		<ScrollView>
 			<View style={styles.container}>
 				<Image
 					style={styles.heroImg}
@@ -47,10 +50,6 @@ export default function StartScreen({ navigation,}: RootTabScreenProps<"Home">) 
 						<Text style={styles.prilla}>Prilla</Text>
 						<Image
 							style={styles.logo}
-							source={require('../assets/images/Prilla.png')}
-						/>
-						<Image
-							style={styles.logo}
 							source={require('../assets/images/loop.png')}
 						/>
 					</View>
@@ -58,9 +57,9 @@ export default function StartScreen({ navigation,}: RootTabScreenProps<"Home">) 
 			</View>
 			<Tabbar />
 			{reviews.map((review) => {
-				return <ReviewCard key={review.id} review={review} />;
+        return <ActivityCard key={review.id} review={review}/>
 			})}
-		</View>
+		</ScrollView>
 	);
 }
 
@@ -82,8 +81,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "transparent",
-    left: 100,
-    bottom: 40,
   },
   heroText: {
     color: "white",
