@@ -94,7 +94,11 @@ function ProductDetailScreen({
 						</View>
 						<View style={styles.folderFacts}>
 							<Text style={styles.fatText}>Smak</Text>
-							<Text>{product?.Flavor}</Text>
+							<View style={{flexDirection: 'row'}}>
+								{product?.Flavor.map((f) => {
+									return <Text>{f} </Text>;
+								})}
+							</View>
 						</View>
 						<View style={styles.folderFacts}>
 							<Text style={styles.fatText}>Nikotinhalt</Text>
@@ -258,11 +262,12 @@ const styles = StyleSheet.create({
 	},
 	productInfo: {
 		justifyContent: 'space-between',
-    maxWidth: '60%'
+		maxWidth: '60%',
 	},
 	manufacturer: {},
 	ratingContainer: {
 		flexDirection: 'row',
+    alignItems: 'center'
 	},
 	ratingText: {
 		marginLeft: 10,
