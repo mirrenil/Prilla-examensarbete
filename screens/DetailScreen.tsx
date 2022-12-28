@@ -7,8 +7,8 @@ import {
 	TouchableOpacity,
 } from 'react-native';
 import { View, Text } from '../components/Themed';
-import { getOneDocById } from '../helper';
-import { Product } from '../Interfaces';
+import { getDocsWithSpecificValue, getOneDocById } from '../helper';
+import { Product, Review } from '../Interfaces';
 import { RootStackParamList, RootStackScreenProps } from '../types';
 import { RatingDots } from '../components/Rating';
 import { AntDesign } from '@expo/vector-icons';
@@ -20,16 +20,12 @@ function ProductDetailScreen({
 }: RootStackScreenProps<'Product'>) {
 	const [product, setProduct] = useState<Product>();
 	const [activeTab, setActiveTab] = useState<number>(1);
-	const [reviews, setReviews] = useState([]);
+	const [reviews, setReviews] = useState<Review[]>([]);
 
 	useEffect(() => {
 		getProductData();
 		getProductReviews();
 	}, []);
-
-	useEffect(() => {
-		console.log(product);
-	}, [product]);
 
 	const getProductData = async () => {
 		try {
@@ -44,7 +40,8 @@ function ProductDetailScreen({
 
 	const getProductReviews = async () => {
     try {
-
+      const reviews = await getDocsWithSpecificValue('recensioner', 'productID', product?.id);
+      setReviews(reviews as Review[])
     }catch(err) {
       console.log(err)
     }

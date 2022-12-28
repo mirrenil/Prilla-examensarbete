@@ -25,11 +25,11 @@ export interface Product {
     Nicotine: number,
     Photo: string,
     Pouches: number,
-    // productID: string,
     Reviews: string[],
     Strength: number,
     Tags: Tag[],
     Type: string,
     Weight: number,
-    Rating?: number
+    Rating?: number,
+    id: string
 }
