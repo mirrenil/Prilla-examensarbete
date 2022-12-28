@@ -24,11 +24,19 @@ export default function ProfileScreen({ user }: Props) {
       <View style={styles.container}>
         <UserInfoCard user={user} />
 
-        <Button
-          color="#FFFD54"
+        <TouchableOpacity
+          style={[follow ? styles.borderButton : styles.button]}
           onPress={toggleButton}
-          title={follow ? "Följer" : "Följ"}
-        />
+        >
+          <Text
+            darkColor="#201A28"
+            lightColor="#201A28"
+            style={[follow ? styles.borderButtonText : styles.buttonText]}
+          >
+            {follow ? "Följer" : "Följ"}{" "}
+            {follow ? <AntDesign name="down" size={14} color="white" /> : null}
+          </Text>
+        </TouchableOpacity>
       </View>
 
       <View
@@ -106,6 +114,22 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "bold",
     fontSize: 17,
+  },
+  borderButton: {
+    borderWidth: 0.2,
+    borderColor: "#fff",
+    padding: 10,
+    borderRadius: 6,
+    width: 120,
+    height: 40,
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  borderButtonText: {
+    textAlign: "center",
+    fontWeight: "bold",
+    fontSize: 17,
+    color: "#fff",
   },
   box: {
     display: "flex",
