@@ -1,12 +1,13 @@
 import * as WebBrowser from "expo-web-browser";
 import { useEffect, useState } from "react";
-import { Alert, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import { Alert, StyleSheet, TouchableOpacity } from "react-native";
 
-import { Text, View } from "../components/Themed";
+import { Text, View, TextInput } from "../components/Themed";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { createUserWithEmailAndPassword, updateProfile } from "@firebase/auth";
-import { auth, db } from "../firebase";
+import { auth } from "../firebase";
+import { Timestamp } from "firebase/firestore";
 import { setOneDoc } from "../helper";
 import { RootStackScreenProps } from "../types";
 
@@ -94,34 +95,37 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
           return (
             <View style={styles.container}>
               <TextInput
-                style={styles.input}
+                lightColor="#AF90D9"
+                darkColor="#413C48"
                 placeholder="Username"
+                style={styles.input}
                 value={displayName}
                 onChangeText={handleChange("displayName")}
                 onBlur={handleBlur("displayName")}
                 autoCapitalize="none"
               />
               {touched.displayName && errors.displayName && (
-                <Text style={{ fontSize: 10, color: "red" }}>
-                  {errors.displayName}
-                </Text>
+                <Text style={styles.error}>{errors.displayName}</Text>
               )}
+
               <TextInput
-                style={styles.input}
+                lightColor="#AF90D9"
+                darkColor="#413C48"
                 placeholder="Email"
+                style={styles.input}
                 value={email}
                 onChangeText={handleChange("email")}
                 autoCapitalize="none"
               />
               {touched.email && errors.email && (
-                <Text style={{ fontSize: 10, color: "red" }}>
-                  {errors.email}
-                </Text>
+                <Text style={styles.error}>{errors.email}</Text>
               )}
 
               <TextInput
-                style={styles.input}
+                lightColor="#AF90D9"
+                darkColor="#413C48"
                 placeholder="Password"
+                style={styles.input}
                 secureTextEntry
                 value={password}
                 onChangeText={handleChange("password")}
@@ -129,14 +133,14 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
                 onBlur={handleBlur("password")}
               />
               {touched.password && errors.password && (
-                <Text style={{ fontSize: 10, color: "red" }}>
-                  {errors.password}
-                </Text>
+                <Text style={styles.error}>{errors.password}</Text>
               )}
 
               <TextInput
+                lightColor="#AF90D9"
+                darkColor="#413C48"
+                placeholder="Password Confirmation"
                 style={styles.input}
-                placeholder="Password"
                 secureTextEntry
                 value={passwordConfirmation}
                 onChangeText={handleChange("passwordConfirmation")}
@@ -144,9 +148,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
                 onBlur={handleBlur("passwordConfirmation")}
               />
               {touched.passwordConfirmation && errors.passwordConfirmation && (
-                <Text style={{ fontSize: 10, color: "red" }}>
-                  {errors.passwordConfirmation}
-                </Text>
+                <Text style={styles.error}>{errors.passwordConfirmation}</Text>
               )}
 
               <TouchableOpacity
@@ -179,7 +181,6 @@ const styles = StyleSheet.create({
     height: 50,
     width: 300,
     color: "#fff",
-    backgroundColor: "#413C48",
     marginBottom: 10,
     padding: 10,
     borderRadius: 6,
@@ -214,5 +215,15 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     height: 1,
     width: "60%",
+  },
+  label: {
+    fontSize: 15,
+    marginBottom: 10,
+    marginRight: 200,
+  },
+  error: {
+    fontSize: 10,
+    color: "red",
+    margin: 5,
   },
 });
