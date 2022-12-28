@@ -12,12 +12,9 @@ import {
 } from "@firebase/auth";
 import { auth } from "../firebase";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useDispatch, useSelector } from "react-redux";
 import { RootStackScreenProps } from "../types";
 
 export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
-  const dispatch = useDispatch();
-  const state = useSelector((state: any) => state);
   const [currentUser, setcurrentUser] = useState<User>();
 
   const [user, setUser] = useState({
@@ -65,7 +62,6 @@ export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
       );
       if (auth.currentUser) {
         setcurrentUser(auth.currentUser);
-        dispatch({ type: "SET_USER", payload: user });
         saveLoginState(true);
         navigation.navigate("Root");
       } else {
