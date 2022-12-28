@@ -39,5 +39,5 @@ export interface Product {
     Type: string,
     Weight: number,
     Rating?: number,
-    id: string
+    ProductID: string
 }
