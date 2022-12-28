@@ -23,8 +23,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
     const user = {
       email: newUser.email,
       displayName: newUser.displayName,
-      userID: auth.currentUser?.uid,
-      createdAt: Timestamp.now().toDate(),
+      createdAt: new Date(),
       photo: "",
     };
     setOneDoc("users", auth.currentUser?.uid, user);
