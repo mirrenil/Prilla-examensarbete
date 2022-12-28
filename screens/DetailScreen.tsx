@@ -254,10 +254,11 @@ const styles = StyleSheet.create({
 	},
 	title: {
 		fontWeight: 'bold',
-		fontSize: 20,
+		fontSize: 18,
 	},
 	productInfo: {
 		justifyContent: 'space-between',
+    maxWidth: '60%'
 	},
 	manufacturer: {},
 	ratingContainer: {
