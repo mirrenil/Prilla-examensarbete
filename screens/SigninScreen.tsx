@@ -10,61 +10,63 @@ import {
   onAuthStateChanged,
   User,
 } from "@firebase/auth";
-import { auth } from "../firebase";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { RootStackScreenProps } from "../types";
-import { saveLoginState } from "../redux/actions";
+import { auth } from "../firebase";
+import { useDispatch, useSelector } from "react-redux";
+import { setActiveUser, selectEmail, selectPassword } from "../redux/signin";
 
-export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
+export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
   const [currentUser, setcurrentUser] = useState<User>();
-
   const [user, setUser] = useState({
     email: "",
     password: "",
   });
+  const dispatch = useDispatch();
+  const email = useSelector(selectEmail);
+  const password = useSelector(selectPassword);
 
-  const loadLoginState = async () => {
-    try {
-      const loggedInString = await AsyncStorage.getItem("loggedIn");
-      if (loggedInString) {
-        navigation.navigate("Root");
-        return loggedInString;
-      } else {
-        return false;
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const loadLoginState = async () => {
+  //   try {
+  //     const loggedInString = await AsyncStorage.getItem("loggedIn");
+  //     if (loggedInString) {
+  //       navigation.navigate("Root");
+  //       return loggedInString;
+  //     } else {
+  //       await AsyncStorage.setItem("loggedIn", "false");
+  //       navigation.navigate("Signin");
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   useEffect(() => {
-    loadLoginState();
+    console.log(currentUser);
+  }, [currentUser]);
+
+  useEffect(() => {
     const unsubrcribe = onAuthStateChanged(auth, (user) => {
       setcurrentUser(user as User);
     });
     return unsubrcribe;
-  }, [auth, onAuthStateChanged, loadLoginState]);
+  }, [auth, onAuthStateChanged]);
 
   const login = async () => {
     try {
-      const x = await signInWithEmailAndPassword(
-        auth,
-        user.email,
-        user.password
+      const email = useSelector(selectEmail);
+      const password = useSelector(selectPassword);
+      await signInWithEmailAndPassword(auth, user.email, user.password);
+      dispatch(
+        setActiveUser({
+          email: user.email,
+          password: user.password,
+        })
       );
-      if (auth.currentUser) {
-        setcurrentUser(auth.currentUser);
-        saveLoginState(true);
-        navigation.navigate("Root");
-      } else {
-        setcurrentUser(undefined);
-      }
+      navigation.navigate("Root");
     } catch (error) {
       Alert.alert("Felaktig email eller lösenord");
     }
   };
-
-  console.log("currentUser", currentUser?.displayName);
 
   return (
     <View style={styles.screen}>
