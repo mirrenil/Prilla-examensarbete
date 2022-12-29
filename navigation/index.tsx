@@ -30,6 +30,7 @@ import ProfileScreen from "../screens/ProfileScreen";
 import ForgotPasswordScreen from "../screens/ForgotPasswordScreen";
 import AgeCheckScreen from "../screens/AgeCheckScreen";
 import LinkingConfiguration from "./LinkingConfiguration";
+import { saveLoginState, loadLoginState } from "../redux/actions/index";
 
 import {
   RootStackParamList,
@@ -123,13 +124,17 @@ function BottomTabNavigator() {
 
           headerRight: () => (
             <Pressable
-              onPress={() => navigation.navigate("Modal")}
+              onPress={() => {
+                saveLoginState(false);
+                loadLoginState();
+                navigation.navigate("Signin");
+              }}
               style={({ pressed }) => ({
                 opacity: pressed ? 0.5 : 1,
               })}
             >
               <FontAwesome
-                name="info-circle"
+                name="sign-out"
                 size={25}
                 color={Colors[colorScheme].text}
                 style={{ marginRight: 15 }}
