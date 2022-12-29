@@ -5,18 +5,36 @@ import { StyleSheet, TouchableOpacity, Image, Button } from "react-native";
 import { Text, View } from "../components/Themed";
 import { ActivityCard } from "../components/ActivityCard";
 import { UserInfoCard } from "../components/UserInfoCard";
+import { FavoritesCard } from "../components/FavoritesCard";
 import { User } from "../Interfaces";
-import user from "../redux/reducers/users";
-import { getCurrentUser } from "../redux/actions/index";
+import { getAllDocsInCollection } from "../helper";
+import { saveLoginState } from "../redux/actions";
 
 interface Props {
   user: User;
 }
+
 export default function ProfileScreen({ user }: Props) {
   const [follow, setFollow] = useState(false);
+  const [users, setUsers] = useState<User[]>([]);
 
   const toggleButton = () => {
     setFollow(!follow);
+    saveLoginState(false);
+  };
+
+  useEffect(() => {
+    getUsers();
+  }, []);
+
+  const getUsers = async () => {
+    let newData = [];
+    let data = await getAllDocsInCollection("users");
+
+    if (data?.length) {
+      newData = data;
+    }
+    setUsers(newData);
   };
 
   return (
