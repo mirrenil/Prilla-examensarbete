@@ -94,7 +94,7 @@ function ProductDetailScreen({
 						</View>
 						<View style={styles.folderFacts}>
 							<Text style={styles.fatText}>Smak</Text>
-							<View style={{flexDirection: 'row'}}>
+							<View style={{ flexDirection: 'row' }}>
 								{product?.Flavor.map((f) => {
 									return <Text>{f} </Text>;
 								})}
@@ -161,11 +161,16 @@ function ProductDetailScreen({
 							</View>
 							<Text>{product?.Reviews.length} Ratings</Text>
 							<View style={styles.interactions}>
-								<TouchableOpacity>
+								<TouchableOpacity
+									onPress={() =>
+										navigation.navigate('Review', { id: product.ProductID })
+									}
+								>
 									<View style={styles.button}>
 										<Text>Lägg till recension</Text>
 									</View>
 								</TouchableOpacity>
+
 								<AntDesign name="hearto" size={24} color="white" />
 							</View>
 						</View>
@@ -267,7 +272,7 @@ const styles = StyleSheet.create({
 	manufacturer: {},
 	ratingContainer: {
 		flexDirection: 'row',
-    alignItems: 'center'
+		alignItems: 'center',
 	},
 	ratingText: {
 		marginLeft: 10,
