@@ -39,9 +39,14 @@ const ImageUpload = () => {
 
 	return (
 		<View>
-			<TouchableOpacity onPress={PickImage} style={{alignItems: 'center'}}>
-				<MaterialIcons name="add-a-photo" size={50} color="white" style={{paddingBottom: 10}}/>
-        <Text>Lägg till foto</Text>
+			<TouchableOpacity onPress={PickImage} style={{ alignItems: 'center' }}>
+				<MaterialIcons
+					name="add-a-photo"
+					size={50}
+					color="white"
+					style={{ paddingBottom: 10 }}
+				/>
+				<Text>Lägg till foto</Text>
 			</TouchableOpacity>
 			{image && (
 				<Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
