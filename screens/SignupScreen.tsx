@@ -7,11 +7,22 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import { createUserWithEmailAndPassword, updateProfile } from "@firebase/auth";
 import { auth } from "../firebase";
-import { Timestamp } from "firebase/firestore";
 import { setOneDoc } from "../helper";
 import { RootStackScreenProps } from "../types";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  selectDisplayName,
+  selectEmail,
+  selectPassword,
+  selectPasswordConfirmation,
+} from "../redux/signup";
 
 export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
+  const dispatch = useDispatch();
+  const displayName = useSelector(selectDisplayName);
+  const email = useSelector(selectEmail);
+  const password = useSelector(selectPassword);
+  const passwordConfirmation = useSelector(selectPasswordConfirmation);
   const [newUser, setNewUser] = useState({
     email: "",
     displayName: "",
@@ -31,7 +42,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
 
   const signup = async () => {
     try {
-      const user = await createUserWithEmailAndPassword(
+      await createUserWithEmailAndPassword(
         auth,
         newUser.email,
         newUser.password
@@ -40,6 +51,15 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
           updateProfile(auth.currentUser, { displayName: newUser.displayName });
         }
       });
+
+      dispatch(
+        setNewUser({
+          displayName: newuser.displayName,
+          email: newuser.email,
+          password: newuser.password,
+          passwordConfirmation: newuser.passwordConfirmation,
+        })
+      );
       addUserToDb();
       Alert.alert("Registrering lyckades!");
       navigation.navigate("Signin");
