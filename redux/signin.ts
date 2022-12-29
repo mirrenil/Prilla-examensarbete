@@ -2,29 +2,25 @@ import { createSlice } from "@reduxjs/toolkit";
 
 // same as [displayName, setdisplayName] = useState(null)
 const initialState = {
-  email: null,
-  password: null,
+  reduxEmail: null,
 };
 
 const userSignInSlice = createSlice({
-  name: "user",
+  name: "reduxUser",
   initialState,
   reducers: {
-    // same as setEmail(action.payload)
+    // same as setreduxEmail(action.payload)
     setActiveUser: (state, action) => {
-      state.email = action.payload.email;
-      state.password = action.payload.password;
+      state.reduxEmail = action.payload.reduxEmail;
     },
     setSignOutState: (state) => {
-      state.email = null;
-      state.password = null;
+      state.reduxEmail = null;
     },
   },
 });
 
 export const { setActiveUser, setSignOutState } = userSignInSlice.actions;
 
-export const selectEmail = (state: any) => state.user.email;
-export const selectPassword = (state: any) => state.user.password;
+export const selectReduxEmail = (state: any) => state.user.reduxEmail;
 
 export default userSignInSlice.reducer;

@@ -9,11 +9,12 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
   User,
+  UserCredential,
 } from "@firebase/auth";
 import { RootStackScreenProps } from "../types";
 import { auth } from "../firebase";
 import { useDispatch, useSelector } from "react-redux";
-import { setActiveUser, selectEmail, selectPassword } from "../redux/signin";
+import { setActiveUser, selectReduxEmail } from "../redux/signin";
 
 export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
   const [currentUser, setcurrentUser] = useState<User>();
@@ -22,8 +23,7 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
     password: "",
   });
   const dispatch = useDispatch();
-  const email = useSelector(selectEmail);
-  const password = useSelector(selectPassword);
+  const reduxEmail = useSelector(selectReduxEmail);
 
   // const loadLoginState = async () => {
   //   try {
@@ -53,15 +53,16 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
 
   const login = async () => {
     try {
-      const email = useSelector(selectEmail);
-      const password = useSelector(selectPassword);
-      await signInWithEmailAndPassword(auth, user.email, user.password);
-      dispatch(
-        setActiveUser({
-          email: user.email,
-          password: user.password,
-        })
+      await signInWithEmailAndPassword(auth, user.email, user.password).then(
+        (result: UserCredential) => {
+          dispatch(
+            setActiveUser({
+              reduxEmail: result.user?.email,
+            })
+          );
+        }
       );
+      Alert.alert("Inloggning lyckades!");
       navigation.navigate("Root");
     } catch (error) {
       Alert.alert("Felaktig email eller lösenord");
