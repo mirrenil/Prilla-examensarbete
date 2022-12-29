@@ -8,7 +8,7 @@ interface Props {
 	single?: number,
 	width?: number
 }
-export const RatingDots = ({ rating, dotSize, single, width }: Props) => {
+export const RateInactive = ({ rating, dotSize, single, width }: Props) => {
 	const handleRating = (value: number) => {
 		console.log(value);
 	};

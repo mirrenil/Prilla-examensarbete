@@ -11,7 +11,7 @@ import { View, Text } from '../components/Themed';
 import { getDocsWithSpecificValue, getOneDocById } from '../helper';
 import { Product, Review } from '../Interfaces';
 import { RootStackParamList, RootStackScreenProps } from '../types';
-import { RatingDots } from '../components/Rating';
+import { RateInactive } from '../components/RateInactive';
 import { AntDesign } from '@expo/vector-icons';
 import { StrengthBar } from '../components/StrengthBar';
 import { User } from '../Interfaces';
@@ -118,7 +118,7 @@ function ProductDetailScreen({
 								<Text style={[styles.fatText, styles.capitalize]}>
 									{rev.author}
 								</Text>
-								<RatingDots
+								<RateInactive
 									rating={rev.rating}
 									dotSize={10}
 									single={15}
@@ -154,7 +154,7 @@ function ProductDetailScreen({
 							</Text>
 							<Text style={styles.manufacturer}>{product?.Manufacturer}</Text>
 							<View style={styles.ratingContainer}>
-								<RatingDots rating={product?.Rating ? product.Rating : 0} />
+								<RateInactive rating={product?.Rating ? product.Rating : 0} />
 								<Text style={styles.ratingText}>
 									{product?.Rating ? product.Rating : 0}
 								</Text>
