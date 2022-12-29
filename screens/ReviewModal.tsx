@@ -1,4 +1,4 @@
-import { View, Text } from '../components/Themed';
+import { View, Text, TextInput } from '../components/Themed';
 import {
 	StyleSheet,
 	Image,
@@ -10,7 +10,7 @@ import {
 	ScrollView,
 } from 'react-native';
 import { RootStackScreenProps } from '../types';
-import React, { useEffect, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import { Product, Tag } from '../Interfaces';
 import { getAllDocsInCollection, getOneDocById } from '../helper';
 import { EvilIcons } from '@expo/vector-icons';
@@ -22,14 +22,12 @@ import Tags from '../components/Tags';
 const ReviewModal = ({ navigation, route }: RootStackScreenProps<'Review'>) => {
 	const [product, setProduct] = useState<Product>();
 	const [value, setValue] = useState<number>(0);
+	const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
+	const [reviewText, setReviewText] = useState<string>('');
 
 	useEffect(() => {
 		getProductData();
 	}, []);
-
-	// useEffect(() => {
-	// 	console.log(selectedTags);
-	// }, [selectedTags]);
 
 	const getProductData = async () => {
 		try {
@@ -41,31 +39,6 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<'Review'>) => {
 			console.log(err);
 		}
 	};
-
-	// const getTags = async () => {
-	// 	try {
-	// 		let tags = await getAllDocsInCollection('tags');
-	// 		setTags(tags as Tag[]);
-	// 	} catch (err) {
-	// 		console.log(err);
-	// 	}
-	// };
-
-	// const isAlreadySelected = (tag: Tag) => {
-	// 	let selected = selectedTags.some(
-	// 		(selectedTag) => selectedTag.name == tag.name
-	// 	);
-	// 	console.log('is selected: ', tag.name, selected);
-	// 	return selected;
-	// };
-
-	// const toggleSelectTag = (tag: Tag) => {
-	// 	if (!isAlreadySelected(tag)) {
-	// 		let list = selectedTags;
-	// 		list.push(tag);
-	// 		setSelectedTags(list);
-	// 	}
-	// };
 
 	const styles = StyleSheet.create({
 		fatText: {
@@ -124,46 +97,106 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<'Review'>) => {
 		},
 	});
 
-	return (
-		<ScrollView style={styles.container}>
-			<View style={[styles.productSection, styles.section]}>
-				<View style={styles.productInfo}>
-					<Image style={styles.image} source={{ uri: product?.Photo }} />
-					<View style={styles.productText}>
-						<View style={styles.titles}>
-							<Text style={styles.fatText}>{product?.Brand} </Text>
-							<Text style={styles.fatText}>{product?.Name} </Text>
-							<Text>{product?.Format}</Text>
+	const popupStyles = StyleSheet.create({
+		layover: {
+			height: '100%',
+			width: '100%',
+			position: 'absolute',
+			top: 0,
+			right: 0,
+			backgroundColor: 'rgba(0,0,0,0.7)',
+			zIndex: 100,
+		},
+		popUp: {
+			width: '80%',
+			height: 200,
+			backgroundColor: 'black',
+		},
+	});
+
+	const Popup = () => {
+		const [text, setText] = useState<string>('');
+
+		const handleSubmit = () => {
+			setReviewText(text);
+			setPopUpOpen(false);
+		};
+
+		return (
+			<View style={popupStyles.layover}>
+				<View style={popupStyles.popUp}>
+					<Text>Title</Text>
+					<TextInput
+						lightColor="#AF90D9"
+						darkColor="#413C48"
+						placeholder="Skriv här..."
+						// style={styles.input}
+						value={text}
+						onChangeText={setText}
+						// autoFocus
+					/>
+					<TouchableOpacity onPress={handleSubmit}>
+						<View>
+							<Text>Spara</Text>
 						</View>
-						<Text>{product?.Manufacturer}</Text>
+					</TouchableOpacity>
+				</View>
+			</View>
+		);
+	};
+
+	return (
+		<>
+			{popUpOpen ? <Popup /> : null}
+			<ScrollView style={styles.container}>
+				<View style={[styles.productSection, styles.section]}>
+					<View style={styles.productInfo}>
+						<Image style={styles.image} source={{ uri: product?.Photo }} />
+						<View style={styles.productText}>
+							<View style={styles.titles}>
+								<Text style={styles.fatText}>{product?.Brand} </Text>
+								<Text style={styles.fatText}>{product?.Name} </Text>
+								<Text>{product?.Format}</Text>
+							</View>
+							<Text>{product?.Manufacturer}</Text>
+						</View>
+					</View>
+					<TouchableOpacity
+						style={{ flexDirection: 'row' }}
+						onPress={() => setPopUpOpen(true)}
+					>
+            <EvilIcons name="pencil" size={24} color="white" />
+						{reviewText ? (
+							<Text>{reviewText}</Text>
+						) : (
+							<>
+								<Text>Lägg till kommentar</Text>
+							</>
+						)}
+					</TouchableOpacity>
+				</View>
+				<View style={[styles.rateSection, styles.section]}>
+					<Text style={styles.sectionTitle}>Sätt betyg</Text>
+					<View style={styles.rateSectionContent}>
+						<Text style={styles.value}>{value}</Text>
+						<RateActive
+							handleChange={(value: number) => {
+								setValue(value);
+							}}
+						/>
 					</View>
 				</View>
-				<View style={{ flexDirection: 'row' }}>
-					<EvilIcons name="pencil" size={24} color="white" />
-					<Text>Lägg till kommentar</Text>
+				<View style={styles.section}>
+					<Tags />
 				</View>
-			</View>
-			<View style={[styles.rateSection, styles.section]}>
-				<Text style={styles.sectionTitle}>Sätt betyg</Text>
-				<View style={styles.rateSectionContent}>
-					<Text style={styles.value}>{value}</Text>
-					<RateActive
-						handleChange={(value: number) => {
-							setValue(value);
-						}}
-					/>
+				<View style={styles.imageSection}>
+					<ImageUpload />
+					<TouchableOpacity style={styles.submitButton}>
+						<Text style={[{ color: 'black' }, styles.fatText]}>Publicera</Text>
+					</TouchableOpacity>
 				</View>
-			</View>
-			<View style={styles.section}>
-				<Tags />
-			</View>
-			<View style={styles.imageSection}>
-				<ImageUpload />
-				<TouchableOpacity style={styles.submitButton}>
-					<Text style={[{ color: 'black' }, styles.fatText]}>Publicera</Text>
-				</TouchableOpacity>
-			</View>
-		</ScrollView>
+			</ScrollView>
+		</>
 	);
 };
 
