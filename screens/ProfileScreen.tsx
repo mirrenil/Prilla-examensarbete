@@ -9,12 +9,12 @@ import { FavoritesCard } from "../components/FavoritesCard";
 import { User } from "../Interfaces";
 import { getAllDocsInCollection } from "../helper";
 import { saveLoginState } from "../redux/actions";
+import { RootTabScreenProps } from "../types";
 
-interface Props {
-  user: User;
-}
-
-export default function ProfileScreen({ user }: Props) {
+export default function ProfileScreen({
+  navigation,
+  route,
+}: RootTabScreenProps<"Profile">) {
   const [follow, setFollow] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
 
@@ -40,7 +40,7 @@ export default function ProfileScreen({ user }: Props) {
   return (
     <View style={styles.screen}>
       <View style={styles.container}>
-        <UserInfoCard user={user} />
+        {/* <UserInfoCard user={user} /> */}
 
         <TouchableOpacity
           style={[follow ? styles.borderButton : styles.button]}
