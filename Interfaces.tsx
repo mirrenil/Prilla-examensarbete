@@ -15,27 +15,29 @@ export interface Tag {
     name: string
 }
 
-export interface Product {
-    brand: string,
-    description: string,
-    flavor: string[],
-    format: string,
-    manufacturer: string,
-    name: string,
-    nicotine: number,
-    photo: string,
-    pouches: number,
-    // productID: string,
-    reviews: string[],
-    strength: number,
-    tags: Tag[],
-    type: string,
-    weigth: number
-}
-
 export interface User {
     createdAt: Date,
-    displayName: string,
+    displayName: string, 
     email: string,
+    id: string,
     photo: string
+}
+
+export interface Product {
+    Brand: string,
+    Description: string,
+    Flavor: string[],
+    Format: string,
+    Manufacturer: string,
+    Name: string,
+    Nicotine: number,
+    Photo: string,
+    Pouches: number,
+    Reviews: string[],
+    Strength: number,
+    Tags: Tag[],
+    Type: string,
+    Weight: number,
+    Rating?: number,
+    ProductID: string
 }

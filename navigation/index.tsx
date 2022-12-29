@@ -35,6 +35,7 @@ import {
   RootTabParamList,
   RootTabScreenProps,
 } from "../types";
+import ProductDetailScreen from "../screens/DetailScreen";
 
 export default function Navigation({
   colorScheme,
@@ -69,6 +70,8 @@ function RootNavigator() {
       <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
 
       <Stack.Screen name="AgeCheck" component={AgeCheckScreen} />
+
+	  <Stack.Screen name="Product" initialParams={{id: '13'}} component={ProductDetailScreen} />
 
       <Stack.Screen
         name="Root"

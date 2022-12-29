@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
 import { useFonts } from "expo-font";
-import { ReviewCard } from "../components/ReviewCard";
 import { getAllDocsInCollection } from "../helper";
 import { Review } from "../Interfaces";
 import Tabbar from "../components/Tabbar";

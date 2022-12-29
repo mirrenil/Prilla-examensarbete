@@ -1,13 +1,14 @@
-import { getDocs, collection, doc, getDoc, setDoc } from "firebase/firestore";
-import { db } from "./firebase";
+import { getDocs, collection, doc, getDoc, setDoc, query, where } from 'firebase/firestore';
+import { db } from './firebase';
 
 //Gets one document in a collection by doc id
 export const getOneDocById = async (collectionName, id) => {
 	try {
-		const productDocRef = doc(db, collectionName, id);
-		const docSnap = await getDoc(productDocRef);
+		const docRef = doc(db, collectionName, id);
+		const docSnap = await getDoc(docRef);
 		if (docSnap.exists()) {
-			return docSnap.data() ;
+			const item = docSnap.data();
+			return item
 		}
 	} catch (err) {
 		console.log(err);
@@ -20,9 +21,29 @@ export const getAllDocsInCollection = async (collectionName) => {
 	try {
 		const docs = await getDocs(collection(db, collectionName));
 		docs.forEach((doc) => {
-			documents.push({...doc.data(), id: doc.id});
+			documents.push(doc.data());
 		});
 		return documents;
+	} catch (err) {
+		console.log(err);
+	}
+};
+
+//Gets all documents with specific property value
+export const getDocsWithSpecificValue = async (
+	collectionName,
+	property,
+	id
+) => {
+  let documents = [];
+  const collectionRef = collection(db, collectionName);
+  const q = query(collectionRef, where(property, '==', id));
+	try {
+		const data = await getDocs(q);
+		data.forEach((doc) => {
+			documents.push(doc.data());
+		});
+    return documents;
 	} catch (err) {
 		console.log(err);
 	}
