@@ -13,9 +13,7 @@ import {
 import { auth } from "../firebase";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { RootStackScreenProps } from "../types";
-import navigation from "../navigation";
-import { setUser, login } from "../redux/actions";
-import user from "../redux/reducers/users";
+import { saveLoginState } from "../redux/actions";
 
 export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
   const [currentUser, setcurrentUser] = useState<User>();
@@ -47,15 +45,6 @@ export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
     return unsubrcribe;
   }, [auth, onAuthStateChanged, loadLoginState]);
 
-  // this function should be called saveLoginState(false) to sign out!
-  const saveLoginState = async (loggedIn: boolean) => {
-    try {
-      await AsyncStorage.setItem("loggedIn", loggedIn.toString());
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const login = async () => {
     try {
       const x = await signInWithEmailAndPassword(
@@ -74,6 +63,8 @@ export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
       Alert.alert("Felaktig email eller lösenord");
     }
   };
+
+  console.log("currentUser", currentUser?.displayName);
 
   return (
     <View style={styles.screen}>
