@@ -24,9 +24,7 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
   });
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    console.log("currentUSer: ", currentUser?.displayName);
-  }, [currentUser]);
+  useEffect(() => {}, [currentUser]);
 
   useEffect(() => {
     const unsubrcribe = onAuthStateChanged(auth, (user) => {
@@ -36,7 +34,6 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
   }, [auth, onAuthStateChanged]);
 
   const login = async () => {
-    console.log("in login");
     try {
       await signInWithEmailAndPassword(auth, user.email, user.password).then(
         (result: UserCredential) => {
