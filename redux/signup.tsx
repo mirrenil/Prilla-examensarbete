@@ -12,6 +12,7 @@ const userSignUp = createSlice({
   reducers: {
     // same as setEmail(action.payload)
     setNewUser: (state, action) => {
+      console.log('in userSignUp')
       state.reduxDisplayName = action.payload.reduxDisplayName;
       state.reduxEmail = action.payload.reduxEmail;
     },

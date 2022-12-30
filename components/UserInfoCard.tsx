@@ -24,16 +24,20 @@ import {
 import { setDoc, doc } from "firebase/firestore";
 import { auth, db } from "../firebase";
 import { useDispatch, useSelector } from "react-redux";
-import { selectReduxEmail, setSignOutState } from "../redux/signin";
+import { currentReduxUser, setSignOutState } from "../redux/signin";
 import { useNavigation } from "@react-navigation/native";
 
 export const UserInfoCard = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   // const [username, setUsername] = useState(currentUser?.displayName);
-  const userEmail = useSelector(selectReduxEmail);
+  const user = useSelector(currentReduxUser);
   const dispatch = useDispatch();
   const navigate = useNavigation();
+
+  useEffect(() => {
+    console.log('user infocard: ', user)
+  }, [])
 
   useEffect(() => {
     const unsubrcribe = onAuthStateChanged(auth, (user) => {
@@ -61,7 +65,7 @@ export const UserInfoCard = () => {
   ) => {
     e.preventDefault();
     let userObject = {
-      displayName: userEmail,
+      displayName: "hej",
     };
     userObject = { ...userObject };
     // await updateProfile(currentUser, userObject);
@@ -106,6 +110,9 @@ export const UserInfoCard = () => {
 
   return (
     <View>
+      <Text>{user.displayName}</Text>
+      <Text>{user.email}</Text>
+      <Text>{user.id}</Text>
       <View style={styles.top}>
         <Feather
           name="settings"
@@ -171,7 +178,7 @@ export const UserInfoCard = () => {
                       lightColor="#fff"
                       darkColor="#fff"
                       style={styles.borderButton}
-                      onPress={() => resetPassword(userEmail as string)}
+                      // onPress={() => resetPassword(userEmail as string)}
                     >
                       Skicka återställnings länk till e-post
                     </Text>

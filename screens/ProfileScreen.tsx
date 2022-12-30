@@ -9,9 +9,10 @@ import { FavoritesCard } from "../components/FavoritesCard";
 import { User } from "../Interfaces";
 import { getAllDocsInCollection } from "../helper";
 import { RootTabScreenProps } from "../types";
-import { selectReduxEmail } from "../redux/signin";
+// import { selectCurrentUser, selectReduxEmail } from "../redux/signin";
 import { useDispatch, useSelector } from "react-redux";
-import { reduxDisplayName } from "../redux/signup";
+// import { reduxDisplayName } from "../redux/signup";
+import { currentReduxUser } from "../redux/signin";
 
 export default function ProfileScreen({
   navigation,
@@ -20,12 +21,17 @@ export default function ProfileScreen({
   const [follow, setFollow] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
   const dispatch = useDispatch();
-  const userEmail = useSelector(selectReduxEmail);
-  const userDisplayName = useSelector(reduxDisplayName);
+  // const userEmail = useSelector(selectReduxEmail);
+  // const userDisplayName = useSelector(reduxDisplayName);
+  const user = useSelector(currentReduxUser);
 
   const toggleButton = () => {
     setFollow(!follow);
   };
+
+  useEffect(() => {
+    console.log('user in profilescreen: ', user)
+  }, [user])
 
   useEffect(() => {
     getUsers();
@@ -40,7 +46,7 @@ export default function ProfileScreen({
     }
     setUsers(newData);
   };
-  console.log(userEmail, userDisplayName, "user info from redux");
+  // console.log(userEmail, userDisplayName, "user info from redux");
 
   return (
     <View style={styles.screen}>
@@ -60,7 +66,7 @@ export default function ProfileScreen({
             {follow ? <AntDesign name="down" size={14} color="white" /> : null}
           </Text>
         </TouchableOpacity>
-        {userEmail ? <Text>{userEmail}</Text> : <Text>Användarnamn</Text>}
+        {/* {userEmail ? <Text>{userEmail}</Text> : <Text>Användarnamn</Text>} */}
       </View>
 
       <View
