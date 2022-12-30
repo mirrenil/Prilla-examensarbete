@@ -22,6 +22,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
     const userToDB = {
       email: user.email,
       displayName: user.displayName,
+      id: auth.currentUser?.uid,
       createdAt: new Date(),
       photo: "",
       liked: [],

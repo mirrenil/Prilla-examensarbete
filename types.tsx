@@ -24,6 +24,7 @@ export type RootStackParamList = {
   Signin: undefined;
   Signup: undefined;
   ForgotPassword: undefined;
+  Product: { id: string }
   AgeCheck: undefined;
 };
 

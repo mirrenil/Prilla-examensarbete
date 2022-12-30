@@ -1,5 +1,7 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { View, Image, Text, StyleSheet } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { getOneDocById } from '../helper';
 import { Tag, Review, Product } from '../Interfaces';
 import { RatingDots } from './Rating';
@@ -9,7 +11,8 @@ interface Props {
 }
 
 export const ReviewCard = ({ review }: Props) => {
-	const [product, setProduct] = useState<any>();
+	const [product, setProduct] = useState<Product>();
+	const navigation = useNavigation();
 
 	useEffect(() => {
 		getProduct();
@@ -18,7 +21,7 @@ export const ReviewCard = ({ review }: Props) => {
 	const getProduct = async () => {
 		let data = await getOneDocById('produkter', review.productID);
 		if (data) {
-			setProduct(data);
+			setProduct(data as Product);
 		}
 	};
 
@@ -28,11 +31,22 @@ export const ReviewCard = ({ review }: Props) => {
 				<View style={styles.productData}>
 					<Image style={styles.image} source={{ uri: product.Photo }} />
 					<View style={styles.textAndRating}>
-						<View style={styles.productText}>
-							<Text style={styles.textBold}>{product.Brand + ' ' + product.Name}</Text>
-              <Text>{product.Type}</Text>
+						<TouchableOpacity
+							onPress={() =>
+								navigation.navigate('Product', { id: review.productID })
+							}
+						>
+							<View style={styles.productText}>
+								<Text style={styles.textBold}>
+									{product.Brand + ' ' + product.Name}
+								</Text>
+								<Text>{product.Type}</Text>
+							</View>
+						</TouchableOpacity>
+						<View style={{flexDirection: 'row'}}>
+							<RatingDots rating={review.rating} />
+							<Text style={{marginLeft: 10}}>{review.rating}</Text>
 						</View>
-						<RatingDots rating={review.rating} />
 					</View>
 				</View>
 				<View style={styles.description}>
@@ -51,7 +65,7 @@ export const ReviewCard = ({ review }: Props) => {
 
 const styles = StyleSheet.create({
 	wrapper: {
-    marginTop: 10,
+		marginTop: 10,
 		borderRadius: 6,
 		width: '90%',
 		padding: 10,
@@ -60,24 +74,23 @@ const styles = StyleSheet.create({
 	image: {
 		height: 60,
 		width: 60,
-    flex: 1,
-  
+		flex: 1,
 	},
 	productData: {
 		flexDirection: 'row',
 	},
-  textAndRating: {
-    flex: 4
-  },
-  productText: {
-    marginLeft: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
+	textAndRating: {
+		marginLeft: 10,
+		flex: 4,
+	},
+	productText: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+	},
 	textBold: {
 		fontWeight: 'bold',
 	},
-  description: {
-    padding: 10
-  }
+	description: {
+		padding: 10,
+	},
 });

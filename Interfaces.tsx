@@ -13,30 +13,30 @@ export interface Tag {
   name: string;
 }
 
-export interface Product {
-  brand: string;
-  description: string;
-  flavor: string[];
-  format: string;
-  manufacturer: string;
-  name: string;
-  nicotine: number;
-  photo: string;
-  pouches: number;
-  reviews: string[];
-  strength: number;
-  tags: Tag[];
-  type: string;
-  weigth: number;
-}
-
 export interface User {
-  id: string;
   createdAt: Date;
   displayName: string;
   email: string;
+  id: string;
   photo: string;
   liked: string[];
-  reviews: string[];
-  grade: number;
+}
+
+export interface Product {
+  Brand: string;
+  Description: string;
+  Flavor: string[];
+  Format: string;
+  Manufacturer: string;
+  Name: string;
+  Nicotine: number;
+  Photo: string;
+  Pouches: number;
+  Reviews: string[];
+  Strength: number;
+  Tags: Tag[];
+  Type: string;
+  Weight: number;
+  Rating?: number;
+  ProductID: string;
 }
