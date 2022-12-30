@@ -75,7 +75,6 @@ export const updateSingleProperty = async (
 	newData
 ) => {
 	try {
-		console.log(newData);
 		const docRef = doc(db, collectionName, document);
 		updateDoc(docRef, newData).then((docRef) => {
 			console.log('value has been updated');
