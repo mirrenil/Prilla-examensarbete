@@ -8,8 +8,10 @@ import { UserInfoCard } from "../components/UserInfoCard";
 import { FavoritesCard } from "../components/FavoritesCard";
 import { User } from "../Interfaces";
 import { getAllDocsInCollection } from "../helper";
-import { saveLoginState } from "../redux/actions";
 import { RootTabScreenProps } from "../types";
+import { selectReduxEmail } from "../redux/signin";
+import { useDispatch, useSelector } from "react-redux";
+import { reduxDisplayName } from "../redux/signup";
 
 export default function ProfileScreen({
   navigation,
@@ -17,10 +19,12 @@ export default function ProfileScreen({
 }: RootTabScreenProps<"Profile">) {
   const [follow, setFollow] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
+  const dispatch = useDispatch();
+  const userEmail = useSelector(selectReduxEmail);
+  const userDisplayName = useSelector(reduxDisplayName);
 
   const toggleButton = () => {
     setFollow(!follow);
-    saveLoginState(false);
   };
 
   useEffect(() => {
@@ -36,11 +40,12 @@ export default function ProfileScreen({
     }
     setUsers(newData);
   };
+  console.log(userEmail, userDisplayName, "user info from redux");
 
   return (
     <View style={styles.screen}>
       <View style={styles.container}>
-        {/* <UserInfoCard user={user} /> */}
+        <UserInfoCard />
 
         <TouchableOpacity
           style={[follow ? styles.borderButton : styles.button]}
@@ -55,6 +60,7 @@ export default function ProfileScreen({
             {follow ? <AntDesign name="down" size={14} color="white" /> : null}
           </Text>
         </TouchableOpacity>
+        {userEmail ? <Text>{userEmail}</Text> : <Text>Användarnamn</Text>}
       </View>
 
       <View
