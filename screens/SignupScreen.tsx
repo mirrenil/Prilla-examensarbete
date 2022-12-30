@@ -9,14 +9,8 @@ import { createUserWithEmailAndPassword, updateProfile } from "@firebase/auth";
 import { auth } from "../firebase";
 import { setOneDoc } from "../helper";
 import { RootStackScreenProps } from "../types";
-import { reduxDisplayName, reduxEmail, setNewUser } from "../redux/signup";
-import { useDispatch, useSelector } from "react-redux";
-import { UserCredential } from "firebase/auth";
 
 export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
-  const dispatch = useDispatch();
-  const setReduxEmail = useSelector(reduxEmail);
-  const setReduxDisplayName = useSelector(reduxDisplayName);
   const [user, setUser] = useState({
     email: "",
     displayName: "",
@@ -40,18 +34,13 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
         auth,
         user.email,
         user.password
-      ).then((result: UserCredential) => {
-        dispatch(
-          setNewUser({
-            setReduxEmail: result.user?.email,
-            setReduxDisplayName: result.user?.displayName,
-          })
-        );
-        console.log(setReduxEmail, setReduxDisplayName, "user info");
+      ).then(() => {
+        if (auth.currentUser) {
+          updateProfile(auth.currentUser, {
+            displayName: user.displayName,
+          });
+        }
       });
-      if (auth.currentUser) {
-        updateProfile(auth.currentUser, { displayName: user.displayName });
-      }
       addUserToDb();
       Alert.alert("Registrering lyckades!");
       navigation.navigate("Signin");
@@ -67,7 +56,6 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
       signup();
     }
   };
-  console.log(reduxDisplayName, reduxEmail, "redux info");
 
   return (
     <View style={styles.screen}>
