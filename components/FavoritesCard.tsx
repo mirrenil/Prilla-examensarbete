@@ -2,40 +2,37 @@ import { Text } from "./Themed";
 import { StyleSheet, View } from "react-native";
 import { useSelector } from "react-redux";
 import { currentReduxUser } from "../redux/signin";
-import { query, where, getDocs, collection } from "firebase/firestore";
+import { query, where, getDocs, collection, getDoc } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { db } from "../firebase";
 import { User } from "../Interfaces";
+import firebase from "firebase/compat/app";
 
 export const FavoritesCard = () => {
   const user = useSelector(currentReduxUser);
-  const [liked, setLiked] = useState<User>();
-  const docRef = collection(db, "users");
-
-  const getFavorites = async () => {
-    const q = query(docRef, where("id", "==", `${user?.id}`));
-    const favorites: any = [];
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      const snusInArray = {
-        id: doc.id,
-        ...doc.data(),
-      };
-      favorites.push(snusInArray);
-    });
-    setLiked(favorites);
-    console.log("favorites: ", favorites.liked);
-  };
+  const [liked, setLiked] = useState<any>();
+  const [likedArray, setLikedArray] = useState<string[]>([]);
+  const usersRef = collection(db, "users");
 
   useEffect(() => {
-    getFavorites();
+    const fetch = async () => {
+      await getDocs(usersRef).then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          if (doc.id === user?.uid) {
+            setLikedArray(doc.data().liked);
+          }
+        });
+      });
+    };
+    fetch();
+    console.log(likedArray, "likedArray");
   }, []);
 
   return (
     <View>
-      {liked?.liked.map(() => (
+      {/* {liked?.liked.map(() => (
         <Text>{liked?.liked}</Text>
-      ))}
+      ))} */}
     </View>
   );
 };
