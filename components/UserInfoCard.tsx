@@ -27,9 +27,7 @@ export const UserInfoCard = () => {
   const navigate = useNavigation();
   const userEmail = user?.email;
 
-  useEffect(() => {
-    console.log("user infocard: ", user);
-  }, [user]);
+  useEffect(() => {}, [user]);
 
   const resetPassword = async (email: string) => {
     try {

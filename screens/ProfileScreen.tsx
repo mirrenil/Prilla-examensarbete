@@ -21,28 +21,29 @@ export default function ProfileScreen({
     setFollow(!follow);
   };
 
-  useEffect(() => {
-    console.log("user in profilescreen: ", user);
-  }, [user]);
+  useEffect(() => {}, [user]);
 
   return (
     <View style={styles.screen}>
       <View style={styles.container}>
         <UserInfoCard />
-
-        <TouchableOpacity
-          style={[follow ? styles.borderButton : styles.button]}
-          onPress={toggleButton}
-        >
-          <Text
-            darkColor="#201A28"
-            lightColor="#201A28"
-            style={[follow ? styles.borderButtonText : styles.buttonText]}
+        {!user && (
+          <TouchableOpacity
+            style={[follow ? styles.borderButton : styles.button]}
+            onPress={toggleButton}
           >
-            {follow ? "Följer" : "Följ"}{" "}
-            {follow ? <AntDesign name="down" size={14} color="white" /> : null}
-          </Text>
-        </TouchableOpacity>
+            <Text
+              darkColor="#201A28"
+              lightColor="#201A28"
+              style={[follow ? styles.borderButtonText : styles.buttonText]}
+            >
+              {follow ? "Följer" : "Följ"}{" "}
+              {follow ? (
+                <AntDesign name="down" size={14} color="white" />
+              ) : null}
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
 
       <View
@@ -56,7 +57,7 @@ export default function ProfileScreen({
             Favoriter <AntDesign name="right" size={16} color="white" />
           </Text>
         </View>
-        {/* <FavoritesCard /> */}
+        <FavoritesCard />
         <Text lightColor="#fff" darkColor="#fff" style={styles.smallText}>
           Senast uppdaterad:
         </Text>
