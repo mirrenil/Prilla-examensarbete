@@ -6,20 +6,16 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
-  NativeSyntheticEvent,
-  TextInputEndEditingEventData,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { AntDesign, Feather } from "@expo/vector-icons";
 import {
   deleteUser,
   getAuth,
-  onAuthStateChanged,
   sendPasswordResetEmail,
-  updateProfile,
   signOut,
 } from "firebase/auth";
-import { auth, db } from "../firebase";
+import { auth } from "../firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { currentReduxUser, setSignOutState } from "../redux/signin";
 import { useNavigation } from "@react-navigation/native";
@@ -29,28 +25,15 @@ export const UserInfoCard = () => {
   const user = useSelector(currentReduxUser);
   const dispatch = useDispatch();
   const navigate = useNavigation();
+  const userEmail = user?.email;
 
   useEffect(() => {
     console.log("user infocard: ", user);
   }, [user]);
 
-  const handleNameChange = async (
-    e: NativeSyntheticEvent<TextInputEndEditingEventData>
-  ) => {
-    e.preventDefault();
-    let userObject = {
-      displayName: "hej",
-    };
-    userObject = { ...userObject };
-    // await updateProfile(currentUser, userObject);
-    // await setDoc(doc(db, "users", currentUser?.id), {
-    //   displayName: username,
-    // });
-  };
-
-  const resetPassword = async (userEmail: string) => {
+  const resetPassword = async (email: string) => {
     try {
-      await sendPasswordResetEmail(auth, userEmail);
+      await sendPasswordResetEmail(auth, email);
       Alert.alert("Återställningslänk skickad till din email");
     } catch (error) {
       Alert.alert("Ogiltig email");
@@ -58,15 +41,14 @@ export const UserInfoCard = () => {
   };
 
   const deleteAccount = async () => {
-    const auth = getAuth();
-    const userToDelete = auth.currentUser;
-    // deleteUser(userToDelete as User)
-    //   .then(() => {
-    //     Alert.alert("Ditt konto har raderats");
-    //   })
-    //   .catch((error) => {
-    //     Alert.alert("Något gick fel");
-    //   });
+    const userToDelete = user;
+    deleteUser(userToDelete)
+      .then(() => {
+        Alert.alert("Ditt konto har raderats");
+      })
+      .catch((error) => {
+        Alert.alert("Något gick fel");
+      });
   };
 
   const handleSignOut = () => {
@@ -80,7 +62,6 @@ export const UserInfoCard = () => {
         console.error(error);
       });
   };
-
   return (
     <View>
       <View style={styles.top}>
@@ -122,25 +103,6 @@ export const UserInfoCard = () => {
                     darkColor="#fff"
                     style={styles.modalText}
                   >
-                    Användarnamn
-                  </Text>
-                  <TextInput
-                    lightColor="#261F30"
-                    lightTextColor="#fff"
-                    darkTextColor="#fff"
-                    darkColor="#261F30"
-                    placeholder={"Byt användarnamn"}
-                    placeholderTextColor={"#fff"}
-                    style={styles.input}
-                    // onChangeText={(text) => setUsername(text)}
-                    onEndEditing={(e) => handleNameChange(e)}
-                  />
-
-                  <Text
-                    lightColor="#fff"
-                    darkColor="#fff"
-                    style={styles.modalText}
-                  >
                     Lösenord
                   </Text>
                   <TouchableOpacity>
@@ -148,7 +110,7 @@ export const UserInfoCard = () => {
                       lightColor="#fff"
                       darkColor="#fff"
                       style={styles.borderButton}
-                      // onPress={() => resetPassword(userEmail as string)}
+                      onPress={() => resetPassword(userEmail as string)}
                     >
                       Skicka återställnings länk till e-post
                     </Text>
@@ -191,7 +153,11 @@ export const UserInfoCard = () => {
         <Text darkColor="#fff" lightColor="#fff">
           Recensioner
         </Text>
-        {/* <Image source={{ uri:  }} /> */}
+        <Image
+          source={{ uri: user?.photo }}
+          resizeMode="cover"
+          style={{ height: 50, width: 50 }}
+        />
         <Text darkColor="#fff" lightColor="#fff">
           Betyg
         </Text>
@@ -284,5 +250,9 @@ const styles = StyleSheet.create({
     width: 300,
     marginBottom: 10,
     padding: 10,
+  },
+  image: {
+    width: 100,
+    height: 100,
   },
 });
