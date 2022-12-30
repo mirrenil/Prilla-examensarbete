@@ -12,7 +12,12 @@ import {
 import { RootStackScreenProps } from '../types';
 import React, { FormEvent, useEffect, useState } from 'react';
 import { Product, Review, Tag } from '../Interfaces';
-import { getAllDocsInCollection, getOneDocById } from '../helper';
+import {
+	addNewDoc,
+	getOneDocById,
+	setOneDoc,
+	updateSingleProperty,
+} from '../helper';
 import { EvilIcons } from '@expo/vector-icons';
 import { RateActive } from '../components/RateActive';
 import ImageUpload from '../components/ImageUpload';
@@ -24,8 +29,8 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<'Review'>) => {
 	const [value, setValue] = useState<number>(0);
 	const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
 	const [reviewText, setReviewText] = useState<string>('');
-  const [completeReview, setCompleteReview] = useState<Review>();
-  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+	const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+	const [image, setImage] = useState<any>();
 
 	useEffect(() => {
 		getProductData();
@@ -41,10 +46,62 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<'Review'>) => {
 			console.log(err);
 		}
 	};
-  
-  const handleTags = (tagList: Tag[]) => {
-    setSelectedTags(tagList)
-  }
+
+	const handleTags = (tagList: Tag[]) => {
+		setSelectedTags(tagList);
+	};
+
+	const pushReviewToProductsReviewArray = async (id: string) => {
+		product?.Reviews.push(id);
+		let newData = { Reviews: product?.Reviews };
+		try {
+			await updateSingleProperty('produkter', route.params.id, newData);
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
+	const updateProductsTotalRating = async (rating: number) => {
+		if (product?.Rating || product?.Rating == 0) {
+			const total = rating + product.Rating;
+			let updatedRating = total / product.Reviews.length;
+			let string = updatedRating.toFixed(2);
+			updatedRating = JSON.parse(string);
+			let newData = { Rating: updatedRating };
+			try {
+				await updateSingleProperty('produkter', route.params.id, newData);
+			} catch (err) {
+				console.log(err);
+			}
+		}
+	};
+
+	const convertRating = () => {
+		let rating = value / 2;
+		updateProductsTotalRating(rating);
+		return rating;
+	};
+
+	const handleSubmit = async () => {
+		const rating = convertRating();
+		const newReview = {
+			createdAt: new Date(),
+			tags: selectedTags,
+			description: reviewText,
+			photo: image,
+			productID: route.params.id,
+			rating: rating,
+			userID: 'Jg93kssG9mV4gaR72mfa9Lkm5aF2',
+		};
+		try {
+			let docId = await addNewDoc('recensioner', newReview);
+			if (docId) {
+				pushReviewToProductsReviewArray(docId);
+			}
+		} catch (err) {
+			console.log(err);
+		}
+	};
 
 	const styles = StyleSheet.create({
 		fatText: {
@@ -118,7 +175,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<'Review'>) => {
 		popUp: {
 			width: '80%',
 			height: 200,
-			backgroundColor: DarkTheme.colors.section,
+			backgroundColor: '#2E233C',
 			justifyContent: 'space-around',
 			alignItems: 'center',
 			padding: 10,
@@ -153,34 +210,32 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<'Review'>) => {
 		return (
 			<View style={popupStyles.layover}>
 				<View style={popupStyles.popUp}>
-						<Text style={[styles.fatText]}>
-							Lämna recension
-						</Text>
-						<TextInput
-							lightColor="#AF90D9"
-							darkColor="#413C48"
-							placeholder="Skriv här..."
-							style={popupStyles.input}
-							value={text}
-							onChangeText={setText}
-							multiline={true}
-							numberOfLines={4}
-						/>
-						<View style={popupStyles.buttons}>
-							<TouchableOpacity
-								style={popupStyles.button}
-								onPress={() => setPopUpOpen(false)}
-							>
-								<View>
-									<Text>Avbryt</Text>
-								</View>
-							</TouchableOpacity>
-							<TouchableOpacity onPress={handleSubmit}>
-								<View>
-									<Text>Spara</Text>
-								</View>
-							</TouchableOpacity>
-						</View>
+					<Text style={[styles.fatText]}>Lämna recension</Text>
+					<TextInput
+						lightColor="#AF90D9"
+						darkColor="#413C48"
+						placeholder="Skriv här..."
+						style={popupStyles.input}
+						value={text}
+						onChangeText={setText}
+						multiline={true}
+						numberOfLines={4}
+					/>
+					<View style={popupStyles.buttons}>
+						<TouchableOpacity
+							style={popupStyles.button}
+							onPress={() => setPopUpOpen(false)}
+						>
+							<View>
+								<Text>Avbryt</Text>
+							</View>
+						</TouchableOpacity>
+						<TouchableOpacity onPress={handleSubmit}>
+							<View>
+								<Text>Spara</Text>
+							</View>
+						</TouchableOpacity>
+					</View>
 				</View>
 			</View>
 		);
@@ -228,11 +283,11 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<'Review'>) => {
 					</View>
 				</View>
 				<View style={styles.section}>
-					<Tags handleInput={handleTags}/>
+					<Tags handleInput={handleTags} />
 				</View>
 				<View style={styles.imageSection}>
-					<ImageUpload />
-					<TouchableOpacity style={styles.submitButton}>
+					<ImageUpload handleUpload={(img) => setImage(img)} />
+					<TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
 						<Text style={[{ color: 'black' }, styles.fatText]}>Publicera</Text>
 					</TouchableOpacity>
 				</View>

@@ -59,7 +59,7 @@ const Tags = ({ handleInput }: Props) => {
 		let newList = selectedTags.filter(
 			(selectedTag) => tag.name !== selectedTag.name
 		);
-    handleInput(newList)
+		handleInput(newList);
 		setSelectedTags(newList);
 	};
 
@@ -67,7 +67,7 @@ const Tags = ({ handleInput }: Props) => {
 		if (!isAlreadySelected(tag)) {
 			let list = selectedTags;
 			list.push(tag);
-      handleInput(list);
+			handleInput(list);
 			setSelectedTags(list);
 		} else {
 			removeSelectedTag(tag);
@@ -79,10 +79,7 @@ const Tags = ({ handleInput }: Props) => {
 			<Text style={styles.sectionTitle}>Välj taggar</Text>
 			<View style={styles.tags}>
 				{tags.map((tag) => {
-					let isSelected: boolean = false;
-          
-          console.log(isSelected)
-
+					let isSelected: boolean = isAlreadySelected(tag);
 					return (
 						<Pressable
 							style={() => [styles.tag, isSelected ? styles.selected : null]}
