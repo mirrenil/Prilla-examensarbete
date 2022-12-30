@@ -6,7 +6,7 @@ const initialState = {
 };
 
 const userSignInSlice = createSlice({
-  name: "reduxUser",
+  name: "user",
   initialState,
   reducers: {
     // same as setreduxEmail(action.payload)
