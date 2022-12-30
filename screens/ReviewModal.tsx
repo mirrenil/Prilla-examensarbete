@@ -61,13 +61,19 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<'Review'>) => {
 		}
 	};
 
+  // Calculates average rating value and updates DB
 	const updateProductsTotalRating = async (rating: number) => {
 		if (product?.Rating || product?.Rating == 0) {
-			const total = rating + product.Rating;
-			let updatedRating = total / product.Reviews.length;
-			let string = updatedRating.toFixed(2);
-			updatedRating = JSON.parse(string);
-			let newData = { Rating: updatedRating };
+      let oldRating = product.Rating;
+      let numberOfReviews = product.Reviews.length;
+      let newRating = (oldRating * numberOfReviews + rating) / (numberOfReviews + 1)
+      let string = newRating.toFixed(2)
+      newRating = JSON.parse(string)
+
+      const newData = {
+        Rating: newRating
+      }
+
 			try {
 				await updateSingleProperty('produkter', route.params.id, newData);
 			} catch (err) {
@@ -76,6 +82,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<'Review'>) => {
 		}
 	};
 
+  // Converting rating since rating scale is 0 - 10 but UI shows scale 0 - 5.
 	const convertRating = () => {
 		let rating = value / 2;
 		updateProductsTotalRating(rating);
@@ -98,6 +105,8 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<'Review'>) => {
 			if (docId) {
 				pushReviewToProductsReviewArray(docId);
 			}
+      alert('Recension skickad!');
+      navigation.goBack()
 		} catch (err) {
 			console.log(err);
 		}
