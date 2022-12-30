@@ -9,9 +9,7 @@ import {
   NativeSyntheticEvent,
   TextInputEndEditingEventData,
 } from "react-native";
-import { User } from "../Interfaces";
 import React, { useEffect, useState } from "react";
-import { getAllDocsInCollection } from "../helper";
 import { AntDesign, Feather } from "@expo/vector-icons";
 import {
   deleteUser,
@@ -21,44 +19,20 @@ import {
   updateProfile,
   signOut,
 } from "firebase/auth";
-import { setDoc, doc } from "firebase/firestore";
 import { auth, db } from "../firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { currentReduxUser, setSignOutState } from "../redux/signin";
 import { useNavigation } from "@react-navigation/native";
 
 export const UserInfoCard = () => {
-  const [users, setUsers] = useState<User[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
-  // const [username, setUsername] = useState(currentUser?.displayName);
   const user = useSelector(currentReduxUser);
   const dispatch = useDispatch();
   const navigate = useNavigation();
 
   useEffect(() => {
-    console.log('user infocard: ', user)
-  }, [])
-
-  useEffect(() => {
-    const unsubrcribe = onAuthStateChanged(auth, (user) => {
-      // setCurrentUser(currentUser as User);
-    });
-    return unsubrcribe;
-  }, [auth, onAuthStateChanged]);
-
-  useEffect(() => {
-    getUsers();
-  }, []);
-
-  const getUsers = async () => {
-    let newData = [];
-    let data = await getAllDocsInCollection("users");
-
-    if (data?.length) {
-      newData = data;
-    }
-    setUsers(newData);
-  };
+    console.log("user infocard: ", user);
+  }, [user]);
 
   const handleNameChange = async (
     e: NativeSyntheticEvent<TextInputEndEditingEventData>
@@ -100,7 +74,6 @@ export const UserInfoCard = () => {
     signOut(auth)
       .then(() => {
         dispatch(setSignOutState());
-        Alert.alert("Du har loggat ut");
         navigate.navigate("Signin");
       })
       .catch((error: any) => {
@@ -110,9 +83,6 @@ export const UserInfoCard = () => {
 
   return (
     <View>
-      <Text>{user.displayName}</Text>
-      <Text>{user.email}</Text>
-      <Text>{user.id}</Text>
       <View style={styles.top}>
         <Feather
           name="settings"
@@ -221,20 +191,20 @@ export const UserInfoCard = () => {
         <Text darkColor="#fff" lightColor="#fff">
           Recensioner
         </Text>
-        {/* <Image source={{ uri: currentUser?.photo }} /> */}
+        {/* <Image source={{ uri:  }} /> */}
         <Text darkColor="#fff" lightColor="#fff">
           Betyg
         </Text>
       </View>
       <View style={styles.row}>
         <Text darkColor="#fff" lightColor="#fff">
-          {/* {currentUser?.reviews} */}
+          {user?.reviews}
         </Text>
         <Text darkColor="#fff" lightColor="#fff">
-          {/* {currentUser?.displayName} */}
+          {user?.displayName}
         </Text>
         <Text darkColor="#fff" lightColor="#fff">
-          {/* {currentUser?.grade} */}
+          {user?.grade}
         </Text>
       </View>
       <View style={styles.center}>
@@ -242,7 +212,7 @@ export const UserInfoCard = () => {
           Medlem sedan:
         </Text>
         <Text darkColor="#fff" lightColor="#fff">
-          {/* {currentUser?.createdAt.toLocaleString("sv-SE").substring(0, 10)} */}
+          {/* {user?.createdAt.toDate().toLocaleString("sv-SE").substring(0, 10)} */}
         </Text>
       </View>
     </View>
