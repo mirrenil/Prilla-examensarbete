@@ -43,7 +43,6 @@ export default function ProfileScreen({
             {follow ? <AntDesign name="down" size={14} color="white" /> : null}
           </Text>
         </TouchableOpacity>
-        {/* {userEmail ? <Text>{userEmail}</Text> : <Text>Användarnamn</Text>} */}
       </View>
 
       <View
