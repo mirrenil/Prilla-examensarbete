@@ -6,12 +6,8 @@ import { Text, View } from "../components/Themed";
 import { ActivityCard } from "../components/ActivityCard";
 import { UserInfoCard } from "../components/UserInfoCard";
 import { FavoritesCard } from "../components/FavoritesCard";
-import { User } from "../Interfaces";
-import { getAllDocsInCollection } from "../helper";
 import { RootTabScreenProps } from "../types";
-// import { selectCurrentUser, selectReduxEmail } from "../redux/signin";
-import { useDispatch, useSelector } from "react-redux";
-// import { reduxDisplayName } from "../redux/signup";
+import { useSelector } from "react-redux";
 import { currentReduxUser } from "../redux/signin";
 
 export default function ProfileScreen({
@@ -19,10 +15,6 @@ export default function ProfileScreen({
   route,
 }: RootTabScreenProps<"Profile">) {
   const [follow, setFollow] = useState(false);
-  const [users, setUsers] = useState<User[]>([]);
-  const dispatch = useDispatch();
-  // const userEmail = useSelector(selectReduxEmail);
-  // const userDisplayName = useSelector(reduxDisplayName);
   const user = useSelector(currentReduxUser);
 
   const toggleButton = () => {
@@ -30,23 +22,8 @@ export default function ProfileScreen({
   };
 
   useEffect(() => {
-    console.log('user in profilescreen: ', user)
-  }, [user])
-
-  useEffect(() => {
-    getUsers();
-  }, []);
-
-  const getUsers = async () => {
-    let newData = [];
-    let data = await getAllDocsInCollection("users");
-
-    if (data?.length) {
-      newData = data;
-    }
-    setUsers(newData);
-  };
-  // console.log(userEmail, userDisplayName, "user info from redux");
+    console.log("user in profilescreen: ", user);
+  }, [user]);
 
   return (
     <View style={styles.screen}>
