@@ -5,27 +5,26 @@ import { currentReduxUser } from "../redux/signin";
 import { query, where, getDocs, collection } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { db } from "../firebase";
+import { User } from "../Interfaces";
 
 export const FavoritesCard = () => {
-  const [liked, setLiked] = useState([]);
+  const user = useSelector(currentReduxUser);
+  const [liked, setLiked] = useState<User>();
   const docRef = collection(db, "users");
 
   const getFavorites = async () => {
-    const q = query(
-      docRef,
-      where("liked", "array-contains", "6exAQJW12ChJMUnVWDLb")
-    );
+    const q = query(docRef, where("id", "==", `${user?.id}`));
     const favorites: any = [];
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
-      const snus = {
+      const snusInArray = {
         id: doc.id,
         ...doc.data(),
       };
-      favorites.push(snus);
+      favorites.push(snusInArray);
     });
     setLiked(favorites);
-    console.log(favorites, "liked snus");
+    console.log("favorites: ", favorites.liked);
   };
 
   useEffect(() => {
@@ -34,7 +33,9 @@ export const FavoritesCard = () => {
 
   return (
     <View>
-      <Text>Olika snus jag gillar :)</Text>
+      {liked?.liked.map(() => (
+        <Text>{liked?.liked}</Text>
+      ))}
     </View>
   );
 };
