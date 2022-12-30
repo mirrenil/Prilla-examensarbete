@@ -23,23 +23,21 @@ import {
 } from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore";
 import { auth, db } from "../firebase";
-import { loadLoginState } from "../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
-interface Props {
-  user: User;
-}
+import { selectReduxEmail, setSignOutState } from "../redux/signin";
+import { useNavigation } from "@react-navigation/native";
 
-export const UserInfoCard = ({ user }: Props) => {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+export const UserInfoCard = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
-  const [username, setUsername] = useState(currentUser?.displayName);
-  const userEmail = currentUser?.email;
+  // const [username, setUsername] = useState(currentUser?.displayName);
+  const userEmail = useSelector(selectReduxEmail);
+  const dispatch = useDispatch();
+  const navigate = useNavigation();
 
   useEffect(() => {
-    loadLoginState();
     const unsubrcribe = onAuthStateChanged(auth, (user) => {
-      setCurrentUser(currentUser as User);
+      // setCurrentUser(currentUser as User);
     });
     return unsubrcribe;
   }, [auth, onAuthStateChanged]);
@@ -56,7 +54,6 @@ export const UserInfoCard = ({ user }: Props) => {
       newData = data;
     }
     setUsers(newData);
-    console.log(users);
   };
 
   const handleNameChange = async (
@@ -64,7 +61,7 @@ export const UserInfoCard = ({ user }: Props) => {
   ) => {
     e.preventDefault();
     let userObject = {
-      displayName: username,
+      displayName: userEmail,
     };
     userObject = { ...userObject };
     // await updateProfile(currentUser, userObject);
@@ -98,9 +95,9 @@ export const UserInfoCard = ({ user }: Props) => {
     const auth = getAuth();
     signOut(auth)
       .then(() => {
-        setCurrentUser(null);
+        dispatch(setSignOutState());
         Alert.alert("Du har loggat ut");
-        console.log(currentUser?.displayName);
+        navigate.navigate("Signin");
       })
       .catch((error: any) => {
         console.error(error);
@@ -158,7 +155,7 @@ export const UserInfoCard = ({ user }: Props) => {
                     placeholder={"Byt användarnamn"}
                     placeholderTextColor={"#fff"}
                     style={styles.input}
-                    onChangeText={(text) => setUsername(text)}
+                    // onChangeText={(text) => setUsername(text)}
                     onEndEditing={(e) => handleNameChange(e)}
                   />
 
@@ -217,20 +214,20 @@ export const UserInfoCard = ({ user }: Props) => {
         <Text darkColor="#fff" lightColor="#fff">
           Recensioner
         </Text>
-        <Image source={{ uri: currentUser?.photo }} />
+        {/* <Image source={{ uri: currentUser?.photo }} /> */}
         <Text darkColor="#fff" lightColor="#fff">
           Betyg
         </Text>
       </View>
       <View style={styles.row}>
         <Text darkColor="#fff" lightColor="#fff">
-          {currentUser?.reviews}
+          {/* {currentUser?.reviews} */}
         </Text>
         <Text darkColor="#fff" lightColor="#fff">
-          {currentUser?.displayName}
+          {/* {currentUser?.displayName} */}
         </Text>
         <Text darkColor="#fff" lightColor="#fff">
-          {currentUser?.grade}
+          {/* {currentUser?.grade} */}
         </Text>
       </View>
       <View style={styles.center}>
@@ -238,7 +235,7 @@ export const UserInfoCard = ({ user }: Props) => {
           Medlem sedan:
         </Text>
         <Text darkColor="#fff" lightColor="#fff">
-          {currentUser?.createdAt.toLocaleString("sv-SE").substring(0, 10)}
+          {/* {currentUser?.createdAt.toLocaleString("sv-SE").substring(0, 10)} */}
         </Text>
       </View>
     </View>
