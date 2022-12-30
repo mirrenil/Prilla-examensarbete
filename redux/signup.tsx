@@ -1,33 +1,25 @@
-// import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
-// // same as [displayName, setdisplayName] = useState(null)
-// const initialState = {
-//   displayName: null,
-//   email: null,
-//   password: null,
-//   passwordConfirmation: null,
-// };
+// same as [displayName, setdisplayName] = useState(null)
+const initialState = {
+  reduxDisplayName: null,
+  reduxEmail: null,
+};
 
-// const userSignUp = createSlice({
-//   name: "newuser",
-//   initialState,
-//   reducers: {
-//     // same as setEmail(action.payload)
-//     setNewUser: (state, action) => {
-//       state.displayName = action.payload.displayName;
-//       state.email = action.payload.email;
-//       state.password = action.payload.password;
-//       state.passwordConfirmation = action.payload.passwordConfirmation;
-//     },
-//   },
-// });
+const userSignUp = createSlice({
+  name: "newreduxuser",
+  initialState,
+  reducers: {
+    // same as setEmail(action.payload)
+    setNewUser: (state, action) => {
+      state.reduxDisplayName = action.payload.reduxDisplayName;
+      state.reduxEmail = action.payload.reduxEmail;
+    },
+  },
+});
+export const { setNewUser } = userSignUp.actions;
 
-// export const { setNewUser } = userSignUp.actions;
+export const reduxDisplayName = (state: any) => state.user.displayName;
+export const reduxEmail = (state: any) => state.user.email;
 
-// export const selectDisplayName = (state: any) => state.user.displayName;
-// export const selectEmail = (state: any) => state.user.email;
-// export const selectPassword = (state: any) => state.user.password;
-// export const selectPasswordConfirmation = (state: any) =>
-//   state.user.passwordConfirmation;
-
-// export default userSignUp.reducer;
+export default userSignUp.reducer;
