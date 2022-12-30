@@ -11,11 +11,9 @@ const userSignInSlice = createSlice({
   initialState,
   reducers: {
     setActiveUser: (state, action) => {
-      console.log("setActiveUser action : ", action.payload.currentUser);
       state.displayName = action.payload.currentUser.displayName;
       state.id = action.payload.currentUser.uid;
       state.email = action.payload.currentUser.email;
-      console.log("state: ", state);
     },
     setSignOutState: (state) => {
       state = { displayName: "", id: "", email: "" };
