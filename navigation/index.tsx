@@ -14,8 +14,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
 import { ColorSchemeName, Pressable } from "react-native";
 import { Provider } from "react-redux";
-import store from "../redux/store";
-import { User } from "../Interfaces";
 
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
@@ -30,13 +28,13 @@ import ProfileScreen from "../screens/ProfileScreen";
 import ForgotPasswordScreen from "../screens/ForgotPasswordScreen";
 import AgeCheckScreen from "../screens/AgeCheckScreen";
 import LinkingConfiguration from "./LinkingConfiguration";
-import { saveLoginState, loadLoginState } from "../redux/actions/index";
 
 import {
   RootStackParamList,
   RootTabParamList,
   RootTabScreenProps,
 } from "../types";
+import store from "../redux/store";
 
 export default function Navigation({
   colorScheme,
@@ -125,8 +123,6 @@ function BottomTabNavigator() {
           headerRight: () => (
             <Pressable
               onPress={() => {
-                saveLoginState(false);
-                loadLoginState();
                 navigation.navigate("Signin");
               }}
               style={({ pressed }) => ({
