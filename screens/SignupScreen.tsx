@@ -9,9 +9,15 @@ import { createUserWithEmailAndPassword, updateProfile } from "@firebase/auth";
 import { auth } from "../firebase";
 import { setOneDoc } from "../helper";
 import { RootStackScreenProps } from "../types";
+import { reduxDisplayName, reduxEmail, setNewUser } from "../redux/signup";
+import { useDispatch, useSelector } from "react-redux";
+import { UserCredential } from "firebase/auth";
 
 export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
-  const [newUser, setNewUser] = useState({
+  const dispatch = useDispatch();
+  const setReduxEmail = useSelector(reduxEmail);
+  const setReduxDisplayName = useSelector(reduxDisplayName);
+  const [user, setUser] = useState({
     email: "",
     displayName: "",
     password: "",
@@ -19,26 +25,33 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
   });
 
   const addUserToDb = async () => {
-    const user = {
-      email: newUser.email,
-      displayName: newUser.displayName,
+    const userToDB = {
+      email: user.email,
+      displayName: user.displayName,
       createdAt: new Date(),
       photo: "",
     };
-    setOneDoc("users", auth.currentUser?.uid, user);
+    setOneDoc("users", auth.currentUser?.uid, userToDB);
   };
 
   const signup = async () => {
     try {
       await createUserWithEmailAndPassword(
         auth,
-        newUser.email,
-        newUser.password
-      ).then(() => {
-        if (auth.currentUser) {
-          updateProfile(auth.currentUser, { displayName: newUser.displayName });
-        }
+        user.email,
+        user.password
+      ).then((result: UserCredential) => {
+        dispatch(
+          setNewUser({
+            setReduxEmail: result.user?.email,
+            setReduxDisplayName: result.user?.displayName,
+          })
+        );
+        console.log(setReduxEmail, setReduxDisplayName, "user info");
       });
+      if (auth.currentUser) {
+        updateProfile(auth.currentUser, { displayName: user.displayName });
+      }
       addUserToDb();
       Alert.alert("Registrering lyckades!");
       navigation.navigate("Signin");
@@ -48,12 +61,13 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
   };
 
   const isValid = () => {
-    if (newUser.password !== newUser.passwordConfirmation) {
+    if (user.password !== user.passwordConfirmation) {
       Alert.alert("Lösenorden matchar inte");
     } else {
       signup();
     }
   };
+  console.log(reduxDisplayName, reduxEmail, "redux info");
 
   return (
     <View style={styles.screen}>
@@ -66,7 +80,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
       />
 
       <Formik
-        initialValues={newUser}
+        initialValues={user}
         onSubmit={(values) => {}}
         validationSchema={yup.object().shape({
           displayName: yup.string().required("Please, provide a displayName!"),
@@ -84,7 +98,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
           const { email, displayName, password, passwordConfirmation } = values;
 
           useEffect(() => {
-            setNewUser({
+            setUser({
               email: email,
               displayName: displayName,
               password: password,
