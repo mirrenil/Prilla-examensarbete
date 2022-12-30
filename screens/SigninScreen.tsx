@@ -25,25 +25,6 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
   const dispatch = useDispatch();
   const reduxEmail = useSelector(selectReduxEmail);
 
-  // const loadLoginState = async () => {
-  //   try {
-  //     const loggedInString = await AsyncStorage.getItem("loggedIn");
-  //     if (loggedInString) {
-  //       navigation.navigate("Root");
-  //       return loggedInString;
-  //     } else {
-  //       await AsyncStorage.setItem("loggedIn", "false");
-  //       navigation.navigate("Signin");
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  useEffect(() => {
-    console.log(currentUser);
-  }, [currentUser]);
-
   useEffect(() => {
     const unsubrcribe = onAuthStateChanged(auth, (user) => {
       setcurrentUser(user as User);
@@ -62,7 +43,7 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
           );
         }
       );
-      Alert.alert("Inloggning lyckades!");
+      console.log(reduxEmail, "reduxEmail");
       navigation.navigate("Root");
     } catch (error) {
       Alert.alert("Felaktig email eller lösenord");
