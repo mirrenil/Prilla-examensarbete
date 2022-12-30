@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { RootStackScreenProps } from '../types';
 import React, { FormEvent, useEffect, useState } from 'react';
-import { Product, Tag } from '../Interfaces';
+import { Product, Review, Tag } from '../Interfaces';
 import { getAllDocsInCollection, getOneDocById } from '../helper';
 import { EvilIcons } from '@expo/vector-icons';
 import { RateActive } from '../components/RateActive';
@@ -24,6 +24,8 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<'Review'>) => {
 	const [value, setValue] = useState<number>(0);
 	const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
 	const [reviewText, setReviewText] = useState<string>('');
+  const [completeReview, setCompleteReview] = useState<Review>();
+  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
 
 	useEffect(() => {
 		getProductData();
@@ -39,6 +41,10 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<'Review'>) => {
 			console.log(err);
 		}
 	};
+  
+  const handleTags = (tagList: Tag[]) => {
+    setSelectedTags(tagList)
+  }
 
 	const styles = StyleSheet.create({
 		fatText: {
@@ -106,12 +112,34 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<'Review'>) => {
 			right: 0,
 			backgroundColor: 'rgba(0,0,0,0.7)',
 			zIndex: 100,
+			justifyContent: 'center',
+			alignItems: 'center',
 		},
 		popUp: {
 			width: '80%',
 			height: 200,
-			backgroundColor: 'black',
+			backgroundColor: DarkTheme.colors.section,
+			justifyContent: 'space-around',
+			alignItems: 'center',
+			padding: 10,
+			paddingLeft: 20,
+			paddingRight: 20,
+			borderRadius: 6,
 		},
+		buttons: {
+			flexDirection: 'row',
+			justifyContent: 'space-around',
+			width: '100%',
+		},
+		button: {},
+		input: {
+			width: '70%',
+			backgroundColor: 'white',
+			height: 100,
+			color: 'black',
+			borderRadius: 6,
+			padding: 10,
+		}
 	});
 
 	const Popup = () => {
@@ -125,21 +153,34 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<'Review'>) => {
 		return (
 			<View style={popupStyles.layover}>
 				<View style={popupStyles.popUp}>
-					<Text>Title</Text>
-					<TextInput
-						lightColor="#AF90D9"
-						darkColor="#413C48"
-						placeholder="Skriv här..."
-						// style={styles.input}
-						value={text}
-						onChangeText={setText}
-						// autoFocus
-					/>
-					<TouchableOpacity onPress={handleSubmit}>
-						<View>
-							<Text>Spara</Text>
+						<Text style={[styles.fatText]}>
+							Lämna recension
+						</Text>
+						<TextInput
+							lightColor="#AF90D9"
+							darkColor="#413C48"
+							placeholder="Skriv här..."
+							style={popupStyles.input}
+							value={text}
+							onChangeText={setText}
+							multiline={true}
+							numberOfLines={4}
+						/>
+						<View style={popupStyles.buttons}>
+							<TouchableOpacity
+								style={popupStyles.button}
+								onPress={() => setPopUpOpen(false)}
+							>
+								<View>
+									<Text>Avbryt</Text>
+								</View>
+							</TouchableOpacity>
+							<TouchableOpacity onPress={handleSubmit}>
+								<View>
+									<Text>Spara</Text>
+								</View>
+							</TouchableOpacity>
 						</View>
-					</TouchableOpacity>
 				</View>
 			</View>
 		);
@@ -165,7 +206,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<'Review'>) => {
 						style={{ flexDirection: 'row' }}
 						onPress={() => setPopUpOpen(true)}
 					>
-            <EvilIcons name="pencil" size={24} color="white" />
+						<EvilIcons name="pencil" size={24} color="white" />
 						{reviewText ? (
 							<Text>{reviewText}</Text>
 						) : (
@@ -187,7 +228,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<'Review'>) => {
 					</View>
 				</View>
 				<View style={styles.section}>
-					<Tags />
+					<Tags handleInput={handleTags}/>
 				</View>
 				<View style={styles.imageSection}>
 					<ImageUpload />

@@ -4,7 +4,11 @@ import { View, Text } from '../components/Themed';
 import { getAllDocsInCollection } from '../helper';
 import { Tag } from '../Interfaces';
 
-const Tags = () => {
+interface Props {
+	handleInput: (a: Tag[]) => void;
+}
+
+const Tags = ({ handleInput }: Props) => {
 	const [tags, setTags] = useState<Tag[]>([]);
 	const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
 
@@ -51,19 +55,23 @@ const Tags = () => {
 		return selected;
 	};
 
-  const removeSelectedTag = (tag: Tag) => {
-    let newList = selectedTags.filter((selectedTag) => tag.name !== selectedTag.name)
-    setSelectedTags(newList);
-  }
+	const removeSelectedTag = (tag: Tag) => {
+		let newList = selectedTags.filter(
+			(selectedTag) => tag.name !== selectedTag.name
+		);
+    handleInput(newList)
+		setSelectedTags(newList);
+	};
 
 	const toggleSelectTag = (tag: Tag) => {
 		if (!isAlreadySelected(tag)) {
 			let list = selectedTags;
 			list.push(tag);
+      handleInput(list);
 			setSelectedTags(list);
 		} else {
-      removeSelectedTag(tag)
-    }
+			removeSelectedTag(tag);
+		}
 	};
 
 	return (
@@ -72,6 +80,8 @@ const Tags = () => {
 			<View style={styles.tags}>
 				{tags.map((tag) => {
 					let isSelected: boolean = false;
+          
+          console.log(isSelected)
 
 					return (
 						<Pressable
