@@ -5,34 +5,37 @@ import { currentReduxUser } from "../redux/signin";
 import { query, where, getDocs, collection, getDoc } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { db } from "../firebase";
-import { User } from "../Interfaces";
+import { Product, User } from "../Interfaces";
 import firebase from "firebase/compat/app";
+import { getDocsWithSpecificValue, getOneDocById } from "../helper";
 
 export const FavoritesCard = () => {
   const user = useSelector(currentReduxUser);
-  const [liked, setLiked] = useState<any>();
-  const [likedArray, setLikedArray] = useState<string[]>([]);
-  const usersRef = collection(db, "users");
+  const [liked, setLiked] = useState<string[]>([]);
 
   useEffect(() => {
-    const fetch = async () => {
-      await getDocs(usersRef).then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          if (doc.id === user?.uid) {
-            setLikedArray(doc.data().liked);
-          }
-        });
-      });
-    };
-    fetch();
-    console.log(likedArray, "likedArray");
+    getLiked();
   }, []);
+
+  const getLiked = async () => {
+    const favoritesArray: string[] = [];
+    try {
+      const favorites = await getOneDocById("users", user?.id);
+      for (let i = 0; i < favorites?.liked.length; i++) {
+        favoritesArray.push(favorites?.liked[i]);
+      }
+      setLiked(favoritesArray);
+      console.log(liked, "liked favorites Array");
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <View>
-      {/* {liked?.liked.map(() => (
-        <Text>{liked?.liked}</Text>
-      ))} */}
+      {liked.map((item) => {
+        return <Text>{item}</Text>;
+      })}
     </View>
   );
 };
