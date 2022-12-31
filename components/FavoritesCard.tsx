@@ -1,42 +1,66 @@
 import { Text } from "./Themed";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Image } from "react-native";
 import { useSelector } from "react-redux";
 import { currentReduxUser } from "../redux/signin";
-import { query, where, getDocs, collection, getDoc } from "firebase/firestore";
 import { useState, useEffect } from "react";
-import { db } from "../firebase";
 import { Product, User } from "../Interfaces";
-import firebase from "firebase/compat/app";
-import { getDocsWithSpecificValue, getOneDocById } from "../helper";
+import { getOneDocById, getAllDocsInCollection } from "../helper";
 
 export const FavoritesCard = () => {
   const user = useSelector(currentReduxUser);
-  const [liked, setLiked] = useState<string[]>([]);
+  const favoritesArray: any = [];
+  let photos: any = [];
 
   useEffect(() => {
     getLiked();
+    compareLikedIds();
+    getPhotos();
   }, []);
 
   const getLiked = async () => {
-    const favoritesArray: string[] = [];
     try {
       const favorites = await getOneDocById("users", user?.id);
       for (let i = 0; i < favorites?.liked.length; i++) {
         favoritesArray.push(favorites?.liked[i]);
       }
-      setLiked(favoritesArray);
-      console.log(liked, "liked favorites Array");
     } catch (err) {
       console.log(err);
     }
   };
 
+  // get the products with same ID from the favorites array
+  const compareLikedIds = async () => {
+    const products = await getAllDocsInCollection("produkter");
+    let likedProducts: any = [];
+    if (!products) return;
+    if (products) {
+      likedProducts = products.filter((product) =>
+        favoritesArray.includes(product.ProductID)
+      );
+      return likedProducts;
+    }
+  };
+
+  const getPhotos = async () => {
+    const products = await compareLikedIds();
+    for (let i = 0; i < products.length; i++) {
+      photos.push(products[i].Photo);
+    }
+    console.log(photos, "photo urls");
+  };
+
   return (
     <View>
-      {liked.map((item) => {
-        return <Text>{item}</Text>;
+      {photos?.map((photo: any) => {
+        return <Image style={styles.image} source={{ uri: `${photo}` }} />;
       })}
     </View>
   );
 };
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  image: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+  },
+});
