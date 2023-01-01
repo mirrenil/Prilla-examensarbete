@@ -2,19 +2,20 @@ import { Text } from "./Themed";
 import { StyleSheet, View, Image } from "react-native";
 import { useSelector } from "react-redux";
 import { currentReduxUser } from "../redux/signin";
-import { useState, useEffect } from "react";
-import { Product, User } from "../Interfaces";
+import { useEffect, useState } from "react";
 import { getOneDocById, getAllDocsInCollection } from "../helper";
 
 export const FavoritesCard = () => {
+  const [urls, setUrls] = useState<string[]>([]);
   const user = useSelector(currentReduxUser);
   const favoritesArray: any = [];
-  let photos: any = [];
+  let photoURLS: string[] = [];
 
   useEffect(() => {
     getLiked();
     compareLikedIds();
     getPhotos();
+    imagesLoaded();
   }, []);
 
   const getLiked = async () => {
@@ -35,8 +36,9 @@ export const FavoritesCard = () => {
     if (!products) return;
     if (products) {
       likedProducts = products.filter((product) =>
-        favoritesArray.includes(product.ProductID)
+        favoritesArray.includes(product.productID)
       );
+
       return likedProducts;
     }
   };
@@ -44,16 +46,38 @@ export const FavoritesCard = () => {
   const getPhotos = async () => {
     const products = await compareLikedIds();
     for (let i = 0; i < products.length; i++) {
-      photos.push(products[i].Photo);
+      photoURLS.push(products[i].photo);
     }
-    console.log(photos, "photo urls");
+    return photoURLS;
+  };
+
+  const imagesLoaded = async () => {
+    try {
+      const asyncUrls = await getPhotos();
+      setUrls(asyncUrls);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
     <View>
-      {photos?.map((photo: any) => {
-        return <Image style={styles.image} source={{ uri: `${photo}` }} />;
-      })}
+      {urls && (
+        <>
+          <Image
+            style={{
+              width: "50%",
+              height: "50%",
+              borderRadius: 50,
+              backgroundColor: "red",
+            }}
+            source={{
+              uri: urls[0],
+            }}
+          />
+          <Text darkColor="#FFF">PHOTO!!!</Text>
+        </>
+      )}
     </View>
   );
 };
