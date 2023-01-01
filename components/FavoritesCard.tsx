@@ -14,7 +14,6 @@ export const FavoritesCard = () => {
   useEffect(() => {
     getLiked();
     compareLikedIds();
-    getPhotos();
     imagesLoaded();
   }, []);
 
@@ -38,7 +37,6 @@ export const FavoritesCard = () => {
       likedProducts = products.filter((product) =>
         favoritesArray.includes(product.productID)
       );
-
       return likedProducts;
     }
   };
@@ -48,6 +46,7 @@ export const FavoritesCard = () => {
     for (let i = 0; i < products.length; i++) {
       photoURLS.push(products[i].photo);
     }
+    console.log(photoURLS.length);
     return photoURLS;
   };
 
@@ -61,30 +60,26 @@ export const FavoritesCard = () => {
   };
 
   return (
-    <View>
-      {urls && (
-        <>
-          <Image
-            style={{
-              width: "50%",
-              height: "50%",
-              borderRadius: 50,
-              backgroundColor: "red",
-            }}
-            source={{
-              uri: urls[0],
-            }}
-          />
-          <Text darkColor="#FFF">PHOTO!!!</Text>
-        </>
-      )}
+    <View style={styles.row}>
+      {urls.map((url, index) => (
+        <Image
+          key={index}
+          style={styles.image}
+          source={{
+            uri: url,
+          }}
+        />
+      ))}
     </View>
   );
 };
 const styles = StyleSheet.create({
   image: {
-    width: 50,
-    height: 50,
+    width: 60,
+    height: 60,
     borderRadius: 50,
+  },
+  row: {
+    flexDirection: "row",
   },
 });

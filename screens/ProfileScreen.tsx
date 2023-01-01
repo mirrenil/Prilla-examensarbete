@@ -58,9 +58,6 @@ export default function ProfileScreen({
           </Text>
         </View>
         <FavoritesCard />
-        <Text lightColor="#fff" darkColor="#fff" style={styles.smallText}>
-          Senast uppdaterad:
-        </Text>
       </View>
       <View
         style={styles.separator}
