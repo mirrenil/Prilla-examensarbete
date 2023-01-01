@@ -15,19 +15,96 @@ import {
   sendPasswordResetEmail,
   signOut,
 } from "firebase/auth";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { currentReduxUser, setSignOutState } from "../redux/signin";
 import { useNavigation } from "@react-navigation/native";
+import { getAllDocsInCollection, getOneDocById } from "../helper";
+import { collection, getDocs } from "firebase/firestore";
 
 export const UserInfoCard = () => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [photoURL, setPhotoURL] = useState<string[]>([]);
+  const [reviews, setReviews] = useState<string[]>([]);
+  const reviewsArray: any = [];
+  let reviewsArray2: string[] = [];
   const user = useSelector(currentReduxUser);
   const dispatch = useDispatch();
   const navigate = useNavigation();
   const userEmail = user?.email;
 
-  useEffect(() => {}, [user]);
+  useEffect(() => {
+    getUser();
+    getPhoto();
+    getReviews();
+    compareReviewIDs();
+    reviewsLoaded();
+  }, [user]);
+
+  const getReviews = async () => {
+    try {
+      const favorites = await getOneDocById("users", user?.id);
+      for (let i = 0; i < favorites?.liked.length; i++) {
+        reviewsArray.push(favorites?.liked[i]);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // get the products with same ID from the favorites array
+  const compareReviewIDs = async () => {
+    const products = await getAllDocsInCollection("produkter");
+    let writtenReviews: any = [];
+    if (!products) return;
+    if (products) {
+      writtenReviews = products.filter((product) =>
+        reviewsArray.includes(product.productID)
+      );
+      return writtenReviews;
+    }
+  };
+
+  const getAsyncReviews = async () => {
+    const reviews = await compareReviewIDs();
+    for (let i = 0; i < reviews.length; i++) {
+      reviewsArray2.push(reviews[i].reviews);
+    }
+    return reviewsArray2;
+  };
+
+  const reviewsLoaded = async () => {
+    try {
+      const asyncReview = await getAsyncReviews();
+      setReviews(asyncReview);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getUser = () => {
+    const currentUser = getOneDocById("users", user?.uid);
+    return currentUser;
+  };
+
+  // Define a function that retrieves a user's photo
+  async function getUserPhoto(id: string) {
+    try {
+      const userDoc = await getDocs(collection(db, "users", id));
+      const photo = userDoc.docs[0].data().photo;
+      console.log(photo.length);
+
+      return photo;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  // Call the function to retrieve a user's photo
+  const getPhoto = async () => {
+    const photo = await getUserPhoto(user?.id);
+    setPhotoURL(photo);
+    console.log(photoURL.length);
+  };
 
   const resetPassword = async (email: string) => {
     try {
@@ -60,6 +137,7 @@ export const UserInfoCard = () => {
         console.error(error);
       });
   };
+
   return (
     <View>
       <View style={styles.top}>
@@ -151,18 +229,20 @@ export const UserInfoCard = () => {
         <Text darkColor="#fff" lightColor="#fff">
           Recensioner
         </Text>
-        <Image
-          source={{ uri: user?.photo }}
-          resizeMode="cover"
-          style={{ height: 50, width: 50 }}
-        />
+        {photoURL && (
+          <Image
+            source={{ uri: photoURL[0] }}
+            style={{ height: 50, width: 50 }}
+          />
+        )}
+
         <Text darkColor="#fff" lightColor="#fff">
           Betyg
         </Text>
       </View>
       <View style={styles.row}>
-        <Text darkColor="#fff" lightColor="#fff">
-          {user?.reviews}
+        <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
+          {reviews.length}
         </Text>
         <Text darkColor="#fff" lightColor="#fff">
           {user?.displayName}
@@ -252,5 +332,8 @@ const styles = StyleSheet.create({
   image: {
     width: 100,
     height: 100,
+  },
+  text: {
+    fontSize: 20,
   },
 });
