@@ -38,5 +38,5 @@ export interface Product {
   type: string;
   weight: number;
   rating: number;
-  productID: string;
+  id: string;
 }
