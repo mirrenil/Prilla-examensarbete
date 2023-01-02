@@ -29,7 +29,7 @@ export const ReviewCard = ({ review }: Props) => {
 		return (
 			<View style={styles.wrapper}>
 				<View style={styles.productData}>
-					<Image style={styles.image} source={{ uri: product.Photo }} />
+					<Image style={styles.image} source={{ uri: product.photo }} />
 					<View style={styles.textAndRating}>
 						<TouchableOpacity
 							onPress={() =>
@@ -38,9 +38,9 @@ export const ReviewCard = ({ review }: Props) => {
 						>
 							<View style={styles.productText}>
 								<Text style={styles.textBold}>
-									{product.Brand + ' ' + product.Name}
+									{product.brand + ' ' + product.name}
 								</Text>
-								<Text>{product.Type}</Text>
+								<Text>{product.type}</Text>
 							</View>
 						</TouchableOpacity>
 						<View style={{flexDirection: 'row'}}>
