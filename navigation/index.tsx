@@ -29,6 +29,7 @@ import ProfileScreen from "../screens/ProfileScreen";
 import ForgotPasswordScreen from "../screens/ForgotPasswordScreen";
 import AgeCheckScreen from "../screens/AgeCheckScreen";
 import LinkingConfiguration from "./LinkingConfiguration";
+import Constants from "expo-constants";
 
 import {
   RootStackParamList,
@@ -71,7 +72,11 @@ function RootNavigator() {
 
       <Stack.Screen name="AgeCheck" component={AgeCheckScreen} />
 
-	  <Stack.Screen name="Product" initialParams={{id: '13'}} component={ProductDetailScreen} />
+      <Stack.Screen
+        name="Product"
+        initialParams={{ id: "13" }}
+        component={ProductDetailScreen}
+      />
 
       <Stack.Screen
         name="Root"
@@ -143,6 +148,8 @@ function BottomTabNavigator() {
         component={SearchScreen}
         options={{
           title: "",
+          // headerShown: false,
+          headerStyle: { height: Constants.statusBarHeight },
           tabBarIcon: ({ color }) => (
             <AntDesign name="search1" size={30} color={color} />
           ),
