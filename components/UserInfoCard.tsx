@@ -15,16 +15,14 @@ import {
   sendPasswordResetEmail,
   signOut,
 } from "firebase/auth";
-import { auth, db } from "../firebase";
+import { auth } from "../firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { currentReduxUser, setSignOutState } from "../redux/signin";
 import { useNavigation } from "@react-navigation/native";
 import { getAllDocsInCollection, getOneDocById } from "../helper";
-import { collection, getDocs } from "firebase/firestore";
 
 export const UserInfoCard = () => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [photoURL, setPhotoURL] = useState<string[]>([]);
   const [reviews, setReviews] = useState<string[]>([]);
   const reviewsArray: any = [];
   let reviewsArray2: string[] = [];
