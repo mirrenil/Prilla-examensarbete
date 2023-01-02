@@ -8,7 +8,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
-    "build": "webpack --mode=production --node-env=production",
+    "build": "vercel",
     "build:dev": "webpack --mode=development",
     "build:prod": "webpack --mode=production --node-env=production",
     "watch": "webpack --watch",
@@ -20,6 +20,7 @@
   "dependencies": {
     "@aashu-dubey/react-native-rating-bar": "^0.2.0",
     "@expo/vector-icons": "^13.0.0",
+    "@expo/webpack-config": "^0.17.2",
     "@react-native-async-storage/async-storage": "^1.17.11",
     "@react-navigation/bottom-tabs": "^6.0.5",
     "@react-navigation/native": "^6.0.2",
@@ -50,8 +51,7 @@
     "react-redux-firebase": "^3.11.0",
     "redux-thunk": "^2.4.2",
     "vercel": "^28.10.1",
-    "yup": "^0.32.11",
-    "@expo/webpack-config": "^0.17.2"
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
