@@ -70,14 +70,12 @@ export default function ProfileScreen({
   const toggleButton = () => {
     setFollow(!follow);
   };
-
-  useEffect(() => {}, [user]);
-
+  console.log(user?.displayname, "user");
   return (
     <View style={styles.screen}>
       <View style={styles.container}>
         <UserInfoCard />
-        {!user && (
+        {user?.id !== route.params.id && (
           <TouchableOpacity
             style={[follow ? styles.borderButton : styles.button]}
             onPress={toggleButton}
