@@ -3,12 +3,13 @@
     "name": "prilla",
     "slug": "prilla",
     "version": "1.0.0",
+    "description": "Prilla - För dig som gillar snus.",
     "orientation": "portrait",
-    "icon": "./assets/images/prilla.png",
+    "icon": "./assets/images/transparent-prilla-sqaure.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/prilla.png",
+      "image": "./assets/images/transparent-prilla-sqaure.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -21,12 +22,12 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/prilla.png",
+        "foregroundImage": "./assets/images/transparent-prilla-sqaure.png",
         "backgroundColor": "#ffffff"
       }
     },
     "web": {
-      "favicon": "./assets/images/prilla.png"
+      "favicon": "./assets/images/transparent-prilla-sqaure.png"
     }
   }
 }
