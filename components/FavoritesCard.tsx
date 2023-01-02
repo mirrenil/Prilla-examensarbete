@@ -35,7 +35,7 @@ export const FavoritesCard = () => {
     if (!products) return;
     if (products) {
       likedProducts = products.filter((product) =>
-        favoritesArray.includes(product.productID)
+        favoritesArray.includes(product.id)
       );
       return likedProducts;
     }
