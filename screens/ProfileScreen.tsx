@@ -22,7 +22,6 @@ export default function ProfileScreen({
   const [reviews, setReviews] = useState<Review[]>([]);
 
   useEffect(() => {
-    console.log("params id: ", route.params.id);
     getReviews();
   }, []);
 
@@ -33,7 +32,6 @@ export default function ProfileScreen({
         "userID",
         route.params.id
       );
-      console.log(data);
       setReviews(data as Review[]);
     } catch (err) {
       console.log(err);
@@ -49,7 +47,7 @@ export default function ProfileScreen({
       <ScrollView style={styles.screen}>
         <View style={styles.container}>
           <UserInfoCard />
-          {!user && (
+          {user.id !== route.params.id && (
             <TouchableOpacity
               style={[follow ? styles.borderButton : styles.button]}
               onPress={toggleButton}
@@ -60,9 +58,7 @@ export default function ProfileScreen({
                 style={[follow ? styles.borderButtonText : styles.buttonText]}
               >
                 {follow ? "Följer" : "Följ"}{" "}
-                {follow ? (
-                  <AntDesign name="down" size={14} color="white" />
-                ) : null}
+                {follow && <AntDesign name="down" size={14} color="white" />}
               </Text>
             </TouchableOpacity>
           )}
