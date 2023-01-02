@@ -9,9 +9,6 @@ interface Props {
 	width?: number
 }
 export const RateInactive = ({ rating, dotSize, single, width }: Props) => {
-	const handleRating = (value: number) => {
-		console.log(value);
-	};
 
 	const styles = StyleSheet.create({
 		circle: {
@@ -58,7 +55,6 @@ export const RateInactive = ({ rating, dotSize, single, width }: Props) => {
 					/>
 				),
 			}}
-			onRatingUpdate={(value) => handleRating(value)}
 		/>
 	);
 };

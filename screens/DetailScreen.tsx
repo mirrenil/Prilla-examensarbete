@@ -37,7 +37,6 @@ function ProductDetailScreen({
 	const getProductData = async () => {
 		try {
 			let data = await getOneDocById('produkter', route.params.id);
-			console.log('detail page: ', data)
 			if (data) {
 				setProduct(data as Product);
 			}
