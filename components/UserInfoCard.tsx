@@ -57,7 +57,7 @@ export const UserInfoCard = () => {
     if (!products) return;
     if (products) {
       writtenReviews = products.filter((product) =>
-        reviewsArray.includes(product.productID)
+        reviewsArray.includes(product.id)
       );
       return writtenReviews;
     }
