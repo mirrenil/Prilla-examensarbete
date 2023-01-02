@@ -202,6 +202,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "bold",
     fontSize: 17,
+    marginTop: 5,
   },
   title: {
     fontFamily: "OleoScript",

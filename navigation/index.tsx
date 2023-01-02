@@ -108,10 +108,6 @@ function BottomTabNavigator() {
   const colorScheme = useColorScheme();
   const user = useSelector(currentReduxUser);
 
-  React.useEffect(() => {
-		console.log('user: ', user)
-	}, [user])
-
   return (
     <BottomTab.Navigator
       initialRouteName="Home"

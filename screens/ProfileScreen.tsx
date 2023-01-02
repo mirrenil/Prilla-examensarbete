@@ -20,12 +20,12 @@ import { Review } from '../Interfaces';
 import { ScrollView } from 'react-native-gesture-handler';
 
 export default function ProfileScreen({
-	navigation,
-	route,
-}: RootTabScreenProps<'Profile'>) {
-	const [follow, setFollow] = useState(false);
-	const user = useSelector(currentReduxUser);
-	const [reviews, setReviews] = useState<Review[]>([]);
+  navigation,
+  route,
+}: RootTabScreenProps<"Profile">) {
+  const [follow, setFollow] = useState(false);
+  const user = useSelector(currentReduxUser);
+  const [reviews, setReviews] = useState<Review[]>([]);
 
 	useEffect(() => {
 		console.log('params id: ', route.params.id);
@@ -46,11 +46,10 @@ export default function ProfileScreen({
 		}
 	};
 
-	const toggleButton = () => {
-		setFollow(!follow);
-	};
-
-	useEffect(() => {}, [user]);
+  const toggleButton = () => {
+    setFollow(!follow);
+  };
+  console.log(user?.displayname, "user");
 
 	if (user) {
 		return (
@@ -114,81 +113,81 @@ export default function ProfileScreen({
 }
 
 const styles = StyleSheet.create({
-	screen: {
-		height: '100%',
-	},
-	container: {
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-	title: {
-		fontFamily: 'OleoScript',
-		fontStyle: 'normal',
-		fontSize: 50,
-		fontWeight: 'bold',
-		color: '#FFFD54',
-	},
-	slogan: {
-		fontSize: 15,
-		fontWeight: 'bold',
-		color: '#FFFD54',
-	},
-	separator: {
-		marginVertical: 30,
-		height: 1,
-		width: '100%',
-	},
-	button: {
-		backgroundColor: '#FFFD54',
-		padding: 10,
-		borderRadius: 6,
-		width: 100,
-		height: 40,
-		marginTop: 10,
-		marginBottom: 10,
-	},
-	buttonText: {
-		textAlign: 'center',
-		fontWeight: 'bold',
-		fontSize: 17,
-	},
-	borderButton: {
-		borderWidth: 0.2,
-		borderColor: '#fff',
-		padding: 10,
-		borderRadius: 6,
-		width: 120,
-		height: 40,
-		marginTop: 10,
-		marginBottom: 10,
-	},
-	borderButtonText: {
-		textAlign: 'center',
-		fontWeight: 'bold',
-		fontSize: 17,
-		color: '#fff',
-	},
-	box: {
-		display: 'flex',
-		flexDirection: 'row',
-		justifyContent: 'flex-start',
-		alignContent: 'center',
-	},
-	smallText: {
-		fontSize: 9,
-		margin: 10,
-	},
-	text: {
-		fontSize: 17,
-		marginBottom: 10,
-	},
-	activities: {
-		flexDirection: 'column',
-		justifyContent: 'center',
-		alignContent: 'center',
-		marginLeft: 20,
-	},
-	favorites: {
-		marginLeft: 20,
-	},
+  screen: {
+    height: "100%",
+  },
+  container: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  title: {
+    fontFamily: "OleoScript",
+    fontStyle: "normal",
+    fontSize: 50,
+    fontWeight: "bold",
+    color: "#FFFD54",
+  },
+  slogan: {
+    fontSize: 15,
+    fontWeight: "bold",
+    color: "#FFFD54",
+  },
+  separator: {
+    marginVertical: 30,
+    height: 1,
+    width: "100%",
+  },
+  button: {
+    backgroundColor: "#FFFD54",
+    padding: 10,
+    borderRadius: 6,
+    width: 100,
+    height: 40,
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  buttonText: {
+    textAlign: "center",
+    fontWeight: "bold",
+    fontSize: 17,
+  },
+  borderButton: {
+    borderWidth: 0.2,
+    borderColor: "#fff",
+    padding: 10,
+    borderRadius: 6,
+    width: 120,
+    height: 40,
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  borderButtonText: {
+    textAlign: "center",
+    fontWeight: "bold",
+    fontSize: 17,
+    color: "#fff",
+  },
+  box: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignContent: "center",
+  },
+  smallText: {
+    fontSize: 9,
+    margin: 10,
+  },
+  text: {
+    fontSize: 17,
+    marginBottom: 10,
+  },
+  activities: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignContent: "center",
+    marginLeft: 20,
+  },
+  favorites: {
+    marginLeft: 20,
+  },
 });
