@@ -46,7 +46,6 @@ export const FavoritesCard = () => {
     for (let i = 0; i < products.length; i++) {
       photoURLS.push(products[i].photo);
     }
-    console.log(photoURLS.length);
     return photoURLS;
   };
 
