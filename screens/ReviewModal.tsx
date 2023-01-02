@@ -52,8 +52,8 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<'Review'>) => {
 	};
 
 	const pushReviewToProductsReviewArray = async (id: string) => {
-		product?.Reviews.push(id);
-		let newData = { Reviews: product?.Reviews };
+		product?.reviews.push(id);
+		let newData = { Reviews: product?.reviews };
 		try {
 			await updateSingleProperty('produkter', route.params.id, newData);
 		} catch (err) {
@@ -63,9 +63,9 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<'Review'>) => {
 
   // Calculates average rating value and updates DB
 	const updateProductsTotalRating = async (rating: number) => {
-		if (product?.Rating || product?.Rating == 0) {
-      let oldRating = product.Rating;
-      let numberOfReviews = product.Reviews.length;
+		if (product?.rating || product?.rating == 0) {
+      let oldRating = product.rating;
+      let numberOfReviews = product.reviews.length;
       let newRating = (oldRating * numberOfReviews + rating) / (numberOfReviews + 1)
       let string = newRating.toFixed(2)
       newRating = JSON.parse(string)
@@ -140,6 +140,11 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<'Review'>) => {
 			justifyContent: 'space-between',
 		},
 		productText: {},
+		reviewText: {
+			flexDirection: 'row',
+			marginTop: 20,
+			marginBottom: 10
+		},
 		titles: {
 			flexDirection: 'row',
 			justifyContent: 'space-between',
@@ -157,7 +162,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<'Review'>) => {
 			justifyContent: 'space-around',
 			alignItems: 'center',
 			padding: 10,
-			height: 250,
+			minHeight: 250,
 		},
 		submitButton: {
 			width: '70%',
@@ -228,7 +233,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<'Review'>) => {
 						value={text}
 						onChangeText={setText}
 						multiline={true}
-						numberOfLines={4}
+						numberOfLines={10}
 					/>
 					<View style={popupStyles.buttons}>
 						<TouchableOpacity
@@ -256,18 +261,18 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<'Review'>) => {
 			<ScrollView style={styles.container}>
 				<View style={[styles.productSection, styles.section]}>
 					<View style={styles.productInfo}>
-						<Image style={styles.image} source={{ uri: product?.Photo }} />
+						<Image style={styles.image} source={{ uri: product?.photo }} />
 						<View style={styles.productText}>
 							<View style={styles.titles}>
-								<Text style={styles.fatText}>{product?.Brand} </Text>
-								<Text style={styles.fatText}>{product?.Name} </Text>
-								<Text>{product?.Format}</Text>
+								<Text style={styles.fatText}>{product?.brand} </Text>
+								<Text style={styles.fatText}>{product?.name} </Text>
+								<Text>{product?.format}</Text>
 							</View>
-							<Text>{product?.Manufacturer}</Text>
+							<Text>{product?.manufacturer}</Text>
 						</View>
 					</View>
 					<TouchableOpacity
-						style={{ flexDirection: 'row' }}
+						style={styles.reviewText}
 						onPress={() => setPopUpOpen(true)}
 					>
 						<EvilIcons name="pencil" size={24} color="white" />
