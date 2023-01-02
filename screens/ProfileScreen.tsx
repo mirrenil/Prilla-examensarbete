@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { StyleSheet, TouchableOpacity, ActivityIndicator } from "react-native";
 
 import { Text, View } from "../components/Themed";
-import { ActivityCard } from "../components/ActivityCard";
 import { UserInfoCard } from "../components/UserInfoCard";
 import { FavoritesCard } from "../components/FavoritesCard";
 import { RootTabScreenProps } from "../types";
@@ -12,6 +11,7 @@ import { currentReduxUser } from "../redux/signin";
 import { getDocsWithSpecificValue } from "../helper";
 import { Review } from "../Interfaces";
 import { ScrollView } from "react-native-gesture-handler";
+import { ReviewCard } from "../components/ReviewCard";
 
 export default function ProfileScreen({
   navigation,
@@ -91,7 +91,7 @@ export default function ProfileScreen({
           </View>
           {/* should only display reviews by specific user */}
           {reviews.map((review: any) => {
-            return <ActivityCard key={review.id} review={review} />;
+            return <ReviewCard key={review.id} review={review} />;
           })}
         </View>
       </ScrollView>
