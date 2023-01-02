@@ -49,18 +49,25 @@ const ImageUpload = ({ handleUpload }: Props) => {
 	};
 
 	return (
-		<View>
-			<TouchableOpacity onPress={PickImage} style={{ alignItems: 'center' }}>
-				<MaterialIcons
-					name="add-a-photo"
-					size={50}
-					color="white"
-					style={{ paddingBottom: 10 }}
-				/>
-				<Text>Lägg till foto</Text>
-			</TouchableOpacity>
-			{image && (
-				<Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
+		<View style={{borderColor: 'red', borderStyle:'solid', borderWidth: 1}}>
+			{image ? (
+				<View style={{position: 'relative'}}>
+          <MaterialIcons name="remove-circle" size={24} color="red" style={{position: 'absolute', zIndex: 2}}/>
+					<Image source={{ uri: image }} style={{ width: 100, height: 100, position: 'absolute', top: 0, zIndex: 1 }} />
+				</View>
+			) : (
+				<TouchableOpacity
+					onPress={PickImage}
+					style={{ alignItems: 'center', margin: 10 }}
+				>
+					<MaterialIcons
+						name="add-a-photo"
+						size={50}
+						color="white"
+						style={{ paddingBottom: 10 }}
+					/>
+					<Text>Lägg till foto</Text>
+				</TouchableOpacity>
 			)}
 		</View>
 	);
