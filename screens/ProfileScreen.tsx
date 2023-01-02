@@ -53,7 +53,7 @@ export default function ProfileScreen({
       />
       <View style={styles.favorites}>
         <View style={styles.box}>
-          <Text lightColor="#fff" darkColor="#fff">
+          <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
             Favoriter <AntDesign name="right" size={16} color="white" />
           </Text>
         </View>
@@ -66,7 +66,7 @@ export default function ProfileScreen({
       />
       <View style={styles.activities}>
         <View style={styles.box}>
-          <Text lightColor="#fff" darkColor="#fff">
+          <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
             Aktiviteter
           </Text>
           <AntDesign name="right" size={16} color="white" />
@@ -140,18 +140,23 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-start",
     alignContent: "center",
-    margin: 10,
   },
   smallText: {
     fontSize: 9,
     margin: 10,
+  },
+  text: {
+    fontSize: 17,
+    marginBottom: 10,
   },
   activities: {
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
     alignContent: "center",
-    margin: 10,
+    marginLeft: 20,
   },
-  favorites: {},
+  favorites: {
+    marginLeft: 20,
+  },
 });
