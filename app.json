@@ -15,18 +15,28 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.liinneeaa.prilla"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/prilla.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.liinneeaa.prilla"
     },
     "web": {
       "favicon": "./assets/images/prilla.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "05efc6d5-db10-4e72-99c6-f7f1f6ecf67a"
+      }
+    },
+    "owner": "liinneea-a"
   }
 }
