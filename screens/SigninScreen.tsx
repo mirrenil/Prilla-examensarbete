@@ -24,8 +24,6 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
   });
   const dispatch = useDispatch();
 
-  useEffect(() => {}, [currentUser]);
-
   useEffect(() => {
     const unsubrcribe = onAuthStateChanged(auth, (user) => {
       setcurrentUser(user as User);
