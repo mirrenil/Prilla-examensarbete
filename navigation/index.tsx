@@ -13,7 +13,7 @@ import {
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
 import { ColorSchemeName, Pressable } from "react-native";
-import { Provider } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
@@ -36,6 +36,7 @@ import {
 } from "../types";
 import store from "../redux/store";
 import ProductDetailScreen from "../screens/DetailScreen";
+import { currentReduxUser } from "../redux/signin";
 
 export default function Navigation({
   colorScheme,
@@ -104,6 +105,7 @@ const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
   const colorScheme = useColorScheme();
+  const user = useSelector(currentReduxUser);
 
   return (
     <BottomTab.Navigator
@@ -169,7 +171,7 @@ function BottomTabNavigator() {
       <BottomTab.Screen
         name="Profile"
         component={ProfileScreen}
-        // initialParams={{ id: currentUser.id }}
+        initialParams={{ id: user.id }}
         options={{
           title: "",
           tabBarIcon: ({ color }) => (
