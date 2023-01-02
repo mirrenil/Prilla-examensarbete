@@ -49,11 +49,36 @@ const ImageUpload = ({ handleUpload }: Props) => {
 	};
 
 	return (
-		<View style={{borderColor: 'red', borderStyle:'solid', borderWidth: 1}}>
+		<View
+			style={{
+				height: 100,
+				justifyContent: 'center',
+				alignItems: 'center',
+			}}
+		>
 			{image ? (
-				<View style={{position: 'relative'}}>
-          <MaterialIcons name="remove-circle" size={24} color="red" style={{position: 'absolute', zIndex: 2}}/>
-					<Image source={{ uri: image }} style={{ width: 100, height: 100, position: 'absolute', top: 0, zIndex: 1 }} />
+				<View style={{justifyContent: 'flex-start'}}>
+					<TouchableOpacity
+						onPress={() => {
+							setImage(null);
+						}}
+					>
+						<MaterialIcons
+							name="remove-circle"
+							size={24}
+							color="red"
+						/>
+					</TouchableOpacity>
+
+					<Image
+						source={{ uri: image }}
+						style={{
+							width: 100,
+							height: 100,
+							top: 0,
+							zIndex: 1,
+						}}
+					/>
 				</View>
 			) : (
 				<TouchableOpacity
