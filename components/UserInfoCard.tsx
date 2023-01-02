@@ -32,10 +32,10 @@ export const UserInfoCard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigation();
   const userEmail = user?.email;
+  const profilePic =
+    "https://cdn.drawception.com/images/avatars/647493-B9E.png";
 
   useEffect(() => {
-    getUser();
-    getPhoto();
     getReviews();
     compareReviewIDs();
     reviewsLoaded();
@@ -82,30 +82,7 @@ export const UserInfoCard = () => {
     }
   };
 
-  const getUser = () => {
-    const currentUser = getOneDocById("users", user?.uid);
-    return currentUser;
-  };
-
-  // Define a function that retrieves a user's photo
-  async function getUserPhoto(id: string) {
-    try {
-      const userDoc = await getDocs(collection(db, "users", id));
-      const photo = userDoc.docs[0].data().photo;
-      console.log(photo.length);
-
-      return photo;
-    } catch (error) {
-      console.error(error);
-    }
-  }
-  // Call the function to retrieve a user's photo
-  const getPhoto = async () => {
-    const photo = await getUserPhoto(user?.id);
-    setPhotoURL(photo);
-    console.log(photoURL.length);
-  };
-
+  // modal functions
   const resetPassword = async (email: string) => {
     try {
       await sendPasswordResetEmail(auth, email);
@@ -147,117 +124,108 @@ export const UserInfoCard = () => {
           color="#FFFD54"
           onPress={() => setModalVisible(true)}
         />
-        <View>
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-              setModalVisible(!modalVisible);
-            }}
-          >
-            <View>
-              <View style={styles.modalView}>
-                <View>
-                  <AntDesign
-                    name="left"
-                    size={20}
-                    color="white"
-                    onPress={() => setModalVisible(!modalVisible)}
-                  />
-                  <Text
-                    lightColor="#fff"
-                    darkColor="#fff"
-                    style={styles.modalTextHeader}
-                  >
-                    Inställningar
-                  </Text>
-                </View>
-                <View style={styles.column}>
-                  <Text
-                    lightColor="#fff"
-                    darkColor="#fff"
-                    style={styles.modalText}
-                  >
-                    Lösenord
-                  </Text>
-                  <TouchableOpacity>
-                    <Text
-                      lightColor="#fff"
-                      darkColor="#fff"
-                      style={styles.borderButton}
-                      onPress={() => resetPassword(userEmail as string)}
-                    >
-                      Skicka återställnings länk till e-post
-                    </Text>
-                  </TouchableOpacity>
-
-                  <Text
-                    lightColor="#fff"
-                    darkColor="#fff"
-                    style={styles.modalText}
-                  >
-                    Radera konto
-                  </Text>
-                  <TouchableOpacity>
-                    <Text
-                      lightColor="#fff"
-                      darkColor="#fff"
-                      style={styles.borderButton}
-                      onPress={() => deleteAccount()}
-                    >
-                      Vill du radera ditt konto?
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity>
-                    <Text
-                      lightColor="#fff"
-                      darkColor="#fff"
-                      style={styles.borderButton}
-                      onPress={handleSignOut}
-                    >
-                      Logga ut
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-          </Modal>
+      </View>
+      <View style={styles.topContainer}>
+        <View style={styles.left}>
+          <Text darkColor="#fff" lightColor="#fff">
+            Recensioner
+          </Text>
+          <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
+            {reviews.length}
+          </Text>
+        </View>
+        <View style={styles.right}>
+          <Text darkColor="#fff" lightColor="#fff">
+            Följer
+          </Text>
+          <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
+            {/* {user?.follow} right now hard coded value*/} 1
+          </Text>
         </View>
       </View>
-      <View style={styles.row}>
-        <Text darkColor="#fff" lightColor="#fff">
-          Recensioner
-        </Text>
-        {photoURL && (
-          <Image
-            source={{ uri: photoURL[0] }}
-            style={{ height: 50, width: 50 }}
-          />
-        )}
+      <View style={styles.center}>
+        <Image source={{ uri: profilePic }} style={styles.image} />
 
-        <Text darkColor="#fff" lightColor="#fff">
-          Betyg
-        </Text>
-      </View>
-      <View style={styles.row}>
         <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
-          {reviews.length}
-        </Text>
-        <Text darkColor="#fff" lightColor="#fff">
           {user?.displayName}
         </Text>
-        <Text darkColor="#fff" lightColor="#fff">
-          {user?.grade}
-        </Text>
       </View>
-      <View style={styles.center}>
-        <Text darkColor="#fff" lightColor="#fff">
-          Medlem sedan:
-        </Text>
-        <Text darkColor="#fff" lightColor="#fff">
-          {/* {user?.createdAt.toDate().toLocaleString("sv-SE").substring(0, 10)} */}
-        </Text>
+      <View>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <View>
+            <View style={styles.modalView}>
+              <View>
+                <AntDesign
+                  name="left"
+                  size={20}
+                  color="white"
+                  onPress={() => setModalVisible(!modalVisible)}
+                />
+                <Text
+                  lightColor="#fff"
+                  darkColor="#fff"
+                  style={styles.modalTextHeader}
+                >
+                  Inställningar
+                </Text>
+              </View>
+              <View style={styles.column}>
+                <Text
+                  lightColor="#fff"
+                  darkColor="#fff"
+                  style={styles.modalText}
+                >
+                  Lösenord
+                </Text>
+                <TouchableOpacity>
+                  <Text
+                    lightColor="#fff"
+                    darkColor="#fff"
+                    style={styles.borderButton}
+                    onPress={() => resetPassword(userEmail as string)}
+                  >
+                    Skicka återställnings länk till e-post
+                  </Text>
+                </TouchableOpacity>
+
+                <Text
+                  lightColor="#fff"
+                  darkColor="#fff"
+                  style={styles.modalText}
+                >
+                  Radera konto
+                </Text>
+                <TouchableOpacity>
+                  <Text
+                    lightColor="#fff"
+                    darkColor="#fff"
+                    style={styles.borderButton}
+                    onPress={() => deleteAccount()}
+                  >
+                    Vill du radera ditt konto?
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Text
+                    lightColor="#fff"
+                    darkColor="#fff"
+                    style={styles.borderButton}
+                    onPress={handleSignOut}
+                  >
+                    Logga ut
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
       </View>
     </View>
   );
@@ -270,22 +238,38 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 80,
   },
+  left: {
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  center: {
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  right: {
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  topContainer: {
+    width: 550,
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+  },
   column: {
     flexDirection: "column",
     justifyContent: "flex-start",
     width: "100%",
     height: "100%",
   },
-  center: {
-    alignItems: "center",
-  },
   top: {
-    marginLeft: 300,
+    marginLeft: 375,
+    marginBottom: 20,
   },
   modalView: {
     margin: 10,
     marginTop: 100,
-    height: 550,
+    height: 500,
     backgroundColor: "#261F30",
     borderRadius: 20,
     padding: 35,
@@ -332,8 +316,11 @@ const styles = StyleSheet.create({
   image: {
     width: 100,
     height: 100,
+    borderRadius: 50,
+    marginBottom: 20,
   },
   text: {
     fontSize: 20,
+    padding: 10,
   },
 });
