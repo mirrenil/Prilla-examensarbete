@@ -7,7 +7,6 @@ import {
 	query,
 	where,
 	addDoc,
-	update,
 	updateDoc,
 } from 'firebase/firestore';
 import { db } from './firebase';
@@ -88,6 +87,8 @@ export const addNewDoc = async (collectionName, newData) => {
 	try {
 		let response = await addDoc(collection(db, collectionName), newData).then(
 			(docRef) => {
+				let obj = { ...newData, id: docRef.id };
+				setOneDoc('produkter', obj, docRef.id);
 				return docRef.id;
 			}
 		);
@@ -96,3 +97,5 @@ export const addNewDoc = async (collectionName, newData) => {
 		console.log(err);
 	}
 };
+
+
