@@ -18,7 +18,7 @@ import {
   getDocsWithSpecificValue,
   getOneDocById,
 } from "../helper";
-import { Product, Review } from "../Interfaces";
+import { Review, User } from "../Interfaces";
 import { ScrollView } from "react-native-gesture-handler";
 import { ReviewCard } from "../components/ReviewCard";
 import { useNavigation } from "@react-navigation/native";
@@ -29,21 +29,20 @@ import {
   signOut,
 } from "firebase/auth";
 import { auth } from "../firebase";
-import { setUseProxies } from "immer";
 
 export default function ProfileScreen({
   navigation,
   route,
 }: RootTabScreenProps<"Profile">) {
   const [follow, setFollow] = useState(false);
-  const user = useSelector(currentReduxUser);
+  const myUser = useSelector(currentReduxUser);
   const [myProfile, setMyProfile] = useState(false);
-  const [randomUser, setRandomUser] = useState();
+  const [user, setUser] = useState<User>();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigation();
-  const userEmail = user?.email;
+  const userEmail = myUser?.email;
   const [urls, setUrls] = useState<string[]>([]);
   const favoritesArray: any = [];
   let photoURLS: string[] = [];
@@ -56,17 +55,16 @@ export default function ProfileScreen({
     compareLikedIds();
     imagesLoaded();
     checkCurrentUser();
-  }, [user]);
+  }, [myUser]);
 
   const checkCurrentUser = async () => {
-    if (user.id === route.params.id) {
-      setMyProfile(true);
+    let isMe = route.params.id === myUser.id;
+    if (!isMe) {
+      const user = await getOneDocById("users", route.params.id);
+      setUser(user as User);
     } else {
-      let usersArr: any = [];
-      const allUsers = await getAllDocsInCollection("users");
-      usersArr.push(allUsers);
-      const user = usersArr.filter((user: any) => usersArr.includes(user.id));
-      setRandomUser(user);
+      setMyProfile(true);
+      setUser(myUser);
     }
   };
 
@@ -98,7 +96,7 @@ export default function ProfileScreen({
   };
 
   const deleteAccount = async () => {
-    const userToDelete = user;
+    const userToDelete = myUser;
     deleteUser(userToDelete)
       .then(() => {
         Alert.alert("Ditt konto har raderats");
@@ -207,14 +205,14 @@ export default function ProfileScreen({
             <View style={styles.center}>
               <Image source={{ uri: profilePic }} style={styles.image} />
               <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
-                {user.displayName}
+                {myUser.displayName}
               </Text>
             </View>
           ) : (
             <View style={styles.center}>
               <Image source={{ uri: profilePic }} style={styles.image} />
               <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
-                {randomUser?.displayName}
+                {user?.displayName}
               </Text>
             </View>
           )}
@@ -252,7 +250,7 @@ export default function ProfileScreen({
           ) : (
             <View style={styles.box}>
               <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
-                Favoriter
+                {user.displayName}'s favoriter
                 <AntDesign name="right" size={16} color="white" />
               </Text>
             </View>
@@ -286,7 +284,7 @@ export default function ProfileScreen({
           ) : (
             <View style={styles.box}>
               <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
-                Aktiviteter
+                {user.displayName}'s aktiviteter
               </Text>
               <AntDesign name="right" size={20} color="white" />
             </View>
