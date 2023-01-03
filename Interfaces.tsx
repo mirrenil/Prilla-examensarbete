@@ -36,6 +36,6 @@ export interface Product {
   tags: Tag[];
   type: string;
   weight: number;
-  rating?: number;
-  åroductID: string;
+  rating: number;
+  id: string;
 }
