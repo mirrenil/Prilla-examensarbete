@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import {
   StyleSheet,
   Image,
   ImageBackground,
-  TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
 import { View, Text } from "../components/Themed";
@@ -15,7 +14,6 @@ import { RatingDots } from "../components/Rating";
 import { AntDesign } from "@expo/vector-icons";
 import { StrengthBar } from "../components/StrengthBar";
 import { User } from "../Interfaces";
-import { connectFirestoreEmulator } from "firebase/firestore";
 
 interface ReviewWithAuthor extends Review {
   author: string;
@@ -115,9 +113,15 @@ function ProductDetailScreen({
           return (
             <View style={styles.reviewWrapper}>
               <View style={styles.reviewTop}>
-                <Text style={[styles.fatText, styles.capitalize]}>
-                  {rev.author}
-                </Text>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("Profile", { id: rev.userID })
+                  }
+                >
+                  <Text style={[styles.fatText, styles.capitalize]}>
+                    {rev.author}
+                  </Text>
+                </TouchableOpacity>
                 <RatingDots
                   rating={rev.rating}
                   dotSize={10}
