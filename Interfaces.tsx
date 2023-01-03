@@ -33,7 +33,7 @@ export interface Product {
   photo: string;
   pouches: number;
   reviews: string[];
-  strength: number;
+  strenght: number;
   tags: Tag[];
   type: string;
   weight: number;
