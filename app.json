@@ -3,6 +3,7 @@
     "name": "prilla",
     "slug": "prilla",
     "version": "1.0.0",
+    "description": "Prilla - För dig som gillar snus.",
     "orientation": "portrait",
     "icon": "./assets/images/transparent-prilla-sqaure.png",
     "scheme": "myapp",
