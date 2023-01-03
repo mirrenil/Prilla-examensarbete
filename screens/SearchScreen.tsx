@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { StyleSheet, Image, TouchableOpacity } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Searchbar } from "react-native-paper";
-import { RatingDots } from "../components/Rating";
+import { RateInactive } from "../components/RateInactive";
 import { Text, View } from "../components/Themed";
 import { getAllDocsInCollection } from "../helper";
 import { Product } from "../Interfaces";
@@ -70,7 +70,7 @@ export default function SearchScreen({
                   {product.description.slice(0, 130)}...
                 </Text>
                 <View style={{ flexDirection: "row" }}>
-                  <RatingDots rating={product.rating ?? 0} />
+                  <RateInactive rating={product.rating ?? 0} />
                   <Text style={margin.left}>{product.rating}</Text>
                 </View>
                 <Text>{product.reviews.length} ratings</Text>
