@@ -36,8 +36,7 @@ import {
 } from "../types";
 import store from "../redux/store";
 import ProductDetailScreen from "../screens/DetailScreen";
-import { currentReduxUser } from '../redux/signin';
-
+import { currentReduxUser } from "../redux/signin";
 
 export default function Navigation({
   colorScheme,
@@ -77,6 +76,12 @@ function RootNavigator() {
         name="Product"
         initialParams={{ id: "13" }}
         component={ProductDetailScreen}
+      />
+
+      <Stack.Screen
+        name="Profile"
+        initialParams={{ id: "13" }}
+        component={ProfileScreen}
       />
 
       <Stack.Screen
