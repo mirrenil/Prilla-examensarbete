@@ -4,7 +4,7 @@ import { View, Image, Text, StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { getOneDocById } from "../helper";
 import { Tag, Review, Product } from "../Interfaces";
-import { RatingDots } from "./Rating";
+import { RateInactive } from "./RateInactive";
 
 interface Props {
   review: Review;
@@ -44,7 +44,7 @@ export const ReviewCard = ({ review }: Props) => {
               </View>
             </TouchableOpacity>
             <View style={{ flexDirection: "row" }}>
-              <RatingDots rating={review.rating} />
+              <RateInactive rating={review.rating} />
               <Text style={{ marginLeft: 10 }}>{review.rating}</Text>
             </View>
           </View>

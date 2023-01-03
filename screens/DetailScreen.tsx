@@ -11,7 +11,7 @@ import { View, Text } from "../components/Themed";
 import { getDocsWithSpecificValue, getOneDocById } from "../helper";
 import { Product, Review } from "../Interfaces";
 import { RootStackParamList, RootStackScreenProps } from "../types";
-import { RatingDots } from "../components/Rating";
+import { RateInactive } from "../components/RateInactive";
 import { AntDesign } from "@expo/vector-icons";
 import { StrengthBar } from "../components/StrengthBar";
 import { User } from "../Interfaces";
@@ -96,7 +96,7 @@ function ProductDetailScreen({
               <Text style={styles.fatText}>Smak</Text>
               <View style={{ flexDirection: "row" }}>
                 {product?.flavor.map((f) => {
-                  return <Text key={f}>{f} </Text>;
+                  return <Text>{f} </Text>;
                 })}
               </View>
             </View>
@@ -113,12 +113,12 @@ function ProductDetailScreen({
       case 3:
         return reviews.map((rev) => {
           return (
-            <View key={rev.id} style={styles.reviewWrapper}>
+            <View style={styles.reviewWrapper}>
               <View style={styles.reviewTop}>
                 <Text style={[styles.fatText, styles.capitalize]}>
                   {rev.author}
                 </Text>
-                <RatingDots rating={rev.rating} />
+                <RateInactive rating={rev.rating} />
                 <Text>{rev.rating}</Text>
               </View>
               <Text>{rev.description}</Text>
@@ -149,18 +149,23 @@ function ProductDetailScreen({
               </Text>
               <Text style={styles.manufacturer}>{product?.manufacturer}</Text>
               <View style={styles.ratingContainer}>
-                <RatingDots rating={product?.rating ? product.rating : 0} />
+                <RateInactive rating={product?.rating ? product.rating : 0} />
                 <Text style={styles.ratingText}>
                   {product?.rating ? product.rating : 0}
                 </Text>
               </View>
               <Text>{product?.reviews.length} Ratings</Text>
               <View style={styles.interactions}>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("Review", { id: product.id })
+                  }
+                >
                   <View style={styles.button}>
                     <Text>Lägg till recension</Text>
                   </View>
                 </TouchableOpacity>
+
                 <AntDesign name="hearto" size={24} color="white" />
               </View>
             </View>

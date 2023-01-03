@@ -37,6 +37,7 @@ import {
   RootTabScreenProps,
 } from "../types";
 import ProductDetailScreen from "../screens/DetailScreen";
+import ReviewModal from "../screens/ReviewModal";
 
 export default function Navigation({
   colorScheme,
@@ -90,6 +91,7 @@ function RootNavigator() {
       />
       <Stack.Group screenOptions={{ presentation: "modal" }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
+        <Stack.Screen  options={{ title: "Lämna recension" }} name="Review" initialParams={{ id: '12 '}} component={ReviewModal} />
       </Stack.Group>
     </Stack.Navigator>
   );

@@ -1,15 +1,11 @@
 import { RatingBar } from "@aashu-dubey/react-native-rating-bar";
 import React, { ReactNode } from "react";
-import { View, StyleSheet, Text, Image } from "react-native";
+import { StyleSheet, Text, Image } from "react-native";
 
 interface Props {
   rating: number;
 }
-export const RatingDots = ({ rating }: Props) => {
-  const handleRating = (value: number) => {
-    console.log(value);
-  };
-
+export const RateInactive = ({ rating }: Props) => {
   const styles = StyleSheet.create({
     circle: {
       width: 20,
@@ -55,7 +51,6 @@ export const RatingDots = ({ rating }: Props) => {
           />
         ),
       }}
-      onRatingUpdate={(value) => handleRating(value)}
     />
   );
 };
