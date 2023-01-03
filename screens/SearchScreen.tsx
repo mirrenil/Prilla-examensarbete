@@ -33,8 +33,10 @@ export default function SearchScreen({
 
   const sortProducts = () => {
     let searchTerm = searchInput.toLowerCase();
-    let filteredList = allProducts.filter((p) =>
-      p.name.toLowerCase().includes(searchTerm)
+    let filteredList = allProducts.filter(
+      (p) =>
+        p.name.toLowerCase().includes(searchTerm) ||
+        p.brand.toLowerCase().includes(searchTerm)
     );
     setFilteredProducts(filteredList);
   };
