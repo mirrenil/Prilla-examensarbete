@@ -9,6 +9,7 @@ import { createUserWithEmailAndPassword, updateProfile } from "@firebase/auth";
 import { auth } from "../firebase";
 import { setOneDoc } from "../helper";
 import { RootStackScreenProps } from "../types";
+import * as Haptics from "expo-haptics";
 
 export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
   const [user, setUser] = useState({
@@ -157,7 +158,10 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
 
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => isValid()}
+                onPress={() => {
+                  isValid();
+                  Haptics.ImpactFeedbackStyle.Light;
+                }}
                 disabled={!values.email}
               >
                 <Text style={styles.buttonText}>Registrera dig</Text>
