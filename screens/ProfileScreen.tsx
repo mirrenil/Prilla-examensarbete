@@ -41,13 +41,13 @@ export default function ProfileScreen({
   const [reviews, setReviews] = useState<Review[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const dispatch = useDispatch();
-  const navigate = useNavigation();
   const userEmail = myUser?.email;
   const [urls, setUrls] = useState<string[]>([]);
   const favoritesArray: any = [];
   let photoURLS: string[] = [];
   const profilePic =
     "https://cdn.drawception.com/images/avatars/647493-B9E.png";
+  let isMe = route.params.id === myUser.id;
 
   useEffect(() => {
     getReviews();
@@ -55,10 +55,9 @@ export default function ProfileScreen({
     compareLikedIds();
     imagesLoaded();
     checkCurrentUser();
-  }, [myUser]);
+  }, [isMe]);
 
   const checkCurrentUser = async () => {
-    let isMe = route.params.id === myUser.id;
     if (!isMe) {
       const user = await getOneDocById("users", route.params.id);
       setUser(user as User);
@@ -112,7 +111,7 @@ export default function ProfileScreen({
       .then(() => {
         dispatch(setSignOutState());
         setMyProfile(false);
-        navigate.navigate("Signin");
+        navigation.navigate("Signin");
       })
       .catch((error: any) => {
         console.error(error);
