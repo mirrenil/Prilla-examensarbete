@@ -11,7 +11,7 @@ import { View, Text } from '../components/Themed';
 import { getDocsWithSpecificValue, getOneDocById } from '../helper';
 import { Product, Review } from '../Interfaces';
 import { RootStackParamList, RootStackScreenProps } from '../types';
-import { RatingDots } from '../components/Rating';
+import { RateInactive } from '../components/RateInactive';
 import { AntDesign } from '@expo/vector-icons';
 import { StrengthBar } from '../components/StrengthBar';
 import { User } from '../Interfaces';
@@ -80,33 +80,33 @@ function ProductDetailScreen({
 	const renderFolderContent = () => {
 		switch (activeTab) {
 			case 1:
-				return <Text>{product?.Description}</Text>;
+				return <Text>{product?.description}</Text>;
 			case 2:
 				return (
 					<>
 						<View style={styles.folderFacts}>
 							<Text style={styles.fatText}>Varumärke</Text>
-							<Text>{product?.Brand}</Text>
+							<Text>{product?.brand}</Text>
 						</View>
 						<View style={styles.folderFacts}>
 							<Text style={styles.fatText}>Namn</Text>
-							<Text>{product?.Name}</Text>
+							<Text>{product?.name}</Text>
 						</View>
 						<View style={styles.folderFacts}>
 							<Text style={styles.fatText}>Smak</Text>
-							<View style={{flexDirection: 'row'}}>
-								{product?.Flavor.map((f) => {
+							<View style={{ flexDirection: 'row' }}>
+								{product?.flavor.map((f) => {
 									return <Text>{f} </Text>;
 								})}
 							</View>
 						</View>
 						<View style={styles.folderFacts}>
 							<Text style={styles.fatText}>Nikotinhalt</Text>
-							<Text>{product?.Nicotine} mg/g</Text>
+							<Text>{product?.nicotine} mg/g</Text>
 						</View>
 						<View style={styles.folderFacts}>
 							<Text style={styles.fatText}>Vikt</Text>
-							<Text>{product?.Weight}g</Text>
+							<Text>{product?.weight}g</Text>
 						</View>
 					</>
 				);
@@ -118,7 +118,7 @@ function ProductDetailScreen({
 								<Text style={[styles.fatText, styles.capitalize]}>
 									{rev.author}
 								</Text>
-								<RatingDots
+								<RateInactive
 									rating={rev.rating}
 									dotSize={10}
 									single={15}
@@ -147,25 +147,30 @@ function ProductDetailScreen({
 				</ImageBackground>
 				<View style={styles.screenContainer}>
 					<View style={styles.productDataContainer}>
-						<Image style={styles.productImg} source={{ uri: product?.Photo }} />
+						<Image style={styles.productImg} source={{ uri: product?.photo }} />
 						<View style={styles.productInfo}>
 							<Text style={styles.title}>
-								{product?.Brand + ' ' + product?.Name}
+								{product?.brand + ' ' + product?.name}
 							</Text>
-							<Text style={styles.manufacturer}>{product?.Manufacturer}</Text>
+							<Text style={styles.manufacturer}>{product?.manufacturer}</Text>
 							<View style={styles.ratingContainer}>
-								<RatingDots rating={product?.Rating ? product.Rating : 0} />
+								<RateInactive rating={product?.rating ? product.rating : 0} />
 								<Text style={styles.ratingText}>
-									{product?.Rating ? product.Rating : 0}
+									{product?.rating ? product.rating : 0}
 								</Text>
 							</View>
-							<Text>{product?.Reviews.length} Ratings</Text>
+							<Text>{product?.reviews.length} Ratings</Text>
 							<View style={styles.interactions}>
-								<TouchableOpacity>
+								<TouchableOpacity
+									onPress={() =>
+										navigation.navigate('Review', { id: product.id })
+									}
+								>
 									<View style={styles.button}>
 										<Text>Lägg till recension</Text>
 									</View>
 								</TouchableOpacity>
+
 								<AntDesign name="hearto" size={24} color="white" />
 							</View>
 						</View>
@@ -174,19 +179,19 @@ function ProductDetailScreen({
 					<View style={styles.tableDataContainer}>
 						<View style={styles.tableRow}>
 							<Text>Styrka</Text>
-							<StrengthBar strength={product?.Strength} />
+							<StrengthBar strength={product?.strenght} />
 						</View>
 						<View style={styles.tableRow}>
 							<Text>Antal</Text>
-							<Text>{product?.Pouches} st per dosa</Text>
+							<Text>{product?.pouches} st per dosa</Text>
 						</View>
 						<View style={styles.tableRow}>
 							<Text>Typ</Text>
-							<Text>{product?.Type}</Text>
+							<Text>{product?.type}</Text>
 						</View>
 						<View style={styles.tableRow}>
 							<Text>Format</Text>
-							<Text>{product?.Format}</Text>
+							<Text>{product?.format}</Text>
 						</View>
 					</View>
 
@@ -267,7 +272,7 @@ const styles = StyleSheet.create({
 	manufacturer: {},
 	ratingContainer: {
 		flexDirection: 'row',
-    alignItems: 'center'
+		alignItems: 'center',
 	},
 	ratingText: {
 		marginLeft: 10,

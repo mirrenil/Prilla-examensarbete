@@ -26,7 +26,7 @@ export const ActivityCard = ({ review }: Props) => {
 	return (
 		<View>
 			<ImageBackground
-				source={require('../assets/images/myPic.png')}
+				source={{uri: review.photo}}
 				resizeMode="cover"
 				style={styles.image}
 			>
