@@ -34,12 +34,12 @@ export default function ProfileScreen({
   navigation,
   route,
 }: RootTabScreenProps<"Profile">) {
-  const [follow, setFollow] = useState(false);
+  const [follow, setFollow] = useState<boolean>(false);
   const myUser = useSelector(currentReduxUser);
-  const [myProfile, setMyProfile] = useState(false);
+  const [myProfile, setMyProfile] = useState<boolean>(false);
   const [user, setUser] = useState<User>();
   const [reviews, setReviews] = useState<Review[]>([]);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
   const dispatch = useDispatch();
   const userEmail = myUser?.email;
   const [urls, setUrls] = useState<string[]>([]);
