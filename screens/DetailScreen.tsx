@@ -181,10 +181,7 @@ function ProductDetailScreen({
                   </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity
-                  onPress={toggleButton}
-                  style={[like ? styles.like : styles.dislike]}
-                >
+                <TouchableOpacity onPress={toggleButton}>
                   {like ? (
                     <AntDesign name="heart" size={24} color="red" />
                   ) : (
@@ -355,12 +352,6 @@ const styles = StyleSheet.create({
   reviewWrapper: {
     width: "90%",
     marginBottom: 10,
-  },
-  like: {
-    color: "red",
-  },
-  dislike: {
-    color: "white",
   },
 });
 
