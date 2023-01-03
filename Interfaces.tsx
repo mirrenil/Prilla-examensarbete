@@ -22,6 +22,7 @@ export interface User {
 }
 
 export interface Product {
+  addedAt: number;
   brand: string;
   description: string;
   flavor: string[];
