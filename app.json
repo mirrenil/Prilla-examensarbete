@@ -10,7 +10,7 @@
     "splash": {
       "image": "./assets/images/transparent-prilla-sqaure.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#201A28"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
