@@ -34,15 +34,16 @@ export const ActivityCard = ({ review }: Props) => {
         style={styles.image}
       >
         {" "}
-        <TouchableOpacity
-          onPress={() => navigation.navigate("Profile", { id: review.userID })}
-        >
-          <View style={styles.userInfo}>
+        <View style={styles.userInfo}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("Profile", { id: review.userID })
+            }
+          >
             <Text>User Pic</Text>
-
             <Text style={styles.username}>{author?.displayName}</Text>
-          </View>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        </View>
         <ReviewCard key={review.id} review={review} />
       </ImageBackground>
     </View>
