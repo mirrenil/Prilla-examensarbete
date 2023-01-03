@@ -7,12 +7,11 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import { createUserWithEmailAndPassword, updateProfile } from "@firebase/auth";
 import { auth } from "../firebase";
-import { Timestamp } from "firebase/firestore";
 import { setOneDoc } from "../helper";
 import { RootStackScreenProps } from "../types";
 
 export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
-  const [newUser, setNewUser] = useState({
+  const [user, setUser] = useState({
     email: "",
     displayName: "",
     password: "",
@@ -20,25 +19,28 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
   });
 
   const addUserToDb = async () => {
-    const user = {
-      email: newUser.email,
-      displayName: newUser.displayName,
+    const userToDB = {
+      email: user.email,
+      displayName: user.displayName,
       id: auth.currentUser?.uid,
       createdAt: new Date(),
       photo: "",
+      liked: [],
     };
-    setOneDoc("users", user, auth.currentUser?.uid);
+    setOneDoc("users", auth.currentUser?.uid, userToDB);
   };
 
   const signup = async () => {
     try {
-      const user = await createUserWithEmailAndPassword(
+      await createUserWithEmailAndPassword(
         auth,
-        newUser.email,
-        newUser.password
+        user.email,
+        user.password
       ).then(() => {
         if (auth.currentUser) {
-          updateProfile(auth.currentUser, { displayName: newUser.displayName });
+          updateProfile(auth.currentUser, {
+            displayName: user.displayName,
+          });
         }
       });
       addUserToDb();
@@ -50,7 +52,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
   };
 
   const isValid = () => {
-    if (newUser.password !== newUser.passwordConfirmation) {
+    if (user.password !== user.passwordConfirmation) {
       Alert.alert("Lösenorden matchar inte");
     } else {
       signup();
@@ -68,7 +70,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
       />
 
       <Formik
-        initialValues={newUser}
+        initialValues={user}
         onSubmit={(values) => {}}
         validationSchema={yup.object().shape({
           displayName: yup.string().required("Please, provide a displayName!"),
@@ -86,7 +88,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
           const { email, displayName, password, passwordConfirmation } = values;
 
           useEffect(() => {
-            setNewUser({
+            setUser({
               email: email,
               displayName: displayName,
               password: password,
@@ -200,6 +202,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "bold",
     fontSize: 17,
+    marginTop: 5,
   },
   title: {
     fontFamily: "OleoScript",

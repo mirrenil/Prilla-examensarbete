@@ -9,64 +9,42 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
   User,
+  UserCredential,
 } from "@firebase/auth";
-import { auth } from "../firebase";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { RootStackScreenProps } from "../types";
+import { auth } from "../firebase";
+import { useDispatch } from "react-redux";
+import { setActiveUser } from "../redux/signin";
 
-export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
+export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
   const [currentUser, setcurrentUser] = useState<User>();
-
   const [user, setUser] = useState({
     email: "",
     password: "",
   });
-
-  const loadLoginState = async () => {
-    try {
-      const loggedInString = await AsyncStorage.getItem("loggedIn");
-      if (loggedInString) {
-        navigation.navigate("Root");
-        return loggedInString;
-      } else {
-        return false;
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    loadLoginState();
     const unsubrcribe = onAuthStateChanged(auth, (user) => {
       setcurrentUser(user as User);
     });
     return unsubrcribe;
-  }, [auth, onAuthStateChanged, loadLoginState]);
-
-  // this function should be called saveLoginState(false) to sign out!
-  const saveLoginState = async (loggedIn: boolean) => {
-    try {
-      await AsyncStorage.setItem("loggedIn", loggedIn.toString());
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  }, [auth, onAuthStateChanged]);
 
   const login = async () => {
     try {
-      const x = await signInWithEmailAndPassword(
-        auth,
-        user.email,
-        user.password
+      await signInWithEmailAndPassword(auth, user.email, user.password).then(
+        (result: UserCredential) => {
+          dispatch(
+            setActiveUser({
+              reduxEmail: result.user?.email,
+              currentUser: currentUser,
+            })
+          );
+        }
       );
-      if (auth.currentUser) {
-        setcurrentUser(auth.currentUser);
-        saveLoginState(true);
-        navigation.navigate("Root");
-      } else {
-        setcurrentUser(undefined);
-      }
+
+      navigation.navigate("Root");
     } catch (error) {
       Alert.alert("Felaktig email eller lösenord");
     }
@@ -193,6 +171,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "bold",
     fontSize: 17,
+    marginTop: 5,
   },
   text: {
     color: "#fff",
