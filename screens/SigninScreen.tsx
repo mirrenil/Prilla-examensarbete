@@ -5,6 +5,7 @@ import { Alert, StyleSheet, TouchableOpacity } from "react-native";
 import { Text, View, TextInput } from "../components/Themed";
 import { Formik } from "formik";
 import * as yup from "yup";
+import * as Haptics from "expo-haptics";
 import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
@@ -113,20 +114,31 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
               )}
 
               <TouchableOpacity
-                onPress={() => navigation.navigate("ForgotPassword")}
+                onPress={() => {
+                  navigation.navigate("ForgotPassword");
+                  Haptics.ImpactFeedbackStyle.Light;
+                }}
               >
                 <Text style={styles.text}>Glömt lösenord?</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => login()}
+                onPress={() => {
+                  login();
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                }}
                 disabled={!values.email || !values.password}
               >
                 <Text style={styles.buttonText}>Logga in</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => navigation.navigate("AgeCheck")}>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("AgeCheck");
+                  Haptics.ImpactFeedbackStyle.Light;
+                }}
+              >
                 <Text style={styles.text}>
                   Har du inget konto än? Skapa ett här!
                 </Text>

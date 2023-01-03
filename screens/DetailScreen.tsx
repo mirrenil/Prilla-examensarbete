@@ -6,6 +6,7 @@ import {
   ImageBackground,
   ActivityIndicator,
 } from "react-native";
+import * as Haptics from "expo-haptics";
 import { View, Text } from "../components/Themed";
 import { getDocsWithSpecificValue, getOneDocById } from "../helper";
 import { Product, Review } from "../Interfaces";
@@ -24,6 +25,7 @@ function ProductDetailScreen({
   const [product, setProduct] = useState<Product>();
   const [activeTab, setActiveTab] = useState<number>(3);
   const [reviews, setReviews] = useState<ReviewWithAuthor[]>([]);
+  const [like, setLike] = useState<boolean>(false);
 
   useEffect(() => {
     getProductReviews();
@@ -71,6 +73,11 @@ function ProductDetailScreen({
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const toggleButton = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setLike(!like);
   };
 
   const renderFolderContent = () => {
@@ -174,7 +181,13 @@ function ProductDetailScreen({
                   </View>
                 </TouchableOpacity>
 
-                <AntDesign name="hearto" size={24} color="white" />
+                <TouchableOpacity onPress={toggleButton}>
+                  {like ? (
+                    <AntDesign name="heart" size={24} color="red" />
+                  ) : (
+                    <AntDesign name="hearto" size={24} color="white" />
+                  )}
+                </TouchableOpacity>
               </View>
             </View>
           </View>

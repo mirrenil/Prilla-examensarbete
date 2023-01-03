@@ -8,7 +8,7 @@ import {
   Modal,
   Image,
 } from "react-native";
-
+import * as Haptics from "expo-haptics";
 import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import { useDispatch, useSelector } from "react-redux";
@@ -34,12 +34,12 @@ export default function ProfileScreen({
   navigation,
   route,
 }: RootTabScreenProps<"Profile">) {
-  const [follow, setFollow] = useState(false);
+  const [follow, setFollow] = useState<boolean>(false);
   const myUser = useSelector(currentReduxUser);
-  const [myProfile, setMyProfile] = useState(false);
+  const [myProfile, setMyProfile] = useState<boolean>(false);
   const [user, setUser] = useState<User>();
   const [reviews, setReviews] = useState<Review[]>([]);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
   const dispatch = useDispatch();
   const userEmail = myUser?.email;
   const [urls, setUrls] = useState<string[]>([]);
@@ -81,11 +81,13 @@ export default function ProfileScreen({
   };
 
   const toggleButton = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setFollow(!follow);
   };
 
   // Modal functionality
   const resetPassword = async (email: string) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     try {
       await sendPasswordResetEmail(auth, email);
       Alert.alert("Återställningslänk skickad till din email");
@@ -95,6 +97,7 @@ export default function ProfileScreen({
   };
 
   const deleteAccount = async () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     const userToDelete = myUser;
     deleteUser(userToDelete)
       .then(() => {
@@ -106,6 +109,7 @@ export default function ProfileScreen({
   };
 
   const handleSignOut = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     const auth = getAuth();
     signOut(auth)
       .then(() => {
@@ -164,7 +168,7 @@ export default function ProfileScreen({
     return (
       <ScrollView style={styles.screen}>
         <View style={styles.container}>
-          {myProfile && (
+          {myProfile ? (
             <View style={styles.top}>
               <Feather
                 name="settings"
@@ -173,7 +177,7 @@ export default function ProfileScreen({
                 onPress={() => setModalVisible(true)}
               />
             </View>
-          )}
+          ) : null}
           <View style={styles.topContainer}>
             <View style={styles.left}>
               <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
@@ -218,7 +222,7 @@ export default function ProfileScreen({
 
           {!myProfile && (
             <TouchableOpacity
-              style={[follow ? styles.borderButton : styles.button]}
+              style={[follow ? styles.borderButtonLike : styles.button]}
               onPress={toggleButton}
             >
               <Text
@@ -421,6 +425,17 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 6,
     width: 300,
+    height: 50,
+    marginTop: 10,
+    marginBottom: 10,
+    textAlign: "center",
+  },
+  borderButtonLike: {
+    borderWidth: 0.2,
+    borderColor: "#575060",
+    padding: 15,
+    borderRadius: 6,
+    width: 100,
     height: 50,
     marginTop: 10,
     marginBottom: 10,
