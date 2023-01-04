@@ -22,7 +22,6 @@ export interface User {
 }
 
 export interface Product {
-  addedAt: number;
   brand: string;
   description: string;
   flavor: string[];
@@ -38,5 +37,6 @@ export interface Product {
   type: string;
   weight: number;
   rating: number;
+  liked: string[];
   id: string;
 }

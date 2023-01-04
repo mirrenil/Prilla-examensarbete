@@ -13,8 +13,7 @@ import {
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
 import { ColorSchemeName, Pressable } from "react-native";
-import { Provider } from "react-redux";
-import store from "../redux/store";
+import { Provider, useSelector } from "react-redux";
 
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
@@ -36,7 +35,9 @@ import {
   RootTabParamList,
   RootTabScreenProps,
 } from "../types";
+import store from "../redux/store";
 import ProductDetailScreen from "../screens/DetailScreen";
+import { currentReduxUser } from "../redux/signin";
 import ReviewModal from "../screens/ReviewModal";
 
 export default function Navigation({
@@ -80,6 +81,12 @@ function RootNavigator() {
       />
 
       <Stack.Screen
+        name="Profile"
+        initialParams={{ id: "13" }}
+        component={ProfileScreen}
+      />
+
+      <Stack.Screen
         name="Root"
         component={BottomTabNavigator}
         options={{ headerShown: false }}
@@ -91,7 +98,12 @@ function RootNavigator() {
       />
       <Stack.Group screenOptions={{ presentation: "modal" }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
-        <Stack.Screen  options={{ title: "Lämna recension" }} name="Review" initialParams={{ id: '12 '}} component={ReviewModal} />
+        <Stack.Screen
+          options={{ title: "Lämna recension" }}
+          name="Review"
+          initialParams={{ id: "12 " }}
+          component={ReviewModal}
+        />
       </Stack.Group>
     </Stack.Navigator>
   );
@@ -100,11 +112,14 @@ function RootNavigator() {
 /**
  * A bottom tab navigator displays tab buttons on the bottom of the display to switch screens.
  * https://reactnavigation.org/docs/bottom-tab-navigator
+ *
  */
+
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
   const colorScheme = useColorScheme();
+  const user = useSelector(currentReduxUser);
 
   return (
     <BottomTab.Navigator
@@ -130,13 +145,15 @@ function BottomTabNavigator() {
 
           headerRight: () => (
             <Pressable
-              onPress={() => navigation.navigate("Modal")}
+              onPress={() => {
+                navigation.navigate("Signin");
+              }}
               style={({ pressed }) => ({
                 opacity: pressed ? 0.5 : 1,
               })}
             >
               <FontAwesome
-                name="info-circle"
+                name="sign-out"
                 size={25}
                 color={Colors[colorScheme].text}
                 style={{ marginRight: 15 }}
@@ -170,6 +187,7 @@ function BottomTabNavigator() {
       <BottomTab.Screen
         name="Profile"
         component={ProfileScreen}
+        initialParams={{ id: user.id }}
         options={{
           title: "",
           tabBarIcon: ({ color }) => (
@@ -180,9 +198,3 @@ function BottomTabNavigator() {
     </BottomTab.Navigator>
   );
 }
-
-// function TabBarIcon(props: {
-//   name: React.ComponentProps<typeof FontAwesome>["name"];
-//   color: string;
-// }) {
-//   return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;

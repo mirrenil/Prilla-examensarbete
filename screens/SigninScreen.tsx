@@ -5,68 +5,47 @@ import { Alert, StyleSheet, TouchableOpacity } from "react-native";
 import { Text, View, TextInput } from "../components/Themed";
 import { Formik } from "formik";
 import * as yup from "yup";
+import * as Haptics from "expo-haptics";
 import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
   User,
+  UserCredential,
 } from "@firebase/auth";
-import { auth } from "../firebase";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { RootStackScreenProps } from "../types";
+import { auth } from "../firebase";
+import { useDispatch } from "react-redux";
+import { setActiveUser } from "../redux/signin";
 
-export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
+export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
   const [currentUser, setcurrentUser] = useState<User>();
-
   const [user, setUser] = useState({
     email: "",
     password: "",
   });
-
-  const loadLoginState = async () => {
-    try {
-      const loggedInString = await AsyncStorage.getItem("loggedIn");
-      if (loggedInString) {
-        navigation.navigate("Root");
-        return loggedInString;
-      } else {
-        return false;
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    loadLoginState();
     const unsubrcribe = onAuthStateChanged(auth, (user) => {
       setcurrentUser(user as User);
     });
     return unsubrcribe;
-  }, [auth, onAuthStateChanged, loadLoginState]);
-
-  // this function should be called saveLoginState(false) to sign out!
-  const saveLoginState = async (loggedIn: boolean) => {
-    try {
-      await AsyncStorage.setItem("loggedIn", loggedIn.toString());
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  }, [auth, onAuthStateChanged]);
 
   const login = async () => {
     try {
-      const x = await signInWithEmailAndPassword(
-        auth,
-        user.email,
-        user.password
+      await signInWithEmailAndPassword(auth, user.email, user.password).then(
+        (result: UserCredential) => {
+          dispatch(
+            setActiveUser({
+              reduxEmail: result.user?.email,
+              currentUser: currentUser,
+            })
+          );
+        }
       );
-      if (auth.currentUser) {
-        setcurrentUser(auth.currentUser);
-        saveLoginState(true);
-        navigation.navigate("Root");
-      } else {
-        setcurrentUser(undefined);
-      }
+
+      navigation.navigate("Root");
     } catch (error) {
       Alert.alert("Felaktig email eller lösenord");
     }
@@ -135,20 +114,31 @@ export default function Sigin({ navigation }: RootStackScreenProps<"Signin">) {
               )}
 
               <TouchableOpacity
-                onPress={() => navigation.navigate("ForgotPassword")}
+                onPress={() => {
+                  navigation.navigate("ForgotPassword");
+                  Haptics.ImpactFeedbackStyle.Light;
+                }}
               >
                 <Text style={styles.text}>Glömt lösenord?</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => login()}
+                onPress={() => {
+                  login();
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                }}
                 disabled={!values.email || !values.password}
               >
                 <Text style={styles.buttonText}>Logga in</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => navigation.navigate("AgeCheck")}>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("AgeCheck");
+                  Haptics.ImpactFeedbackStyle.Light;
+                }}
+              >
                 <Text style={styles.text}>
                   Har du inget konto än? Skapa ett här!
                 </Text>
@@ -193,6 +183,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "bold",
     fontSize: 17,
+    marginTop: 5,
   },
   text: {
     color: "#fff",
