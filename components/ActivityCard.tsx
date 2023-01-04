@@ -2,7 +2,7 @@ import { Text } from "./Themed";
 import { Image, ImageBackground, StyleSheet, View } from "react-native";
 import { Review, User } from "../Interfaces";
 import { ReviewCard } from "./ReviewCard";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getOneDocById } from "../helper";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
@@ -29,7 +29,7 @@ export const ActivityCard = ({ review }: Props) => {
   return (
     <View>
       <ImageBackground
-        source={require("../assets/images/myPic.png")}
+        source={{ uri: review.photo }}
         resizeMode="cover"
         style={styles.image}
       >
