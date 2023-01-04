@@ -10,7 +10,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16.x
-          cache: yarn
+          cache: "npm"
 
       - name: 🏗 Setup Expo
         uses: expo/expo-github-action@v7
