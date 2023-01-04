@@ -1,5 +1,5 @@
 import { AntDesign, Feather } from "@expo/vector-icons";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   TouchableOpacity,
@@ -27,8 +27,11 @@ import {
   deleteUser,
   getAuth,
   signOut,
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "../firebase";
+import { PopUp } from "../components/PopUp";
+import { updateSingleProperty } from "../helper";
 
 export default function ProfileScreen({
   navigation,
@@ -44,16 +47,17 @@ export default function ProfileScreen({
   const userEmail = myUser?.email;
   const [urls, setUrls] = useState<string[]>([]);
   const favoritesArray: any = [];
-  let photoURLS: string[] = [];
-  const profilePic =
-    "https://cdn.drawception.com/images/avatars/647493-B9E.png";
+  // let photoURLS: string[] = [];
+  // const profilePic =
+  //   "https://cdn.drawception.com/images/avatars/647493-B9E.png";
   let isMe = route.params.id === myUser.id;
+  const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
 
   useEffect(() => {
     getReviews();
     getLiked();
     compareLikedIds();
-    imagesLoaded();
+    // imagesLoaded();
     checkCurrentUser();
   }, [isMe]);
 
@@ -147,18 +151,39 @@ export default function ProfileScreen({
     }
   };
 
-  const getPhotos = async () => {
-    const products = await compareLikedIds();
-    for (let i = 0; i < products.length; i++) {
-      photoURLS.push(products[i].photo);
-    }
-    return photoURLS;
-  };
+  // const getPhotos = async () => {
+  //   const products = await compareLikedIds();
+  //   for (let i = 0; i < products.length; i++) {
+  //     photoURLS.push(products[i].photo);
+  //   }
+  //   return photoURLS;
+  // };
 
-  const imagesLoaded = async () => {
+  // const imagesLoaded = async () => {
+  //   try {
+  //     const asyncUrls = await getPhotos();
+  //     setUrls(asyncUrls);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+
+  useEffect(() => {
+    console.log("user: ", user);
+  }, []);
+
+  const handleImgUpload = async (image: any) => {
+    const auth = getAuth();
+    let newData = { photo: image };
     try {
-      const asyncUrls = await getPhotos();
-      setUrls(asyncUrls);
+      await updateSingleProperty("users", user?.id, newData).then(() => {
+        if (auth.currentUser) {
+          updateProfile(auth.currentUser, { photoURL: image }).then(() =>
+            console.log("img success")
+          );
+        }
+      });
+      setPopUpOpen(false);
     } catch (err) {
       console.log(err);
     }
@@ -166,214 +191,228 @@ export default function ProfileScreen({
 
   if (user) {
     return (
-      <ScrollView style={styles.screen}>
-        <View style={styles.container}>
-          {myProfile ? (
-            <View style={styles.top}>
-              <Feather
-                name="settings"
-                size={24}
-                color="#FFFD54"
-                onPress={() => setModalVisible(true)}
-              />
-            </View>
-          ) : null}
-          <View style={styles.topContainer}>
-            <View style={styles.left}>
-              <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
-                Recensioner
-              </Text>
-              <Text
-                darkColor="#fff"
-                lightColor="#fff"
-                style={styles.textMedium}
-              >
-                {reviews.length}
-              </Text>
-            </View>
-            <View style={styles.right}>
-              <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
-                Följer
-              </Text>
-              <Text
-                darkColor="#fff"
-                lightColor="#fff"
-                style={styles.textMedium}
-              >
-                {/* {user?.follow} right now hard coded value*/} 1
-              </Text>
-            </View>
-          </View>
-          {myProfile ? (
-            <View style={styles.center}>
-              <Image source={{ uri: profilePic }} style={styles.image} />
-              <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
-                {myUser.displayName}
-              </Text>
-            </View>
-          ) : (
-            <View style={styles.center}>
-              <Image source={{ uri: profilePic }} style={styles.image} />
-              <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
-                {user?.displayName}
-              </Text>
-            </View>
-          )}
-
-          {!myProfile && (
-            <TouchableOpacity
-              style={[follow ? styles.borderButtonLike : styles.button]}
-              onPress={toggleButton}
-            >
-              <Text
-                darkColor="#201A28"
-                lightColor="#201A28"
-                style={[follow ? styles.borderButtonText : styles.buttonText]}
-              >
-                {follow ? "Följer" : "Följ"}{" "}
-                {follow && <AntDesign name="down" size={14} color="white" />}
-              </Text>
-            </TouchableOpacity>
-          )}
-        </View>
-
-        <View
-          style={styles.separator}
-          lightColor="#eee"
-          darkColor="rgba(255,255,255,0.1)"
-        />
-        <View style={styles.favorites}>
-          {myProfile ? (
-            <View style={styles.box}>
-              <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
-                Mina favoriter
-                <AntDesign name="right" size={16} color="white" />
-              </Text>
-            </View>
-          ) : (
-            <View style={styles.box}>
-              <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
-                {user.displayName}'s favoriter
-                <AntDesign name="right" size={16} color="white" />
-              </Text>
-            </View>
-          )}
-
-          <View style={styles.row}>
-            {urls.map((url, index) => (
-              <Image
-                key={index}
-                style={styles.favoritesImage}
-                source={{
-                  uri: url,
-                }}
-              />
-            ))}
-          </View>
-        </View>
-        <View
-          style={styles.separator}
-          lightColor="#eee"
-          darkColor="rgba(255,255,255,0.1)"
-        />
-        <View style={styles.activities}>
-          {myProfile ? (
-            <View style={styles.box}>
-              <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
-                Mina aktiviteter
-              </Text>
-              <AntDesign name="right" size={20} color="white" />
-            </View>
-          ) : (
-            <View style={styles.box}>
-              <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
-                {user.displayName}'s aktiviteter
-              </Text>
-              <AntDesign name="right" size={20} color="white" />
-            </View>
-          )}
-          {reviews.map((review: Review) => {
-            return <ReviewCard key={review.id} review={review} />;
-          })}
-        </View>
-        <View>
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-              setModalVisible(!modalVisible);
+      <>
+        {popUpOpen ? (
+          <PopUp
+            setProfilePic={(img) => handleImgUpload(img)}
+            closePopUp={() => {
+              setPopUpOpen(false);
             }}
-          >
-            <View>
-              <View style={styles.modalView}>
-                <View>
-                  <AntDesign
-                    name="left"
-                    size={20}
-                    color="white"
-                    onPress={() => setModalVisible(!modalVisible)}
-                  />
-                  <Text
-                    lightColor="#fff"
-                    darkColor="#fff"
-                    style={styles.modalTextHeader}
-                  >
-                    Inställningar
-                  </Text>
-                </View>
-                <View style={styles.column}>
-                  <Text
-                    lightColor="#fff"
-                    darkColor="#fff"
-                    style={styles.modalText}
-                  >
-                    Lösenord
-                  </Text>
-                  <TouchableOpacity>
-                    <Text
-                      lightColor="#fff"
-                      darkColor="#fff"
-                      style={styles.borderButton}
-                      onPress={() => resetPassword(userEmail as string)}
-                    >
-                      Skicka återställnings länk till e-post
-                    </Text>
-                  </TouchableOpacity>
-
-                  <Text
-                    lightColor="#fff"
-                    darkColor="#fff"
-                    style={styles.modalText}
-                  >
-                    Radera konto
-                  </Text>
-                  <TouchableOpacity>
-                    <Text
-                      lightColor="#fff"
-                      darkColor="#fff"
-                      style={styles.borderButton}
-                      onPress={() => deleteAccount()}
-                    >
-                      Vill du radera ditt konto?
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity>
-                    <Text
-                      lightColor="#fff"
-                      darkColor="#fff"
-                      style={styles.borderButton}
-                      onPress={handleSignOut}
-                    >
-                      Logga ut
-                    </Text>
-                  </TouchableOpacity>
-                </View>
+          />
+        ) : null}
+        <ScrollView style={styles.screen}>
+          <View style={styles.container}>
+            {myProfile ? (
+              <View style={styles.top}>
+                <Feather
+                  name="settings"
+                  size={24}
+                  color="#FFFD54"
+                  onPress={() => setModalVisible(true)}
+                />
+              </View>
+            ) : null}
+            <View style={styles.topContainer}>
+              <View style={styles.left}>
+                <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
+                  Recensioner
+                </Text>
+                <Text
+                  darkColor="#fff"
+                  lightColor="#fff"
+                  style={styles.textMedium}
+                >
+                  {reviews.length}
+                </Text>
+              </View>
+              <View style={styles.right}>
+                <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
+                  Följer
+                </Text>
+                <Text
+                  darkColor="#fff"
+                  lightColor="#fff"
+                  style={styles.textMedium}
+                >
+                  {/* {user?.follow} right now hard coded value*/} 1
+                </Text>
               </View>
             </View>
-          </Modal>
-        </View>
-      </ScrollView>
+            {myProfile ? (
+              <View style={styles.center}>
+                <TouchableOpacity onPress={() => setPopUpOpen(true)}>
+                  {/* <Image source={{ uri: profilePic }} style={styles.image} /> */}
+                  <Image source={{ uri: user.photo }} style={styles.image} />
+                </TouchableOpacity>
+
+                <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
+                  {myUser.displayName}
+                </Text>
+              </View>
+            ) : (
+              <View style={styles.center}>
+                {/* <Image source={{ uri: profilePic }} style={styles.image} /> */}
+                <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
+                  {user?.displayName}
+                </Text>
+              </View>
+            )}
+
+            {!myProfile && (
+              <TouchableOpacity
+                style={[follow ? styles.borderButtonLike : styles.button]}
+                onPress={toggleButton}
+              >
+                <Text
+                  darkColor="#201A28"
+                  lightColor="#201A28"
+                  style={[follow ? styles.borderButtonText : styles.buttonText]}
+                >
+                  {follow ? "Följer" : "Följ"}{" "}
+                  {follow && <AntDesign name="down" size={14} color="white" />}
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
+
+          <View
+            style={styles.separator}
+            lightColor="#eee"
+            darkColor="rgba(255,255,255,0.1)"
+          />
+          <View style={styles.favorites}>
+            {myProfile ? (
+              <View style={styles.box}>
+                <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
+                  Mina favoriter
+                  <AntDesign name="right" size={16} color="white" />
+                </Text>
+              </View>
+            ) : (
+              <View style={styles.box}>
+                <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
+                  {user.displayName}'s favoriter
+                  <AntDesign name="right" size={16} color="white" />
+                </Text>
+              </View>
+            )}
+
+            <View style={styles.row}>
+              {urls.map((url, index) => (
+                <Image
+                  key={index}
+                  style={styles.favoritesImage}
+                  source={{
+                    uri: url,
+                  }}
+                />
+              ))}
+            </View>
+          </View>
+          <View
+            style={styles.separator}
+            lightColor="#eee"
+            darkColor="rgba(255,255,255,0.1)"
+          />
+          <View style={styles.activities}>
+            {myProfile ? (
+              <View style={styles.box}>
+                <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
+                  Mina aktiviteter
+                </Text>
+                <AntDesign name="right" size={20} color="white" />
+              </View>
+            ) : (
+              <View style={styles.box}>
+                <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
+                  {user.displayName}'s aktiviteter
+                </Text>
+                <AntDesign name="right" size={20} color="white" />
+              </View>
+            )}
+            {reviews.map((review: Review) => {
+              return <ReviewCard key={review.id} review={review} />;
+            })}
+          </View>
+          <View>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalVisible}
+              onRequestClose={() => {
+                setModalVisible(!modalVisible);
+              }}
+            >
+              <View>
+                <View style={styles.modalView}>
+                  <View>
+                    <AntDesign
+                      name="left"
+                      size={20}
+                      color="white"
+                      onPress={() => setModalVisible(!modalVisible)}
+                    />
+                    <Text
+                      lightColor="#fff"
+                      darkColor="#fff"
+                      style={styles.modalTextHeader}
+                    >
+                      Inställningar
+                    </Text>
+                  </View>
+                  <View style={styles.column}>
+                    <Text
+                      lightColor="#fff"
+                      darkColor="#fff"
+                      style={styles.modalText}
+                    >
+                      Lösenord
+                    </Text>
+                    <TouchableOpacity>
+                      <Text
+                        lightColor="#fff"
+                        darkColor="#fff"
+                        style={styles.borderButton}
+                        onPress={() => resetPassword(userEmail as string)}
+                      >
+                        Skicka återställnings länk till e-post
+                      </Text>
+                    </TouchableOpacity>
+
+                    <Text
+                      lightColor="#fff"
+                      darkColor="#fff"
+                      style={styles.modalText}
+                    >
+                      Radera konto
+                    </Text>
+                    <TouchableOpacity>
+                      <Text
+                        lightColor="#fff"
+                        darkColor="#fff"
+                        style={styles.borderButton}
+                        onPress={() => deleteAccount()}
+                      >
+                        Vill du radera ditt konto?
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                      <Text
+                        lightColor="#fff"
+                        darkColor="#fff"
+                        style={styles.borderButton}
+                        onPress={handleSignOut}
+                      >
+                        Logga ut
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            </Modal>
+          </View>
+        </ScrollView>
+      </>
     );
   } else {
     return <ActivityIndicator size="small" color="#0000ff" />;

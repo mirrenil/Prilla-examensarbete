@@ -1,5 +1,5 @@
 import * as WebBrowser from "expo-web-browser";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Alert, StyleSheet, TouchableOpacity } from "react-native";
 
 import { Text, View, TextInput } from "../components/Themed";
@@ -31,6 +31,10 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
     });
     return unsubrcribe;
   }, [auth, onAuthStateChanged]);
+
+  useEffect(() => {
+    console.log("user: ", currentUser);
+  }, [currentUser]);
 
   const login = async () => {
     try {
