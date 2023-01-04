@@ -27,6 +27,7 @@
     "expo-asset": "~8.6.2",
     "expo-constants": "~14.0.2",
     "expo-font": "~11.0.1",
+    "expo-haptics": "~12.0.1",
     "expo-image-picker": "~14.0.2",
     "expo-linking": "~3.2.3",
     "expo-splash-screen": "~0.17.5",
@@ -49,10 +50,8 @@
     "react-native-web": "~0.18.9",
     "react-redux": "^8.0.5",
     "react-redux-firebase": "^3.11.0",
-    "redux-thunk": "^2.4.2",
-    "yup": "^0.32.11",
-    "expo-updates": "~0.15.6",
-    "expo-haptics": "~12.0.1"
+    "yarn": "^1.22.19",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
