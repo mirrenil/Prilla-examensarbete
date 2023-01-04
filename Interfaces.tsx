@@ -19,6 +19,7 @@ export interface User {
   email: string;
   id: string;
   photo: string;
+  liked: string[];
 }
 
 export interface Product {
@@ -37,6 +38,5 @@ export interface Product {
   type: string;
   weight: number;
   rating: number;
-  liked: string[];
   id: string;
 }
