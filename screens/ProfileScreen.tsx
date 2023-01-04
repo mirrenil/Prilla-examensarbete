@@ -12,7 +12,12 @@ import * as Haptics from "expo-haptics";
 import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import { useDispatch, useSelector } from "react-redux";
-import { currentReduxUser, setSignOutState } from "../redux/signin";
+import {
+  currentReduxUser,
+  setActiveUser,
+  setSignOutState,
+  updateUser,
+} from "../redux/signin";
 import {
   getAllDocsInCollection,
   getDocsWithSpecificValue,
@@ -47,19 +52,21 @@ export default function ProfileScreen({
   const userEmail = myUser?.email;
   const [urls, setUrls] = useState<string[]>([]);
   const favoritesArray: any = [];
-  // let photoURLS: string[] = [];
-  // const profilePic =
-  //   "https://cdn.drawception.com/images/avatars/647493-B9E.png";
+  let photoURLS: string[] = [];
   let isMe = route.params.id === myUser.id;
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
 
   useEffect(() => {
+    checkCurrentUser();
     getReviews();
     getLiked();
     compareLikedIds();
-    // imagesLoaded();
-    checkCurrentUser();
-  }, [isMe]);
+    imagesLoaded();
+  }, []);
+
+  useEffect(() => {
+    console.log("pic updated");
+  }, [user?.photo]);
 
   const checkCurrentUser = async () => {
     if (!isMe) {
@@ -151,26 +158,22 @@ export default function ProfileScreen({
     }
   };
 
-  // const getPhotos = async () => {
-  //   const products = await compareLikedIds();
-  //   for (let i = 0; i < products.length; i++) {
-  //     photoURLS.push(products[i].photo);
-  //   }
-  //   return photoURLS;
-  // };
+  const getPhotos = async () => {
+    const products = await compareLikedIds();
+    for (let i = 0; i < products.length; i++) {
+      photoURLS.push(products[i].photo);
+    }
+    return photoURLS;
+  };
 
-  // const imagesLoaded = async () => {
-  //   try {
-  //     const asyncUrls = await getPhotos();
-  //     setUrls(asyncUrls);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-
-  useEffect(() => {
-    console.log("user: ", user);
-  }, []);
+  const imagesLoaded = async () => {
+    try {
+      const asyncUrls = await getPhotos();
+      setUrls(asyncUrls);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleImgUpload = async (image: any) => {
     const auth = getAuth();
@@ -183,6 +186,11 @@ export default function ProfileScreen({
           );
         }
       });
+      dispatch(
+        updateUser({
+          photo: image,
+        })
+      );
       setPopUpOpen(false);
     } catch (err) {
       console.log(err);
@@ -242,6 +250,7 @@ export default function ProfileScreen({
               <View style={styles.center}>
                 <TouchableOpacity onPress={() => setPopUpOpen(true)}>
                   {/* <Image source={{ uri: profilePic }} style={styles.image} /> */}
+
                   <Image source={{ uri: user.photo }} style={styles.image} />
                 </TouchableOpacity>
 

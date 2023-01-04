@@ -17,13 +17,18 @@ const userSignInSlice = createSlice({
       state.email = action.payload.currentUser.email;
       state.photo = action.payload.currentUser.photoURL;
     },
+    updateUser: (state, action) => {
+      console.log("action: ", action);
+      state.photo = action.payload.photo;
+    },
     setSignOutState: (state) => {
       state = { displayName: "", id: "", email: "", photo: "" };
     },
   },
 });
 
-export const { setActiveUser, setSignOutState } = userSignInSlice.actions;
+export const { setActiveUser, setSignOutState, updateUser } =
+  userSignInSlice.actions;
 
 export const currentReduxUser = (state: any) => state.user;
 
