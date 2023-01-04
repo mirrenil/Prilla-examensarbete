@@ -28,6 +28,11 @@
     },
     "web": {
       "favicon": "./assets/images/transparent-prilla-sqaure.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f013faad-b3a4-4832-bd3f-130898c235d2"
+      }
     }
   }
 }
