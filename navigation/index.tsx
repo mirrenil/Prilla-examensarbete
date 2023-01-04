@@ -28,6 +28,7 @@ import ProfileScreen from "../screens/ProfileScreen";
 import ForgotPasswordScreen from "../screens/ForgotPasswordScreen";
 import AgeCheckScreen from "../screens/AgeCheckScreen";
 import LinkingConfiguration from "./LinkingConfiguration";
+import Constants from "expo-constants";
 
 import {
   RootStackParamList,
@@ -166,6 +167,8 @@ function BottomTabNavigator() {
         component={SearchScreen}
         options={{
           title: "",
+          // headerShown: false,
+          headerStyle: { height: Constants.statusBarHeight },
           tabBarIcon: ({ color }) => (
             <AntDesign name="search1" size={30} color={color} />
           ),

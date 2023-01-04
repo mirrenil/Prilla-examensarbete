@@ -31,19 +31,18 @@ export const ReviewCard = ({ review }: Props) => {
         <View style={styles.productData}>
           <Image style={styles.image} source={{ uri: product.photo }} />
           <View style={styles.textAndRating}>
-            <View style={styles.productText}>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate("Product", { id: review.productID })
-                }
-              >
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("Product", { id: review.productID })
+              }
+            >
+              <View style={styles.productText}>
                 <Text style={styles.textBold}>
                   {product.brand + " " + product.name}
                 </Text>
                 <Text>{product.type}</Text>
-              </TouchableOpacity>
-            </View>
-
+              </View>
+            </TouchableOpacity>
             <View style={{ flexDirection: "row" }}>
               <RateInactive rating={review.rating} />
               <Text style={{ marginLeft: 10 }}>{review.rating}</Text>
