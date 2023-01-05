@@ -1,5 +1,5 @@
 import * as WebBrowser from "expo-web-browser";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Alert, StyleSheet, TouchableOpacity } from "react-native";
 
 import { Text, View, TextInput } from "../components/Themed";
@@ -66,7 +66,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
       <Text style={styles.slogan}>GOTTA SNUS THEM ALL</Text>
       <View
         style={styles.separator}
-        lightColor="#eee"
+        lightColor="#D3D3D3"
         darkColor="rgba(255,255,255,0.1)"
       />
 
@@ -100,7 +100,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
           return (
             <View style={styles.container}>
               <TextInput
-                lightColor="#AF90D9"
+                lightColor="#fff"
                 darkColor="#413C48"
                 placeholder="Username"
                 style={styles.input}
@@ -114,7 +114,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
               )}
 
               <TextInput
-                lightColor="#AF90D9"
+                lightColor="#fff"
                 darkColor="#413C48"
                 placeholder="Email"
                 style={styles.input}
@@ -127,7 +127,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
               )}
 
               <TextInput
-                lightColor="#AF90D9"
+                lightColor="#fff"
                 darkColor="#413C48"
                 placeholder="Password"
                 style={styles.input}
@@ -142,7 +142,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
               )}
 
               <TextInput
-                lightColor="#AF90D9"
+                lightColor="#fff"
                 darkColor="#413C48"
                 placeholder="Password Confirmation"
                 style={styles.input}

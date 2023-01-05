@@ -1,34 +1,34 @@
-import React, { useEffect, useState } from 'react';
-import { ScrollView } from 'react-native-gesture-handler';
+import React, { useEffect, useState } from "react";
+import { ScrollView } from "react-native-gesture-handler";
 import {
-	StyleSheet,
-	Image,
-	ImageBackground,
-	TouchableOpacity,
-	ActivityIndicator,
-} from 'react-native';
+  StyleSheet,
+  Image,
+  ImageBackground,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import * as Haptics from "expo-haptics";
-import { View, Text } from '../components/Themed';
-import { getDocsWithSpecificValue, getOneDocById } from '../helper';
-import { Product, Review } from '../Interfaces';
-import { RootStackParamList, RootStackScreenProps } from '../types';
-import { RateInactive } from '../components/RateInactive';
-import { AntDesign } from '@expo/vector-icons';
-import { StrengthBar } from '../components/StrengthBar';
-import { User } from '../Interfaces';
-import { connectFirestoreEmulator } from 'firebase/firestore';
+import { View, Text } from "../components/Themed";
+import { getDocsWithSpecificValue, getOneDocById } from "../helper";
+import { Product, Review } from "../Interfaces";
+import { RootStackScreenProps } from "../types";
+import { RateInactive } from "../components/RateInactive";
+import { AntDesign } from "@expo/vector-icons";
+import { StrengthBar } from "../components/StrengthBar";
+import { User } from "../Interfaces";
+import { connectFirestoreEmulator } from "firebase/firestore";
 
 interface ReviewWithAuthor extends Review {
   author: string;
 }
 
 function ProductDetailScreen({
-	navigation,
-	route,
-}: RootStackScreenProps<'Product'>) {
-	const [product, setProduct] = useState<Product>();
-	const [activeTab, setActiveTab] = useState<number>(3);
-	const [reviews, setReviews] = useState<ReviewWithAuthor[]>([]);
+  navigation,
+  route,
+}: RootStackScreenProps<"Product">) {
+  const [product, setProduct] = useState<Product>();
+  const [activeTab, setActiveTab] = useState<number>(3);
+  const [reviews, setReviews] = useState<ReviewWithAuthor[]>([]);
   const [like, setLike] = useState<boolean>(false);
 
   useEffect(() => {
@@ -67,80 +67,91 @@ function ProductDetailScreen({
     }
   };
 
-	const getReviewAuthor = async (id: string) => {
-		try {
-			const user = await getOneDocById('users', id);
-			if (user) {
-				let name = user?.displayName;
-				return name;
-			}
-		} catch (err) {
-			console.log(err);
-		}
-	};
-    const toggleButton = () => {
+  const getReviewAuthor = async (id: string) => {
+    try {
+      const user = await getOneDocById("users", id);
+      if (user) {
+        let name = user?.displayName;
+        return name;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const toggleButton = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setLike(!like);
   };
 
-	const renderFolderContent = () => {
-		switch (activeTab) {
-			case 1:
-				return <Text>{product?.description}</Text>;
-			case 2:
-				return (
-					<>
-						<View style={styles.folderFacts}>
-							<Text style={styles.fatText}>Varumärke</Text>
-							<Text>{product?.brand}</Text>
-						</View>
-						<View style={styles.folderFacts}>
-							<Text style={styles.fatText}>Namn</Text>
-							<Text>{product?.name}</Text>
-						</View>
-						<View style={styles.folderFacts}>
-							<Text style={styles.fatText}>Smak</Text>
-							<View style={{ flexDirection: 'row' }}>
-								{product?.flavor.map((f) => {
-									return <Text>{f} </Text>;
-								})}
-							</View>
-						</View>
-						<View style={styles.folderFacts}>
-							<Text style={styles.fatText}>Nikotinhalt</Text>
-							<Text>{product?.nicotine} mg/g</Text>
-						</View>
-						<View style={styles.folderFacts}>
-							<Text style={styles.fatText}>Vikt</Text>
-							<Text>{product?.weight}g</Text>
-						</View>
-					</>
-				);
-			case 3:
-				return reviews.map((rev) => {
-					return (
-						<View style={styles.reviewWrapper}>
-							<View style={styles.reviewTop}>
-              <TouchableOpacity
+  const renderFolderContent = () => {
+    switch (activeTab) {
+      case 1:
+        return <Text lightColor="#fff">{product?.description}</Text>;
+      case 2:
+        return (
+          <>
+            <View lightColor="#2E233B" style={styles.folderFacts}>
+              <Text lightColor="#fff" style={styles.fatText}>
+                Varumärke
+              </Text>
+              <Text lightColor="#fff">{product?.brand}</Text>
+            </View>
+            <View lightColor="#2E233B" style={styles.folderFacts}>
+              <Text lightColor="#fff" style={styles.fatText}>
+                Namn
+              </Text>
+              <Text lightColor="#fff">{product?.name}</Text>
+            </View>
+            <View lightColor="#2E233B" style={styles.folderFacts}>
+              <Text lightColor="#fff" style={styles.fatText}>
+                Smak
+              </Text>
+              <View lightColor="#2E233B" style={{ flexDirection: "row" }}>
+                {product?.flavor.map((f) => {
+                  return <Text lightColor="#fff">{f} </Text>;
+                })}
+              </View>
+            </View>
+            <View lightColor="#2E233B" style={styles.folderFacts}>
+              <Text lightColor="#fff" style={styles.fatText}>
+                Nikotinhalt
+              </Text>
+              <Text lightColor="#fff">{product?.nicotine} mg/g</Text>
+            </View>
+            <View lightColor="#2E233B" style={styles.folderFacts}>
+              <Text lightColor="#fff" style={styles.fatText}>
+                Vikt
+              </Text>
+              <Text lightColor="#fff">{product?.weight}g</Text>
+            </View>
+          </>
+        );
+      case 3:
+        return reviews.map((rev) => {
+          return (
+            <View lightColor="#2E233B" style={styles.reviewWrapper}>
+              <View lightColor="#2E233B" style={styles.reviewTop}>
+                <TouchableOpacity
                   onPress={() => {
                     navigation.navigate("Profile", { id: rev.userID });
                   }}
                 >
-								<Text style={[styles.fatText, styles.capitalize]}>
-									{rev.author}
-								</Text>
+                  <Text
+                    lightColor="#fff"
+                    style={[styles.fatText, styles.capitalize]}
+                  >
+                    {rev.author}
+                  </Text>
                 </TouchableOpacity>
-								<RateInactive
-									rating={rev.rating}
-								/>
-								<Text>{rev.rating}</Text>
-							</View>
-							<Text>{rev.description}</Text>
-						</View>
-					);
-				});
-		}
-	};
+                <RateInactive rating={rev.rating} />
+                <Text lightColor="#fff">{rev.rating}</Text>
+              </View>
+              <Text lightColor="#fff">{rev.description}</Text>
+            </View>
+          );
+        });
+    }
+  };
 
   if (product && reviews) {
     return (
@@ -176,39 +187,41 @@ function ProductDetailScreen({
                   }
                 >
                   <View style={styles.button}>
-                    <Text>Lägg till recension</Text>
+                    <Text lightColor="#333" darkColor="#fff">
+                      Lägg till recension
+                    </Text>
                   </View>
                 </TouchableOpacity>
 
-								  <TouchableOpacity onPress={toggleButton}>
+                <TouchableOpacity onPress={toggleButton}>
                   {like ? (
                     <AntDesign name="heart" size={24} color="red" />
                   ) : (
-                    <AntDesign name="hearto" size={24} color="white" />
+                    <AntDesign name="hearto" size={24} color="#783BC9" />
                   )}
                 </TouchableOpacity>
-							</View>
-						</View>
-					</View>
+              </View>
+            </View>
+          </View>
 
-					<View style={styles.tableDataContainer}>
-						<View style={styles.tableRow}>
-							<Text>Styrka</Text>
-							<StrengthBar strength={product?.strength} />
-						</View>
-						<View style={styles.tableRow}>
-							<Text>Antal</Text>
-							<Text>{product?.pouches} st per dosa</Text>
-						</View>
-						<View style={styles.tableRow}>
-							<Text>Typ</Text>
-							<Text>{product?.type}</Text>
-						</View>
-						<View style={styles.tableRow}>
-							<Text>Format</Text>
-							<Text>{product?.format}</Text>
-						</View>
-					</View>
+          <View style={styles.tableDataContainer}>
+            <View style={styles.tableRow}>
+              <Text>Styrka</Text>
+              <StrengthBar strength={product?.strength} />
+            </View>
+            <View style={styles.tableRow}>
+              <Text>Antal</Text>
+              <Text>{product?.pouches} st per dosa</Text>
+            </View>
+            <View style={styles.tableRow}>
+              <Text>Typ</Text>
+              <Text>{product?.type}</Text>
+            </View>
+            <View style={styles.tableRow}>
+              <Text>Format</Text>
+              <Text>{product?.format}</Text>
+            </View>
+          </View>
 
           <View style={styles.folder}>
             <View style={styles.tabs}>
@@ -216,7 +229,7 @@ function ProductDetailScreen({
                 onPress={() => setActiveTab(1)}
                 style={[styles.tab, activeTab === 1 ? styles.activeTab : null]}
               >
-                <Text>Beskrivning</Text>
+                <Text lightColor="#fff">Beskrivning</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => setActiveTab(2)}
@@ -226,13 +239,13 @@ function ProductDetailScreen({
                   { marginLeft: 10, marginRight: 10 },
                 ]}
               >
-                <Text>Fakta</Text>
+                <Text lightColor="#fff">Fakta</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => setActiveTab(3)}
                 style={[styles.tab, activeTab === 3 ? styles.activeTab : null]}
               >
-                <Text>Recensioner</Text>
+                <Text lightColor="#fff">Recensioner</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.folderContent}>{renderFolderContent()}</View>
@@ -301,7 +314,7 @@ const styles = StyleSheet.create({
     padding: 10,
     marginRight: 10,
     borderWidth: 1,
-    borderColor: "white",
+    borderColor: "#783BC9",
     borderRadius: 6,
   },
   tableDataContainer: {
@@ -329,11 +342,12 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 6,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(255,255,255,0.2)",
+    backgroundColor: "#7E7885",
   },
   activeTab: {
     backgroundColor: "#2E233B",
   },
+
   folderContent: {
     backgroundColor: "#2E233B",
     padding: 10,

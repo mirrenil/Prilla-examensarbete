@@ -131,7 +131,11 @@ function BottomTabNavigator() {
         },
         tabBarActiveTintColor: Colors[colorScheme].tint,
         tabBarInactiveTintColor: Colors[colorScheme].tabIconDefault,
-        tabBarStyle: { backgroundColor: "#1B1324", height: 100, padding: 15 },
+        tabBarStyle: {
+          backgroundColor: Colors[colorScheme].background,
+          height: 100,
+          padding: 15,
+        },
       }}
     >
       <BottomTab.Screen
