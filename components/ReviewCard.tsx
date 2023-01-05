@@ -1,10 +1,11 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { View, Image, Text, StyleSheet } from "react-native";
+import { Image, StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { getOneDocById } from "../helper";
 import { Tag, Review, Product } from "../Interfaces";
 import { RateInactive } from "./RateInactive";
+import { View, Text } from "../components/Themed";
 
 interface Props {
   review: Review;
@@ -27,37 +28,73 @@ export const ReviewCard = ({ review }: Props) => {
 
   if (product) {
     return (
-      <View style={styles.wrapper}>
-        <View style={styles.productData}>
+      <View lightColor="#7e7885" darkColor="#3D3745" style={styles.wrapper}>
+        <View
+          lightColor="#7e7885"
+          darkColor="#3D3745"
+          style={styles.productData}
+        >
           <Image style={styles.image} source={{ uri: product.photo }} />
-          <View style={styles.textAndRating}>
+          <View
+            lightColor="#7e7885"
+            darkColor="#3D3745"
+            style={styles.textAndRating}
+          >
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate("Product", { id: review.productID })
               }
             >
-              <View style={styles.productText}>
-                <Text style={styles.textBold}>
+              <View
+                lightColor="#7e7885"
+                darkColor="#3D3745"
+                style={styles.productText}
+              >
+                <Text
+                  style={styles.textBold}
+                  lightColor="#fff"
+                  darkColor="#fff"
+                >
                   {product.brand + " " + product.name}
                 </Text>
-                <Text>{product.type}</Text>
+                <Text lightColor="#fff" darkColor="#fff">
+                  {product.type}
+                </Text>
               </View>
             </TouchableOpacity>
-            <View style={{ flexDirection: "row" }}>
+            <View
+              lightColor="#7e7885"
+              darkColor="#3D3745"
+              style={{ flexDirection: "row" }}
+            >
               <RateInactive rating={review.rating} />
-              <Text style={{ marginLeft: 10 }}>{review.rating}</Text>
+              <Text
+                lightColor="#fff"
+                darkColor="#fff"
+                style={{ marginLeft: 10 }}
+              >
+                {review.rating}
+              </Text>
             </View>
           </View>
         </View>
-        <View style={styles.description}>
-          <Text>{review.description}</Text>
+        <View
+          lightColor="#7e7885"
+          darkColor="#3D3745"
+          style={styles.description}
+        >
+          <Text lightColor="#fff" darkColor="#fff">
+            {review.description}
+          </Text>
         </View>
       </View>
     );
   } else {
     return (
       <View>
-        <Text>Loading</Text>
+        <Text lightColor="#333" darkColor="#fff">
+          Loading
+        </Text>
       </View>
     );
   }
@@ -69,7 +106,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     width: "90%",
     padding: 10,
-    backgroundColor: "rgba(255,255,255,0.5)",
+    height: 130,
   },
   image: {
     height: 60,
