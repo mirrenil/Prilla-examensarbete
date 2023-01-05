@@ -21,7 +21,6 @@ import {
 import { Review, User } from "../Interfaces";
 import { ScrollView } from "react-native-gesture-handler";
 import { ReviewCard } from "../components/ReviewCard";
-import { useNavigation } from "@react-navigation/native";
 import {
   sendPasswordResetEmail,
   deleteUser,
@@ -78,7 +77,6 @@ export default function ProfileScreen({
         route.params.id
       );
       setReviews(data as Review[]);
-      console.log(reviews);
     } catch (err) {
       console.log(err);
     }
@@ -90,7 +88,7 @@ export default function ProfileScreen({
       for (let i = 0; i < following?.liked.length; i++) {
         followersArray.push(following?.liked[i]);
       }
-      console.log(followersArray.length);
+
       setFollowers(followersArray);
     } catch (err) {
       console.log(err);
