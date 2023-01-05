@@ -220,18 +220,18 @@ export default function ProfileScreen({
             </View>
           )}
 
-          {!myProfile && (
+          {myProfile && (
             <TouchableOpacity
               style={[follow ? styles.borderButtonLike : styles.button]}
               onPress={toggleButton}
             >
               <Text
                 darkColor="#201A28"
-                lightColor="#201A28"
+                lightColor="#333"
                 style={[follow ? styles.borderButtonText : styles.buttonText]}
               >
                 {follow ? "Följer" : "Följ"}{" "}
-                {follow && <AntDesign name="down" size={14} color="white" />}
+                {follow && <AntDesign name="down" size={14} color="grey" />}
               </Text>
             </TouchableOpacity>
           )}
@@ -456,7 +456,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "bold",
     fontSize: 17,
-    color: "#fff",
   },
   box: {
     display: "flex",
