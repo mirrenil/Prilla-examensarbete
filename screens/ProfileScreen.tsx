@@ -305,13 +305,17 @@ export default function ProfileScreen({
               setModalVisible(!modalVisible);
             }}
           >
-            <View>
-              <View style={styles.modalView}>
+            <View style={styles.layover}>
+              <View
+                lightColor="#FFF"
+                darkColor="#261F30"
+                style={styles.modalView}
+              >
                 <View>
                   <AntDesign
                     name="left"
                     size={20}
-                    color="white"
+                    color="#D3D3D3"
                     onPress={() => setModalVisible(!modalVisible)}
                   />
                   <Text
@@ -350,7 +354,7 @@ export default function ProfileScreen({
                   </Text>
                   <TouchableOpacity>
                     <Text
-                      lightColor="#fff"
+                      lightColor="#333"
                       darkColor="#fff"
                       style={styles.borderButton}
                       onPress={() => deleteAccount()}
@@ -358,6 +362,13 @@ export default function ProfileScreen({
                       Vill du radera ditt konto?
                     </Text>
                   </TouchableOpacity>
+                  <Text
+                    lightColor="#333"
+                    darkColor="#fff"
+                    style={styles.modalText}
+                  >
+                    Logga ut
+                  </Text>
                   <TouchableOpacity>
                     <Text
                       lightColor="#333"
@@ -499,18 +510,14 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "flex-start",
     width: "100%",
-    height: "100%",
   },
   top: {
     marginLeft: 300,
     marginBottom: 20,
   },
   modalView: {
-    margin: 10,
-    marginTop: 100,
-    height: 500,
-    backgroundColor: "#261F30",
-    borderRadius: 20,
+    maxHeight: 400,
+    borderRadius: 6,
     padding: 35,
     shadowColor: "#000",
     shadowOffset: {
@@ -522,12 +529,10 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   modalText: {
-    margin: 15,
-    textAlign: "center",
     fontSize: 15,
+    fontWeight: "bold",
   },
   modalTextHeader: {
-    margin: 12,
     textAlign: "center",
     fontSize: 20,
   },
@@ -556,5 +561,16 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 50,
     marginRight: 10,
+  },
+  layover: {
+    height: "100%",
+    width: "100%",
+    position: "absolute",
+    top: 0,
+    right: 0,
+    backgroundColor: "rgba(0,0,0,0.7)",
+    zIndex: 100,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
