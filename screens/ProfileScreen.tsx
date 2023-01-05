@@ -226,7 +226,7 @@ export default function ProfileScreen({
               onPress={toggleButton}
             >
               <Text
-                darkColor="#201A28"
+                darkColor="#783bc9"
                 lightColor="#333"
                 style={[follow ? styles.borderButtonText : styles.buttonText]}
               >
