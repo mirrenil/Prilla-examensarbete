@@ -39,11 +39,13 @@ export default function ProfileScreen({
   const [myProfile, setMyProfile] = useState<boolean>(false);
   const [user, setUser] = useState<User>();
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [followers, setFollowers] = useState<any>([]);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const dispatch = useDispatch();
   const userEmail = myUser?.email;
   const [urls, setUrls] = useState<string[]>([]);
   const favoritesArray: any = [];
+  const followersArray: any = [];
   let photoURLS: string[] = [];
   const profilePic =
     "https://cdn.drawception.com/images/avatars/647493-B9E.png";
@@ -55,6 +57,7 @@ export default function ProfileScreen({
     compareLikedIds();
     imagesLoaded();
     checkCurrentUser();
+    getFollowers();
   }, [isMe]);
 
   const checkCurrentUser = async () => {
@@ -75,6 +78,20 @@ export default function ProfileScreen({
         route.params.id
       );
       setReviews(data as Review[]);
+      console.log(reviews);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getFollowers = async () => {
+    try {
+      const following = await getOneDocById("users", route.params?.id);
+      for (let i = 0; i < following?.liked.length; i++) {
+        followersArray.push(following?.liked[i]);
+      }
+      console.log(followersArray.length);
+      setFollowers(followersArray);
     } catch (err) {
       console.log(err);
     }
@@ -200,7 +217,7 @@ export default function ProfileScreen({
                 lightColor="#333"
                 style={styles.textMedium}
               >
-                {/* {user?.follow} right now hard coded value*/} 1
+                {followers.length}
               </Text>
             </View>
           </View>
