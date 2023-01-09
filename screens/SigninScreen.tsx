@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Alert, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  Alert,
+  StyleSheet,
+  TouchableOpacity,
+  useColorScheme,
+} from "react-native";
 import { Text, View, TextInput } from "../components/Themed";
 import { Formik } from "formik";
 import * as yup from "yup";
@@ -14,6 +19,8 @@ import { RootStackScreenProps } from "../types";
 import { auth } from "../firebase";
 import { useDispatch } from "react-redux";
 import { setActiveUser } from "../redux/signin";
+import { LinearGradient } from "expo-linear-gradient";
+import Colors, { gradientDark, gradientLight } from "../constants/Colors";
 
 export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
   const [currentUser, setcurrentUser] = useState<User>();
@@ -22,6 +29,8 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
     password: "",
   });
   const dispatch = useDispatch();
+  const colorScheme: any = useColorScheme();
+  let isLight = colorScheme == "light" ? true : false;
 
   useEffect(() => {
     const unsubrcribe = onAuthStateChanged(auth, (user) => {
@@ -48,9 +57,15 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
       Alert.alert("Felaktig email eller lösenord");
     }
   };
-
   return (
-    <View style={styles.screen}>
+    <LinearGradient
+      colors={
+        isLight
+          ? [gradientLight.from, gradientLight.to]
+          : [gradientDark.from, gradientDark.to]
+      }
+      style={styles.screen}
+    >
       <Text style={styles.title}>Prilla</Text>
       <Text style={styles.slogan}>GOTTA SNUS THEM ALL</Text>
       <View
@@ -147,7 +162,7 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
           );
         }}
       </Formik>
-    </View>
+    </LinearGradient>
   );
 }
 

@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   useColorScheme,
+  ColorSchemeName,
 } from "react-native";
 import * as Haptics from "expo-haptics";
 import { View, Text } from "../components/Themed";
@@ -18,7 +19,8 @@ import { AntDesign } from "@expo/vector-icons";
 import { StrengthBar } from "../components/StrengthBar";
 import { User } from "../Interfaces";
 import { connectFirestoreEmulator } from "firebase/firestore";
-import Colors from "../constants/Colors";
+import Colors, { gradientDark, gradientLight } from "../constants/Colors";
+import { LinearGradient } from "expo-linear-gradient";
 
 interface ReviewWithAuthor extends Review {
   author: string;
@@ -32,7 +34,7 @@ function ProductDetailScreen({
   const [activeTab, setActiveTab] = useState<number>(3);
   const [reviews, setReviews] = useState<ReviewWithAuthor[]>([]);
   const [like, setLike] = useState<boolean>(false);
-  const colorScheme = useColorScheme();
+  const colorScheme: any = useColorScheme();
   let isLight = colorScheme == "light" ? true : false;
 
   useEffect(() => {
@@ -99,38 +101,61 @@ function ProductDetailScreen({
         return (
           <>
             <View lightColor="transparent" style={styles.folderFacts}>
-              <Text lightColor="#fff" style={styles.fatText}>
+              <Text
+                lightColor={Colors[colorScheme].text}
+                style={styles.fatText}
+              >
                 Varumärke
               </Text>
-              <Text lightColor="#fff">{product?.brand}</Text>
+              <Text lightColor={Colors[colorScheme].text}>
+                {product?.brand}
+              </Text>
             </View>
             <View lightColor="transparent" style={styles.folderFacts}>
-              <Text lightColor="#fff" style={styles.fatText}>
+              <Text
+                lightColor={Colors[colorScheme].text}
+                style={styles.fatText}
+              >
                 Namn
               </Text>
-              <Text lightColor="#fff">{product?.name}</Text>
+              <Text lightColor={Colors[colorScheme].text}>{product?.name}</Text>
             </View>
             <View lightColor="transparent" style={styles.folderFacts}>
-              <Text lightColor="#fff" style={styles.fatText}>
+              <Text
+                lightColor={Colors[colorScheme].text}
+                style={styles.fatText}
+              >
                 Smak
               </Text>
               <View lightColor="transparent" style={{ flexDirection: "row" }}>
                 {product?.flavor.map((f) => {
-                  return <Text lightColor="#fff">{f} </Text>;
+                  return (
+                    <Text lightColor={Colors[colorScheme].text}>{f} </Text>
+                  );
                 })}
               </View>
             </View>
             <View lightColor="transparent" style={styles.folderFacts}>
-              <Text lightColor="#fff" style={styles.fatText}>
+              <Text
+                lightColor={Colors[colorScheme].text}
+                style={styles.fatText}
+              >
                 Nikotinhalt
               </Text>
-              <Text lightColor="#fff">{product?.nicotine} mg/g</Text>
+              <Text lightColor={Colors[colorScheme].text}>
+                {product?.nicotine} mg/g
+              </Text>
             </View>
             <View lightColor="transparent" style={styles.folderFacts}>
-              <Text lightColor="#fff" style={styles.fatText}>
+              <Text
+                lightColor={Colors[colorScheme].text}
+                style={styles.fatText}
+              >
                 Vikt
               </Text>
-              <Text lightColor="#fff">{product?.weight}g</Text>
+              <Text lightColor={Colors[colorScheme].text}>
+                {product?.weight}g
+              </Text>
             </View>
           </>
         );
@@ -145,16 +170,21 @@ function ProductDetailScreen({
                   }}
                 >
                   <Text
-                    lightColor="#fff"
+                    lightColor={Colors[colorScheme].text}
                     style={[styles.fatText, styles.capitalize]}
                   >
                     {rev.author}
                   </Text>
                 </TouchableOpacity>
-                <RateInactive rating={rev.rating} />
-                <Text lightColor="#fff">{rev.rating}</Text>
+                <RateInactive
+                  rating={rev.rating}
+                  small={{ size: 15, container: 90, single: 17 }}
+                />
+                <Text lightColor={Colors[colorScheme].text}>{rev.rating}</Text>
               </View>
-              <Text lightColor="#fff">{rev.description}</Text>
+              <Text lightColor={Colors[colorScheme].text}>
+                {rev.description}
+              </Text>
             </View>
           );
         });
@@ -197,8 +227,6 @@ function ProductDetailScreen({
       fontSize: 18,
     },
     productInfo: {
-      // backgroundColor: Colors[isLight ? "light" : "dark"].folderTabActive,
-      // backgroundColor: "#A287C5",
       padding: 10,
       borderBottomLeftRadius: 6,
       borderTopLeftRadius: 6,
@@ -211,6 +239,7 @@ function ProductDetailScreen({
       alignItems: "center",
     },
     ratingText: {
+      color: "white",
       marginLeft: 10,
     },
     interactions: {
@@ -253,23 +282,19 @@ function ProductDetailScreen({
       borderBottomWidth: 0,
       justifyContent: "center",
       alignItems: "center",
-      // backgroundColor: "white",
+      backgroundColor: Colors[colorScheme].grey.light,
     },
     activeTab: {
-      // backgroundColor: Colors[isLight ? "light" : "dark"].primary.normal,
-      backgroundColor: "#F5F5F5",
-      // borderColor: Colors[isLight ? "light" : "dark"].primary.normal,
+      backgroundColor: Colors[colorScheme].background,
     },
 
     folderContent: {
-      // backgroundColor: Colors[isLight ? "light" : "dark"].folderTabActive,
-      backgroundColor: "#AE89E0",
+      backgroundColor: Colors[colorScheme].background,
       borderColor: Colors[isLight ? "light" : "dark"].grey.light,
-      // borderTopWidth: 7,
       borderBottomWidth: 1,
       borderLeftWidth: 1,
       borderRightWidth: 1,
-      padding: 10,
+      padding: 30,
     },
     folderFacts: {
       flexDirection: "row",
@@ -283,125 +308,147 @@ function ProductDetailScreen({
     },
     reviewWrapper: {
       width: "90%",
+      paddingBottom: 10,
       marginBottom: 10,
+      borderBottomColor: Colors[colorScheme].grey.light,
+      borderBottomWidth: 1,
     },
   });
 
   if (product && reviews) {
     return (
-      <ScrollView>
-        <ImageBackground
-          style={styles.background}
-          source={require("../assets/images/detail_Bg.png")}
-        >
-          {isLight ? (
-            <Image
-              style={styles.waves}
-              source={require("../assets/images/waves_light.png")}
-            />
-          ) : (
-            <Image
-              style={styles.waves}
-              source={require("../assets/images/waves_dark.png")}
-            />
-          )}
-        </ImageBackground>
-        <View style={styles.screenContainer}>
-          <View style={styles.productDataContainer}>
-            <Image style={styles.productImg} source={{ uri: product?.photo }} />
-            <View style={styles.productInfo}>
-              <Text style={styles.title}>
-                {product?.brand + " " + product?.name}
-              </Text>
-              <Text style={styles.manufacturer}>{product?.manufacturer}</Text>
-              <View style={styles.ratingContainer}>
-                <View
-                  style={{
-                    backgroundColor: Colors[colorScheme!].primary.dark,
-                    padding: 10,
-                    borderRadius: 6,
-                  }}
-                >
-                  <RateInactive rating={product?.rating ? product.rating : 0} />
-                </View>
-                {/* <RateInactive rating={} /> */}
-                <Text style={styles.ratingText}>
-                  {product?.rating ? product.rating : 0}
+      <LinearGradient
+        colors={
+          isLight
+            ? [gradientLight.from, gradientLight.to]
+            : [gradientDark.from, gradientDark.to]
+        }
+      >
+        <ScrollView>
+          <ImageBackground
+            style={styles.background}
+            source={require("../assets/images/detail_Bg.png")}
+          >
+            {isLight ? (
+              <Image
+                source={require("../assets/images/waves_light.png")}
+                style={styles.waves}
+              />
+            ) : (
+              <Image
+                style={styles.waves}
+                source={require("../assets/images/waves_dark.png")}
+              />
+            )}
+          </ImageBackground>
+          <View style={styles.screenContainer}>
+            <View style={styles.productDataContainer}>
+              <Image
+                style={styles.productImg}
+                source={{ uri: product?.photo }}
+              />
+              <View style={styles.productInfo}>
+                <Text style={styles.title}>
+                  {product?.brand + " " + product?.name}
                 </Text>
-              </View>
-              <Text>{product?.reviews.length} Ratings</Text>
-              <View style={styles.interactions}>
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate("Review", { id: product.id })
-                  }
-                >
-                  <View style={styles.button}>
-                    <Text lightColor="#333" darkColor="#fff">
-                      Lägg till recension
+                <Text style={styles.manufacturer}>{product?.manufacturer}</Text>
+                <View style={styles.ratingContainer}>
+                  <View
+                    style={{
+                      backgroundColor: Colors[colorScheme!].primary.dark,
+                      padding: 10,
+                      borderRadius: 6,
+                      flexDirection: "row",
+                    }}
+                  >
+                    <RateInactive
+                      rating={product?.rating ? product.rating : 0}
+                    />
+                    <Text style={styles.ratingText}>
+                      {product?.rating ? product.rating : 0}
                     </Text>
                   </View>
-                </TouchableOpacity>
+                </View>
+                <Text>{product?.reviews.length} Ratings</Text>
+                <View style={styles.interactions}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate("Review", { id: product.id })
+                    }
+                  >
+                    <View style={styles.button}>
+                      <Text lightColor="#333" darkColor="#fff">
+                        Lägg till recension
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
 
-                <TouchableOpacity onPress={toggleButton}>
-                  {like ? (
-                    <AntDesign name="heart" size={24} color="red" />
-                  ) : (
-                    <AntDesign name="hearto" size={24} color="#783BC9" />
-                  )}
-                </TouchableOpacity>
+                  <TouchableOpacity onPress={toggleButton}>
+                    {like ? (
+                      <AntDesign name="heart" size={24} color="red" />
+                    ) : (
+                      <AntDesign name="hearto" size={24} color="#783BC9" />
+                    )}
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
-          </View>
 
-          <View style={styles.tableDataContainer}>
-            <View style={styles.tableRow}>
-              <Text>Styrka</Text>
-              <StrengthBar strength={product?.strength} />
+            <View style={styles.tableDataContainer}>
+              <View style={styles.tableRow}>
+                <Text>Styrka</Text>
+                <StrengthBar strength={product?.strength} />
+              </View>
+              <View style={styles.tableRow}>
+                <Text>Antal</Text>
+                <Text>{product?.pouches} st per dosa</Text>
+              </View>
+              <View style={styles.tableRow}>
+                <Text>Typ</Text>
+                <Text>{product?.type}</Text>
+              </View>
+              <View style={styles.tableRow}>
+                <Text>Format</Text>
+                <Text>{product?.format}</Text>
+              </View>
             </View>
-            <View style={styles.tableRow}>
-              <Text>Antal</Text>
-              <Text>{product?.pouches} st per dosa</Text>
-            </View>
-            <View style={styles.tableRow}>
-              <Text>Typ</Text>
-              <Text>{product?.type}</Text>
-            </View>
-            <View style={styles.tableRow}>
-              <Text>Format</Text>
-              <Text>{product?.format}</Text>
-            </View>
-          </View>
 
-          <View style={styles.folder}>
-            <View style={styles.tabs}>
-              <TouchableOpacity
-                onPress={() => setActiveTab(1)}
-                style={[styles.tab, activeTab === 1 ? styles.activeTab : null]}
-              >
-                <Text lightColor={Colors[colorScheme].text}>Beskrivning</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => setActiveTab(2)}
-                style={[
-                  styles.tab,
-                  activeTab === 2 ? styles.activeTab : null,
-                  { marginLeft: 10, marginRight: 10 },
-                ]}
-              >
-                <Text lightColor={Colors[colorScheme].text}>Fakta</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => setActiveTab(3)}
-                style={[styles.tab, activeTab === 3 ? styles.activeTab : null]}
-              >
-                <Text lightColor={Colors[colorScheme].text}>Recensioner</Text>
-              </TouchableOpacity>
+            <View style={styles.folder}>
+              <View style={styles.tabs}>
+                <TouchableOpacity
+                  onPress={() => setActiveTab(1)}
+                  style={[
+                    styles.tab,
+                    activeTab === 1 ? styles.activeTab : null,
+                  ]}
+                >
+                  <Text lightColor={Colors[colorScheme].text}>Beskrivning</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => setActiveTab(2)}
+                  style={[
+                    styles.tab,
+                    activeTab === 2 ? styles.activeTab : null,
+                    { marginLeft: 10, marginRight: 10 },
+                  ]}
+                >
+                  <Text lightColor={Colors[colorScheme].text}>Fakta</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => setActiveTab(3)}
+                  style={[
+                    styles.tab,
+                    activeTab === 3 ? styles.activeTab : null,
+                  ]}
+                >
+                  <Text lightColor={Colors[colorScheme].text}>Recensioner</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.folderContent}>{renderFolderContent()}</View>
             </View>
-            <View style={styles.folderContent}>{renderFolderContent()}</View>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </LinearGradient>
     );
   } else {
     return <ActivityIndicator size="small" color="#0000ff" />;

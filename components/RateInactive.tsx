@@ -4,21 +4,26 @@ import { StyleSheet, Image, useColorScheme } from "react-native";
 
 interface Props {
   rating: number;
+  small?: {
+    size: number;
+    container: number;
+    single: number;
+  };
 }
-export const RateInactive = ({ rating }: Props) => {
+export const RateInactive = ({ rating, small }: Props) => {
   const colorScheme = useColorScheme();
   let isLight = colorScheme == "light" ? true : false;
 
   const styles = StyleSheet.create({
     circle: {
-      width: 20,
-      height: 20,
+      width: small ? small.size : 20,
+      height: small ? small.size : 20,
     },
     container: {
-      width: 120,
+      width: small ? small.container : 120,
     },
     single: {
-      width: 25,
+      width: small ? small.single : 25,
     },
   });
 

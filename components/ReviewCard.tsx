@@ -1,11 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { Image, StyleSheet } from "react-native";
+import { Image, StyleSheet, useColorScheme } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { getOneDocById } from "../helper";
 import { Review, Product } from "../Interfaces";
 import { RateInactive } from "./RateInactive";
 import { Text, View } from "../components/Themed";
+import Colors from "../constants/Colors";
 
 interface Props {
   review: Review;
@@ -14,6 +15,7 @@ interface Props {
 export const ReviewCard = ({ review }: Props) => {
   const [product, setProduct] = useState<Product>();
   const navigation = useNavigation();
+  const colorScheme: any = useColorScheme();
 
   useEffect(() => {
     getProduct();
@@ -26,25 +28,48 @@ export const ReviewCard = ({ review }: Props) => {
     }
   };
 
+  const styles = StyleSheet.create({
+    image: {
+      height: 60,
+      width: 60,
+      flex: 1,
+    },
+    productData: {
+      flexDirection: "row",
+    },
+    textAndRating: {
+      marginLeft: 10,
+      flex: 4,
+    },
+    productText: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+    },
+    textBold: {
+      fontWeight: "bold",
+    },
+    description: {
+      padding: 10,
+    },
+    wrapper: {
+      backgroundColor: Colors[colorScheme].section,
+      marginTop: 10,
+      borderRadius: 6,
+      width: "90%",
+      padding: 10,
+      height: 130,
+    },
+  });
+
   if (product) {
     return (
-      <View
-        // lightColor="rgba(56,47,68,0.65)"
-        lightColor="rgba(56,47,68,0.7)"
-        darkColor="#3D3745"
-        style={styles.wrapper}
-      >
-        <View
-          // lightColor="#7e7885"
-          lightColor="transparent"
-          // darkColor="#3D3745"
-          style={styles.productData}
-        >
+      <View style={styles.wrapper}>
+        <View style={styles.productData}>
           <Image style={styles.image} source={{ uri: product.photo }} />
           <View
             // lightColor="#7e7885"
             // darkColor="#3D3745"
-            lightColor="transparent"
+            // lightColor="transparent"
             style={styles.textAndRating}
           >
             <TouchableOpacity
@@ -55,7 +80,7 @@ export const ReviewCard = ({ review }: Props) => {
               <View
                 // lightColor="#7e7885"
                 // darkColor="#3D3745"
-                lightColor="transparent"
+                // lightColor="transparent"
                 style={styles.productText}
               >
                 <Text
@@ -73,7 +98,7 @@ export const ReviewCard = ({ review }: Props) => {
             <View
               // lightColor="#7e7885"
               darkColor="#3D3745"
-              lightColor="transparent"
+              // lightColor="transparent"
               style={{ flexDirection: "row" }}
             >
               <RateInactive rating={review.rating} />
@@ -90,7 +115,7 @@ export const ReviewCard = ({ review }: Props) => {
         <View
           // lightColor="#7e7885"
           darkColor="#3D3745"
-          lightColor="transparent"
+          // lightColor="transparent"
           style={styles.description}
         >
           <Text lightColor="#fff" darkColor="#fff">
@@ -109,35 +134,3 @@ export const ReviewCard = ({ review }: Props) => {
     );
   }
 };
-
-const styles = StyleSheet.create({
-  wrapper: {
-    marginTop: 10,
-    borderRadius: 6,
-    width: "90%",
-    padding: 10,
-    height: 130,
-  },
-  image: {
-    height: 60,
-    width: 60,
-    flex: 1,
-  },
-  productData: {
-    flexDirection: "row",
-  },
-  textAndRating: {
-    marginLeft: 10,
-    flex: 4,
-  },
-  productText: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  textBold: {
-    fontWeight: "bold",
-  },
-  description: {
-    padding: 10,
-  },
-});

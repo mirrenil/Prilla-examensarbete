@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Image, ScrollView, StyleSheet } from "react-native";
+import { Image, ScrollView, StyleSheet, useColorScheme } from "react-native";
 import { Text, View } from "../components/Themed";
 import { useFonts } from "expo-font";
 import { getAllDocsInCollection } from "../helper";
@@ -8,6 +8,8 @@ import Tabbar from "../components/Tabbar";
 import { RootTabScreenProps } from "../types";
 import { ActivityCard } from "../components/ActivityCard";
 import { getAdditionalUserInfo } from "firebase/auth";
+import Colors, { gradientDark, gradientLight } from "../constants/Colors";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function StartScreen({
   navigation,
@@ -18,6 +20,8 @@ export default function StartScreen({
     OleoScript: require("../assets/fonts/OleoScript-Regular.ttf"),
   });
   const [reviews, setReviews] = useState<Review[]>([]);
+  const colorScheme: any = useColorScheme();
+  let isLight = colorScheme == "light" ? true : false;
 
   useEffect(() => {
     getReviews();
@@ -34,35 +38,43 @@ export default function StartScreen({
   };
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <Image
-          style={styles.heroImg}
-          source={require("../assets/images/hero.png")}
-        />
-        <View style={styles.heroTextWrapper}>
-          <Text style={styles.heroText}>äventyr väntar</Text>
-          <Text style={styles.numbers}>
-            20
-            <Text style={styles.specialFont} lightColor="#fff">
-              23
+    <LinearGradient
+      colors={
+        isLight
+          ? [gradientLight.from, gradientLight.to]
+          : [gradientDark.from, gradientDark.to]
+      }
+    >
+      <ScrollView>
+        <View style={styles.container}>
+          <Image
+            style={styles.heroImg}
+            source={require("../assets/images/hero.png")}
+          />
+          <View style={styles.heroTextWrapper}>
+            <Text style={styles.heroText}>äventyr väntar</Text>
+            <Text style={styles.numbers}>
+              20
+              <Text style={styles.specialFont} lightColor="#fff">
+                23
+              </Text>
             </Text>
-          </Text>
-          <View style={styles.separator} lightColor="#fff" darkColor="#fff" />
-          <View style={styles.logosWrapper}>
-            <Text style={styles.prilla}>Prilla</Text>
-            <Image
-              style={styles.logo}
-              source={require("../assets/images/loop.png")}
-            />
+            <View style={styles.separator} lightColor="#fff" darkColor="#fff" />
+            <View style={styles.logosWrapper}>
+              <Text style={styles.prilla}>Prilla</Text>
+              <Image
+                style={styles.logo}
+                source={require("../assets/images/loop.png")}
+              />
+            </View>
           </View>
         </View>
-      </View>
-      <Tabbar />
-      {reviews.map((review) => {
-        return <ActivityCard key={review.id} review={review} />;
-      })}
-    </ScrollView>
+        <Tabbar />
+        {reviews.map((review) => {
+          return <ActivityCard key={review.id} review={review} />;
+        })}
+      </ScrollView>
+    </LinearGradient>
   );
 }
 

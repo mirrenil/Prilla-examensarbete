@@ -69,7 +69,7 @@ function RootNavigator() {
     <Stack.Navigator
       screenOptions={{
         headerStyle: {
-          backgroundColor: Colors[colorScheme].background,
+          backgroundColor: Colors[colorScheme].menu,
         },
         headerTintColor: Colors[colorScheme].text,
       }}
@@ -153,17 +153,17 @@ function BottomTabNavigator() {
       // initialRouteName="Home"
       screenOptions={{
         headerStyle: {
-          backgroundColor: Colors[colorScheme].background,
+          backgroundColor: Colors[colorScheme].menu,
           height: 100,
         },
         headerTitleStyle: {
-          color: "black",
+          color: Colors[colorScheme].text,
         },
         tabBarActiveTintColor: Colors[colorScheme].tint,
         tabBarInactiveTintColor: Colors[colorScheme].tabIconDefault,
         tabBarStyle: {
-          backgroundColor: Colors[colorScheme].background,
-          height: 100,
+          backgroundColor: Colors[colorScheme].menu,
+          height: "8%",
           padding: 15,
         },
       }}
@@ -175,7 +175,7 @@ function BottomTabNavigator() {
           title: "",
           headerTitle: "Hem",
           tabBarIcon: ({ color }) => (
-            <Ionicons name="ios-home-outline" size={30} color={color} />
+            <Ionicons name="ios-home-outline" size={24} color={color} />
           ),
 
           headerRight: () => (
@@ -205,7 +205,7 @@ function BottomTabNavigator() {
           // headerShown: false,
           headerStyle: { height: Constants.statusBarHeight },
           tabBarIcon: ({ color }) => (
-            <AntDesign name="search1" size={30} color={color} />
+            <AntDesign name="search1" size={24} color={color} />
           ),
         }}
       />
@@ -215,7 +215,7 @@ function BottomTabNavigator() {
         options={{
           title: "",
           tabBarIcon: ({ color }) => (
-            <Ionicons name="notifications-outline" size={30} color={color} />
+            <Ionicons name="notifications-outline" size={24} color={color} />
           ),
         }}
       />
@@ -226,7 +226,7 @@ function BottomTabNavigator() {
         options={{
           title: "",
           tabBarIcon: ({ color }) => (
-            <AntDesign name="user" size={30} color={color} />
+            <AntDesign name="user" size={24} color={color} />
           ),
         }}
       />

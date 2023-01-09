@@ -1,5 +1,11 @@
 import { View, Text, TextInput } from "../components/Themed";
-import { StyleSheet, Image, TouchableOpacity, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  useColorScheme,
+} from "react-native";
 import * as Haptics from "expo-haptics";
 import { RootStackScreenProps } from "../types";
 import React, { useEffect, useState } from "react";
@@ -10,6 +16,8 @@ import { RateActive } from "../components/RateActive";
 import ImageUpload from "../components/ImageUpload";
 import { DarkTheme } from "@react-navigation/native";
 import Tags from "../components/Tags";
+import Colors, { gradientDark, gradientLight } from "../constants/Colors";
+import { LinearGradient } from "expo-linear-gradient";
 
 const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
   const [product, setProduct] = useState<Product>();
@@ -18,6 +26,8 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
   const [reviewText, setReviewText] = useState<string>("");
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [image, setImage] = useState<any>();
+  const colorScheme: any = useColorScheme();
+  let isLight = colorScheme == "light" ? true : false;
 
   useEffect(() => {
     getProductData();
@@ -113,7 +123,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
       fontWeight: "bold",
     },
     section: {
-      borderBottomColor: "rgba(255,255,255,0.3)",
+      borderBottomColor: Colors[colorScheme].grey.light,
       borderBottomWidth: 1,
       justifyContent: "space-evenly",
       padding: 10,
@@ -162,6 +172,11 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
       justifyContent: "center",
       alignItems: "center",
     },
+    ratingBackground: {
+      backgroundColor: isLight ? Colors[colorScheme].primary.normal : null,
+      borderRadius: 6,
+      padding: 10,
+    },
   });
 
   const popupStyles = StyleSheet.create({
@@ -177,6 +192,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
       alignItems: "center",
     },
     popUp: {
+      backgroundColor: Colors[colorScheme].primary.dark,
       width: "80%",
       height: 200,
       justifyContent: "space-around",
@@ -249,55 +265,70 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
   return (
     <>
       {popUpOpen ? <Popup /> : null}
-      <ScrollView style={styles.container}>
-        <View style={[styles.productSection, styles.section]}>
-          <View style={styles.productInfo}>
-            <Image style={styles.image} source={{ uri: product?.photo }} />
-            <View style={styles.productText}>
-              <View style={styles.titles}>
-                <Text style={styles.fatText}>{product?.brand} </Text>
-                <Text style={styles.fatText}>{product?.name} </Text>
-                <Text>{product?.format}</Text>
+      <LinearGradient
+        colors={
+          isLight
+            ? [gradientLight.from, gradientLight.to]
+            : [gradientDark.from, gradientDark.to]
+        }
+      >
+        <ScrollView style={styles.container}>
+          <View style={[styles.productSection, styles.section]}>
+            <View style={styles.productInfo}>
+              <Image style={styles.image} source={{ uri: product?.photo }} />
+              <View style={styles.productText}>
+                <View style={styles.titles}>
+                  <Text style={styles.fatText}>{product?.brand} </Text>
+                  <Text style={styles.fatText}>{product?.name} </Text>
+                  <Text>{product?.format}</Text>
+                </View>
+                <Text>{product?.manufacturer}</Text>
               </View>
-              <Text>{product?.manufacturer}</Text>
+            </View>
+            <TouchableOpacity
+              style={styles.reviewText}
+              onPress={() => setPopUpOpen(true)}
+            >
+              <EvilIcons name="pencil" size={24} color="white" />
+              {reviewText ? (
+                <Text>{reviewText}</Text>
+              ) : (
+                <>
+                  <Text>Lägg till kommentar</Text>
+                </>
+              )}
+            </TouchableOpacity>
+          </View>
+          <View style={[styles.rateSection, styles.section]}>
+            <Text style={styles.sectionTitle}>Sätt betyg</Text>
+            <View style={styles.rateSectionContent}>
+              <Text style={styles.value}>{value}</Text>
+              <View style={styles.ratingBackground}>
+                <RateActive
+                  handleChange={(value: number) => {
+                    setValue(value);
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+                  }}
+                />
+              </View>
             </View>
           </View>
-          <TouchableOpacity
-            style={styles.reviewText}
-            onPress={() => setPopUpOpen(true)}
-          >
-            <EvilIcons name="pencil" size={24} color="white" />
-            {reviewText ? (
-              <Text>{reviewText}</Text>
-            ) : (
-              <>
-                <Text>Lägg till kommentar</Text>
-              </>
-            )}
-          </TouchableOpacity>
-        </View>
-        <View style={[styles.rateSection, styles.section]}>
-          <Text style={styles.sectionTitle}>Sätt betyg</Text>
-          <View style={styles.rateSectionContent}>
-            <Text style={styles.value}>{value}</Text>
-            <RateActive
-              handleChange={(value: number) => {
-                setValue(value);
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-              }}
-            />
+          <View style={styles.section}>
+            <Tags handleInput={handleTags} />
           </View>
-        </View>
-        <View style={styles.section}>
-          <Tags handleInput={handleTags} />
-        </View>
-        <View style={styles.imageSection}>
-          <ImageUpload handleUpload={(img) => setImage(img)} />
-          <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-            <Text style={[{ color: "black" }, styles.fatText]}>Publicera</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+          <View style={styles.imageSection}>
+            <ImageUpload handleUpload={(img) => setImage(img)} />
+            <TouchableOpacity
+              style={styles.submitButton}
+              onPress={handleSubmit}
+            >
+              <Text style={[{ color: "black" }, styles.fatText]}>
+                Publicera
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </LinearGradient>
     </>
   );
 };
