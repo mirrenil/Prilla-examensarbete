@@ -59,9 +59,9 @@ export default function ProfileScreen({
     imagesLoaded();
     checkCurrentUser();
     getFollowersFromDb();
-  }, [isMe]);
+  }, [isMe, usersFollowersArray]);
 
-  console.log(usersFollowersArray.length);
+  console.log(usersFollowersArray);
   const checkCurrentUser = async () => {
     if (!isMe) {
       const user = await getOneDocById("users", route.params.id);
@@ -263,11 +263,18 @@ export default function ProfileScreen({
               )}
             </View>
           </View>
-          {myProfile && (
+          {myProfile ? (
             <View style={styles.center}>
               <Image source={{ uri: profilePic }} style={styles.image} />
               <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
                 {myUser.displayName}
+              </Text>
+            </View>
+          ) : (
+            <View style={styles.center}>
+              <Image source={{ uri: profilePic }} style={styles.image} />
+              <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
+                {user.displayName}
               </Text>
             </View>
           )}
