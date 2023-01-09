@@ -17,6 +17,7 @@ import {
   getAllDocsInCollection,
   getDocsWithSpecificValue,
   getOneDocById,
+  updateSingleProperty,
 } from "../helper";
 import { Review, User } from "../Interfaces";
 import { ScrollView } from "react-native-gesture-handler";
@@ -45,6 +46,8 @@ export default function ProfileScreen({
   const [urls, setUrls] = useState<string[]>([]);
   const favoritesArray: any = [];
   let photoURLS: string[] = [];
+  const [usersFollowersArray, setUsersFollowersArray] = useState<string[]>([]);
+  let newArray = [...usersFollowersArray];
   const profilePic =
     "https://cdn.drawception.com/images/avatars/647493-B9E.png";
   let isMe = route.params.id === myUser.id;
@@ -55,8 +58,10 @@ export default function ProfileScreen({
     compareLikedIds();
     imagesLoaded();
     checkCurrentUser();
+    getFollowersFromDb();
   }, [isMe]);
 
+  console.log(usersFollowersArray.length);
   const checkCurrentUser = async () => {
     if (!isMe) {
       const user = await getOneDocById("users", route.params.id);
@@ -79,10 +84,54 @@ export default function ProfileScreen({
       console.log(err);
     }
   };
+  // follow functionality
+  const getFollowersFromDb = async () => {
+    try {
+      const user = await getOneDocById("users", myUser.id);
+      setUsersFollowersArray(user?.following);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-  const toggleButton = () => {
+  const isFollowing = () => {
+    let selected = usersFollowersArray.some((item) => {
+      console.log(item == route.params.id);
+      return item == route.params.id;
+    });
+    return selected;
+  };
+
+  const addFollowerToDb = async () => {
+    newArray.push(route.params.id);
+    const newData = { following: newArray };
+    try {
+      await updateSingleProperty("users", myUser.id, newData);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const unfollowFromDb = async () => {
+    let index = newArray.indexOf(route.params.id);
+    newArray.splice(index, 1);
+    const newData = { following: newArray };
+    try {
+      await updateSingleProperty("users", myUser.id, newData);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const toggleFollow = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setFollow(!follow);
+    if (!isFollowing()) {
+      addFollowerToDb();
+      setFollow(true);
+    } else {
+      unfollowFromDb();
+      setFollow(false);
+    }
   };
 
   // Modal functionality
@@ -168,7 +217,7 @@ export default function ProfileScreen({
     return (
       <ScrollView style={styles.screen}>
         <View style={styles.container}>
-          {myProfile ? (
+          {myProfile && (
             <View style={styles.top}>
               <Feather
                 name="settings"
@@ -177,7 +226,7 @@ export default function ProfileScreen({
                 onPress={() => setModalVisible(true)}
               />
             </View>
-          ) : null}
+          )}
           <View style={styles.topContainer}>
             <View style={styles.left}>
               <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
@@ -195,27 +244,30 @@ export default function ProfileScreen({
               <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
                 Följer
               </Text>
-              <Text
-                darkColor="#fff"
-                lightColor="#fff"
-                style={styles.textMedium}
-              >
-                {/* {user?.follow} right now hard coded value*/} 1
-              </Text>
+              {myProfile ? (
+                <Text
+                  darkColor="#fff"
+                  lightColor="#fff"
+                  style={styles.textMedium}
+                >
+                  {usersFollowersArray.length}
+                </Text>
+              ) : (
+                <Text
+                  darkColor="#fff"
+                  lightColor="#fff"
+                  style={styles.textMedium}
+                >
+                  Finns inte
+                </Text>
+              )}
             </View>
           </View>
-          {myProfile ? (
+          {myProfile && (
             <View style={styles.center}>
               <Image source={{ uri: profilePic }} style={styles.image} />
               <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
                 {myUser.displayName}
-              </Text>
-            </View>
-          ) : (
-            <View style={styles.center}>
-              <Image source={{ uri: profilePic }} style={styles.image} />
-              <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
-                {user?.displayName}
               </Text>
             </View>
           )}
@@ -223,16 +275,26 @@ export default function ProfileScreen({
           {!myProfile && (
             <TouchableOpacity
               style={[follow ? styles.borderButtonLike : styles.button]}
-              onPress={toggleButton}
+              onPress={toggleFollow}
             >
-              <Text
-                darkColor="#201A28"
-                lightColor="#201A28"
-                style={[follow ? styles.borderButtonText : styles.buttonText]}
-              >
-                {follow ? "Följer" : "Följ"}{" "}
-                {follow && <AntDesign name="down" size={14} color="white" />}
-              </Text>
+              {!follow ? (
+                <Text
+                  darkColor="#201A28"
+                  lightColor="#201A28"
+                  style={[follow ? styles.borderButtonText : styles.buttonText]}
+                >
+                  Följ
+                </Text>
+              ) : (
+                <Text
+                  darkColor="#201A28"
+                  lightColor="#201A28"
+                  style={[follow ? styles.borderButtonText : styles.buttonText]}
+                >
+                  Följer
+                  <AntDesign name="down" size={14} color="white" />
+                </Text>
+              )}
             </TouchableOpacity>
           )}
         </View>
