@@ -36,16 +36,14 @@ function ProductDetailScreen({
   const [reviews, setReviews] = useState<ReviewWithAuthor[]>([]);
   const [like, setLike] = useState<boolean>(false);
   const myUser = useSelector(currentReduxUser);
-  let favoritesArray: any = [];
-  let likedProducts: any = [];
-
   const [usersLikedArray, setUsersLikedArray] = useState<string[]>([]);
+  let newArray = [...usersLikedArray];
 
   useEffect(() => {
     getProductReviews();
     getProductData();
     getLiked();
-  }, []);
+  }, [usersLikedArray]);
 
   const getProductData = async () => {
     try {
@@ -90,60 +88,24 @@ function ProductDetailScreen({
     }
   };
 
-  //ÄNDRAT HÄR
-  // Favorite functionality
   const getLiked = async () => {
     try {
       const user = await getOneDocById("users", myUser.id);
       setUsersLikedArray(user?.liked);
-
-      // for (let i = 0; i < user?.liked.length; i++) {
-      //   favoritesArray.push(user?.liked[i]);
-      // }
     } catch (err) {
       console.log(err);
     }
-    // compareLikedIds();
   };
 
-  // get the products with same ID from the favorites array
-  // const compareLikedIds = async () => {
-  //   const products = await getAllDocsInCollection("produkter");
-  //   if (!products) return;
-  //   if (products) {
-  //     likedProducts = products.filter((product) =>
-  //       favoritesArray.includes(product.id)
-  //     );
-  //     return likedProducts;
-  //   }
-  // };
-
-  // ÄNDRAT HÄR
   const isAlreadyLiked = () => {
     let selected = usersLikedArray.some((item) => {
       console.log(item == route.params.id);
       return item == route.params.id;
     });
     return selected;
-
-    // if (route.params.id) {
-    //   likedProducts.forEach((product) => {
-    //     if (product.id === route.params.id) {
-    //       setLike(true);
-    //     }
-    //   });
-    //   addLikedToDb(route.params.id);
-    //   console.log("is liked");
-    // } else {
-    //   console.log("is not liked");
-    // }
-    // if yes the heart should be red
-    // if no the heart should have a white border
   };
 
-  //ÄNDRAT LITE HÄR
   const addLikedToDb = async () => {
-    let newArray = [...usersLikedArray];
     newArray.push(route.params.id);
     const newData = { liked: newArray };
     try {
@@ -153,17 +115,27 @@ function ProductDetailScreen({
     }
   };
 
-  // ÄNDRAT HÄR
+  const removeLikedFromDb = async () => {
+    let index = newArray.indexOf(route.params.id);
+    newArray.splice(index, 1);
+    const newData = { liked: newArray };
+    try {
+      await updateSingleProperty("users", myUser.id, newData);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const toggleLike = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-
     if (!isAlreadyLiked()) {
       addLikedToDb();
-    } else {
+    } else if (isAlreadyLiked()) {
       // remove like from db
+      removeLikedFromDb();
+      setLike(false);
+      // if I unlike the product it should be removed from the array
     }
-    // if I unlike the product it should be removed from the array
-    setLike(!like);
   };
 
   const renderFolderContent = () => {
@@ -262,7 +234,7 @@ function ProductDetailScreen({
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={toggleLike}>
-                  {like ? (
+                  {usersLikedArray ? (
                     <AntDesign name="heart" size={24} color="red" />
                   ) : (
                     <AntDesign name="hearto" size={24} color="white" />
