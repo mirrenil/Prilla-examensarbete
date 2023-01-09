@@ -6,6 +6,7 @@ import {
   ImageBackground,
   TouchableOpacity,
   ActivityIndicator,
+  useColorScheme,
 } from "react-native";
 import * as Haptics from "expo-haptics";
 import { View, Text } from "../components/Themed";
@@ -17,6 +18,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { StrengthBar } from "../components/StrengthBar";
 import { User } from "../Interfaces";
 import { connectFirestoreEmulator } from "firebase/firestore";
+import Colors from "../constants/Colors";
 
 interface ReviewWithAuthor extends Review {
   author: string;
@@ -30,6 +32,8 @@ function ProductDetailScreen({
   const [activeTab, setActiveTab] = useState<number>(3);
   const [reviews, setReviews] = useState<ReviewWithAuthor[]>([]);
   const [like, setLike] = useState<boolean>(false);
+  const colorScheme = useColorScheme();
+  let isLight = colorScheme == "light" ? true : false;
 
   useEffect(() => {
     getProductReviews();
@@ -86,39 +90,43 @@ function ProductDetailScreen({
   const renderFolderContent = () => {
     switch (activeTab) {
       case 1:
-        return <Text lightColor="#fff">{product?.description}</Text>;
+        return (
+          <Text lightColor={Colors[colorScheme].text}>
+            {product?.description}
+          </Text>
+        );
       case 2:
         return (
           <>
-            <View lightColor="#2E233B" style={styles.folderFacts}>
+            <View lightColor="transparent" style={styles.folderFacts}>
               <Text lightColor="#fff" style={styles.fatText}>
                 Varumärke
               </Text>
               <Text lightColor="#fff">{product?.brand}</Text>
             </View>
-            <View lightColor="#2E233B" style={styles.folderFacts}>
+            <View lightColor="transparent" style={styles.folderFacts}>
               <Text lightColor="#fff" style={styles.fatText}>
                 Namn
               </Text>
               <Text lightColor="#fff">{product?.name}</Text>
             </View>
-            <View lightColor="#2E233B" style={styles.folderFacts}>
+            <View lightColor="transparent" style={styles.folderFacts}>
               <Text lightColor="#fff" style={styles.fatText}>
                 Smak
               </Text>
-              <View lightColor="#2E233B" style={{ flexDirection: "row" }}>
+              <View lightColor="transparent" style={{ flexDirection: "row" }}>
                 {product?.flavor.map((f) => {
                   return <Text lightColor="#fff">{f} </Text>;
                 })}
               </View>
             </View>
-            <View lightColor="#2E233B" style={styles.folderFacts}>
+            <View lightColor="transparent" style={styles.folderFacts}>
               <Text lightColor="#fff" style={styles.fatText}>
                 Nikotinhalt
               </Text>
               <Text lightColor="#fff">{product?.nicotine} mg/g</Text>
             </View>
-            <View lightColor="#2E233B" style={styles.folderFacts}>
+            <View lightColor="transparent" style={styles.folderFacts}>
               <Text lightColor="#fff" style={styles.fatText}>
                 Vikt
               </Text>
@@ -129,8 +137,8 @@ function ProductDetailScreen({
       case 3:
         return reviews.map((rev) => {
           return (
-            <View lightColor="#2E233B" style={styles.reviewWrapper}>
-              <View lightColor="#2E233B" style={styles.reviewTop}>
+            <View lightColor="transparent" style={styles.reviewWrapper}>
+              <View lightColor="transparent" style={styles.reviewTop}>
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate("Profile", { id: rev.userID });
@@ -153,6 +161,132 @@ function ProductDetailScreen({
     }
   };
 
+  const styles = StyleSheet.create({
+    fatText: {
+      fontWeight: "bold",
+    },
+    capitalize: {
+      textTransform: "capitalize",
+    },
+    background: {
+      position: "relative",
+      height: 200,
+      width: "100%",
+    },
+    waves: {
+      position: "absolute",
+      bottom: -23,
+      height: 100,
+    },
+    screenContainer: {
+      padding: 20,
+    },
+    productImg: {
+      height: 120,
+      width: 120,
+      marginRight: 10,
+    },
+    productDataContainer: {
+      height: 200,
+      marginBottom: 20,
+      flexDirection: "row",
+      justifyContent: "space-between",
+    },
+    title: {
+      fontWeight: "bold",
+      fontSize: 18,
+    },
+    productInfo: {
+      // backgroundColor: Colors[isLight ? "light" : "dark"].folderTabActive,
+      // backgroundColor: "#A287C5",
+      padding: 10,
+      borderBottomLeftRadius: 6,
+      borderTopLeftRadius: 6,
+      justifyContent: "space-between",
+      maxWidth: "60%",
+    },
+    manufacturer: {},
+    ratingContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    ratingText: {
+      marginLeft: 10,
+    },
+    interactions: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+    },
+    button: {
+      padding: 10,
+      marginRight: 10,
+      borderWidth: 1,
+      borderColor: "#783BC9",
+      borderRadius: 6,
+    },
+    tableDataContainer: {
+      width: "70%",
+    },
+    tableRow: {
+      height: 40,
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      borderBottomColor: Colors[isLight ? "light" : "dark"].grey.light,
+      borderBottomWidth: 1,
+    },
+    folder: {
+      marginTop: 50,
+      width: "100%",
+    },
+    tabs: {
+      flexDirection: "row",
+    },
+    tab: {
+      flex: 1,
+      height: 50,
+      borderTopLeftRadius: 6,
+      borderTopRightRadius: 6,
+      borderWidth: 1,
+      borderColor: Colors[isLight ? "light" : "dark"].grey.light,
+      borderBottomWidth: 0,
+      justifyContent: "center",
+      alignItems: "center",
+      // backgroundColor: "white",
+    },
+    activeTab: {
+      // backgroundColor: Colors[isLight ? "light" : "dark"].primary.normal,
+      backgroundColor: "#F5F5F5",
+      // borderColor: Colors[isLight ? "light" : "dark"].primary.normal,
+    },
+
+    folderContent: {
+      // backgroundColor: Colors[isLight ? "light" : "dark"].folderTabActive,
+      backgroundColor: "#AE89E0",
+      borderColor: Colors[isLight ? "light" : "dark"].grey.light,
+      // borderTopWidth: 7,
+      borderBottomWidth: 1,
+      borderLeftWidth: 1,
+      borderRightWidth: 1,
+      padding: 10,
+    },
+    folderFacts: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      height: 50,
+    },
+    reviewTop: {
+      flexDirection: "row",
+      width: "50%",
+      justifyContent: "space-between",
+    },
+    reviewWrapper: {
+      width: "90%",
+      marginBottom: 10,
+    },
+  });
+
   if (product && reviews) {
     return (
       <ScrollView>
@@ -160,10 +294,17 @@ function ProductDetailScreen({
           style={styles.background}
           source={require("../assets/images/detail_Bg.png")}
         >
-          <Image
-            style={styles.waves}
-            source={require("../assets/images/waves_dark.png")}
-          />
+          {isLight ? (
+            <Image
+              style={styles.waves}
+              source={require("../assets/images/waves_light.png")}
+            />
+          ) : (
+            <Image
+              style={styles.waves}
+              source={require("../assets/images/waves_dark.png")}
+            />
+          )}
         </ImageBackground>
         <View style={styles.screenContainer}>
           <View style={styles.productDataContainer}>
@@ -174,7 +315,16 @@ function ProductDetailScreen({
               </Text>
               <Text style={styles.manufacturer}>{product?.manufacturer}</Text>
               <View style={styles.ratingContainer}>
-                <RateInactive rating={product?.rating ? product.rating : 0} />
+                <View
+                  style={{
+                    backgroundColor: Colors[colorScheme!].primary.dark,
+                    padding: 10,
+                    borderRadius: 6,
+                  }}
+                >
+                  <RateInactive rating={product?.rating ? product.rating : 0} />
+                </View>
+                {/* <RateInactive rating={} /> */}
                 <Text style={styles.ratingText}>
                   {product?.rating ? product.rating : 0}
                 </Text>
@@ -229,7 +379,7 @@ function ProductDetailScreen({
                 onPress={() => setActiveTab(1)}
                 style={[styles.tab, activeTab === 1 ? styles.activeTab : null]}
               >
-                <Text lightColor="#fff">Beskrivning</Text>
+                <Text lightColor={Colors[colorScheme].text}>Beskrivning</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => setActiveTab(2)}
@@ -239,13 +389,13 @@ function ProductDetailScreen({
                   { marginLeft: 10, marginRight: 10 },
                 ]}
               >
-                <Text lightColor="#fff">Fakta</Text>
+                <Text lightColor={Colors[colorScheme].text}>Fakta</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => setActiveTab(3)}
                 style={[styles.tab, activeTab === 3 ? styles.activeTab : null]}
               >
-                <Text lightColor="#fff">Recensioner</Text>
+                <Text lightColor={Colors[colorScheme].text}>Recensioner</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.folderContent}>{renderFolderContent()}</View>
@@ -257,115 +407,5 @@ function ProductDetailScreen({
     return <ActivityIndicator size="small" color="#0000ff" />;
   }
 }
-
-const styles = StyleSheet.create({
-  fatText: {
-    fontWeight: "bold",
-  },
-  capitalize: {
-    textTransform: "capitalize",
-  },
-  background: {
-    position: "relative",
-    height: 200,
-    width: "100%",
-  },
-  waves: {
-    position: "absolute",
-    bottom: -23,
-    height: 100,
-  },
-  screenContainer: {
-    padding: 20,
-  },
-  productImg: {
-    height: 120,
-    width: 120,
-    marginRight: 10,
-  },
-  productDataContainer: {
-    height: 200,
-    marginBottom: 20,
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  title: {
-    fontWeight: "bold",
-    fontSize: 18,
-  },
-  productInfo: {
-    justifyContent: "space-between",
-    maxWidth: "60%",
-  },
-  manufacturer: {},
-  ratingContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  ratingText: {
-    marginLeft: 10,
-  },
-  interactions: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  button: {
-    padding: 10,
-    marginRight: 10,
-    borderWidth: 1,
-    borderColor: "#783BC9",
-    borderRadius: 6,
-  },
-  tableDataContainer: {
-    width: "70%",
-  },
-  tableRow: {
-    height: 40,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    borderBottomColor: "rgba(255,255,255,0.3)",
-    borderBottomWidth: 1,
-  },
-  folder: {
-    marginTop: 50,
-    width: "100%",
-  },
-  tabs: {
-    flexDirection: "row",
-  },
-  tab: {
-    flex: 1,
-    height: 50,
-    borderTopLeftRadius: 6,
-    borderTopRightRadius: 6,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#7E7885",
-  },
-  activeTab: {
-    backgroundColor: "#2E233B",
-  },
-
-  folderContent: {
-    backgroundColor: "#2E233B",
-    padding: 10,
-  },
-  folderFacts: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    height: 50,
-  },
-  reviewTop: {
-    flexDirection: "row",
-    width: "50%",
-    justifyContent: "space-between",
-  },
-  reviewWrapper: {
-    width: "90%",
-    marginBottom: 10,
-  },
-});
 
 export default ProductDetailScreen;

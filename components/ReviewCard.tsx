@@ -5,7 +5,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { getOneDocById } from "../helper";
 import { Review, Product } from "../Interfaces";
 import { RateInactive } from "./RateInactive";
-import { View, Text } from "../components/Themed";
+import { Text, View } from "../components/Themed";
 
 interface Props {
   review: Review;
@@ -28,16 +28,23 @@ export const ReviewCard = ({ review }: Props) => {
 
   if (product) {
     return (
-      <View lightColor="#7e7885" darkColor="#3D3745" style={styles.wrapper}>
+      <View
+        // lightColor="rgba(56,47,68,0.65)"
+        lightColor="rgba(56,47,68,0.7)"
+        darkColor="#3D3745"
+        style={styles.wrapper}
+      >
         <View
-          lightColor="#7e7885"
-          darkColor="#3D3745"
+          // lightColor="#7e7885"
+          lightColor="transparent"
+          // darkColor="#3D3745"
           style={styles.productData}
         >
           <Image style={styles.image} source={{ uri: product.photo }} />
           <View
-            lightColor="#7e7885"
-            darkColor="#3D3745"
+            // lightColor="#7e7885"
+            // darkColor="#3D3745"
+            lightColor="transparent"
             style={styles.textAndRating}
           >
             <TouchableOpacity
@@ -46,8 +53,9 @@ export const ReviewCard = ({ review }: Props) => {
               }
             >
               <View
-                lightColor="#7e7885"
-                darkColor="#3D3745"
+                // lightColor="#7e7885"
+                // darkColor="#3D3745"
+                lightColor="transparent"
                 style={styles.productText}
               >
                 <Text
@@ -63,8 +71,9 @@ export const ReviewCard = ({ review }: Props) => {
               </View>
             </TouchableOpacity>
             <View
-              lightColor="#7e7885"
+              // lightColor="#7e7885"
               darkColor="#3D3745"
+              lightColor="transparent"
               style={{ flexDirection: "row" }}
             >
               <RateInactive rating={review.rating} />
@@ -79,8 +88,9 @@ export const ReviewCard = ({ review }: Props) => {
           </View>
         </View>
         <View
-          lightColor="#7e7885"
+          // lightColor="#7e7885"
           darkColor="#3D3745"
+          lightColor="transparent"
           style={styles.description}
         >
           <Text lightColor="#fff" darkColor="#fff">
