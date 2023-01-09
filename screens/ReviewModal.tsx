@@ -1,24 +1,10 @@
 import { View, Text, TextInput } from "../components/Themed";
-import {
-  StyleSheet,
-  Image,
-  ImageBackground,
-  TouchableOpacity,
-  ActivityIndicator,
-  Pressable,
-  Button,
-  ScrollView,
-} from "react-native";
+import { StyleSheet, Image, TouchableOpacity, ScrollView } from "react-native";
 import * as Haptics from "expo-haptics";
 import { RootStackScreenProps } from "../types";
-import React, { FormEvent, useEffect, useState } from "react";
-import { Product, Review, Tag } from "../Interfaces";
-import {
-  addNewDoc,
-  getOneDocById,
-  setOneDoc,
-  updateSingleProperty,
-} from "../helper";
+import React, { useEffect, useState } from "react";
+import { Product, Tag } from "../Interfaces";
+import { addNewDoc, getOneDocById, updateSingleProperty } from "../helper";
 import { EvilIcons } from "@expo/vector-icons";
 import { RateActive } from "../components/RateActive";
 import ImageUpload from "../components/ImageUpload";

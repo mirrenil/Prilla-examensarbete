@@ -9,57 +9,58 @@ import { RootTabScreenProps } from "../types";
 import { ActivityCard } from "../components/ActivityCard";
 import { getAdditionalUserInfo } from "firebase/auth";
 
-export default function StartScreen({ navigation,}: RootTabScreenProps<"Home">) {
-	const [loaded] = useFonts({
-		Inter: require('../assets/fonts/Inter-VariableFont_slnt,wght.ttf'),
-		Caramel: require('../assets/fonts/Caramel-Regular.ttf'),
-		OleoScript: require('../assets/fonts/OleoScript-Regular.ttf'),
-	});
-	const [reviews, setReviews] = useState<Review[]>([]);
+export default function StartScreen({
+  navigation,
+}: RootTabScreenProps<"Home">) {
+  const [loaded] = useFonts({
+    Inter: require("../assets/fonts/Inter-VariableFont_slnt,wght.ttf"),
+    Caramel: require("../assets/fonts/Caramel-Regular.ttf"),
+    OleoScript: require("../assets/fonts/OleoScript-Regular.ttf"),
+  });
+  const [reviews, setReviews] = useState<Review[]>([]);
 
+  useEffect(() => {
+    getReviews();
+  }, []);
 
-	useEffect(() => {
-		getReviews();
-	}, []);
+  const getReviews = async () => {
+    let newData = [];
+    let data = await getAllDocsInCollection("recensioner");
 
-	const getReviews = async () => {
-		let newData = [];
-		let data = await getAllDocsInCollection('recensioner');
+    if (data?.length) {
+      newData = data;
+    }
+    setReviews(newData);
+  };
 
-		if (data?.length) {
-			newData = data;
-		}
-		setReviews(newData);
-	};
-
-	return (
-		<ScrollView>
-			<View style={styles.container}>
-				<Image
-					style={styles.heroImg}
-					source={require('../assets/images/hero.png')}
-				/>
-				<View style={styles.heroTextWrapper}>
-					<Text style={styles.heroText}>äventyr väntar</Text>
-					<Text style={styles.numbers}>
-						20<Text style={styles.specialFont}>23</Text>
-					</Text>
-					<View style={styles.separator} lightColor="#fff" darkColor="#fff" />
-					<View style={styles.logosWrapper}>
-						<Text style={styles.prilla}>Prilla</Text>
-						<Image
-							style={styles.logo}
-							source={require('../assets/images/loop.png')}
-						/>
-					</View>
-				</View>
-			</View>
-			<Tabbar />
-			{reviews.map((review) => {
-        return <ActivityCard key={review.id} review={review}/>
-			})}
-		</ScrollView>
-	);
+  return (
+    <ScrollView>
+      <View style={styles.container}>
+        <Image
+          style={styles.heroImg}
+          source={require("../assets/images/hero.png")}
+        />
+        <View style={styles.heroTextWrapper}>
+          <Text style={styles.heroText}>äventyr väntar</Text>
+          <Text style={styles.numbers}>
+            20<Text style={styles.specialFont}>23</Text>
+          </Text>
+          <View style={styles.separator} lightColor="#fff" darkColor="#fff" />
+          <View style={styles.logosWrapper}>
+            <Text style={styles.prilla}>Prilla</Text>
+            <Image
+              style={styles.logo}
+              source={require("../assets/images/loop.png")}
+            />
+          </View>
+        </View>
+      </View>
+      <Tabbar />
+      {reviews.map((review) => {
+        return <ActivityCard key={review.id} review={review} />;
+      })}
+    </ScrollView>
+  );
 }
 
 const styles = StyleSheet.create({

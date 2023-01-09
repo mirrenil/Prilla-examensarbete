@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { View, Image, Text, StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { getOneDocById } from "../helper";
-import { Tag, Review, Product } from "../Interfaces";
+import { Review, Product } from "../Interfaces";
 import { RateInactive } from "./RateInactive";
 
 interface Props {
