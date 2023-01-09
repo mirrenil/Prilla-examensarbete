@@ -36,8 +36,10 @@ function ProductDetailScreen({
   const [reviews, setReviews] = useState<ReviewWithAuthor[]>([]);
   const [like, setLike] = useState<boolean>(false);
   const myUser = useSelector(currentReduxUser);
-  const favoritesArray: any = [];
+  let favoritesArray: any = [];
   let likedProducts: any = [];
+
+  const [usersLikedArray, setUsersLikedArray] = useState<string[]>([]);
 
   useEffect(() => {
     getProductReviews();
@@ -88,52 +90,62 @@ function ProductDetailScreen({
     }
   };
 
+  //ÄNDRAT HÄR
   // Favorite functionality
   const getLiked = async () => {
     try {
-      const favorites = await getOneDocById("users", myUser.id);
-      for (let i = 0; i < favorites?.liked.length; i++) {
-        favoritesArray.push(favorites?.liked[i]);
-      }
+      const user = await getOneDocById("users", myUser.id);
+      setUsersLikedArray(user?.liked);
+
+      // for (let i = 0; i < user?.liked.length; i++) {
+      //   favoritesArray.push(user?.liked[i]);
+      // }
     } catch (err) {
       console.log(err);
     }
-    compareLikedIds();
+    // compareLikedIds();
   };
 
   // get the products with same ID from the favorites array
-  const compareLikedIds = async () => {
-    const products = await getAllDocsInCollection("produkter");
-    if (!products) return;
-    if (products) {
-      likedProducts = products.filter((product) =>
-        favoritesArray.includes(product.id)
-      );
-      return likedProducts;
-    }
-  };
+  // const compareLikedIds = async () => {
+  //   const products = await getAllDocsInCollection("produkter");
+  //   if (!products) return;
+  //   if (products) {
+  //     likedProducts = products.filter((product) =>
+  //       favoritesArray.includes(product.id)
+  //     );
+  //     return likedProducts;
+  //   }
+  // };
 
-  const currentProduct = () => {
-    // check if current product is liked
-    if (route.params.id) {
-      likedProducts.forEach((product) => {
-        if (product.id === route.params.id) {
-          setLike(true);
-        }
-      });
-      addLikedToDb(route.params.id);
-      console.log("is liked");
-    } else {
-      console.log("is not liked");
-    }
+  // ÄNDRAT HÄR
+  const isAlreadyLiked = () => {
+    let selected = usersLikedArray.some((item) => {
+      console.log(item == route.params.id);
+      return item == route.params.id;
+    });
+    return selected;
+
+    // if (route.params.id) {
+    //   likedProducts.forEach((product) => {
+    //     if (product.id === route.params.id) {
+    //       setLike(true);
+    //     }
+    //   });
+    //   addLikedToDb(route.params.id);
+    //   console.log("is liked");
+    // } else {
+    //   console.log("is not liked");
+    // }
     // if yes the heart should be red
     // if no the heart should have a white border
   };
-  console.log(likedProducts);
 
-  const addLikedToDb = async (id: string) => {
-    likedProducts.push(id);
-    let newData = { liked: likedProducts };
+  //ÄNDRAT LITE HÄR
+  const addLikedToDb = async () => {
+    let newArray = [...usersLikedArray];
+    newArray.push(route.params.id);
+    const newData = { liked: newArray };
     try {
       await updateSingleProperty("users", myUser.id, newData);
     } catch (err) {
@@ -141,10 +153,15 @@ function ProductDetailScreen({
     }
   };
 
+  // ÄNDRAT HÄR
   const toggleLike = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    // If I like a product it should be pushed to the liked array
-    currentProduct();
+
+    if (!isAlreadyLiked()) {
+      addLikedToDb();
+    } else {
+      // remove like from db
+    }
     // if I unlike the product it should be removed from the array
     setLike(!like);
   };
