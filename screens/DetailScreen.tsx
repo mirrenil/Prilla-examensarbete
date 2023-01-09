@@ -11,7 +11,7 @@ import * as Haptics from "expo-haptics";
 import { View, Text } from "../components/Themed";
 import { getDocsWithSpecificValue, getOneDocById } from "../helper";
 import { Product, Review } from "../Interfaces";
-import { RootStackScreenProps } from "../types";
+import { RootStackParamList, RootStackScreenProps } from "../types";
 import { RateInactive } from "../components/RateInactive";
 import { AntDesign } from "@expo/vector-icons";
 import { StrengthBar } from "../components/StrengthBar";

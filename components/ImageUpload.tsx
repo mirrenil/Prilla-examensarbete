@@ -1,11 +1,10 @@
 import * as ImagePicker from "expo-image-picker";
 import { Constants } from "expo-constants";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Platform, Image } from "react-native";
 import { View, Text } from "./Themed";
 import { MaterialIcons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import React from "react";
 
 interface Props {
   handleUpload: (a: any) => void;
@@ -85,7 +84,7 @@ const ImageUpload = ({ handleUpload }: Props) => {
           <MaterialIcons
             name="add-a-photo"
             size={50}
-            color="#783BC9"
+            color="white"
             style={{ paddingBottom: 10 }}
           />
           <Text>Lägg till foto</Text>

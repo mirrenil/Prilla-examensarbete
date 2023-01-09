@@ -4,12 +4,7 @@ import * as Haptics from "expo-haptics";
 import { RootStackScreenProps } from "../types";
 import React, { useEffect, useState } from "react";
 import { Product, Tag } from "../Interfaces";
-import {
-  addNewDoc,
-  getOneDocById,
-  setOneDoc,
-  updateSingleProperty,
-} from "../helper";
+import { addNewDoc, getOneDocById, updateSingleProperty } from "../helper";
 import { EvilIcons } from "@expo/vector-icons";
 import { RateActive } from "../components/RateActive";
 import ImageUpload from "../components/ImageUpload";

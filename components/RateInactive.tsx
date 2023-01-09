@@ -1,6 +1,6 @@
 import { RatingBar } from "@aashu-dubey/react-native-rating-bar";
-import React, { ReactNode } from "react";
-import { StyleSheet, Text, Image } from "react-native";
+import React from "react";
+import { StyleSheet, Image } from "react-native";
 
 interface Props {
   rating: number;
