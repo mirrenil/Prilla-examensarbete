@@ -94,7 +94,8 @@ export default function ProfileScreen({
     }
   };
 
-  const isFollowing = () => {
+  // not working
+  const isAlreadyFollowing = () => {
     let selected = usersFollowersArray.some((item) => {
       console.log(item == route.params.id);
       return item == route.params.id;
@@ -124,11 +125,11 @@ export default function ProfileScreen({
   };
 
   const toggleFollow = () => {
-    console.log(usersFollowersArray);
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    if (!isFollowing()) {
+    if (!isAlreadyFollowing()) {
       addFollowerToDb();
       setFollow(true);
+      console.log("updated", usersFollowersArray);
     } else {
       unfollowFromDb();
       setFollow(false);
