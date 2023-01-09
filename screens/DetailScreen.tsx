@@ -43,7 +43,7 @@ function ProductDetailScreen({
     getProductReviews();
     getProductData();
     getLiked();
-  }, [usersLikedArray]);
+  }, []);
 
   const getProductData = async () => {
     try {
@@ -128,13 +128,13 @@ function ProductDetailScreen({
 
   const toggleLike = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+
     if (!isAlreadyLiked()) {
       addLikedToDb();
-    } else if (isAlreadyLiked()) {
-      // remove like from db
+      setLike(true);
+    } else {
       removeLikedFromDb();
       setLike(false);
-      // if I unlike the product it should be removed from the array
     }
   };
 
@@ -234,10 +234,10 @@ function ProductDetailScreen({
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={toggleLike}>
-                  {usersLikedArray ? (
-                    <AntDesign name="heart" size={24} color="red" />
-                  ) : (
+                  {!like ? (
                     <AntDesign name="hearto" size={24} color="white" />
+                  ) : (
+                    <AntDesign name="heart" size={24} color="red" />
                   )}
                 </TouchableOpacity>
               </View>
