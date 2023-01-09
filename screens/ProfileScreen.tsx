@@ -7,6 +7,7 @@ import {
   Alert,
   Modal,
   Image,
+  Pressable,
 } from "react-native";
 import * as Haptics from "expo-haptics";
 import { Text, View } from "../components/Themed";
@@ -59,9 +60,8 @@ export default function ProfileScreen({
     imagesLoaded();
     checkCurrentUser();
     getFollowersFromDb();
-  }, [isMe, usersFollowersArray]);
+  }, [isMe]);
 
-  console.log(usersFollowersArray);
   const checkCurrentUser = async () => {
     if (!isMe) {
       const user = await getOneDocById("users", route.params.id);
@@ -124,6 +124,7 @@ export default function ProfileScreen({
   };
 
   const toggleFollow = () => {
+    console.log(usersFollowersArray);
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     if (!isFollowing()) {
       addFollowerToDb();
@@ -280,29 +281,32 @@ export default function ProfileScreen({
           )}
 
           {!myProfile && (
-            <TouchableOpacity
-              style={[follow ? styles.borderButtonLike : styles.button]}
-              onPress={toggleFollow}
-            >
+            <View>
               {!follow ? (
-                <Text
-                  darkColor="#201A28"
-                  lightColor="#201A28"
-                  style={[follow ? styles.borderButtonText : styles.buttonText]}
-                >
-                  Följ
-                </Text>
+                <Pressable style={styles.button} onPress={toggleFollow}>
+                  <Text
+                    darkColor="#201A28"
+                    lightColor="#201A28"
+                    style={styles.buttonText}
+                  >
+                    Följ
+                  </Text>
+                </Pressable>
               ) : (
-                <Text
-                  darkColor="#201A28"
-                  lightColor="#201A28"
-                  style={[follow ? styles.borderButtonText : styles.buttonText]}
+                <Pressable
+                  style={styles.borderButtonLike}
+                  onPress={toggleFollow}
                 >
-                  Följer
-                  <AntDesign name="down" size={14} color="white" />
-                </Text>
+                  <Text
+                    darkColor="#fff"
+                    lightColor="#fff"
+                    style={styles.borderButtonText}
+                  >
+                    Följer <AntDesign name="down" size={14} color="white" />
+                  </Text>
+                </Pressable>
               )}
-            </TouchableOpacity>
+            </View>
           )}
         </View>
 
@@ -500,8 +504,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   borderButtonLike: {
-    borderWidth: 0.2,
-    borderColor: "#575060",
+    borderWidth: 0.5,
+    borderColor: "#783BC9",
     padding: 15,
     borderRadius: 6,
     width: 100,
@@ -514,7 +518,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "bold",
     fontSize: 17,
-    color: "#fff",
   },
   box: {
     display: "flex",
