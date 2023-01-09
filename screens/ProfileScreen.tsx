@@ -167,9 +167,9 @@ export default function ProfileScreen({
   if (user) {
     return (
       <ScrollView style={styles.screen}>
-        <View style={styles.container}>
+        <View lightColor="#fff" style={styles.container}>
           {myProfile ? (
-            <View style={styles.top}>
+            <View lightColor="#fff" style={styles.top}>
               <Feather
                 name="settings"
                 size={24}
@@ -178,8 +178,8 @@ export default function ProfileScreen({
               />
             </View>
           ) : null}
-          <View style={styles.topContainer}>
-            <View style={styles.left}>
+          <View lightColor="#fff" style={styles.topContainer}>
+            <View lightColor="#fff" style={styles.left}>
               <Text darkColor="#fff" lightColor="#333" style={styles.text}>
                 Recensioner
               </Text>
@@ -191,7 +191,7 @@ export default function ProfileScreen({
                 {reviews.length}
               </Text>
             </View>
-            <View style={styles.right}>
+            <View lightColor="#fff" style={styles.right}>
               <Text darkColor="#fff" lightColor="#333" style={styles.text}>
                 Följer
               </Text>
@@ -205,14 +205,14 @@ export default function ProfileScreen({
             </View>
           </View>
           {myProfile ? (
-            <View style={styles.center}>
+            <View lightColor="#fff" style={styles.center}>
               <Image source={{ uri: profilePic }} style={styles.image} />
               <Text darkColor="#fff" lightColor="#333" style={styles.text}>
                 {myUser.displayName}
               </Text>
             </View>
           ) : (
-            <View style={styles.center}>
+            <View lightColor="#fff" style={styles.center}>
               <Image source={{ uri: profilePic }} style={styles.image} />
               <Text darkColor="#fff" lightColor="#333" style={styles.text}>
                 {user?.displayName}
@@ -244,14 +244,14 @@ export default function ProfileScreen({
         />
         <View style={styles.favorites}>
           {myProfile ? (
-            <View style={styles.box}>
+            <View lightColor="#fff" style={styles.box}>
               <Text lightColor="#333" darkColor="#fff" style={styles.text}>
                 Mina favoriter
                 <AntDesign name="right" size={16} color="white" />
               </Text>
             </View>
           ) : (
-            <View style={styles.box}>
+            <View lightColor="#fff" style={styles.box}>
               <Text lightColor="#333" darkColor="#fff" style={styles.text}>
                 {user.displayName}'s favoriter
                 <AntDesign name="right" size={16} color="white" />
@@ -259,7 +259,7 @@ export default function ProfileScreen({
             </View>
           )}
 
-          <View style={styles.row}>
+          <View lightColor="#fff" style={styles.row}>
             {urls.map((url, index) => (
               <Image
                 key={index}
@@ -276,16 +276,16 @@ export default function ProfileScreen({
           lightColor="#D3D3D3"
           darkColor="rgba(255,255,255,0.1)"
         />
-        <View style={styles.activities}>
+        <View lightColor="#fff" style={styles.activities}>
           {myProfile ? (
-            <View style={styles.box}>
+            <View lightColor="#fff" style={styles.box}>
               <Text lightColor="#333" darkColor="#fff" style={styles.text}>
                 Mina aktiviteter
               </Text>
               <AntDesign name="right" size={20} color="white" />
             </View>
           ) : (
-            <View style={styles.box}>
+            <View lightColor="#fff" style={styles.box}>
               <Text lightColor="#333" darkColor="#fff" style={styles.text}>
                 {user.displayName}'s aktiviteter
               </Text>
