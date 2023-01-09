@@ -10,13 +10,13 @@ import {
 import * as Haptics from "expo-haptics";
 import { View, Text } from "../components/Themed";
 import { getDocsWithSpecificValue, getOneDocById } from "../helper";
-import { Product, Review } from "../Interfaces";
-import { RootStackParamList, RootStackScreenProps } from "../types";
+import { Product, Review, User } from "../Interfaces";
+import { RootStackScreenProps } from "../types";
 import { RateInactive } from "../components/RateInactive";
 import { AntDesign } from "@expo/vector-icons";
 import { StrengthBar } from "../components/StrengthBar";
-import { User } from "../Interfaces";
-import { connectFirestoreEmulator } from "firebase/firestore";
+import { useSelector } from "react-redux";
+import { currentReduxUser } from "../redux/signin";
 
 interface ReviewWithAuthor extends Review {
   author: string;
@@ -30,11 +30,28 @@ function ProductDetailScreen({
   const [activeTab, setActiveTab] = useState<number>(3);
   const [reviews, setReviews] = useState<ReviewWithAuthor[]>([]);
   const [like, setLike] = useState<boolean>(false);
+  const myUser = useSelector(currentReduxUser);
+  const [myDetailScreen, setMyDetailScreen] = useState<boolean>(false);
+  const [user, setUser] = useState<User>();
+  let isMe = route.params.id === myUser.id;
 
   useEffect(() => {
     getProductReviews();
     getProductData();
-  }, []);
+    checkCurrentUser();
+  }, [isMe]);
+
+  console.log(isMe, user?.email);
+
+  const checkCurrentUser = async () => {
+    if (!isMe) {
+      const user = await getOneDocById("users", route.params.id);
+      setUser(user as User);
+    } else {
+      setMyDetailScreen(true);
+      setUser(myUser);
+    }
+  };
 
   const getProductData = async () => {
     try {

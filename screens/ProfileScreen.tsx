@@ -57,6 +57,7 @@ export default function ProfileScreen({
     checkCurrentUser();
   }, [isMe]);
 
+  console.log(isMe, user?.displayName);
   const checkCurrentUser = async () => {
     if (!isMe) {
       const user = await getOneDocById("users", route.params.id);
