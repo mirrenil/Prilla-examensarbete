@@ -184,7 +184,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
       height: "100%",
       width: "100%",
       position: "absolute",
-      top: 0,
+      top: -100,
       right: 0,
       backgroundColor: "rgba(0,0,0,0.7)",
       zIndex: 100,
@@ -194,7 +194,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
     popUp: {
       backgroundColor: Colors[colorScheme].primary.dark,
       width: "80%",
-      height: 200,
+      height: 250,
       justifyContent: "space-around",
       alignItems: "center",
       padding: 10,
@@ -205,16 +205,32 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
     buttons: {
       flexDirection: "row",
       justifyContent: "space-around",
-      width: "100%",
+      width: "80%",
+      backgroundColor: "transparent",
     },
-    button: {},
+    button: {
+      padding: 15,
+      borderRadius: 6,
+      width: 80,
+      height: 45,
+      justifyContent: "center",
+      textAlign: "center",
+      backgroundColor: "transparent",
+      borderColor: "#783bc9",
+      borderWidth: 0.2,
+    },
     input: {
       width: "70%",
       backgroundColor: "white",
       height: 100,
       color: "black",
       borderRadius: 6,
-      padding: 10,
+      padding: 5,
+      borderWidth: 0.2,
+      borderColor: "#783bc9",
+    },
+    textButton: {
+      fontWeight: "bold",
     },
   });
 
@@ -247,14 +263,22 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
               style={popupStyles.button}
               onPress={() => setPopUpOpen(false)}
             >
-              <View>
-                <Text>Avbryt</Text>
-              </View>
+              <Text
+                style={popupStyles.textButton}
+                darkColor="#FFFD54"
+                lightColor="#2E233B"
+              >
+                Avbryt
+              </Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={handleSubmit}>
-              <View>
-                <Text>Spara</Text>
-              </View>
+            <TouchableOpacity style={popupStyles.button} onPress={handleSubmit}>
+              <Text
+                style={popupStyles.textButton}
+                darkColor="#FFFD54"
+                lightColor="#2E233B"
+              >
+                Spara
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
