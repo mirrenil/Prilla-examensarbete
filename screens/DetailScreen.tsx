@@ -15,8 +15,6 @@ import { RootStackScreenProps } from "../types";
 import { RateInactive } from "../components/RateInactive";
 import { AntDesign } from "@expo/vector-icons";
 import { StrengthBar } from "../components/StrengthBar";
-import { User } from "../Interfaces";
-import { connectFirestoreEmulator } from "firebase/firestore";
 
 interface ReviewWithAuthor extends Review {
   author: string;

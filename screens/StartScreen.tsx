@@ -7,7 +7,6 @@ import { Review } from "../Interfaces";
 import Tabbar from "../components/Tabbar";
 import { RootTabScreenProps } from "../types";
 import { ActivityCard } from "../components/ActivityCard";
-import { getAdditionalUserInfo } from "firebase/auth";
 
 export default function StartScreen({
   navigation,
