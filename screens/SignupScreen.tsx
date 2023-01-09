@@ -26,6 +26,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
       createdAt: new Date(),
       photo: "",
       liked: [],
+      following: [],
     };
     setOneDoc("users", auth.currentUser?.uid, userToDB);
   };
