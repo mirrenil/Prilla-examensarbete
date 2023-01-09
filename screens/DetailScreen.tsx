@@ -9,7 +9,12 @@ import {
 } from "react-native";
 import * as Haptics from "expo-haptics";
 import { View, Text } from "../components/Themed";
-import { getDocsWithSpecificValue, getOneDocById } from "../helper";
+import {
+  getAllDocsInCollection,
+  getDocsWithSpecificValue,
+  getOneDocById,
+  updateSingleProperty,
+} from "../helper";
 import { Product, Review, User } from "../Interfaces";
 import { RootStackScreenProps } from "../types";
 import { RateInactive } from "../components/RateInactive";
@@ -31,27 +36,14 @@ function ProductDetailScreen({
   const [reviews, setReviews] = useState<ReviewWithAuthor[]>([]);
   const [like, setLike] = useState<boolean>(false);
   const myUser = useSelector(currentReduxUser);
-  const [myDetailScreen, setMyDetailScreen] = useState<boolean>(false);
-  const [user, setUser] = useState<User>();
-  let isMe = route.params.id === myUser.id;
+  const favoritesArray: any = [];
+  let likedProducts: any = [];
 
   useEffect(() => {
     getProductReviews();
     getProductData();
-    checkCurrentUser();
-  }, [isMe]);
-
-  console.log(isMe, user?.email);
-
-  const checkCurrentUser = async () => {
-    if (!isMe) {
-      const user = await getOneDocById("users", route.params.id);
-      setUser(user as User);
-    } else {
-      setMyDetailScreen(true);
-      setUser(myUser);
-    }
-  };
+    getLiked();
+  }, []);
 
   const getProductData = async () => {
     try {
@@ -95,8 +87,65 @@ function ProductDetailScreen({
       console.log(err);
     }
   };
-  const toggleButton = () => {
+
+  // Favorite functionality
+  const getLiked = async () => {
+    try {
+      const favorites = await getOneDocById("users", myUser.id);
+      for (let i = 0; i < favorites?.liked.length; i++) {
+        favoritesArray.push(favorites?.liked[i]);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    compareLikedIds();
+  };
+
+  // get the products with same ID from the favorites array
+  const compareLikedIds = async () => {
+    const products = await getAllDocsInCollection("produkter");
+    if (!products) return;
+    if (products) {
+      likedProducts = products.filter((product) =>
+        favoritesArray.includes(product.id)
+      );
+      return likedProducts;
+    }
+  };
+
+  const currentProduct = () => {
+    // check if current product is liked
+    if (route.params.id) {
+      likedProducts.forEach((product) => {
+        if (product.id === route.params.id) {
+          setLike(true);
+        }
+      });
+      addLikedToDb(route.params.id);
+      console.log("is liked");
+    } else {
+      console.log("is not liked");
+    }
+    // if yes the heart should be red
+    // if no the heart should have a white border
+  };
+  console.log(likedProducts);
+
+  const addLikedToDb = async (id: string) => {
+    likedProducts.push(id);
+    let newData = { liked: likedProducts };
+    try {
+      await updateSingleProperty("users", myUser.id, newData);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const toggleLike = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    // If I like a product it should be pushed to the liked array
+    currentProduct();
+    // if I unlike the product it should be removed from the array
     setLike(!like);
   };
 
@@ -195,7 +244,7 @@ function ProductDetailScreen({
                   </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={toggleButton}>
+                <TouchableOpacity onPress={toggleLike}>
                   {like ? (
                     <AntDesign name="heart" size={24} color="red" />
                   ) : (
