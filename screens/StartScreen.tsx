@@ -49,7 +49,7 @@ export default function StartScreen({
             <Text style={styles.prilla}>Prilla</Text>
             <Image
               style={styles.logo}
-              source={require("../assets/images/loop.png")}
+              source={require("../assets/images/LOOP.png")}
             />
           </View>
         </View>
