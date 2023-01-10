@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
-import { useFonts } from "expo-font";
 import { getAllDocsInCollection } from "../helper";
 import { Review } from "../Interfaces";
 import Tabbar from "../components/Tabbar";
@@ -11,16 +10,11 @@ import { ActivityCard } from "../components/ActivityCard";
 export default function StartScreen({
   navigation,
 }: RootTabScreenProps<"Home">) {
-  const [loaded] = useFonts({
-    Inter: require("../assets/fonts/Inter-VariableFont_slnt,wght.ttf"),
-    Caramel: require("../assets/fonts/Caramel-Regular.ttf"),
-    OleoScript: require("../assets/fonts/OleoScript-Regular.ttf"),
-  });
   const [reviews, setReviews] = useState<Review[]>([]);
 
   useEffect(() => {
     getReviews();
-  }, [loaded]);
+  }, []);
 
   const getReviews = async () => {
     let newData = [];
