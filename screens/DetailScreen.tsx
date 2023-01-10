@@ -9,14 +9,19 @@ import {
 } from "react-native";
 import * as Haptics from "expo-haptics";
 import { View, Text } from "../components/Themed";
-import { getDocsWithSpecificValue, getOneDocById } from "../helper";
-import { Product, Review } from "../Interfaces";
-import { RootStackParamList, RootStackScreenProps } from "../types";
+import {
+  getAllDocsInCollection,
+  getDocsWithSpecificValue,
+  getOneDocById,
+  updateSingleProperty,
+} from "../helper";
+import { Product, Review, User } from "../Interfaces";
+import { RootStackScreenProps } from "../types";
 import { RateInactive } from "../components/RateInactive";
 import { AntDesign } from "@expo/vector-icons";
 import { StrengthBar } from "../components/StrengthBar";
-import { User } from "../Interfaces";
-import { connectFirestoreEmulator } from "firebase/firestore";
+import { useSelector } from "react-redux";
+import { currentReduxUser } from "../redux/signin";
 
 interface ReviewWithAuthor extends Review {
   author: string;
@@ -29,11 +34,14 @@ function ProductDetailScreen({
   const [product, setProduct] = useState<Product>();
   const [activeTab, setActiveTab] = useState<number>(3);
   const [reviews, setReviews] = useState<ReviewWithAuthor[]>([]);
-  const [like, setLike] = useState<boolean>(false);
+  const [liked, setLiked] = useState<boolean>(false);
+  const myUser = useSelector(currentReduxUser);
+  const [usersLikedArray, setUsersLikedArray] = useState<string[]>([]);
 
   useEffect(() => {
     getProductReviews();
     getProductData();
+    getLiked();
   }, []);
 
   const getProductData = async () => {
@@ -48,7 +56,7 @@ function ProductDetailScreen({
   };
 
   const getProductReviews = async () => {
-    let newList = [];
+    let newList: ReviewWithAuthor[] = [];
     try {
       const reviewsDocs = await getDocsWithSpecificValue(
         "recensioner",
@@ -58,7 +66,7 @@ function ProductDetailScreen({
       if (reviewsDocs) {
         for (let rev of reviewsDocs) {
           let name = await getReviewAuthor(rev.userID);
-          newList.push({ ...rev, author: name });
+          newList.push({ ...rev, author: name } as ReviewWithAuthor);
         }
         setReviews(newList);
       }
@@ -78,9 +86,56 @@ function ProductDetailScreen({
       console.log(err);
     }
   };
-  const toggleButton = () => {
+
+  const getLiked = async () => {
+    try {
+      const user = await getOneDocById("users", myUser.id);
+      setUsersLikedArray(user?.liked);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const isAlreadyLiked = () => {
+    let selected = usersLikedArray.some((item) => {
+      return item == route.params.id;
+    });
+    return selected;
+  };
+
+  const addLikedToDb = async () => {
+    let newArray = [...usersLikedArray];
+    newArray.push(route.params.id);
+    const newData = { liked: newArray };
+    try {
+      await updateSingleProperty("users", myUser.id, newData);
+      setUsersLikedArray(newArray);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const removeLikedFromDb = async () => {
+    let newArray = usersLikedArray.filter((item) => item !== product?.id);
+    const newData = { liked: newArray };
+    try {
+      await updateSingleProperty("users", myUser.id, newData);
+      setUsersLikedArray(newArray);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const toggleLike = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setLike(!like);
+
+    if (!isAlreadyLiked()) {
+      addLikedToDb();
+      setLiked(true);
+    } else {
+      removeLikedFromDb();
+      setLiked(false);
+    }
   };
 
   const renderFolderContent = () => {
@@ -178,11 +233,11 @@ function ProductDetailScreen({
                   </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={toggleButton}>
-                  {like ? (
-                    <AntDesign name="heart" size={24} color="red" />
-                  ) : (
+                <TouchableOpacity onPress={toggleLike}>
+                  {!isAlreadyLiked() ? (
                     <AntDesign name="hearto" size={24} color="white" />
+                  ) : (
+                    <AntDesign name="heart" size={24} color="red" />
                   )}
                 </TouchableOpacity>
               </View>

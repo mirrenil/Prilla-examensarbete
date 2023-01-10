@@ -70,11 +70,11 @@ export const setOneDoc = async (collectionName, newData, id) => {
 
 export const updateSingleProperty = async (
   collectionName,
-  document,
+  documentId,
   newData
 ) => {
   try {
-    const docRef = doc(db, collectionName, document);
+    const docRef = doc(db, collectionName, documentId);
     updateDoc(docRef, newData).then((docRef) => {
       console.log("value has been updated");
     });
