@@ -7,18 +7,15 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   useColorScheme,
-  ColorSchemeName,
 } from "react-native";
 import * as Haptics from "expo-haptics";
 import { View, Text } from "../components/Themed";
 import { getDocsWithSpecificValue, getOneDocById } from "../helper";
 import { Product, Review } from "../Interfaces";
-import { RootStackParamList, RootStackScreenProps } from "../types";
+import { RootStackScreenProps } from "../types";
 import { RateInactive } from "../components/RateInactive";
 import { AntDesign } from "@expo/vector-icons";
 import { StrengthBar } from "../components/StrengthBar";
-import { User } from "../Interfaces";
-import { connectFirestoreEmulator } from "firebase/firestore";
 import Colors, { gradientDark, gradientLight } from "../constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -54,7 +51,7 @@ function ProductDetailScreen({
   };
 
   const getProductReviews = async () => {
-    let newList = [];
+    let newList: ReviewWithAuthor[] = [];
     try {
       const reviewsDocs = await getDocsWithSpecificValue(
         "recensioner",
@@ -64,7 +61,7 @@ function ProductDetailScreen({
       if (reviewsDocs) {
         for (let rev of reviewsDocs) {
           let name = await getReviewAuthor(rev.userID);
-          newList.push({ ...rev, author: name });
+          newList.push({ ...rev, author: name } as ReviewWithAuthor);
         }
         setReviews(newList);
       }
