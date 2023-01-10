@@ -234,7 +234,7 @@ function ProductDetailScreen({
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={toggleLike}>
-                  {!like ? (
+                  {!usersLikedArray ? (
                     <AntDesign name="hearto" size={24} color="white" />
                   ) : (
                     <AntDesign name="heart" size={24} color="red" />
