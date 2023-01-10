@@ -34,10 +34,9 @@ function ProductDetailScreen({
   const [product, setProduct] = useState<Product>();
   const [activeTab, setActiveTab] = useState<number>(3);
   const [reviews, setReviews] = useState<ReviewWithAuthor[]>([]);
-  const [like, setLike] = useState<boolean>(false);
+  const [liked, setLiked] = useState<boolean>(false);
   const myUser = useSelector(currentReduxUser);
   const [usersLikedArray, setUsersLikedArray] = useState<string[]>([]);
-  let newArray = [...usersLikedArray];
 
   useEffect(() => {
     getProductReviews();
@@ -57,7 +56,7 @@ function ProductDetailScreen({
   };
 
   const getProductReviews = async () => {
-    let newList = [];
+    let newList: ReviewWithAuthor[] = [];
     try {
       const reviewsDocs = await getDocsWithSpecificValue(
         "recensioner",
@@ -67,7 +66,7 @@ function ProductDetailScreen({
       if (reviewsDocs) {
         for (let rev of reviewsDocs) {
           let name = await getReviewAuthor(rev.userID);
-          newList.push({ ...rev, author: name });
+          newList.push({ ...rev, author: name } as ReviewWithAuthor);
         }
         setReviews(newList);
       }
@@ -99,28 +98,29 @@ function ProductDetailScreen({
 
   const isAlreadyLiked = () => {
     let selected = usersLikedArray.some((item) => {
-      console.log(item == route.params.id);
       return item == route.params.id;
     });
     return selected;
   };
 
   const addLikedToDb = async () => {
+    let newArray = [...usersLikedArray];
     newArray.push(route.params.id);
     const newData = { liked: newArray };
     try {
       await updateSingleProperty("users", myUser.id, newData);
+      setUsersLikedArray(newArray);
     } catch (err) {
       console.log(err);
     }
   };
 
   const removeLikedFromDb = async () => {
-    let index = newArray.indexOf(route.params.id);
-    newArray.splice(index, 1);
+    let newArray = usersLikedArray.filter((item) => item !== product?.id);
     const newData = { liked: newArray };
     try {
       await updateSingleProperty("users", myUser.id, newData);
+      setUsersLikedArray(newArray);
     } catch (err) {
       console.log(err);
     }
@@ -131,10 +131,10 @@ function ProductDetailScreen({
 
     if (!isAlreadyLiked()) {
       addLikedToDb();
-      setLike(true);
+      setLiked(true);
     } else {
       removeLikedFromDb();
-      setLike(false);
+      setLiked(false);
     }
   };
 
@@ -234,7 +234,7 @@ function ProductDetailScreen({
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={toggleLike}>
-                  {!like ? (
+                  {!isAlreadyLiked() ? (
                     <AntDesign name="hearto" size={24} color="white" />
                   ) : (
                     <AntDesign name="heart" size={24} color="red" />
