@@ -96,11 +96,10 @@ export default function ProfileScreen({
 
   // check if user is already following
   const isAlreadyFollowing = () => {
-    if (usersFollowersArray.includes(route.params.id)) {
-      return true;
-    } else {
-      return false;
-    }
+    let selected = usersFollowersArray.some((item) => {
+      return item == route.params.id;
+    });
+    return selected;
   };
 
   const addFollowerToDb = async () => {
@@ -283,17 +282,7 @@ export default function ProfileScreen({
 
           {!myProfile && (
             <View>
-              {usersFollowersArray ? (
-                <Pressable style={styles.button} onPress={toggleFollow}>
-                  <Text
-                    darkColor="#fff"
-                    lightColor="#fff"
-                    style={styles.borderButtonText}
-                  >
-                    Följer <AntDesign name="down" size={14} color="white" />
-                  </Text>
-                </Pressable>
-              ) : (
+              {!isAlreadyFollowing() ? (
                 <Pressable
                   style={styles.borderButtonFollow}
                   onPress={toggleFollow}
@@ -304,6 +293,16 @@ export default function ProfileScreen({
                     style={styles.buttonText}
                   >
                     Följ
+                  </Text>
+                </Pressable>
+              ) : (
+                <Pressable style={styles.button} onPress={toggleFollow}>
+                  <Text
+                    darkColor="#fff"
+                    lightColor="#fff"
+                    style={styles.borderButtonText}
+                  >
+                    Följer <AntDesign name="down" size={14} color="white" />
                   </Text>
                 </Pressable>
               )}
