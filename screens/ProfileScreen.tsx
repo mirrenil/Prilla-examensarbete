@@ -72,6 +72,8 @@ export default function ProfileScreen({
     }
   };
 
+  console.log(user?.following);
+
   const getReviews = async () => {
     try {
       let data = await getDocsWithSpecificValue(
@@ -94,13 +96,13 @@ export default function ProfileScreen({
     }
   };
 
-  // not working
+  // check if user is already following
   const isAlreadyFollowing = () => {
-    let selected = usersFollowersArray.some((item) => {
-      console.log(item == route.params.id);
-      return item == route.params.id;
-    });
-    return selected;
+    if (usersFollowersArray.includes(route.params.id)) {
+      return true;
+    } else {
+      return false;
+    }
   };
 
   const addFollowerToDb = async () => {
@@ -260,7 +262,7 @@ export default function ProfileScreen({
                   lightColor="#fff"
                   style={styles.textMedium}
                 >
-                  Finns inte
+                  {user?.following.length}
                 </Text>
               )}
             </View>
@@ -283,27 +285,27 @@ export default function ProfileScreen({
 
           {!myProfile && (
             <View>
-              {!follow ? (
+              {usersFollowersArray ? (
                 <Pressable style={styles.button} onPress={toggleFollow}>
-                  <Text
-                    darkColor="#201A28"
-                    lightColor="#201A28"
-                    style={styles.buttonText}
-                  >
-                    Följ
-                  </Text>
-                </Pressable>
-              ) : (
-                <Pressable
-                  style={styles.borderButtonLike}
-                  onPress={toggleFollow}
-                >
                   <Text
                     darkColor="#fff"
                     lightColor="#fff"
                     style={styles.borderButtonText}
                   >
                     Följer <AntDesign name="down" size={14} color="white" />
+                  </Text>
+                </Pressable>
+              ) : (
+                <Pressable
+                  style={styles.borderButtonFollow}
+                  onPress={toggleFollow}
+                >
+                  <Text
+                    darkColor="#201A28"
+                    lightColor="#201A28"
+                    style={styles.buttonText}
+                  >
+                    Följ
                   </Text>
                 </Pressable>
               )}
@@ -480,7 +482,9 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   button: {
-    backgroundColor: "#FFFD54",
+    borderColor: "#575060",
+    borderWidth: 0.2,
+    backgroundColor: "transparent",
     padding: 10,
     borderRadius: 6,
     width: 100,
@@ -494,23 +498,22 @@ const styles = StyleSheet.create({
     fontSize: 17,
   },
   borderButton: {
-    borderWidth: 0.2,
-    borderColor: "#575060",
     padding: 15,
     borderRadius: 6,
     width: 300,
-    height: 50,
+    height: 40,
     marginTop: 10,
     marginBottom: 10,
     textAlign: "center",
   },
-  borderButtonLike: {
+  borderButtonFollow: {
+    backgroundColor: "#FFFD54",
     borderWidth: 0.5,
     borderColor: "#783BC9",
-    padding: 15,
+    padding: 10,
     borderRadius: 6,
     width: 100,
-    height: 50,
+    height: 40,
     marginTop: 10,
     marginBottom: 10,
     textAlign: "center",
