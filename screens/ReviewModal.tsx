@@ -18,6 +18,8 @@ import { DarkTheme } from "@react-navigation/native";
 import Tags from "../components/Tags";
 import Colors, { gradientDark, gradientLight } from "../constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
+import { useSelector } from "react-redux";
+import { currentReduxUser } from "../redux/signin";
 
 const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
   const [product, setProduct] = useState<Product>();
@@ -28,6 +30,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
   const [image, setImage] = useState<any>();
   const colorScheme: any = useColorScheme();
   let isLight = colorScheme == "light" ? true : false;
+  const myUser = useSelector(currentReduxUser);
 
   useEffect(() => {
     getProductData();
@@ -98,7 +101,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
       photo: image,
       productID: route.params.id,
       rating: rating,
-      userID: "Jg93kssG9mV4gaR72mfa9Lkm5aF2",
+      userID: myUser.id,
     };
     try {
       let docId = await addNewDoc("recensioner", newReview);
