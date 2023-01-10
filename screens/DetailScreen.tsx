@@ -10,12 +10,11 @@ import {
 import * as Haptics from "expo-haptics";
 import { View, Text } from "../components/Themed";
 import {
-  getAllDocsInCollection,
   getDocsWithSpecificValue,
   getOneDocById,
   updateSingleProperty,
 } from "../helper";
-import { Product, Review, User } from "../Interfaces";
+import { Product, Review } from "../Interfaces";
 import { RootStackScreenProps } from "../types";
 import { RateInactive } from "../components/RateInactive";
 import { AntDesign } from "@expo/vector-icons";
