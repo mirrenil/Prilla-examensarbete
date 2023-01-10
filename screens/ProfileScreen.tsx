@@ -60,7 +60,7 @@ export default function ProfileScreen({
     imagesLoaded();
     checkCurrentUser();
     getFollowersFromDb();
-  }, [isMe]);
+  }, [isMe, follow]);
 
   const checkCurrentUser = async () => {
     if (!isMe) {
@@ -126,9 +126,8 @@ export default function ProfileScreen({
   const toggleFollow = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     if (!isAlreadyFollowing()) {
-      addFollowerToDb();
       setFollow(true);
-      console.log("updated", usersFollowersArray);
+      addFollowerToDb();
     } else {
       unfollowFromDb();
       setFollow(false);
