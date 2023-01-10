@@ -44,7 +44,7 @@ export default function StartScreen({
             <Text>x</Text>
             <Image
               style={styles.logo}
-              source={require("../assets/images/LOOP.png")}
+              source={require("../assets/images/loop-logo.png")}
             />
           </View>
         </View>
