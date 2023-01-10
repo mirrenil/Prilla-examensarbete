@@ -72,8 +72,6 @@ export default function ProfileScreen({
     }
   };
 
-  console.log(user?.following);
-
   const getReviews = async () => {
     try {
       let data = await getDocsWithSpecificValue(
