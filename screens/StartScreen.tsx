@@ -7,7 +7,6 @@ import { Review } from "../Interfaces";
 import Tabbar from "../components/Tabbar";
 import { RootTabScreenProps } from "../types";
 import { ActivityCard } from "../components/ActivityCard";
-import { getAdditionalUserInfo } from "firebase/auth";
 
 export default function StartScreen({
   navigation,
@@ -21,7 +20,7 @@ export default function StartScreen({
 
   useEffect(() => {
     getReviews();
-  }, []);
+  }, [loaded]);
 
   const getReviews = async () => {
     let newData = [];
@@ -86,6 +85,7 @@ const styles = StyleSheet.create({
     color: "white",
     textTransform: "uppercase",
     fontFamily: "Inter",
+    fontStyle: "normal",
     fontWeight: "700",
     fontSize: 20,
   },
@@ -104,6 +104,7 @@ const styles = StyleSheet.create({
   },
   specialFont: {
     fontFamily: "Caramel",
+    fontStyle: "normal",
     height: 10,
     fontSize: 70,
   },
