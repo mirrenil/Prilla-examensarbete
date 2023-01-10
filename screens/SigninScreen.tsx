@@ -21,7 +21,6 @@ import { useDispatch } from "react-redux";
 import { setActiveUser } from "../redux/signin";
 import { LinearGradient } from "expo-linear-gradient";
 import { gradientDark, gradientLight } from "../constants/Colors";
-import { MaterialIcons } from "@expo/vector-icons";
 
 export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
   const [currentUser, setcurrentUser] = useState<User>();

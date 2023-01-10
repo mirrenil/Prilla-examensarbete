@@ -1,6 +1,11 @@
 import * as WebBrowser from "expo-web-browser";
 import React, { useEffect, useState } from "react";
-import { Alert, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  Alert,
+  StyleSheet,
+  TouchableOpacity,
+  useColorScheme,
+} from "react-native";
 import { Text, View, TextInput } from "../components/Themed";
 import { Formik } from "formik";
 import * as yup from "yup";
@@ -9,6 +14,8 @@ import { auth } from "../firebase";
 import { setOneDoc } from "../helper";
 import { RootStackScreenProps } from "../types";
 import * as Haptics from "expo-haptics";
+import { LinearGradient } from "expo-linear-gradient";
+import { gradientDark, gradientLight } from "../constants/Colors";
 
 export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
   const [user, setUser] = useState({
@@ -17,6 +24,9 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
     password: "",
     passwordConfirmation: "",
   });
+
+  const colorScheme: any = useColorScheme();
+  let isLight = colorScheme == "light" ? true : false;
 
   const addUserToDb = async () => {
     const userToDB = {
@@ -60,7 +70,14 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
   };
 
   return (
-    <View style={styles.screen}>
+    <LinearGradient
+      colors={
+        isLight
+          ? [gradientLight.from, gradientLight.to]
+          : [gradientDark.from, gradientDark.to]
+      }
+      style={styles.screen}
+    >
       <Text style={styles.title}>Prilla</Text>
       <Text style={styles.slogan}>GOTTA SNUS THEM ALL</Text>
       <View
@@ -169,7 +186,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
           );
         }}
       </Formik>
-    </View>
+    </LinearGradient>
   );
 }
 
