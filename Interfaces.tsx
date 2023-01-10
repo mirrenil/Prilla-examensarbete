@@ -6,7 +6,7 @@ export interface Review {
   rating: number;
   tags: Tag[];
   userID: string;
-  id?: string;
+  id: string;
 }
 
 export interface Tag {
