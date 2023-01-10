@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { getOneDocById } from "../helper";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
+import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 
 interface Props {
   review: Review;
@@ -39,6 +40,22 @@ export const ActivityCard = ({ review }: Props) => {
         </View>
         <ReviewCard key={review.id} review={review} />
       </ImageBackground>
+      <View style={styles.social}>
+        <TouchableOpacity onPress={toggleButton}>
+          {like ? (
+            <AntDesign name="heart" size={24} color="#783BC9" />
+          ) : (
+            <AntDesign name="hearto" size={26} color="#783BC9" />
+          )}
+        </TouchableOpacity>
+
+        <MaterialCommunityIcons
+          style={{ marginLeft: 10 }}
+          name="comment-outline"
+          size={26}
+          color="#783BC9"
+        />
+      </View>
     </View>
   );
 };
@@ -59,5 +76,13 @@ const styles = StyleSheet.create({
   username: {
     fontWeight: "bold",
     marginLeft: 10,
+  },
+  social: {
+    paddingLeft: 10,
+    width: 90,
+    flexDirection: "row",
+    justifyContent: "space-between",
+
+    height: 50,
   },
 });
