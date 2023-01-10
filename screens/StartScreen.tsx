@@ -47,6 +47,7 @@ export default function StartScreen({
           <View style={styles.separator} lightColor="#fff" darkColor="#fff" />
           <View style={styles.logosWrapper}>
             <Text style={styles.prilla}>Prilla</Text>
+            <Text>x</Text>
             <Image
               style={styles.logo}
               source={require("../assets/images/LOOP.png")}
