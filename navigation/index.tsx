@@ -147,24 +147,6 @@ function BottomTabNavigator() {
           tabBarIcon: ({ color }) => (
             <Ionicons name="ios-home-outline" size={30} color={color} />
           ),
-
-          // headerRight: () => (
-          //   <Pressable
-          //     onPress={() => {
-          //       navigation.navigate("Signin");
-          //     }}
-          //     style={({ pressed }) => ({
-          //       opacity: pressed ? 0.5 : 1,
-          //     })}
-          //   >
-          //     <FontAwesome
-          //       name="sign-out"
-          //       size={25}
-          //       color={Colors[colorScheme].text}
-          //       style={{ marginRight: 15 }}
-          //     />
-          //   </Pressable>
-          // ),
         })}
       />
       <BottomTab.Screen
