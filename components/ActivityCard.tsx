@@ -15,6 +15,7 @@ interface Props {
 export const ActivityCard = ({ review }: Props) => {
   const [author, setAuthor] = useState<User>();
   const navigation = useNavigation();
+  const [like, setLike] = useState<boolean>(false);
 
   useEffect(() => {
     getReviewAuthor();
@@ -25,6 +26,11 @@ export const ActivityCard = ({ review }: Props) => {
     if (data) {
       setAuthor(data as User);
     }
+  };
+
+  const toggleButton = () => {
+    // Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setLike(!like);
   };
 
   return (
