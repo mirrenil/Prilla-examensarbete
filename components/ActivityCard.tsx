@@ -35,7 +35,7 @@ export const ActivityCard = ({ review }: Props) => {
   };
 
   return (
-    <View>
+    <View style={styles.wrapper}>
       <ImageBackground
         source={{ uri: review.photo }}
         resizeMode="cover"
@@ -55,30 +55,39 @@ export const ActivityCard = ({ review }: Props) => {
             <AntDesign name="hearto" size={26} color="#783BC9" />
           )}
         </TouchableOpacity>
-
-        <MaterialCommunityIcons
-          style={{ marginLeft: 10 }}
-          name="comment-outline"
-          size={26}
-          color="#783BC9"
-        />
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Comment", { id: review.id })}
+        >
+          <MaterialCommunityIcons
+            style={{ marginLeft: 10 }}
+            name="comment-outline"
+            size={26}
+            color="#783BC9"
+          />
+        </TouchableOpacity>
       </View>
     </View>
   );
 };
 const styles = StyleSheet.create({
+  wrapper: {
+    // backgroundColor: "rgba(255,255,255,0.5)",
+    // borderWidth: 1,
+    // borderColor: "red",
+    marginBottom: 30,
+  },
   image: {
-    marginTop: 10,
     marginBottom: 10,
-    paddingTop: 10,
     paddingBottom: 10,
     minHeight: 230,
     justifyContent: "space-between",
     alignItems: "center",
   },
   userInfo: {
+    backgroundColor: "rgba(0,0,0,0.5)",
     flexDirection: "row",
     width: "100%",
+    height: 50,
   },
   username: {
     fontWeight: "bold",
