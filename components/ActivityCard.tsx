@@ -7,6 +7,7 @@ import { getOneDocById } from "../helper";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
+import * as Haptics from "expo-haptics";
 
 interface Props {
   review: Review;
@@ -29,7 +30,7 @@ export const ActivityCard = ({ review }: Props) => {
   };
 
   const toggleButton = () => {
-    // Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setLike(!like);
   };
 
