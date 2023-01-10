@@ -78,7 +78,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
           password: yup
             .string()
             .min(6, "Password should be of minimum 6 characters length")
-            .required(),
+            .required("Please, provide a password!"),
           passwordConfirmation: yup
             .string()
             .oneOf([yup.ref("password"), null], "Passwords must match"),
@@ -230,8 +230,9 @@ const styles = StyleSheet.create({
     marginRight: 200,
   },
   error: {
-    fontSize: 10,
-    color: "red",
-    margin: 5,
+    fontSize: 12,
+    color: "#BF0404",
+    fontWeight: "bold",
+    margin: 7,
   },
 });

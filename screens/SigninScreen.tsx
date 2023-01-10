@@ -20,7 +20,8 @@ import { auth } from "../firebase";
 import { useDispatch } from "react-redux";
 import { setActiveUser } from "../redux/signin";
 import { LinearGradient } from "expo-linear-gradient";
-import Colors, { gradientDark, gradientLight } from "../constants/Colors";
+import { gradientDark, gradientLight } from "../constants/Colors";
+import { MaterialIcons } from "@expo/vector-icons";
 
 export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
   const [currentUser, setcurrentUser] = useState<User>();
@@ -54,6 +55,7 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
 
       navigation.navigate("Root");
     } catch (error) {
+      Haptics.NotificationFeedbackType.Error;
       Alert.alert("Felaktig email eller lösenord");
     }
   };
@@ -82,7 +84,7 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
           password: yup
             .string()
             .min(6, "Password should be of minimum 6 characters length")
-            .required(),
+            .required("Please, provide a password!"),
         })}
       >
         {({ values, errors, touched, handleBlur, handleChange }) => {
@@ -97,6 +99,10 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
 
           return (
             <View style={styles.container}>
+              {touched.email &&
+                errors.email &&
+                (Haptics.NotificationFeedbackType.Error,
+                (<Text style={styles.error}>{errors.email}</Text>))}
               <TextInput
                 lightColor="#fff"
                 darkColor="#413C48"
@@ -107,9 +113,10 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
                 autoCapitalize="none"
                 onBlur={handleBlur("email")}
               />
-              {touched.email && errors.email && (
-                <Text style={styles.error}>{errors.email}</Text>
-              )}
+              {touched.password &&
+                errors.password &&
+                (Haptics.NotificationFeedbackType.Error,
+                (<Text style={styles.error}>{errors.password}</Text>))}
 
               <TextInput
                 lightColor="#fff"
@@ -122,9 +129,6 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
                 autoCapitalize="none"
                 onBlur={handleBlur("password")}
               />
-              {touched.password && errors.password && (
-                <Text style={styles.error}>{errors.password}</Text>
-              )}
 
               <TouchableOpacity
                 onPress={() => {
@@ -168,7 +172,6 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
 
 const styles = StyleSheet.create({
   screen: {
-    // backgroundColor: "#c19ce5",
     alignItems: "center",
     justifyContent: "center",
     height: "100%",
@@ -176,7 +179,6 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     marginBottom: 50,
-    // backgroundColor: "#c19ce5",
   },
   input: {
     fontSize: 17,
@@ -226,8 +228,9 @@ const styles = StyleSheet.create({
     width: "60%",
   },
   error: {
-    fontSize: 10,
-    color: "red",
-    margin: 5,
+    fontSize: 12,
+    color: "#BF0404",
+    fontWeight: "bold",
+    margin: 7,
   },
 });
