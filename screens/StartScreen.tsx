@@ -7,7 +7,6 @@ import { Review } from "../Interfaces";
 import Tabbar from "../components/Tabbar";
 import { RootTabScreenProps } from "../types";
 import { ActivityCard } from "../components/ActivityCard";
-import { getAdditionalUserInfo } from "firebase/auth";
 
 export default function StartScreen({
   navigation,
@@ -43,7 +42,10 @@ export default function StartScreen({
         <View style={styles.heroTextWrapper}>
           <Text style={styles.heroText}>äventyr väntar</Text>
           <Text style={styles.numbers}>
-            20<Text style={styles.specialFont}>23</Text>
+            20
+            <Text style={styles.specialFont} lightColor="#fff">
+              23
+            </Text>
           </Text>
           <View style={styles.separator} lightColor="#fff" darkColor="#fff" />
           <View style={styles.logosWrapper}>

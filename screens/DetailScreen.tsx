@@ -141,54 +141,67 @@ function ProductDetailScreen({
   const renderFolderContent = () => {
     switch (activeTab) {
       case 1:
-        return <Text>{product?.description}</Text>;
+        return <Text lightColor="#fff">{product?.description}</Text>;
       case 2:
         return (
           <>
-            <View style={styles.folderFacts}>
-              <Text style={styles.fatText}>Varumärke</Text>
-              <Text>{product?.brand}</Text>
+            <View lightColor="#2E233B" style={styles.folderFacts}>
+              <Text lightColor="#fff" style={styles.fatText}>
+                Varumärke
+              </Text>
+              <Text lightColor="#fff">{product?.brand}</Text>
             </View>
-            <View style={styles.folderFacts}>
-              <Text style={styles.fatText}>Namn</Text>
-              <Text>{product?.name}</Text>
+            <View lightColor="#2E233B" style={styles.folderFacts}>
+              <Text lightColor="#fff" style={styles.fatText}>
+                Namn
+              </Text>
+              <Text lightColor="#fff">{product?.name}</Text>
             </View>
-            <View style={styles.folderFacts}>
-              <Text style={styles.fatText}>Smak</Text>
-              <View style={{ flexDirection: "row" }}>
+            <View lightColor="#2E233B" style={styles.folderFacts}>
+              <Text lightColor="#fff" style={styles.fatText}>
+                Smak
+              </Text>
+              <View lightColor="#2E233B" style={{ flexDirection: "row" }}>
                 {product?.flavor.map((f) => {
-                  return <Text>{f} </Text>;
+                  return <Text lightColor="#fff">{f} </Text>;
                 })}
               </View>
             </View>
-            <View style={styles.folderFacts}>
-              <Text style={styles.fatText}>Nikotinhalt</Text>
-              <Text>{product?.nicotine} mg/g</Text>
+            <View lightColor="#2E233B" style={styles.folderFacts}>
+              <Text lightColor="#fff" style={styles.fatText}>
+                Nikotinhalt
+              </Text>
+              <Text lightColor="#fff">{product?.nicotine} mg/g</Text>
             </View>
-            <View style={styles.folderFacts}>
-              <Text style={styles.fatText}>Vikt</Text>
-              <Text>{product?.weight}g</Text>
+            <View lightColor="#2E233B" style={styles.folderFacts}>
+              <Text lightColor="#fff" style={styles.fatText}>
+                Vikt
+              </Text>
+              <Text lightColor="#fff">{product?.weight}g</Text>
             </View>
           </>
         );
       case 3:
         return reviews.map((rev) => {
           return (
-            <View style={styles.reviewWrapper}>
-              <View style={styles.reviewTop}>
+            <View lightColor="#2E233B" style={styles.reviewWrapper}>
+              <View lightColor="#2E233B" style={styles.reviewTop}>
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate("Profile", { id: rev.userID });
                   }}
                 >
-                  <Text style={[styles.fatText, styles.capitalize]}>
+                  <Text
+                    lightColor="#fff"
+                    style={[styles.fatText, styles.capitalize]}
+                  >
                     {rev.author}
                   </Text>
                 </TouchableOpacity>
                 <RateInactive rating={rev.rating} />
-                <Text>{rev.rating}</Text>
+                <Text lightColor="#fff">{rev.rating}</Text>
               </View>
-              <Text>{rev.description}</Text>
+              <Text lightColor="#fff">{rev.description}</Text>
             </View>
           );
         });
@@ -229,7 +242,9 @@ function ProductDetailScreen({
                   }
                 >
                   <View style={styles.button}>
-                    <Text>Lägg till recension</Text>
+                    <Text lightColor="#333" darkColor="#fff">
+                      Lägg till recension
+                    </Text>
                   </View>
                 </TouchableOpacity>
 
@@ -269,7 +284,7 @@ function ProductDetailScreen({
                 onPress={() => setActiveTab(1)}
                 style={[styles.tab, activeTab === 1 ? styles.activeTab : null]}
               >
-                <Text>Beskrivning</Text>
+                <Text lightColor="#fff">Beskrivning</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => setActiveTab(2)}
@@ -279,13 +294,13 @@ function ProductDetailScreen({
                   { marginLeft: 10, marginRight: 10 },
                 ]}
               >
-                <Text>Fakta</Text>
+                <Text lightColor="#fff">Fakta</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => setActiveTab(3)}
                 style={[styles.tab, activeTab === 3 ? styles.activeTab : null]}
               >
-                <Text>Recensioner</Text>
+                <Text lightColor="#fff">Recensioner</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.folderContent}>{renderFolderContent()}</View>
@@ -354,7 +369,7 @@ const styles = StyleSheet.create({
     padding: 10,
     marginRight: 10,
     borderWidth: 1,
-    borderColor: "white",
+    borderColor: "#783BC9",
     borderRadius: 6,
   },
   tableDataContainer: {
@@ -382,11 +397,12 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 6,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(255,255,255,0.2)",
+    backgroundColor: "#7E7885",
   },
   activeTab: {
     backgroundColor: "#2E233B",
   },
+
   folderContent: {
     backgroundColor: "#2E233B",
     padding: 10,
