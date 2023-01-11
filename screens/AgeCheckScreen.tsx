@@ -43,11 +43,11 @@ function AgeCheckScreen({ navigation }: RootStackScreenProps<"AgeCheck">) {
       <Text style={styles.slogan}>GOTTA SNUS THEM ALL</Text>
       <View
         style={styles.separator}
-        lightColor="#eee"
+        lightColor="#D3D3D3"
         darkColor="rgba(255,255,255,0.1)"
       />
       <View style={styles.container}>
-        <Text style={styles.text} lightColor="#fff" darkColor="#fff">
+        <Text style={styles.text} lightColor="#333" darkColor="#fff">
           För att använda Prilla behöver du vara 18 år eller äldre.
         </Text>
 

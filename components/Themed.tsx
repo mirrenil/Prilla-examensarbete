@@ -3,12 +3,12 @@
  * https://docs.expo.io/guides/color-schemes/
  */
 
+import React from "react";
 import {
   Text as DefaultText,
   View as DefaultView,
   TextInput as DefaultTextInput,
 } from "react-native";
-import React from "react";
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 
