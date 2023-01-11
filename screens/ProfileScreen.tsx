@@ -259,12 +259,7 @@ export default function ProfileScreen({
             </View>
           )}
           <View style={styles.row}>
-            <ScrollView
-              horizontal
-              scrollEnabled
-              showsHorizontalScrollIndicator={false}
-              style={styles.favortiesScroll}
-            >
+            <ScrollView horizontal scrollEnabled style={styles.favortiesScroll}>
               {urls.map((url, index) => (
                 <Image
                   key={index}
