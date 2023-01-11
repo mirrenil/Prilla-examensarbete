@@ -79,8 +79,6 @@ const styles = StyleSheet.create({
   heroText: {
     color: "white",
     textTransform: "uppercase",
-    fontFamily: "Inter",
-    fontStyle: "normal",
     fontWeight: "700",
     fontSize: 20,
   },
