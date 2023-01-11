@@ -23,7 +23,6 @@ import {
 import { Review, User } from "../Interfaces";
 import { ScrollView } from "react-native-gesture-handler";
 import { ReviewCard } from "../components/ReviewCard";
-import { useNavigation } from "@react-navigation/native";
 import {
   sendPasswordResetEmail,
   deleteUser,
@@ -41,11 +40,13 @@ export default function ProfileScreen({
   const [myProfile, setMyProfile] = useState<boolean>(false);
   const [user, setUser] = useState<User>();
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [followers, setFollowers] = useState<any>([]);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const dispatch = useDispatch();
   const userEmail = myUser?.email;
   const [urls, setUrls] = useState<string[]>([]);
   const favoritesArray: any = [];
+  const followersArray: any = [];
   let photoURLS: string[] = [];
   const [usersFollowersArray, setUsersFollowersArray] = useState<string[]>([]);
 
@@ -224,26 +225,26 @@ export default function ProfileScreen({
               <Feather
                 name="settings"
                 size={24}
-                color="#FFFD54"
+                color="#413C48"
                 onPress={() => setModalVisible(true)}
               />
             </View>
           )}
           <View style={styles.topContainer}>
             <View style={styles.left}>
-              <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
+              <Text darkColor="#fff" lightColor="#333" style={styles.text}>
                 Recensioner
               </Text>
               <Text
                 darkColor="#fff"
-                lightColor="#fff"
+                lightColor="#333"
                 style={styles.textMedium}
               >
                 {reviews.length}
               </Text>
             </View>
             <View style={styles.right}>
-              <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
+              <Text darkColor="#fff" lightColor="#333" style={styles.text}>
                 Följer
               </Text>
               {myProfile ? (
@@ -268,7 +269,7 @@ export default function ProfileScreen({
           {myProfile ? (
             <View style={styles.center}>
               <Image source={{ uri: profilePic }} style={styles.image} />
-              <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
+              <Text darkColor="#fff" lightColor="#333" style={styles.text}>
                 {myUser.displayName}
               </Text>
             </View>
@@ -313,20 +314,20 @@ export default function ProfileScreen({
 
         <View
           style={styles.separator}
-          lightColor="#eee"
+          lightColor="#D3D3D3"
           darkColor="rgba(255,255,255,0.1)"
         />
         <View style={styles.favorites}>
           {myProfile ? (
             <View style={styles.box}>
-              <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
+              <Text lightColor="#333" darkColor="#fff" style={styles.text}>
                 Mina favoriter
                 <AntDesign name="right" size={16} color="white" />
               </Text>
             </View>
           ) : (
             <View style={styles.box}>
-              <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
+              <Text lightColor="#333" darkColor="#fff" style={styles.text}>
                 {user.displayName}'s favoriter
                 <AntDesign name="right" size={16} color="white" />
               </Text>
@@ -347,20 +348,20 @@ export default function ProfileScreen({
         </View>
         <View
           style={styles.separator}
-          lightColor="#eee"
+          lightColor="#D3D3D3"
           darkColor="rgba(255,255,255,0.1)"
         />
         <View style={styles.activities}>
           {myProfile ? (
             <View style={styles.box}>
-              <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
+              <Text lightColor="#333" darkColor="#fff" style={styles.text}>
                 Mina aktiviteter
               </Text>
               <AntDesign name="right" size={20} color="white" />
             </View>
           ) : (
             <View style={styles.box}>
-              <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
+              <Text lightColor="#333" darkColor="#fff" style={styles.text}>
                 {user.displayName}'s aktiviteter
               </Text>
               <AntDesign name="right" size={20} color="white" />
@@ -379,17 +380,21 @@ export default function ProfileScreen({
               setModalVisible(!modalVisible);
             }}
           >
-            <View>
-              <View style={styles.modalView}>
+            <View style={styles.layover}>
+              <View
+                lightColor="#FFF"
+                darkColor="#261F30"
+                style={styles.modalView}
+              >
                 <View>
                   <AntDesign
                     name="left"
                     size={20}
-                    color="white"
+                    color="#D3D3D3"
                     onPress={() => setModalVisible(!modalVisible)}
                   />
                   <Text
-                    lightColor="#fff"
+                    lightColor="#333"
                     darkColor="#fff"
                     style={styles.modalTextHeader}
                   >
@@ -398,7 +403,7 @@ export default function ProfileScreen({
                 </View>
                 <View style={styles.column}>
                   <Text
-                    lightColor="#fff"
+                    lightColor="#333"
                     darkColor="#fff"
                     style={styles.modalText}
                   >
@@ -406,7 +411,7 @@ export default function ProfileScreen({
                   </Text>
                   <TouchableOpacity>
                     <Text
-                      lightColor="#fff"
+                      lightColor="#333"
                       darkColor="#fff"
                       style={styles.borderButton}
                       onPress={() => resetPassword(userEmail as string)}
@@ -416,7 +421,7 @@ export default function ProfileScreen({
                   </TouchableOpacity>
 
                   <Text
-                    lightColor="#fff"
+                    lightColor="#333"
                     darkColor="#fff"
                     style={styles.modalText}
                   >
@@ -424,7 +429,7 @@ export default function ProfileScreen({
                   </Text>
                   <TouchableOpacity>
                     <Text
-                      lightColor="#fff"
+                      lightColor="#333"
                       darkColor="#fff"
                       style={styles.borderButton}
                       onPress={() => deleteAccount()}
@@ -432,9 +437,16 @@ export default function ProfileScreen({
                       Vill du radera ditt konto?
                     </Text>
                   </TouchableOpacity>
+                  <Text
+                    lightColor="#333"
+                    darkColor="#fff"
+                    style={styles.modalText}
+                  >
+                    Logga ut
+                  </Text>
                   <TouchableOpacity>
                     <Text
-                      lightColor="#fff"
+                      lightColor="#333"
                       darkColor="#fff"
                       style={styles.borderButton}
                       onPress={handleSignOut}
@@ -496,6 +508,8 @@ const styles = StyleSheet.create({
     fontSize: 17,
   },
   borderButton: {
+    borderWidth: 0.2,
+    borderColor: "#783bc9",
     padding: 15,
     borderRadius: 6,
     width: 300,
@@ -573,18 +587,14 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "flex-start",
     width: "100%",
-    height: "100%",
   },
   top: {
     marginLeft: 300,
     marginBottom: 20,
   },
   modalView: {
-    margin: 10,
-    marginTop: 100,
-    height: 500,
-    backgroundColor: "#261F30",
-    borderRadius: 20,
+    maxHeight: 400,
+    borderRadius: 6,
     padding: 35,
     shadowColor: "#000",
     shadowOffset: {
@@ -596,12 +606,10 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   modalText: {
-    margin: 15,
-    textAlign: "center",
     fontSize: 15,
+    fontWeight: "bold",
   },
   modalTextHeader: {
-    margin: 12,
     textAlign: "center",
     fontSize: 20,
   },
@@ -630,5 +638,16 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 50,
     marginRight: 10,
+  },
+  layover: {
+    height: "100%",
+    width: "100%",
+    position: "absolute",
+    top: 0,
+    right: 0,
+    backgroundColor: "rgba(0,0,0,0.7)",
+    zIndex: 100,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

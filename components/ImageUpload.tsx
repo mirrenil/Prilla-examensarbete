@@ -1,5 +1,4 @@
 import * as ImagePicker from "expo-image-picker";
-import { Constants } from "expo-constants";
 import React, { useEffect, useState } from "react";
 import { Platform, Image } from "react-native";
 import { View, Text } from "./Themed";
@@ -84,7 +83,7 @@ const ImageUpload = ({ handleUpload }: Props) => {
           <MaterialIcons
             name="add-a-photo"
             size={50}
-            color="white"
+            color="#783BC9"
             style={{ paddingBottom: 10 }}
           />
           <Text>Lägg till foto</Text>
