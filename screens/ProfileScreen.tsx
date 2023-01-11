@@ -45,8 +45,11 @@ export default function ProfileScreen({
   const userEmail = myUser?.email;
   const [urls, setUrls] = useState<string[]>([]);
   const favoritesArray: any = [];
+  const myFollowingArray: any = [];
+  const usersFollowingArray: any = [];
   let photoURLS: string[] = [];
-  const [usersFollowersArray, setUsersFollowersArray] = useState<string[]>([]);
+  const [myFollowersArray, setMyFollowersArray] = useState<string[]>([]);
+  const [userFollowersArray, setUserFollowersArray] = useState<string[]>([]);
 
   const profilePic =
     "https://cdn.drawception.com/images/avatars/647493-B9E.png";
@@ -58,7 +61,8 @@ export default function ProfileScreen({
     compareLikedIds();
     imagesLoaded();
     checkCurrentUser();
-    getFollowersFromDb();
+    getMyFollowing();
+    getUsersFollowing();
   }, [isMe, follow]);
 
   const checkCurrentUser = async () => {
@@ -83,11 +87,25 @@ export default function ProfileScreen({
       console.log(err);
     }
   };
-  // follow functionality
-  const getFollowersFromDb = async () => {
+  const getMyFollowing = async () => {
     try {
-      const user = await getOneDocById("users", myUser.id);
-      setUsersFollowersArray(user?.following);
+      const following = await getOneDocById("users", route.params?.id);
+      for (let i = 0; i < following?.following.length; i++) {
+        myFollowingArray.push(following?.following[i]);
+        setMyFollowersArray(myFollowingArray);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getUsersFollowing = async () => {
+    try {
+      const following = await getOneDocById("users", user?.id);
+      for (let i = 0; i < following?.following.length; i++) {
+        usersFollowingArray.push(following?.following[i]);
+        setUserFollowersArray(usersFollowingArray);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -95,14 +113,14 @@ export default function ProfileScreen({
 
   // check if user is already following
   const isAlreadyFollowing = () => {
-    let selected = usersFollowersArray.some((item) => {
+    let selected = myFollowersArray.some((item) => {
       return item == route.params.id;
     });
     return selected;
   };
 
   const addFollowerToDb = async () => {
-    let newArray = [...usersFollowersArray];
+    let newArray = [...myFollowersArray];
     newArray.push(route.params.id);
     const newData = { following: newArray };
     try {
@@ -113,7 +131,7 @@ export default function ProfileScreen({
   };
 
   const unfollowFromDb = async () => {
-    let newArray = [...usersFollowersArray];
+    let newArray = [...myFollowersArray];
     let index = newArray.indexOf(route.params.id);
     newArray.splice(index, 1);
     const newData = { following: newArray };
@@ -213,6 +231,7 @@ export default function ProfileScreen({
       console.log(err);
     }
   };
+  console.log(myFollowingArray.length);
 
   if (user) {
     return (
@@ -223,7 +242,7 @@ export default function ProfileScreen({
               <Feather
                 name="settings"
                 size={24}
-                color="#413C48"
+                color="#FFFD54"
                 onPress={() => setModalVisible(true)}
               />
             </View>
@@ -251,7 +270,7 @@ export default function ProfileScreen({
                   lightColor="#fff"
                   style={styles.textMedium}
                 >
-                  {usersFollowersArray.length ? usersFollowersArray.length : 0}
+                  {myFollowersArray.length}
                 </Text>
               ) : (
                 <Text
@@ -259,7 +278,7 @@ export default function ProfileScreen({
                   lightColor="#fff"
                   style={styles.textMedium}
                 >
-                  {user?.following.length ? user?.following.length : 0}
+                  {userFollowersArray.length}
                 </Text>
               )}
             </View>
