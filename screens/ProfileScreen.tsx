@@ -48,7 +48,7 @@ export default function ProfileScreen({
   const favoritesArray: any = [];
   let photoURLS: string[] = [];
   const [usersFollowersArray, setUsersFollowersArray] = useState<string[]>([]);
-  let newArray = [...usersFollowersArray];
+
   const profilePic =
     "https://cdn.drawception.com/images/avatars/647493-B9E.png";
   let isMe = route.params.id === myUser.id;
@@ -103,6 +103,7 @@ export default function ProfileScreen({
   };
 
   const addFollowerToDb = async () => {
+    let newArray = [...usersFollowersArray];
     newArray.push(route.params.id);
     const newData = { following: newArray };
     try {
@@ -113,6 +114,7 @@ export default function ProfileScreen({
   };
 
   const unfollowFromDb = async () => {
+    let newArray = [...usersFollowersArray];
     let index = newArray.indexOf(route.params.id);
     newArray.splice(index, 1);
     const newData = { following: newArray };
