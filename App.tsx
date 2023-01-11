@@ -14,7 +14,6 @@ export default function App() {
   const [loaded] = useFonts({
     OleoScript: require("./assets/fonts/OleoScript-Regular.ttf"),
     Caramel: require("./assets/fonts/Caramel-Regular.ttf"),
-    Inter: require("./assets/fonts/Inter-VariableFont_slnt,wght.ttf"),
   });
 
   if (!isLoadingComplete && !loaded) {
