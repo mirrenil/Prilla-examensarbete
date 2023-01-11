@@ -231,7 +231,6 @@ export default function ProfileScreen({
       console.log(err);
     }
   };
-  console.log(myFollowingArray.length);
 
   if (user) {
     return (
