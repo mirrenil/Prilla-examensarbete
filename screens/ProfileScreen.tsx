@@ -32,6 +32,7 @@ import {
 import { auth } from "../firebase";
 import { gradientLight, gradientDark } from "../constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
+import { Pressable } from "react-native";
 
 export default function ProfileScreen({
   navigation,
@@ -259,14 +260,14 @@ export default function ProfileScreen({
               <View style={styles.box}>
                 <Text lightColor="#333" darkColor="#fff" style={styles.text}>
                   Mina favoriter
-                  <AntDesign name="right" size={16} color="white" />
+                  <AntDesign name="right" size={16} color="#FFFD54" />
                 </Text>
               </View>
             ) : (
               <View style={styles.box}>
                 <Text lightColor="#333" darkColor="#fff" style={styles.text}>
                   {user.displayName}'s favoriter
-                  <AntDesign name="right" size={16} color="white" />
+                  <AntDesign name="right" size={16} color="#FFFD54" />
                 </Text>
               </View>
             )}
@@ -294,14 +295,14 @@ export default function ProfileScreen({
                 <Text lightColor="#333" darkColor="#fff" style={styles.text}>
                   Mina aktiviteter
                 </Text>
-                <AntDesign name="right" size={20} color="white" />
+                <AntDesign name="right" size={16} color="#FFFD54" />
               </View>
             ) : (
               <View style={styles.box}>
                 <Text lightColor="#333" darkColor="#fff" style={styles.text}>
                   {user.displayName}'s aktiviteter
                 </Text>
-                <AntDesign name="right" size={20} color="white" />
+                <AntDesign name="right" size={16} color="#FFFD54" />
               </View>
             )}
             {reviews.map((review: Review) => {
@@ -346,12 +347,14 @@ export default function ProfileScreen({
                     >
                       Lösenord
                     </Text>
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.borderButton}
+                      onPress={() => resetPassword(userEmail as string)}
+                    >
                       <Text
                         lightColor="#333"
                         darkColor="#fff"
-                        style={styles.borderButton}
-                        onPress={() => resetPassword(userEmail as string)}
+                        style={styles.btnText}
                       >
                         Skicka återställnings länk till e-post
                       </Text>
@@ -364,12 +367,14 @@ export default function ProfileScreen({
                     >
                       Radera konto
                     </Text>
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.borderButton}
+                      onPress={() => deleteAccount()}
+                    >
                       <Text
                         lightColor="#333"
                         darkColor="#fff"
-                        style={styles.borderButton}
-                        onPress={() => deleteAccount()}
+                        style={styles.btnText}
                       >
                         Vill du radera ditt konto?
                       </Text>
@@ -381,12 +386,14 @@ export default function ProfileScreen({
                     >
                       Logga ut
                     </Text>
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.borderButton}
+                      onPress={handleSignOut}
+                    >
                       <Text
                         lightColor="#333"
                         darkColor="#fff"
-                        style={styles.borderButton}
-                        onPress={handleSignOut}
+                        style={styles.btnText}
                       >
                         Logga ut
                       </Text>
@@ -443,16 +450,18 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 17,
   },
+  btnText: {
+    textAlign: "center",
+  },
   borderButton: {
-    borderWidth: 0.2,
-    borderColor: "#783bc9",
+    borderWidth: 0.5,
+    borderColor: "#FFFD54",
     padding: 15,
     borderRadius: 6,
     width: 300,
     height: 50,
     marginTop: 10,
     marginBottom: 10,
-    textAlign: "center",
   },
   borderButtonLike: {
     borderWidth: 0.2,
@@ -528,6 +537,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   modalView: {
+    backgroundColor: "#C8A0FE",
     maxHeight: 400,
     borderRadius: 6,
     padding: 35,
@@ -542,11 +552,13 @@ const styles = StyleSheet.create({
   },
   modalText: {
     fontSize: 15,
-    fontWeight: "bold",
+    fontWeight: "500",
+    backgroundColor: "transparent",
   },
   modalTextHeader: {
     textAlign: "center",
     fontSize: 20,
+    marginBottom: 20,
   },
   input: {
     borderWidth: 0.2,
