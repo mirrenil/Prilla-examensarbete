@@ -26,6 +26,7 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
   const [review, setReview] = useState<Review>();
   const [author, setAuthor] = useState<User>();
   const [input, setInput] = useState<string>();
+  const [comments, setComments] = useState<ReviewComment>();
   const myUser = useSelector(currentReduxUser);
 
   useEffect(() => {
@@ -34,6 +35,11 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
 
   useEffect(() => {
     getAuthor();
+    if (review?.comments) {
+      review?.comments.map((c) => {
+        getComments(c);
+      });
+    }
   }, [review]);
 
   const getReview = async () => {
@@ -52,6 +58,13 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
         setAuthor({ name: user.displayName, image: user.photo });
         console.log(user.photo);
       }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getComments = async (comment: string) => {
+    try {
     } catch (err) {
       console.log(err);
     }
