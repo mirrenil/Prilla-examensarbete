@@ -26,16 +26,6 @@ export const ReviewCard = ({ review, tag }: Props) => {
     }
   };
 
-  const getTags = async () => {
-    let tags: string[] = [];
-    let data = await getOneDocById("produkter", review.productID);
-    for (let i = 0; i < data?.tags.length; i++) {
-      tags.push(data?.tags[i]);
-    }
-    console.log(tags);
-    return tags;
-  };
-
   if (product) {
     return (
       <View style={styles.wrapper}>
