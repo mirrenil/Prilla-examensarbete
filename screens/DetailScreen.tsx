@@ -336,6 +336,7 @@ const styles = StyleSheet.create({
     height: 120,
     width: 120,
     marginRight: 10,
+    borderRadius: 50,
   },
   productDataContainer: {
     height: 200,

@@ -80,5 +80,6 @@ const card = StyleSheet.create({
     height: 90,
     width: 90,
     marginRight: 10,
+    borderRadius: 50,
   },
 });

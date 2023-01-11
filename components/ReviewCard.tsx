@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
     height: 60,
     width: 60,
     flex: 1,
+    borderRadius: 50,
   },
   productData: {
     flexDirection: "row",
