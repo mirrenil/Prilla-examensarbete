@@ -3,14 +3,15 @@ import React, { useEffect, useState } from "react";
 import { View, Image, Text, StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { getOneDocById } from "../helper";
-import { Review, Product } from "../Interfaces";
+import { Review, Product, Tag } from "../Interfaces";
 import { RateInactive } from "./RateInactive";
 
 interface Props {
   review: Review;
+  tag: Tag;
 }
 
-export const ReviewCard = ({ review }: Props) => {
+export const ReviewCard = ({ review, tag }: Props) => {
   const [product, setProduct] = useState<Product>();
   const navigation = useNavigation();
 
@@ -23,6 +24,16 @@ export const ReviewCard = ({ review }: Props) => {
     if (data) {
       setProduct(data as Product);
     }
+  };
+
+  const getTags = async () => {
+    let tags: string[] = [];
+    let data = await getOneDocById("produkter", review.productID);
+    for (let i = 0; i < data?.tags.length; i++) {
+      tags.push(data?.tags[i]);
+    }
+    console.log(tags);
+    return tags;
   };
 
   if (product) {
@@ -45,12 +56,23 @@ export const ReviewCard = ({ review }: Props) => {
             </TouchableOpacity>
             <View style={{ flexDirection: "row" }}>
               <RateInactive rating={review.rating} />
-              <Text style={{ marginLeft: 10 }}>{review.rating}</Text>
+              <Text style={{ marginLeft: 25, marginTop: 10 }}>
+                {review.rating}/5
+              </Text>
             </View>
           </View>
         </View>
         <View style={styles.description}>
           <Text>{review.description}</Text>
+        </View>
+        <View style={{ flexDirection: "row" }}>
+          {review.tags.map((tag: Tag) => {
+            return (
+              <View style={styles.tagsContainer}>
+                <Text style={styles.tagName}>{tag?.name}</Text>
+              </View>
+            );
+          })}
         </View>
       </View>
     );
@@ -92,5 +114,19 @@ const styles = StyleSheet.create({
   },
   description: {
     padding: 10,
+    flexDirection: "row",
+  },
+  tagsContainer: {
+    borderWidth: 0.2,
+    borderColor: "#575060",
+    width: 70,
+    margin: 5,
+    height: 30,
+    padding: 5,
+    borderRadius: 6,
+    backgroundColor: "#CEA9FF",
+  },
+  tagName: {
+    textAlign: "center",
   },
 });
