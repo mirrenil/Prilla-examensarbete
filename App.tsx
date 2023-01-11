@@ -2,6 +2,7 @@ import { useFonts } from "expo-font";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { ActivityIndicator } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import useCachedResources from "./hooks/useCachedResources";
@@ -17,7 +18,7 @@ export default function App() {
   });
 
   if (!isLoadingComplete && !loaded) {
-    return null;
+    return <ActivityIndicator />;
   } else {
     return (
       <SafeAreaProvider>
