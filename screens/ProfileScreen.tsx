@@ -253,7 +253,7 @@ export default function ProfileScreen({
                   lightColor="#fff"
                   style={styles.textMedium}
                 >
-                  {usersFollowersArray.length}
+                  {usersFollowersArray.length ? usersFollowersArray.length : 0}
                 </Text>
               ) : (
                 <Text
@@ -261,7 +261,7 @@ export default function ProfileScreen({
                   lightColor="#fff"
                   style={styles.textMedium}
                 >
-                  {user?.following.length}
+                  {user?.following.length ? user?.following.length : 0}
                 </Text>
               )}
             </View>
