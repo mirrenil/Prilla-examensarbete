@@ -40,13 +40,11 @@ export default function ProfileScreen({
   const [myProfile, setMyProfile] = useState<boolean>(false);
   const [user, setUser] = useState<User>();
   const [reviews, setReviews] = useState<Review[]>([]);
-  const [followers, setFollowers] = useState<any>([]);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const dispatch = useDispatch();
   const userEmail = myUser?.email;
   const [urls, setUrls] = useState<string[]>([]);
   const favoritesArray: any = [];
-  const followersArray: any = [];
   let photoURLS: string[] = [];
   const [usersFollowersArray, setUsersFollowersArray] = useState<string[]>([]);
 
