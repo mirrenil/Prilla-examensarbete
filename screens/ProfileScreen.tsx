@@ -52,7 +52,7 @@ export default function ProfileScreen({
   let isMe = route.params.id === myUser.id;
 
   useEffect(() => {
-    checkCurrentUser();
+    setCurrentUser();
     getMyFollowing();
     getReviews();
     getLiked();
@@ -60,7 +60,7 @@ export default function ProfileScreen({
     imagesLoaded();
   }, []);
 
-  const checkCurrentUser = async () => {
+  const setCurrentUser = async () => {
     try {
       const user = await getOneDocById("users", route.params.id);
       setUser(user as User);
@@ -84,6 +84,8 @@ export default function ProfileScreen({
       console.log(err);
     }
   };
+
+  // Gets a list of all users I follow to be able to check if I follow user of current profile page (unless profile is mine)
   const getMyFollowing = async () => {
     try {
       const user = await getOneDocById("users", myUser.id);
@@ -95,7 +97,7 @@ export default function ProfileScreen({
     }
   };
 
-  // check if user is already following
+  // checks if I follow the user
   const isAlreadyFollowing = () => {
     let selected = myFollows.some((id) => {
       return id == route.params.id;
