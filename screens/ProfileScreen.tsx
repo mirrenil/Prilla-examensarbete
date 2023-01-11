@@ -45,33 +45,30 @@ export default function ProfileScreen({
   const userEmail = myUser?.email;
   const [urls, setUrls] = useState<string[]>([]);
   const favoritesArray: any = [];
-  const myFollowingArray: any = [];
-  const usersFollowingArray: any = [];
   let photoURLS: string[] = [];
-  const [myFollowersArray, setMyFollowersArray] = useState<string[]>([]);
-  const [userFollowersArray, setUserFollowersArray] = useState<string[]>([]);
-
+  const [myFollows, setMyFollows] = useState<string[]>([]);
   const profilePic =
     "https://cdn.drawception.com/images/avatars/647493-B9E.png";
   let isMe = route.params.id === myUser.id;
 
   useEffect(() => {
+    checkCurrentUser();
+    getMyFollowing();
     getReviews();
     getLiked();
     compareLikedIds();
     imagesLoaded();
-    checkCurrentUser();
-    getMyFollowing();
-    getUsersFollowing();
-  }, [isMe, follow]);
+  }, []);
 
   const checkCurrentUser = async () => {
-    if (!isMe) {
+    try {
       const user = await getOneDocById("users", route.params.id);
       setUser(user as User);
-    } else {
-      setMyProfile(true);
-      setUser(myUser);
+      if (isMe) {
+        setMyProfile(true);
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -89,22 +86,9 @@ export default function ProfileScreen({
   };
   const getMyFollowing = async () => {
     try {
-      const following = await getOneDocById("users", route.params?.id);
-      for (let i = 0; i < following?.following.length; i++) {
-        myFollowingArray.push(following?.following[i]);
-        setMyFollowersArray(myFollowingArray);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const getUsersFollowing = async () => {
-    try {
-      const following = await getOneDocById("users", user?.id);
-      for (let i = 0; i < following?.following.length; i++) {
-        usersFollowingArray.push(following?.following[i]);
-        setUserFollowersArray(usersFollowingArray);
+      const user = await getOneDocById("users", myUser.id);
+      if (user?.following) {
+        setMyFollows(user.following);
       }
     } catch (err) {
       console.log(err);
@@ -113,30 +97,16 @@ export default function ProfileScreen({
 
   // check if user is already following
   const isAlreadyFollowing = () => {
-    let selected = myFollowersArray.some((item) => {
-      return item == route.params.id;
+    let selected = myFollows.some((id) => {
+      return id == route.params.id;
     });
     return selected;
   };
 
-  const addFollowerToDb = async () => {
-    let newArray = [...myFollowersArray];
-    newArray.push(route.params.id);
-    const newData = { following: newArray };
+  const updateDb = async (newData) => {
+    let newObj = { following: newData };
     try {
-      await updateSingleProperty("users", myUser.id, newData);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const unfollowFromDb = async () => {
-    let newArray = [...myFollowersArray];
-    let index = newArray.indexOf(route.params.id);
-    newArray.splice(index, 1);
-    const newData = { following: newArray };
-    try {
-      await updateSingleProperty("users", myUser.id, newData);
+      await updateSingleProperty("users", myUser.id, newObj);
     } catch (err) {
       console.log(err);
     }
@@ -146,9 +116,13 @@ export default function ProfileScreen({
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     if (!isAlreadyFollowing()) {
       setFollow(true);
-      addFollowerToDb();
+      let newArray = [...myFollows, route.params.id];
+      updateDb(newArray);
+      setMyFollows([...myFollows, route.params.id]);
     } else {
-      unfollowFromDb();
+      let newArray = myFollows.filter((id) => id !== route.params.id);
+      setMyFollows(newArray);
+      updateDb(newArray);
       setFollow(false);
     }
   };
@@ -263,23 +237,13 @@ export default function ProfileScreen({
               <Text darkColor="#fff" lightColor="#333" style={styles.text}>
                 Följer
               </Text>
-              {myProfile ? (
-                <Text
-                  darkColor="#fff"
-                  lightColor="#fff"
-                  style={styles.textMedium}
-                >
-                  {myFollowersArray.length}
-                </Text>
-              ) : (
-                <Text
-                  darkColor="#fff"
-                  lightColor="#fff"
-                  style={styles.textMedium}
-                >
-                  {userFollowersArray.length}
-                </Text>
-              )}
+              <Text
+                darkColor="#fff"
+                lightColor="#fff"
+                style={styles.textMedium}
+              >
+                {user.following ? user.following.length : 0}
+              </Text>
             </View>
           </View>
           {myProfile ? (
