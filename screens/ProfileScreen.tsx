@@ -45,11 +45,8 @@ export default function ProfileScreen({
   const userEmail = myUser?.email;
   const [urls, setUrls] = useState<string[]>([]);
   const favoritesArray: any = [];
-  const myFollowingArray: any = [];
-  const usersFollowingArray: any = [];
   let photoURLS: string[] = [];
-  const [myFollowersArray, setMyFollowersArray] = useState<string[]>([]);
-  const [userFollowersArray, setUserFollowersArray] = useState<string[]>([]);
+  const [usersFollowersArray, setUsersFollowersArray] = useState<string[]>([]);
 
   const profilePic =
     "https://cdn.drawception.com/images/avatars/647493-B9E.png";
@@ -61,8 +58,7 @@ export default function ProfileScreen({
     compareLikedIds();
     imagesLoaded();
     checkCurrentUser();
-    getMyFollowing();
-    getUsersFollowing();
+    getFollowersFromDb();
   }, [isMe, follow]);
 
   const checkCurrentUser = async () => {
@@ -87,24 +83,14 @@ export default function ProfileScreen({
       console.log(err);
     }
   };
-  const getMyFollowing = async () => {
+  // follow functionality
+  const getFollowersFromDb = async () => {
     try {
-      const following = await getOneDocById("users", route.params?.id);
-      for (let i = 0; i < following?.following.length; i++) {
-        myFollowingArray.push(following?.following[i]);
-        setMyFollowersArray(myFollowingArray);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const getUsersFollowing = async () => {
-    try {
-      const following = await getOneDocById("users", user?.id);
-      for (let i = 0; i < following?.following.length; i++) {
-        usersFollowingArray.push(following?.following[i]);
-        setUserFollowersArray(usersFollowingArray);
+      const user = await getOneDocById("users", myUser.id);
+      if (user?.following[0] !== "") {
+        setUsersFollowersArray(user?.following);
+      } else {
+        setUsersFollowersArray([]);
       }
     } catch (err) {
       console.log(err);
@@ -113,14 +99,14 @@ export default function ProfileScreen({
 
   // check if user is already following
   const isAlreadyFollowing = () => {
-    let selected = myFollowersArray.some((item) => {
+    let selected = usersFollowersArray.some((item) => {
       return item == route.params.id;
     });
     return selected;
   };
 
   const addFollowerToDb = async () => {
-    let newArray = [...myFollowersArray];
+    let newArray = [...usersFollowersArray];
     newArray.push(route.params.id);
     const newData = { following: newArray };
     try {
@@ -131,7 +117,7 @@ export default function ProfileScreen({
   };
 
   const unfollowFromDb = async () => {
-    let newArray = [...myFollowersArray];
+    let newArray = [...usersFollowersArray];
     let index = newArray.indexOf(route.params.id);
     newArray.splice(index, 1);
     const newData = { following: newArray };
@@ -269,7 +255,7 @@ export default function ProfileScreen({
                   lightColor="#fff"
                   style={styles.textMedium}
                 >
-                  {myFollowersArray.length}
+                  {usersFollowersArray.length}
                 </Text>
               ) : (
                 <Text
@@ -277,7 +263,7 @@ export default function ProfileScreen({
                   lightColor="#fff"
                   style={styles.textMedium}
                 >
-                  {userFollowersArray.length}
+                  {user?.following.length}
                 </Text>
               )}
             </View>
