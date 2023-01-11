@@ -107,9 +107,7 @@ const styles = StyleSheet.create({
   },
   prilla: {
     fontFamily: "OleoScript",
-    fontStyle: "normal",
     fontSize: 35,
-    fontWeight: "bold",
     color: "#FFFD54",
   },
   separator: {
