@@ -1,9 +1,10 @@
 // const tintColorLight = "#783bc9";
 // const tintColorDark = "#fff";
 const primaryPurple = "#783BC9";
+const activteColor = "#FFFD54";
 
 export const gradientLight = {
-  from: "#CEA9FF",
+  from: "#fff",
   to: "#783BC9",
 };
 
@@ -15,7 +16,8 @@ export const gradientDark = {
 export default {
   light: {
     text: "#1B1324",
-    menu: "#fff",
+    white: "#fff",
+    menu: "#783BC9",
     background: "#EBE6F3",
     primary: {
       normal: primaryPurple,
@@ -30,7 +32,7 @@ export default {
 
     folderTabActive: primaryPurple,
     folderTabInActive: primaryPurple,
-    tint: primaryPurple,
+    tint: activteColor,
     tabIconDefault: "#d9d9d9",
     tabIconSelected: primaryPurple,
   },

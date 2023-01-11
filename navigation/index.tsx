@@ -153,7 +153,7 @@ function BottomTabNavigator() {
       // initialRouteName="Home"
       screenOptions={{
         headerStyle: {
-          backgroundColor: Colors[colorScheme].menu,
+          backgroundColor: Colors[colorScheme].white,
           height: 100,
         },
         headerTitleStyle: {
@@ -163,7 +163,7 @@ function BottomTabNavigator() {
         tabBarInactiveTintColor: Colors[colorScheme].tabIconDefault,
         tabBarStyle: {
           backgroundColor: Colors[colorScheme].menu,
-          height: "8%",
+          height: "11%",
           padding: 15,
         },
       }}
