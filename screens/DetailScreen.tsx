@@ -10,7 +10,6 @@ import {
 import * as Haptics from "expo-haptics";
 import { View, Text } from "../components/Themed";
 import {
-  getAllDocsInCollection,
   getDocsWithSpecificValue,
   getOneDocById,
   updateSingleProperty,

@@ -6,6 +6,7 @@ export interface Review {
   rating: number;
   tags: Tag[];
   userID: string;
+  comments?: string[];
   id: string;
 }
 
@@ -39,4 +40,10 @@ export interface Product {
   weight: number;
   rating: number;
   id: string;
+}
+
+export interface ReviewComment {
+  authorID: string;
+  reviewID: string;
+  text: string;
 }
