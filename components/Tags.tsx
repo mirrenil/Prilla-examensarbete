@@ -22,11 +22,12 @@ const Tags = ({ handleInput }: Props) => {
       padding: 10,
       margin: 7,
       borderWidth: 1,
-      borderColor: "white",
+      borderColor: "#783BC9",
       borderRadius: 6,
     },
     selected: {
-      backgroundColor: "rgba(255,255,255,0.4)",
+      backgroundColor: "#783BC9",
+      opacity: 0.9,
     },
     sectionTitle: {
       paddingBottom: 10,
@@ -88,9 +89,7 @@ const Tags = ({ handleInput }: Props) => {
                 toggleSelectTag(tag);
               }}
             >
-              <View>
-                <Text>{tag.name}</Text>
-              </View>
+              <Text>{tag.name}</Text>
             </Pressable>
           );
         })}

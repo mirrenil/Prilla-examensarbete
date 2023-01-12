@@ -1,5 +1,8 @@
+import { useFonts } from "expo-font";
 import { StatusBar } from "expo-status-bar";
+import React from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { ActivityIndicator } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import useCachedResources from "./hooks/useCachedResources";
@@ -9,9 +12,13 @@ import Navigation from "./navigation";
 export default function App() {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
+  const [loaded] = useFonts({
+    OleoScript: require("./assets/fonts/OleoScript-Regular.ttf"),
+    Caramel: require("./assets/fonts/Caramel-Regular.ttf"),
+  });
 
-  if (!isLoadingComplete) {
-    return null;
+  if (!isLoadingComplete && !loaded) {
+    return <ActivityIndicator />;
   } else {
     return (
       <SafeAreaProvider>

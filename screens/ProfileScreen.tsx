@@ -7,6 +7,7 @@ import {
   Alert,
   Modal,
   Image,
+  Pressable,
 } from "react-native";
 import * as Haptics from "expo-haptics";
 import { Text, View } from "../components/Themed";
@@ -17,11 +18,11 @@ import {
   getAllDocsInCollection,
   getDocsWithSpecificValue,
   getOneDocById,
+  updateSingleProperty,
 } from "../helper";
 import { Review, User } from "../Interfaces";
 import { ScrollView } from "react-native-gesture-handler";
 import { ReviewCard } from "../components/ReviewCard";
-import { useNavigation } from "@react-navigation/native";
 import {
   sendPasswordResetEmail,
   deleteUser,
@@ -29,6 +30,7 @@ import {
   signOut,
 } from "firebase/auth";
 import { auth } from "../firebase";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function ProfileScreen({
   navigation,
@@ -45,25 +47,35 @@ export default function ProfileScreen({
   const [urls, setUrls] = useState<string[]>([]);
   const favoritesArray: any = [];
   let photoURLS: string[] = [];
+  const [myFollows, setMyFollows] = useState<string[]>([]);
   const profilePic =
     "https://cdn.drawception.com/images/avatars/647493-B9E.png";
   let isMe = route.params.id === myUser.id;
+  const isFocused = useIsFocused();
 
   useEffect(() => {
+    setCurrentUser();
     getReviews();
     getLiked();
     compareLikedIds();
     imagesLoaded();
-    checkCurrentUser();
-  }, [isMe]);
+  }, []);
 
-  const checkCurrentUser = async () => {
-    if (!isMe) {
+  useEffect(() => {
+    if (isFocused) {
+      getMyFollowing();
+    }
+  }, [isFocused]);
+
+  const setCurrentUser = async () => {
+    try {
       const user = await getOneDocById("users", route.params.id);
       setUser(user as User);
-    } else {
-      setMyProfile(true);
-      setUser(myUser);
+      if (isMe) {
+        setMyProfile(true);
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -80,9 +92,48 @@ export default function ProfileScreen({
     }
   };
 
-  const toggleButton = () => {
+  // Gets a list of all users I follow to be able to check if I follow user of current profile page (unless profile is mine)
+  const getMyFollowing = async () => {
+    try {
+      const user = await getOneDocById("users", myUser.id);
+      if (user?.following) {
+        setMyFollows(user.following);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // checks if I follow the user
+  const isAlreadyFollowing = () => {
+    let selected = myFollows.some((id) => {
+      return id == route.params.id;
+    });
+    return selected;
+  };
+
+  const updateDb = async (newData) => {
+    let newObj = { following: newData };
+    try {
+      await updateSingleProperty("users", myUser.id, newObj);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const toggleFollow = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setFollow(!follow);
+    if (!isAlreadyFollowing()) {
+      setFollow(true);
+      let newArray = [...myFollows, route.params.id];
+      updateDb(newArray);
+      setMyFollows([...myFollows, route.params.id]);
+    } else {
+      let newArray = myFollows.filter((id) => id !== route.params.id);
+      setMyFollows(newArray);
+      updateDb(newArray);
+      setFollow(false);
+    }
   };
 
   // Modal functionality
@@ -168,7 +219,7 @@ export default function ProfileScreen({
     return (
       <ScrollView style={styles.screen}>
         <View style={styles.container}>
-          {myProfile ? (
+          {myProfile && (
             <View style={styles.top}>
               <Feather
                 name="settings"
@@ -177,22 +228,22 @@ export default function ProfileScreen({
                 onPress={() => setModalVisible(true)}
               />
             </View>
-          ) : null}
+          )}
           <View style={styles.topContainer}>
             <View style={styles.left}>
-              <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
+              <Text darkColor="#fff" lightColor="#333" style={styles.text}>
                 Recensioner
               </Text>
               <Text
                 darkColor="#fff"
-                lightColor="#fff"
+                lightColor="#333"
                 style={styles.textMedium}
               >
                 {reviews.length}
               </Text>
             </View>
             <View style={styles.right}>
-              <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
+              <Text darkColor="#fff" lightColor="#333" style={styles.text}>
                 Följer
               </Text>
               <Text
@@ -200,14 +251,14 @@ export default function ProfileScreen({
                 lightColor="#fff"
                 style={styles.textMedium}
               >
-                {/* {user?.follow} right now hard coded value*/} 1
+                {user.following ? user.following.length : 0}
               </Text>
             </View>
           </View>
           {myProfile ? (
             <View style={styles.center}>
               <Image source={{ uri: profilePic }} style={styles.image} />
-              <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
+              <Text darkColor="#fff" lightColor="#333" style={styles.text}>
                 {myUser.displayName}
               </Text>
             </View>
@@ -215,78 +266,93 @@ export default function ProfileScreen({
             <View style={styles.center}>
               <Image source={{ uri: profilePic }} style={styles.image} />
               <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
-                {user?.displayName}
+                {user.displayName}
               </Text>
             </View>
           )}
 
           {!myProfile && (
-            <TouchableOpacity
-              style={[follow ? styles.borderButtonLike : styles.button]}
-              onPress={toggleButton}
-            >
-              <Text
-                darkColor="#201A28"
-                lightColor="#201A28"
-                style={[follow ? styles.borderButtonText : styles.buttonText]}
-              >
-                {follow ? "Följer" : "Följ"}{" "}
-                {follow && <AntDesign name="down" size={14} color="white" />}
-              </Text>
-            </TouchableOpacity>
+            <View>
+              {!isAlreadyFollowing() ? (
+                <Pressable
+                  style={styles.borderButtonFollow}
+                  onPress={toggleFollow}
+                >
+                  <Text
+                    darkColor="#201A28"
+                    lightColor="#201A28"
+                    style={styles.buttonText}
+                  >
+                    Följ
+                  </Text>
+                </Pressable>
+              ) : (
+                <Pressable style={styles.button} onPress={toggleFollow}>
+                  <Text
+                    darkColor="#fff"
+                    lightColor="#fff"
+                    style={styles.borderButtonText}
+                  >
+                    Följer <AntDesign name="down" size={14} color="white" />
+                  </Text>
+                </Pressable>
+              )}
+            </View>
           )}
         </View>
 
         <View
           style={styles.separator}
-          lightColor="#eee"
+          lightColor="#D3D3D3"
           darkColor="rgba(255,255,255,0.1)"
         />
         <View style={styles.favorites}>
           {myProfile ? (
             <View style={styles.box}>
-              <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
+              <Text lightColor="#333" darkColor="#fff" style={styles.text}>
                 Mina favoriter
                 <AntDesign name="right" size={16} color="white" />
               </Text>
             </View>
           ) : (
             <View style={styles.box}>
-              <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
+              <Text lightColor="#333" darkColor="#fff" style={styles.text}>
                 {user.displayName}'s favoriter
                 <AntDesign name="right" size={16} color="white" />
               </Text>
             </View>
           )}
-
           <View style={styles.row}>
-            {urls.map((url, index) => (
-              <Image
-                key={index}
-                style={styles.favoritesImage}
-                source={{
-                  uri: url,
-                }}
-              />
-            ))}
+            <ScrollView horizontal scrollEnabled style={styles.favortiesScroll}>
+              {urls.map((url, index) => (
+                <Image
+                  key={index}
+                  style={styles.favoritesImage}
+                  source={{
+                    uri: url,
+                  }}
+                />
+              ))}
+            </ScrollView>
+            <AntDesign name="right" size={30} color="white" />
           </View>
         </View>
         <View
           style={styles.separator}
-          lightColor="#eee"
+          lightColor="#D3D3D3"
           darkColor="rgba(255,255,255,0.1)"
         />
         <View style={styles.activities}>
           {myProfile ? (
             <View style={styles.box}>
-              <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
+              <Text lightColor="#333" darkColor="#fff" style={styles.text}>
                 Mina aktiviteter
               </Text>
               <AntDesign name="right" size={20} color="white" />
             </View>
           ) : (
             <View style={styles.box}>
-              <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
+              <Text lightColor="#333" darkColor="#fff" style={styles.text}>
                 {user.displayName}'s aktiviteter
               </Text>
               <AntDesign name="right" size={20} color="white" />
@@ -305,17 +371,21 @@ export default function ProfileScreen({
               setModalVisible(!modalVisible);
             }}
           >
-            <View>
-              <View style={styles.modalView}>
+            <View style={styles.layover}>
+              <View
+                lightColor="#FFF"
+                darkColor="#261F30"
+                style={styles.modalView}
+              >
                 <View>
                   <AntDesign
                     name="left"
                     size={20}
-                    color="white"
+                    color="#D3D3D3"
                     onPress={() => setModalVisible(!modalVisible)}
                   />
                   <Text
-                    lightColor="#fff"
+                    lightColor="#333"
                     darkColor="#fff"
                     style={styles.modalTextHeader}
                   >
@@ -324,7 +394,7 @@ export default function ProfileScreen({
                 </View>
                 <View style={styles.column}>
                   <Text
-                    lightColor="#fff"
+                    lightColor="#333"
                     darkColor="#fff"
                     style={styles.modalText}
                   >
@@ -332,7 +402,7 @@ export default function ProfileScreen({
                   </Text>
                   <TouchableOpacity>
                     <Text
-                      lightColor="#fff"
+                      lightColor="#333"
                       darkColor="#fff"
                       style={styles.borderButton}
                       onPress={() => resetPassword(userEmail as string)}
@@ -342,7 +412,7 @@ export default function ProfileScreen({
                   </TouchableOpacity>
 
                   <Text
-                    lightColor="#fff"
+                    lightColor="#333"
                     darkColor="#fff"
                     style={styles.modalText}
                   >
@@ -350,7 +420,7 @@ export default function ProfileScreen({
                   </Text>
                   <TouchableOpacity>
                     <Text
-                      lightColor="#fff"
+                      lightColor="#333"
                       darkColor="#fff"
                       style={styles.borderButton}
                       onPress={() => deleteAccount()}
@@ -358,9 +428,16 @@ export default function ProfileScreen({
                       Vill du radera ditt konto?
                     </Text>
                   </TouchableOpacity>
+                  <Text
+                    lightColor="#333"
+                    darkColor="#fff"
+                    style={styles.modalText}
+                  >
+                    Logga ut
+                  </Text>
                   <TouchableOpacity>
                     <Text
-                      lightColor="#fff"
+                      lightColor="#333"
                       darkColor="#fff"
                       style={styles.borderButton}
                       onPress={handleSignOut}
@@ -406,7 +483,9 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   button: {
-    backgroundColor: "#FFFD54",
+    borderColor: "#575060",
+    borderWidth: 0.2,
+    backgroundColor: "transparent",
     padding: 10,
     borderRadius: 6,
     width: 100,
@@ -421,22 +500,23 @@ const styles = StyleSheet.create({
   },
   borderButton: {
     borderWidth: 0.2,
-    borderColor: "#575060",
+    borderColor: "#783bc9",
     padding: 15,
     borderRadius: 6,
     width: 300,
-    height: 50,
+    height: 40,
     marginTop: 10,
     marginBottom: 10,
     textAlign: "center",
   },
-  borderButtonLike: {
-    borderWidth: 0.2,
-    borderColor: "#575060",
-    padding: 15,
+  borderButtonFollow: {
+    backgroundColor: "#FFFD54",
+    borderWidth: 0.5,
+    borderColor: "#783BC9",
+    padding: 10,
     borderRadius: 6,
     width: 100,
-    height: 50,
+    height: 40,
     marginTop: 10,
     marginBottom: 10,
     textAlign: "center",
@@ -445,7 +525,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "bold",
     fontSize: 17,
-    color: "#fff",
   },
   box: {
     display: "flex",
@@ -499,18 +578,14 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "flex-start",
     width: "100%",
-    height: "100%",
   },
   top: {
     marginLeft: 300,
     marginBottom: 20,
   },
   modalView: {
-    margin: 10,
-    marginTop: 100,
-    height: 500,
-    backgroundColor: "#261F30",
-    borderRadius: 20,
+    maxHeight: 400,
+    borderRadius: 6,
     padding: 35,
     shadowColor: "#000",
     shadowOffset: {
@@ -522,12 +597,10 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   modalText: {
-    margin: 15,
-    textAlign: "center",
     fontSize: 15,
+    fontWeight: "bold",
   },
   modalTextHeader: {
-    margin: 12,
     textAlign: "center",
     fontSize: 20,
   },
@@ -556,5 +629,19 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 50,
     marginRight: 10,
+  },
+  favortiesScroll: {
+    width: "85%",
+  },
+  layover: {
+    height: "100%",
+    width: "100%",
+    position: "absolute",
+    top: 0,
+    right: 0,
+    backgroundColor: "rgba(0,0,0,0.7)",
+    zIndex: 100,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

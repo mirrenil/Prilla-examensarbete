@@ -10,6 +10,8 @@ import { RateActive } from "../components/RateActive";
 import ImageUpload from "../components/ImageUpload";
 import { DarkTheme } from "@react-navigation/native";
 import Tags from "../components/Tags";
+import { useSelector } from "react-redux";
+import { currentReduxUser } from "../redux/signin";
 
 const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
   const [product, setProduct] = useState<Product>();
@@ -18,6 +20,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
   const [reviewText, setReviewText] = useState<string>("");
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [image, setImage] = useState<any>();
+  const currentUser = useSelector(currentReduxUser);
 
   useEffect(() => {
     getProductData();
@@ -88,7 +91,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
       photo: image,
       productID: route.params.id,
       rating: rating,
-      userID: "Jg93kssG9mV4gaR72mfa9Lkm5aF2",
+      userID: currentUser?.id,
     };
     try {
       let docId = await addNewDoc("recensioner", newReview);
@@ -122,6 +125,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
     image: {
       height: 60,
       width: 60,
+      borderRadius: 50,
     },
     productSection: {},
     productInfo: {
@@ -156,7 +160,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
     },
     submitButton: {
       width: "70%",
-      backgroundColor: DarkTheme.colors.primary,
+      backgroundColor: "#FFFD54",
       height: 50,
       borderRadius: 6,
       justifyContent: "center",
@@ -179,7 +183,6 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
     popUp: {
       width: "80%",
       height: 200,
-      backgroundColor: "#2E233C",
       justifyContent: "space-around",
       alignItems: "center",
       padding: 10,
@@ -213,8 +216,10 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
 
     return (
       <View style={popupStyles.layover}>
-        <View style={popupStyles.popUp}>
-          <Text style={[styles.fatText]}>Lämna recension</Text>
+        <View style={popupStyles.popUp} lightColor="#fff" darkColor="#2E233C">
+          <Text style={[styles.fatText]} darkColor="#fff" lightColor="#333">
+            Lämna recension
+          </Text>
           <TextInput
             lightColor="#AF90D9"
             darkColor="#413C48"
