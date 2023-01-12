@@ -14,7 +14,7 @@ import {
   getOneDocById,
   updateSingleProperty,
 } from "../helper";
-import { Product, Review } from "../Interfaces";
+import { Product, Review, Tag } from "../Interfaces";
 import { RootStackScreenProps } from "../types";
 import { RateInactive } from "../components/RateInactive";
 import { AntDesign } from "@expo/vector-icons";
@@ -140,7 +140,11 @@ function ProductDetailScreen({
   const renderFolderContent = () => {
     switch (activeTab) {
       case 1:
-        return <Text lightColor="#fff">{product?.description}</Text>;
+        return (
+          <View style={{ height: 150, marginTop: 20 }}>
+            <Text style={{ lineHeight: 25 }}>{product?.description}</Text>
+          </View>
+        );
       case 2:
         return (
           <>
@@ -183,25 +187,41 @@ function ProductDetailScreen({
       case 3:
         return reviews.map((rev) => {
           return (
-            <View lightColor="#2E233B" style={styles.reviewWrapper}>
-              <View lightColor="#2E233B" style={styles.reviewTop}>
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate("Profile", { id: rev.userID });
-                  }}
-                >
-                  <Text
-                    lightColor="#fff"
-                    style={[styles.fatText, styles.capitalize]}
+            <>
+              <View style={styles.reviewWrapper}>
+                <View style={styles.reviewTop}>
+                  <TouchableOpacity
+                    style={{ marginTop: 10 }}
+                    onPress={() => {
+                      navigation.navigate("Profile", { id: rev.userID });
+                    }}
                   >
-                    {rev.author}
+                    <Text style={[styles.fatText, styles.capitalize]}>
+                      {rev.author}
+                    </Text>
+                  </TouchableOpacity>
+                  <RateInactive rating={rev.rating} />
+                  <Text style={{ marginTop: 10, marginLeft: 30 }}>
+                    {rev.rating}
                   </Text>
-                </TouchableOpacity>
-                <RateInactive rating={rev.rating} />
-                <Text lightColor="#fff">{rev.rating}</Text>
+                </View>
+                <Text style={{ lineHeight: 20 }}>{rev.description}</Text>
+                <View style={{ flexDirection: "row" }}>
+                  {rev.tags.map((tag: Tag) => {
+                    return (
+                      <View style={styles.tagsContainer}>
+                        <Text style={styles.tagName}>{tag?.name}</Text>
+                      </View>
+                    );
+                  })}
+                </View>
               </View>
-              <Text lightColor="#fff">{rev.description}</Text>
-            </View>
+              <View
+                style={styles.separator}
+                lightColor="#eee"
+                darkColor="rgba(255,255,255,0.1)"
+              />
+            </>
           );
         });
     }
@@ -313,6 +333,11 @@ function ProductDetailScreen({
 }
 
 const styles = StyleSheet.create({
+  separator: {
+    marginVertical: 15,
+    height: 1,
+    width: "100%",
+  },
   fatText: {
     fontWeight: "bold",
   },
@@ -411,15 +436,30 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     height: 50,
+    marginTop: 10,
   },
   reviewTop: {
     flexDirection: "row",
-    width: "50%",
+    width: "70%",
     justifyContent: "space-between",
   },
   reviewWrapper: {
     width: "90%",
-    marginBottom: 10,
+    marginTop: 10,
+  },
+  tagsContainer: {
+    borderWidth: 1,
+    borderColor: "#575060",
+    width: 73,
+    margin: 5,
+    height: 30,
+    padding: 5,
+    borderRadius: 6,
+    marginTop: 15,
+  },
+  tagName: {
+    textAlign: "center",
+    fontWeight: "bold",
   },
 });
 
