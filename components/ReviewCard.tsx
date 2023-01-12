@@ -107,16 +107,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   tagsContainer: {
-    borderWidth: 0.2,
+    borderWidth: 1,
     borderColor: "#575060",
-    width: 70,
+    width: 73,
     margin: 5,
     height: 30,
     padding: 5,
     borderRadius: 6,
-    backgroundColor: "#CEA9FF",
   },
   tagName: {
     textAlign: "center",
+    fontWeight: "bold",
   },
 });
