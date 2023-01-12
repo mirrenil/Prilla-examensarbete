@@ -123,7 +123,7 @@ export default function ProfileScreen({
         navigation.navigate("Signin");
       })
       .catch((error: any) => {
-        console.error(error);
+        console.log(error);
       });
   };
 
