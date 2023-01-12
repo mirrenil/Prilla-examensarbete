@@ -59,6 +59,8 @@ export const getDocsWithSpecificValue = async (
   }
 };
 
+// Updates document OR adds new document with a preset id
+// To add new doc that also creates an uid use addNewDoc
 export const setOneDoc = async (collectionName, newData, id) => {
   try {
     let response = await setDoc(doc(db, collectionName, id), newData);
