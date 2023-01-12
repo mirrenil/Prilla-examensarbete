@@ -30,6 +30,7 @@ import {
   signOut,
 } from "firebase/auth";
 import { auth } from "../firebase";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function ProfileScreen({
   navigation,
@@ -50,15 +51,21 @@ export default function ProfileScreen({
   const profilePic =
     "https://cdn.drawception.com/images/avatars/647493-B9E.png";
   let isMe = route.params.id === myUser.id;
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     setCurrentUser();
-    getMyFollowing();
     getReviews();
     getLiked();
     compareLikedIds();
     imagesLoaded();
   }, []);
+
+  useEffect(() => {
+    if (isFocused) {
+      getMyFollowing();
+    }
+  }, [isFocused]);
 
   const setCurrentUser = async () => {
     try {
