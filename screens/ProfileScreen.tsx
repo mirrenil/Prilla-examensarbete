@@ -12,12 +12,7 @@ import * as Haptics from "expo-haptics";
 import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  currentReduxUser,
-  setActiveUser,
-  setSignOutState,
-  updateUser,
-} from "../redux/signin";
+import { currentReduxUser, setSignOutState } from "../redux/signin";
 import {
   getAllDocsInCollection,
   getDocsWithSpecificValue,
@@ -54,7 +49,7 @@ export default function ProfileScreen({
   let photoURLS: string[] = [];
   const imageBeforeUpdate =
     "https://cdn.drawception.com/images/avatars/647493-B9E.png";
-  const [profilePic, setProfilePic] = useState<string>("");
+  const [profilePic, setProfilePic] = useState<string[]>([]);
   let isMe = route.params.id === myUser.id;
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
 
@@ -176,20 +171,18 @@ export default function ProfileScreen({
 
   const handleImgUpload = async (image: any) => {
     const auth = getAuth();
+    let myImg: string[] = [];
     let newData = { photo: image };
     try {
       await updateSingleProperty("users", myUser?.id, newData).then(() => {
         if (auth.currentUser) {
           updateProfile(auth.currentUser, { photoURL: image }).then(() =>
-            setProfilePic(image)
+            console.log("Profile updated")
           );
         }
+        myImg.push(image);
+        setProfilePic(myImg);
       });
-      dispatch(
-        updateUser({
-          photo: image,
-        })
-      );
       setPopUpOpen(false);
     } catch (err) {
       console.log(err);
@@ -248,7 +241,10 @@ export default function ProfileScreen({
             {myProfile ? (
               <View style={styles.center}>
                 <TouchableOpacity onPress={() => setPopUpOpen(true)}>
-                  <Image source={{ uri: profilePic }} style={styles.image} />
+                  <Image
+                    source={{ uri: profilePic[0] || user?.photo }}
+                    style={styles.image}
+                  />
                 </TouchableOpacity>
 
                 <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
