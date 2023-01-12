@@ -195,9 +195,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: "OleoScript",
-    fontStyle: "normal",
     fontSize: 50,
-    fontWeight: "bold",
     color: "#FFFD54",
   },
   slogan: {
