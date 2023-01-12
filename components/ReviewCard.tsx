@@ -8,10 +8,9 @@ import { RateInactive } from "./RateInactive";
 
 interface Props {
   review: Review;
-  tag: Tag;
 }
 
-export const ReviewCard = ({ review, tag }: Props) => {
+export const ReviewCard = ({ review }: Props) => {
   const [product, setProduct] = useState<Product>();
   const navigation = useNavigation();
 
