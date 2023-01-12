@@ -15,7 +15,7 @@ import {
   getOneDocById,
   updateSingleProperty,
 } from "../helper";
-import { Product, Review } from "../Interfaces";
+import { Product, Review, Tag } from "../Interfaces";
 import { RootStackScreenProps } from "../types";
 import { RateInactive } from "../components/RateInactive";
 import { AntDesign } from "@expo/vector-icons";
@@ -197,8 +197,16 @@ function ProductDetailScreen({
                   </Text>
                 </View>
                 <Text style={{ lineHeight: 20 }}>{rev.description}</Text>
+                <View style={{ flexDirection: "row" }}>
+                  {rev.tags.map((tag: Tag) => {
+                    return (
+                      <View style={styles.tagsContainer}>
+                        <Text style={styles.tagName}>{tag?.name}</Text>
+                      </View>
+                    );
+                  })}
+                </View>
               </View>
-
               <View
                 style={styles.separator}
                 lightColor="#eee"
@@ -315,7 +323,7 @@ function ProductDetailScreen({
 
 const styles = StyleSheet.create({
   separator: {
-    marginVertical: 30,
+    marginVertical: 15,
     height: 1,
     width: "100%",
   },
@@ -425,6 +433,20 @@ const styles = StyleSheet.create({
   reviewWrapper: {
     width: "90%",
     marginTop: 10,
+  },
+  tagsContainer: {
+    borderWidth: 1,
+    borderColor: "#575060",
+    width: 73,
+    margin: 5,
+    height: 30,
+    padding: 5,
+    borderRadius: 6,
+    marginTop: 15,
+  },
+  tagName: {
+    textAlign: "center",
+    fontWeight: "bold",
   },
 });
 
