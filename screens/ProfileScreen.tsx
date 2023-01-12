@@ -12,7 +12,12 @@ import * as Haptics from "expo-haptics";
 import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import { useDispatch, useSelector } from "react-redux";
-import { currentReduxUser, setSignOutState } from "../redux/signin";
+import {
+  currentReduxUser,
+  setActiveUser,
+  setSignOutState,
+  updateUser,
+} from "../redux/signin";
 import {
   getAllDocsInCollection,
   getDocsWithSpecificValue,
@@ -54,6 +59,7 @@ export default function ProfileScreen({
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
 
   useEffect(() => {
+    checkCurrentUser();
     getReviews();
     getLiked();
     compareLikedIds();
@@ -179,6 +185,11 @@ export default function ProfileScreen({
           );
         }
       });
+      dispatch(
+        updateUser({
+          photo: image,
+        })
+      );
       setPopUpOpen(false);
     } catch (err) {
       console.log(err);
