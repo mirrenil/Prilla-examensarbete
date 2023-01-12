@@ -32,10 +32,6 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
     return unsubrcribe;
   }, [auth, onAuthStateChanged]);
 
-  useEffect(() => {
-    console.log("user: ", currentUser);
-  }, [currentUser]);
-
   const login = async () => {
     try {
       await signInWithEmailAndPassword(auth, user.email, user.password).then(
