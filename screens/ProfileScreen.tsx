@@ -322,17 +322,19 @@ export default function ProfileScreen({
               </Text>
             </View>
           )}
-
           <View style={styles.row}>
-            {urls.map((url, index) => (
-              <Image
-                key={index}
-                style={styles.favoritesImage}
-                source={{
-                  uri: url,
-                }}
-              />
-            ))}
+            <ScrollView horizontal scrollEnabled style={styles.favortiesScroll}>
+              {urls.map((url, index) => (
+                <Image
+                  key={index}
+                  style={styles.favoritesImage}
+                  source={{
+                    uri: url,
+                  }}
+                />
+              ))}
+            </ScrollView>
+            <AntDesign name="right" size={30} color="white" />
           </View>
         </View>
         <View
@@ -627,6 +629,9 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 50,
     marginRight: 10,
+  },
+  favortiesScroll: {
+    width: "85%",
   },
   layover: {
     height: "100%",
