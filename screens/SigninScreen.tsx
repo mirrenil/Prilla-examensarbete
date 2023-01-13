@@ -49,7 +49,7 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
       console.log(error, "error");
     }
   };
-  console.log(currentUser?.email + "hej från signin");
+
   return (
     <View style={styles.screen}>
       <Text style={styles.title}>Prilla</Text>
