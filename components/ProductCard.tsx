@@ -62,6 +62,7 @@ export const ProductCard = ({ product }: Props) => {
       height: 90,
       width: 90,
       marginRight: 10,
+      borderRadius: 50,
     },
   });
 
