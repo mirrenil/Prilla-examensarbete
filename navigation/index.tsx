@@ -154,7 +154,7 @@ function BottomTabNavigator() {
       // initialRouteName="Home"
       screenOptions={{
         headerStyle: {
-          backgroundColor: Colors[colorScheme].white,
+          backgroundColor: Colors[colorScheme].header,
           height: 100,
         },
         headerTitleStyle: {

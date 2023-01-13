@@ -16,7 +16,7 @@ export const gradientDark = {
 export default {
   light: {
     text: "#1B1324",
-    white: "#fff",
+    header: "#fff",
     menu: "#783BC9",
     background: "#EBE6F3",
     primary: {
@@ -38,6 +38,7 @@ export default {
   },
   dark: {
     text: "#fff",
+    header: "#3E394F",
     background: "transparent",
     menu: "#1B1324",
     primary: {
