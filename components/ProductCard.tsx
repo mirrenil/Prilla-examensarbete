@@ -5,7 +5,6 @@ import {
   useColorScheme,
 } from "react-native";
 import { Product } from "../Interfaces";
-import navigation from "../navigation";
 import { RateInactive } from "./RateInactive";
 import { Text, View } from "../components/Themed";
 import { useNavigation } from "@react-navigation/native";
@@ -99,3 +98,50 @@ export const ProductCard = ({ product }: Props) => {
     </View>
   );
 };
+
+const text = StyleSheet.create({
+  fat: {
+    fontWeight: "bold",
+  },
+});
+
+const margin = StyleSheet.create({
+  all: {
+    margin: 10,
+  },
+  bottom: {
+    marginBottom: 10,
+  },
+  left: {
+    marginLeft: 10,
+  },
+  top: {
+    marginTop: 10,
+  },
+});
+
+const content = StyleSheet.create({
+  container: {},
+  cardWrapper: {
+    width: "95%",
+    minHeight: 100,
+    backgroundColor: "rgba(255,255,255,0.5)",
+    borderTopLeftRadius: 6,
+    borderBottomLeftRadius: 6,
+    alignSelf: "flex-end",
+    marginTop: 10,
+    marginBottom: 10,
+    flexDirection: "row",
+    padding: 10,
+  },
+});
+
+const card = StyleSheet.create({
+  image: {
+    flex: 1,
+    height: 90,
+    width: 90,
+    marginRight: 10,
+    borderRadius: 50,
+  },
+});

@@ -147,6 +147,7 @@ const BottomTab = createBottomTabNavigator<RootTabParamList>();
 function BottomTabNavigator() {
   const colorScheme = useColorScheme();
   const user = useSelector(currentReduxUser);
+  const username = user?.displayName;
 
   return (
     <BottomTab.Navigator
@@ -177,24 +178,6 @@ function BottomTabNavigator() {
           tabBarIcon: ({ color }) => (
             <Ionicons name="ios-home-outline" size={24} color={color} />
           ),
-
-          headerRight: () => (
-            <Pressable
-              onPress={() => {
-                navigation.navigate("Signin");
-              }}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}
-            >
-              <FontAwesome
-                name="sign-out"
-                size={25}
-                color={Colors[colorScheme].text}
-                style={{ marginRight: 15 }}
-              />
-            </Pressable>
-          ),
         })}
       />
       <BottomTab.Screen
@@ -224,7 +207,7 @@ function BottomTabNavigator() {
         component={ProfileScreen}
         initialParams={{ id: user.id }}
         options={{
-          title: "",
+          title: username,
           tabBarIcon: ({ color }) => (
             <AntDesign name="user" size={24} color={color} />
           ),

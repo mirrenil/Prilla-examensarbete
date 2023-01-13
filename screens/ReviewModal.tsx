@@ -135,6 +135,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
     image: {
       height: 60,
       width: 60,
+      borderRadius: 50,
     },
     productSection: {},
     productInfo: {

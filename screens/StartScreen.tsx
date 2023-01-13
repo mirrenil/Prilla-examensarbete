@@ -1,24 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet, useColorScheme } from "react-native";
 import { Text, View } from "../components/Themed";
-import { useFonts } from "expo-font";
 import { getAllDocsInCollection } from "../helper";
 import { Review } from "../Interfaces";
 import Tabbar from "../components/Tabbar";
 import { RootTabScreenProps } from "../types";
 import { ActivityCard } from "../components/ActivityCard";
-import { getAdditionalUserInfo } from "firebase/auth";
 import Colors, { gradientDark, gradientLight } from "../constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
 
 export default function StartScreen({
   navigation,
 }: RootTabScreenProps<"Home">) {
-  const [loaded] = useFonts({
-    Inter: require("../assets/fonts/Inter-VariableFont_slnt,wght.ttf"),
-    Caramel: require("../assets/fonts/Caramel-Regular.ttf"),
-    OleoScript: require("../assets/fonts/OleoScript-Regular.ttf"),
-  });
   const [reviews, setReviews] = useState<Review[]>([]);
   const colorScheme: any = useColorScheme();
   let isLight = colorScheme == "light" ? true : false;
@@ -64,7 +57,7 @@ export default function StartScreen({
               <Text style={styles.prilla}>Prilla</Text>
               <Image
                 style={styles.logo}
-                source={require("../assets/images/loop.png")}
+                source={require("../assets/images/loop-logo.png")}
               />
             </View>
           </View>
@@ -100,7 +93,6 @@ const styles = StyleSheet.create({
   heroText: {
     color: "white",
     textTransform: "uppercase",
-    fontFamily: "Inter",
     fontWeight: "700",
     fontSize: 20,
   },
@@ -119,6 +111,7 @@ const styles = StyleSheet.create({
   },
   specialFont: {
     fontFamily: "Caramel",
+    fontStyle: "normal",
     height: 10,
     fontSize: 70,
   },
@@ -128,9 +121,7 @@ const styles = StyleSheet.create({
   },
   prilla: {
     fontFamily: "OleoScript",
-    fontStyle: "normal",
     fontSize: 35,
-    fontWeight: "bold",
     color: "#FFFD54",
   },
   separator: {

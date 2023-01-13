@@ -20,6 +20,7 @@ export interface User {
   id: string;
   photo: string;
   liked: string[];
+  following: string[];
 }
 
 export interface Product {
