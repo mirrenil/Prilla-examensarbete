@@ -323,7 +323,8 @@ function ProductDetailScreen({
     },
     ratingText: {
       color: "white",
-      marginLeft: 10,
+      marginLeft: 20,
+      marginTop: 12,
     },
     interactions: {
       flexDirection: "row",
@@ -460,8 +461,9 @@ function ProductDetailScreen({
                 <Text style={styles.manufacturer}>{product?.manufacturer}</Text>
                 <View style={styles.ratingContainer}>
                   <View
+                    lightColor="transparent"
+                    darkColor="transparent"
                     style={{
-                      backgroundColor: Colors[colorScheme!].primary.dark,
                       padding: 10,
                       borderRadius: 6,
                       flexDirection: "row",
