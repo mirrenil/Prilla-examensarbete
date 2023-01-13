@@ -36,7 +36,6 @@ function ProductDetailScreen({
   const [product, setProduct] = useState<Product>();
   const [activeTab, setActiveTab] = useState<number>(3);
   const [reviews, setReviews] = useState<ReviewWithAuthor[]>([]);
-  const [like, setLike] = useState<boolean>(false);
   const colorScheme: any = useColorScheme();
   let isLight = colorScheme == "light" ? true : false;
   const [liked, setLiked] = useState<boolean>(false);
@@ -147,9 +146,14 @@ function ProductDetailScreen({
     switch (activeTab) {
       case 1:
         return (
-          <Text lightColor={Colors[colorScheme].text}>
-            {product?.description}
-          </Text>
+          <View style={{ height: 150, marginTop: 20 }}>
+            <Text
+              style={{ lineHeight: 25 }}
+              lightColor={Colors[colorScheme].text}
+            >
+              {product?.description}
+            </Text>
+          </View>
         );
       case 2:
         return (
@@ -216,40 +220,55 @@ function ProductDetailScreen({
       case 3:
         return reviews.map((rev) => {
           return (
-            <View lightColor="transparent" style={styles.reviewWrapper}>
-              <View lightColor="transparent" style={styles.reviewTop}>
-                <TouchableOpacity
-                  style={{ marginTop: 10 }}
-                  onPress={() => {
-                    navigation.navigate("Profile", { id: rev.userID });
-                  }}
-                >
+            <>
+              <View lightColor="transparent" style={styles.reviewWrapper}>
+                <View lightColor="transparent" style={styles.reviewTop}>
+                  <TouchableOpacity
+                    style={{ marginTop: 10 }}
+                    onPress={() => {
+                      navigation.navigate("Profile", { id: rev.userID });
+                    }}
+                  >
+                    <Text
+                      lightColor={Colors[colorScheme].text}
+                      style={[styles.fatText, styles.capitalize]}
+                    >
+                      {rev.author}
+                    </Text>
+                  </TouchableOpacity>
+                  <RateInactive
+                    rating={rev.rating}
+                    small={{ size: 15, container: 90, single: 17 }}
+                  />
                   <Text
                     lightColor={Colors[colorScheme].text}
-                    style={[styles.fatText, styles.capitalize]}
+                    style={{ marginTop: 10, marginLeft: 30 }}
                   >
-                    {rev.author}
+                    {rev.rating} / 5
                   </Text>
-                </TouchableOpacity>
-                <RateInactive
-                  rating={rev.rating}
-                  small={{ size: 15, container: 90, single: 17 }}
-                />
-                <Text lightColor={Colors[colorScheme].text} style={{ marginTop: 10, marginLeft: 30 }}>{rev.rating}</Text>
-              </View>
-              <Text style={{ lineHeight: 20 }} lightColor={Colors[colorScheme].text}>
-                {rev.description}
-              </Text>
-              <View style={{ flexDirection: "row" }}>
+                </View>
+                <Text
+                  style={{ lineHeight: 20 }}
+                  lightColor={Colors[colorScheme].text}
+                >
+                  {rev.description}
+                </Text>
+                <View style={styles.tagsContainer}>
                   {rev.tags.map((tag: Tag) => {
                     return (
-                      <View style={styles.tagsContainer}>
+                      <View style={styles.tag}>
                         <Text style={styles.tagName}>{tag?.name}</Text>
                       </View>
                     );
                   })}
                 </View>
-            </View>
+              </View>
+              <View
+                style={styles.separator}
+                lightColor="#eee"
+                darkColor="rgba(255,255,255,0.1)"
+              />
+            </>
           );
         });
     }
@@ -358,7 +377,7 @@ function ProductDetailScreen({
       borderBottomWidth: 1,
       borderLeftWidth: 1,
       borderRightWidth: 1,
-      padding: 30,
+      padding: 15,
     },
     folderFacts: {
       flexDirection: "row",
@@ -371,26 +390,35 @@ function ProductDetailScreen({
       justifyContent: "space-between",
     },
     reviewWrapper: {
-      width: "90%",
+      width: "100%",
       paddingBottom: 10,
       marginBottom: 10,
       borderBottomColor: Colors[colorScheme].grey.light,
       borderBottomWidth: 1,
     },
     tagsContainer: {
+      flexDirection: "row",
+    },
+    tagName: {
+      textAlign: "center",
+      fontWeight: "bold",
+      fontSize: 12,
+    },
+    separator: {
+      marginVertical: 15,
+      height: 1,
+      width: "100%",
+    },
+    tag: {
       borderWidth: 1,
-      borderColor: "#575060",
-      width: 73,
+      borderColor: Colors[colorScheme].grey.light,
+      width: 70,
       margin: 5,
       height: 30,
       padding: 5,
       borderRadius: 6,
       marginTop: 15,
-  },
-  tagName: {
-    textAlign: "center",
-    fontWeight: "bold",
-  },
+    },
   });
 
   if (product && reviews) {
@@ -447,6 +475,7 @@ function ProductDetailScreen({
                     </Text>
                   </View>
                 </View>
+
                 <Text>{product?.reviews.length} Ratings</Text>
                 <View style={styles.interactions}>
                   <TouchableOpacity
@@ -461,13 +490,14 @@ function ProductDetailScreen({
                     </View>
                   </TouchableOpacity>
 
-                <TouchableOpacity onPress={toggleLike}>
-                  {!isAlreadyLiked() ? (
-                    <AntDesign name="hearto" size={24} color="white" />
-                  ) : (
-                    <AntDesign name="heart" size={24} color="red" />
-                  )}
-                </TouchableOpacity>
+                  <TouchableOpacity onPress={toggleLike}>
+                    {!isAlreadyLiked() ? (
+                      <AntDesign name="hearto" size={24} color="white" />
+                    ) : (
+                      <AntDesign name="heart" size={24} color="red" />
+                    )}
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
 
@@ -531,122 +561,5 @@ function ProductDetailScreen({
     return <ActivityIndicator size="small" color="#0000ff" />;
   }
 }
-
-const styles = StyleSheet.create({
-  separator: {
-    marginVertical: 15,
-    height: 1,
-    width: "100%",
-  },
-  fatText: {
-    fontWeight: "bold",
-  },
-  capitalize: {
-    textTransform: "capitalize",
-  },
-  background: {
-    position: "relative",
-    height: 200,
-    width: "100%",
-  },
-  waves: {
-    position: "absolute",
-    bottom: -23,
-    height: 100,
-  },
-  screenContainer: {
-    padding: 20,
-  },
-  productImg: {
-    height: 120,
-    width: 120,
-    marginRight: 10,
-    borderRadius: 50,
-  },
-  productDataContainer: {
-    height: 200,
-    marginBottom: 20,
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  title: {
-    fontWeight: "bold",
-    fontSize: 18,
-  },
-  productInfo: {
-    justifyContent: "space-between",
-    maxWidth: "60%",
-  },
-  manufacturer: {},
-  ratingContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  ratingText: {
-    marginLeft: 10,
-  },
-  interactions: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  button: {
-    padding: 10,
-    marginRight: 10,
-    borderWidth: 1,
-    borderColor: "#783BC9",
-    borderRadius: 6,
-  },
-  tableDataContainer: {
-    width: "70%",
-  },
-  tableRow: {
-    height: 40,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    borderBottomColor: "rgba(255,255,255,0.3)",
-    borderBottomWidth: 1,
-  },
-  folder: {
-    marginTop: 50,
-    width: "100%",
-  },
-  tabs: {
-    flexDirection: "row",
-  },
-  tab: {
-    flex: 1,
-    height: 50,
-    borderTopLeftRadius: 6,
-    borderTopRightRadius: 6,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#7E7885",
-  },
-  activeTab: {
-    backgroundColor: "#2E233B",
-  },
-
-  folderContent: {
-    backgroundColor: "#2E233B",
-    padding: 10,
-  },
-  folderFacts: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    height: 50,
-    marginTop: 10,
-  },
-  reviewTop: {
-    flexDirection: "row",
-    width: "70%",
-    justifyContent: "space-between",
-  },
-  reviewWrapper: {
-    width: "90%",
-    marginTop: 10,
-  },
-});
 
 export default ProductDetailScreen;
