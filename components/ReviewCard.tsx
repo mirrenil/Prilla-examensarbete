@@ -33,6 +33,7 @@ export const ReviewCard = ({ review }: Props) => {
       height: 60,
       width: 60,
       flex: 1,
+      borderRadius: 50,
     },
     productData: {
       flexDirection: "row",
@@ -50,6 +51,7 @@ export const ReviewCard = ({ review }: Props) => {
     },
     description: {
       padding: 10,
+      flexDirection: "row",
     },
     wrapper: {
       backgroundColor: Colors[colorScheme].section,
@@ -57,7 +59,20 @@ export const ReviewCard = ({ review }: Props) => {
       borderRadius: 6,
       width: "90%",
       padding: 10,
-      height: 130,
+      maxHeight: 200,
+    },
+    container: {
+      borderWidth: 1,
+      borderColor: "#575060",
+      width: 73,
+      margin: 5,
+      height: 30,
+      padding: 5,
+      borderRadius: 6,
+    },
+    name: {
+      textAlign: "center",
+      fontWeight: "bold",
     },
   });
 
@@ -121,8 +136,8 @@ export const ReviewCard = ({ review }: Props) => {
         <View style={{ flexDirection: "row" }}>
           {review.tags.map((tag: Tag) => {
             return (
-              <View style={styles.tagsContainer}>
-                <Text style={styles.tagName}>{tag?.name}</Text>
+              <View style={styles.container}>
+                <Text style={styles.name}>{tag?.name}</Text>
               </View>
             );
           })}
@@ -139,50 +154,3 @@ export const ReviewCard = ({ review }: Props) => {
     );
   }
 };
-
-const styles = StyleSheet.create({
-  wrapper: {
-    marginTop: 10,
-    borderRadius: 6,
-    width: "90%",
-    padding: 10,
-    backgroundColor: "rgba(255,255,255,0.5)",
-  },
-  image: {
-    height: 60,
-    width: 60,
-    flex: 1,
-    borderRadius: 50,
-  },
-  productData: {
-    flexDirection: "row",
-  },
-  textAndRating: {
-    marginLeft: 10,
-    flex: 4,
-  },
-  productText: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  textBold: {
-    fontWeight: "bold",
-  },
-  description: {
-    padding: 10,
-    flexDirection: "row",
-  },
-  tagsContainer: {
-    borderWidth: 1,
-    borderColor: "#575060",
-    width: 73,
-    margin: 5,
-    height: 30,
-    padding: 5,
-    borderRadius: 6,
-  },
-  tagName: {
-    textAlign: "center",
-    fontWeight: "bold",
-  },
-});
