@@ -117,8 +117,8 @@ export const ReviewCard = ({ review }: Props) => {
               style={{ flexDirection: "row" }}
             >
               <RateInactive rating={review.rating} />
-              <Text style={{ marginLeft: 25, marginTop: 10 }}>
-                {review.rating}/5
+              <Text lightColor="#fff" style={{ marginLeft: 25, marginTop: 10 }}>
+                {review.rating} / 5
               </Text>
             </View>
           </View>
@@ -137,7 +137,9 @@ export const ReviewCard = ({ review }: Props) => {
           {review.tags.map((tag: Tag) => {
             return (
               <View style={styles.container}>
-                <Text style={styles.name}>{tag?.name}</Text>
+                <Text lightColor="#fff" style={styles.name}>
+                  {tag?.name}
+                </Text>
               </View>
             );
           })}
