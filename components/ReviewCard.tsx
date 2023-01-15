@@ -1,10 +1,17 @@
-import { useNavigation } from "@react-navigation/native";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
+
 import React, { useEffect, useState } from "react";
-import { View, Image, Text, StyleSheet } from "react-native";
+import { View, Image, Text, StyleSheet, Alert } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useSelector } from "react-redux";
 import { getOneDocById } from "../helper";
 import { Review, Product, Tag } from "../Interfaces";
+import { currentReduxUser } from "../redux/signin";
 import { RateInactive } from "./RateInactive";
+import * as Haptics from "expo-haptics";
+import { deleteDoc, doc } from "firebase/firestore";
+import { db } from "../firebase";
 
 interface Props {
   review: Review;
@@ -12,17 +19,49 @@ interface Props {
 
 export const ReviewCard = ({ review }: Props) => {
   const [product, setProduct] = useState<Product>();
+  const myUser = useSelector(currentReduxUser);
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     getProduct();
   }, []);
+
+  useEffect(() => {
+    if (isFocused) {
+      getProduct();
+    }
+  }, [isFocused]);
 
   const getProduct = async () => {
     let data = await getOneDocById("produkter", review.productID);
     if (data) {
       setProduct(data as Product);
     }
+  };
+
+  const handleRemove = async (id: string) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    Alert.alert(
+      "Är du säker på att du vill ta bort din recension?",
+      "Du kan inte ångra dig!",
+      [
+        {
+          text: "Avbryt",
+          onPress: () => console.log("AVBRYT Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "Ja",
+          onPress: () => {
+            console.log("JA Pressed");
+            const specificReview = doc(db, "recensioner", id);
+            deleteDoc(specificReview);
+          },
+        },
+      ]
+    );
+    getProduct();
   };
 
   if (product) {
@@ -62,6 +101,17 @@ export const ReviewCard = ({ review }: Props) => {
               </View>
             );
           })}
+
+          {review.userID === myUser?.id && (
+            <View style={{ position: "absolute", left: "85%" }}>
+              <FontAwesome5
+                name="trash"
+                size={24}
+                color="#783BC9"
+                onPress={() => handleRemove(review.id as string)}
+              />
+            </View>
+          )}
         </View>
       </View>
     );

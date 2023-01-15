@@ -64,6 +64,7 @@ export default function ProfileScreen({
   useEffect(() => {
     if (isFocused) {
       getMyFollowing();
+      getReviews();
     }
   }, [isFocused]);
 
