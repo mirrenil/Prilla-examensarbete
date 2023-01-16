@@ -37,7 +37,7 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
           dispatch(
             setActiveUser({
               reduxEmail: result.user?.email,
-              currentUser: currentUser,
+              currentUser: result.user,
             })
           );
         }
@@ -46,6 +46,7 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
       navigation.navigate("Root");
     } catch (error) {
       Alert.alert("Felaktig email eller lösenord");
+      console.log(error, "error");
     }
   };
 
