@@ -25,7 +25,6 @@ import { useIsFocused } from "@react-navigation/native";
 
 interface ReviewWithAuthor extends Review {
   author: string;
-  rating: number;
 }
 
 function ProductDetailScreen({
@@ -38,7 +37,6 @@ function ProductDetailScreen({
   const [liked, setLiked] = useState<boolean>(false);
   const myUser = useSelector(currentReduxUser);
   const [usersLikedArray, setUsersLikedArray] = useState<string[]>([]);
-  const [productRating, setProductRating] = useState<number>(0);
   const isFocused = useIsFocused();
 
   useEffect(() => {
@@ -65,18 +63,16 @@ function ProductDetailScreen({
   };
 
   // get the rating of the product
-  const getRating = () => {
-    let rating = 0;
+  const getRating = useCallback(() => {
+    let thisRating = 0;
     if (reviews.length > 0) {
       for (let rev of reviews) {
-        rating += rev.rating;
+        thisRating += rev.rating;
       }
-      rating = rating / reviews.length;
+      thisRating = thisRating / reviews.length;
     }
-    setProductRating(rating);
-    console.log(productRating);
-    return productRating;
-  };
+    return thisRating;
+  }, [reviews, product?.rating]);
 
   const getProductReviews = async () => {
     let newList: ReviewWithAuthor[] = [];
@@ -272,9 +268,9 @@ function ProductDetailScreen({
               </Text>
               <Text style={styles.manufacturer}>{product?.manufacturer}</Text>
               <View style={styles.ratingContainer}>
-                <RateInactive rating={productRating ? productRating : 0} />
+                <RateInactive rating={product?.rating} />
                 <Text style={styles.ratingText}>
-                  {productRating ? productRating.toFixed(1) : 0}
+                  {product?.rating ? product?.rating : 0}
                 </Text>
               </View>
               <Text>{reviews.length} Ratings</Text>
