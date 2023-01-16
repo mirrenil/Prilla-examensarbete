@@ -10,6 +10,7 @@ import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { useSelector } from "react-redux";
 import { currentReduxUser } from "../redux/signin";
+import { useIsFocused } from "@react-navigation/native";
 
 interface Props {
   review: Review;
@@ -28,6 +29,7 @@ export const ActivityCard = ({ review }: Props) => {
   const [comment, setComment] = useState<CommentWithUsername>();
   const myUser = useSelector(currentReduxUser);
   const [likesCount, setLikesCount] = useState<number>(0);
+  let isFocused = useIsFocused();
 
   useEffect(() => {
     if (review.likes) {
@@ -36,7 +38,7 @@ export const ActivityCard = ({ review }: Props) => {
     getReviewAuthor();
     getCommentsData();
     checkIfLiked();
-  }, []);
+  }, [isFocused]);
 
   const getReviewAuthor = async () => {
     let data = await getOneDocById("users", review.userID);
@@ -68,7 +70,11 @@ export const ActivityCard = ({ review }: Props) => {
     setLikesCount(likesCount + 1);
     if (review.likes) {
       let allLikes = review.likes;
-      newData = { likes: [...allLikes, myUser.id] };
+      let filteredList = allLikes.filter((id) => id !== myUser.id);
+      filteredList.push(myUser.id);
+      newData = { likes: filteredList };
+      console.log("alllikes: ", allLikes);
+      console.log(newData);
     } else {
       newData = { likes: [myUser.id] };
     }
@@ -86,6 +92,7 @@ export const ActivityCard = ({ review }: Props) => {
     if (review.likes) {
       let likesArray = review.likes;
       let filteredList = likesArray.filter((id) => id !== myUser.id);
+      console.log("removed from list: ", filteredList);
       try {
         await updateSingleProperty("recensioner", review.id, {
           likes: filteredList,
