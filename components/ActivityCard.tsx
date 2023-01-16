@@ -3,23 +3,34 @@ import { Image, ImageBackground, StyleSheet, View } from "react-native";
 import { Review, User } from "../Interfaces";
 import { ReviewCard } from "./ReviewCard";
 import React, { useEffect, useState } from "react";
-import { getOneDocById } from "../helper";
+import { getOneDocById, updateSingleProperty } from "../helper";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
+import { useSelector } from "react-redux";
+import { currentReduxUser } from "../redux/signin";
 
 interface Props {
   review: Review;
+}
+
+interface CommentWithUsername {
+  author: string;
+  image: string;
+  text: string;
 }
 
 export const ActivityCard = ({ review }: Props) => {
   const [author, setAuthor] = useState<User>();
   const navigation = useNavigation();
   const [like, setLike] = useState<boolean>(false);
+  const [comment, setComment] = useState<CommentWithUsername>();
+  const myUser = useSelector(currentReduxUser);
 
   useEffect(() => {
     getReviewAuthor();
+    getCommentsData();
   }, []);
 
   const getReviewAuthor = async () => {
@@ -29,9 +40,42 @@ export const ActivityCard = ({ review }: Props) => {
     }
   };
 
-  const toggleButton = () => {
+  const getCommentsData = async () => {
+    if (review?.comments?.length) {
+      let user = await getOneDocById("users", review.comments[0].authorID);
+      if (user) {
+        setComment({
+          author: user.displayName,
+          image: user.photo,
+          text: review.comments[0].text,
+        });
+      }
+    }
+  };
+
+  const toggleLikeButton = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setLike(!like);
+    // addlikeToDb();
+  };
+
+  const addLike = async () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    let allLikes = [...review.likes];
+    const newData = { likes: [...allLikes, myUser.id] };
+    console.log(newData);
+    try {
+      await updateSingleProperty("recensioner", review.id, newData);
+      setLike(true);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const removeLike = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    let allLikes = review.likes.filter((id) => id !== myUser.id);
+    console.log(allLikes);
   };
 
   return (
@@ -42,19 +86,21 @@ export const ActivityCard = ({ review }: Props) => {
         style={styles.image}
       >
         <View style={styles.userInfo}>
-          <Text>User Pic</Text>
+          <Image source={{ uri: author?.photo }} style={styles.profilePic} />
           <Text style={styles.username}>{author?.displayName}</Text>
         </View>
         <ReviewCard key={review.id} review={review} />
       </ImageBackground>
       <View style={styles.social}>
-        <TouchableOpacity onPress={toggleButton}>
-          {like ? (
+        {like ? (
+          <TouchableOpacity onPress={removeLike}>
             <AntDesign name="heart" size={24} color="#783BC9" />
-          ) : (
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity onPress={addLike}>
             <AntDesign name="hearto" size={26} color="#783BC9" />
-          )}
-        </TouchableOpacity>
+          </TouchableOpacity>
+        )}
         <TouchableOpacity
           onPress={() => navigation.navigate("Comment", { id: review.id })}
         >
@@ -66,18 +112,25 @@ export const ActivityCard = ({ review }: Props) => {
           />
         </TouchableOpacity>
       </View>
+      {comment && (
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Comment", { id: review.id })}
+        >
+          <View style={styles.comment}>
+            <Image source={{ uri: comment?.image }} style={styles.commentImg} />
+            <View style={styles.textWrapper}>
+              <Text>{comment?.author}</Text>
+              <Text>{comment?.text}</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
 const styles = StyleSheet.create({
-  wrapper: {
-    // backgroundColor: "rgba(255,255,255,0.5)",
-    // borderWidth: 1,
-    // borderColor: "red",
-    marginBottom: 30,
-  },
+  wrapper: {},
   image: {
-    marginBottom: 10,
     paddingBottom: 10,
     minHeight: 230,
     justifyContent: "space-between",
@@ -86,8 +139,14 @@ const styles = StyleSheet.create({
   userInfo: {
     backgroundColor: "rgba(0,0,0,0.5)",
     flexDirection: "row",
+    alignItems: "center",
     width: "100%",
-    height: 50,
+    padding: 10,
+  },
+  profilePic: {
+    height: 30,
+    width: 30,
+    borderRadius: 100,
   },
   username: {
     fontWeight: "bold",
@@ -98,7 +157,20 @@ const styles = StyleSheet.create({
     width: 90,
     flexDirection: "row",
     justifyContent: "space-between",
-
-    height: 50,
+    alignItems: "center",
+    padding: 10,
+  },
+  comment: {
+    padding: 10,
+    flexDirection: "row",
+  },
+  textWrapper: {
+    width: "70%",
+    marginLeft: 10,
+  },
+  commentImg: {
+    height: 30,
+    width: 30,
+    borderRadius: 100,
   },
 });

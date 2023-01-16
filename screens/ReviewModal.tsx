@@ -88,7 +88,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
       createdAt: new Date(),
       tags: selectedTags,
       description: reviewText,
-      photo: image,
+      photo: image ? image : product?.photo,
       productID: route.params.id,
       rating: rating,
       userID: myUser.id,

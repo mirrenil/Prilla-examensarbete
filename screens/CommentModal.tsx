@@ -30,19 +30,18 @@ interface User {
   image: string;
 }
 
-interface FullComment {
+interface CommentWithUsername {
   author: string;
   image: string;
   text: string;
-  // id?: string;
 }
+
 export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
   const [review, setReview] = useState<Review>();
   const [author, setAuthor] = useState<User>();
   const [input, setInput] = useState<string>();
-  const [comments, setComments] = useState<FullComment[]>([]);
+  const [comments, setComments] = useState<CommentWithUsername[]>([]);
   const myUser = useSelector(currentReduxUser);
-  let isFocused = useIsFocused();
 
   useEffect(() => {
     getReview();
@@ -84,7 +83,7 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
 
   const getCommentData = async () => {
     if (review?.comments?.length) {
-      let commentsArray: FullComment[] = [];
+      let commentsArray: CommentWithUsername[] = [];
       for (let i = 0; i < review?.comments.length; i++) {
         try {
           let user = await getCommentAuthor(review?.comments[i].authorID);

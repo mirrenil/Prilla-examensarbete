@@ -7,6 +7,7 @@ export interface Review {
   tags: Tag[];
   userID: string;
   comments?: Comment[];
+  likes: string[];
   id: string;
 }
 
