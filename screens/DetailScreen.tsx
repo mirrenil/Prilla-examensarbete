@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import {
   StyleSheet,
@@ -21,9 +21,11 @@ import { AntDesign } from "@expo/vector-icons";
 import { StrengthBar } from "../components/StrengthBar";
 import { useSelector } from "react-redux";
 import { currentReduxUser } from "../redux/signin";
+import { useIsFocused } from "@react-navigation/native";
 
 interface ReviewWithAuthor extends Review {
   author: string;
+  rating: number;
 }
 
 function ProductDetailScreen({
@@ -36,12 +38,20 @@ function ProductDetailScreen({
   const [liked, setLiked] = useState<boolean>(false);
   const myUser = useSelector(currentReduxUser);
   const [usersLikedArray, setUsersLikedArray] = useState<string[]>([]);
+  const [productRating, setProductRating] = useState<number>(0);
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     getProductReviews();
     getProductData();
     getLiked();
   }, []);
+
+  useEffect(() => {
+    if (isFocused) {
+      getRating();
+    }
+  }, [isFocused]);
 
   const getProductData = async () => {
     try {
@@ -52,6 +62,20 @@ function ProductDetailScreen({
     } catch (err) {
       console.log(err);
     }
+  };
+
+  // get the rating of the product
+  const getRating = () => {
+    let rating = 0;
+    if (reviews.length > 0) {
+      for (let rev of reviews) {
+        rating += rev.rating;
+      }
+      rating = rating / reviews.length;
+    }
+    setProductRating(rating);
+    console.log(productRating);
+    return productRating;
   };
 
   const getProductReviews = async () => {
@@ -248,12 +272,12 @@ function ProductDetailScreen({
               </Text>
               <Text style={styles.manufacturer}>{product?.manufacturer}</Text>
               <View style={styles.ratingContainer}>
-                <RateInactive rating={product?.rating ? product.rating : 0} />
+                <RateInactive rating={productRating ? productRating : 0} />
                 <Text style={styles.ratingText}>
-                  {product?.rating ? product.rating : 0}
+                  {productRating ? productRating.toFixed(1) : 0}
                 </Text>
               </View>
-              <Text>{product?.reviews.length} Ratings</Text>
+              <Text>{reviews.length} Ratings</Text>
               <View style={styles.interactions}>
                 <TouchableOpacity
                   onPress={() =>
