@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Pressable, StyleSheet } from "react-native";
+import { Pressable, StyleSheet, Alert } from "react-native";
 import { View, Text } from "../components/Themed";
 import { getAllDocsInCollection } from "../helper";
 import { Tag } from "../Interfaces";
@@ -65,7 +65,13 @@ const Tags = ({ handleInput }: Props) => {
   };
 
   const toggleSelectTag = (tag: Tag) => {
+    let limit = 4;
     if (!isAlreadySelected(tag)) {
+      if (selectedTags.length >= limit) {
+        removeSelectedTag(tag);
+        Alert.alert("Du kan inte välja fler än 4 taggar");
+        return;
+      }
       let list = selectedTags;
       list.push(tag);
       handleInput(list);
@@ -77,7 +83,7 @@ const Tags = ({ handleInput }: Props) => {
 
   return (
     <View style={[styles.tagsSection]}>
-      <Text style={styles.sectionTitle}>Välj taggar</Text>
+      <Text style={styles.sectionTitle}>Välj upp till fyra taggar</Text>
       <View style={styles.tags}>
         {tags.map((tag) => {
           let isSelected: boolean = isAlreadySelected(tag);
