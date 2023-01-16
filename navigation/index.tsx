@@ -28,6 +28,7 @@ import ProfileScreen from "../screens/ProfileScreen";
 import ForgotPasswordScreen from "../screens/ForgotPasswordScreen";
 import AgeCheckScreen from "../screens/AgeCheckScreen";
 import LinkingConfiguration from "./LinkingConfiguration";
+import Constants from "expo-constants";
 
 import {
   RootStackParamList,
@@ -119,6 +120,7 @@ const BottomTab = createBottomTabNavigator<RootTabParamList>();
 function BottomTabNavigator() {
   const colorScheme = useColorScheme();
   const user = useSelector(currentReduxUser);
+  const username = user?.displayName;
 
   return (
     <BottomTab.Navigator
@@ -130,34 +132,20 @@ function BottomTabNavigator() {
         },
         tabBarActiveTintColor: Colors[colorScheme].tint,
         tabBarInactiveTintColor: Colors[colorScheme].tabIconDefault,
-        tabBarStyle: { backgroundColor: "#1B1324", height: 100, padding: 15 },
+        tabBarStyle: {
+          backgroundColor: Colors[colorScheme].background,
+          height: 100,
+          padding: 15,
+        },
       }}
     >
       <BottomTab.Screen
         name="Home"
         component={StartScreen}
         options={({ navigation }: RootTabScreenProps<"Home">) => ({
-          title: "",
+          title: "Utforska",
           tabBarIcon: ({ color }) => (
             <Ionicons name="ios-home-outline" size={30} color={color} />
-          ),
-
-          headerRight: () => (
-            <Pressable
-              onPress={() => {
-                navigation.navigate("Signin");
-              }}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}
-            >
-              <FontAwesome
-                name="sign-out"
-                size={25}
-                color={Colors[colorScheme].text}
-                style={{ marginRight: 15 }}
-              />
-            </Pressable>
           ),
         })}
       />
@@ -166,6 +154,8 @@ function BottomTabNavigator() {
         component={SearchScreen}
         options={{
           title: "",
+          // headerShown: false,
+          headerStyle: { height: Constants.statusBarHeight },
           tabBarIcon: ({ color }) => (
             <AntDesign name="search1" size={30} color={color} />
           ),
@@ -186,7 +176,7 @@ function BottomTabNavigator() {
         component={ProfileScreen}
         initialParams={{ id: user.id }}
         options={{
-          title: "",
+          title: username,
           tabBarIcon: ({ color }) => (
             <AntDesign name="user" size={30} color={color} />
           ),

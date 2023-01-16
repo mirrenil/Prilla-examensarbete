@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-
+import React from "react";
 import { Text, View } from "../components/Themed";
 import { RootStackScreenProps } from "../types";
 import { useFonts } from "expo-font";

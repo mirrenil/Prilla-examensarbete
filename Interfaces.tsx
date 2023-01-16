@@ -20,6 +20,7 @@ export interface User {
   id: string;
   photo: string;
   liked: string[];
+  following: string[];
 }
 
 export interface Product {
@@ -33,7 +34,7 @@ export interface Product {
   photo: string;
   pouches: number;
   reviews: string[];
-  strenght: number;
+  strength: number;
   tags: Tag[];
   type: string;
   weight: number;

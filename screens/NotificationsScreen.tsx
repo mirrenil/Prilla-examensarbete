@@ -1,3 +1,4 @@
+import React from "react";
 import { StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
@@ -11,7 +12,7 @@ export default function NotificationsScreen({
       <Text>Notifications</Text>
       <View
         style={styles.separator}
-        lightColor="#eee"
+        lightColor="#D3D3D3"
         darkColor="rgba(255,255,255,0.1)"
       />
     </View>

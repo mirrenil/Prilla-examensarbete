@@ -7,6 +7,7 @@ import {
   Alert,
   Modal,
   Image,
+  Pressable,
 } from "react-native";
 import * as Haptics from "expo-haptics";
 import { Text, View } from "../components/Themed";
@@ -17,6 +18,7 @@ import {
   getAllDocsInCollection,
   getDocsWithSpecificValue,
   getOneDocById,
+  updateSingleProperty,
 } from "../helper";
 import { Review, User } from "../Interfaces";
 import { ScrollView } from "react-native-gesture-handler";
@@ -30,7 +32,7 @@ import {
 } from "firebase/auth";
 import { auth } from "../firebase";
 import { PopUp } from "../components/PopUp";
-import { updateSingleProperty } from "../helper";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function ProfileScreen({
   navigation,
@@ -47,28 +49,36 @@ export default function ProfileScreen({
   const [urls, setUrls] = useState<string[]>([]);
   const favoritesArray: any = [];
   let photoURLS: string[] = [];
-  const imageBeforeUpdate =
-    "https://cdn.drawception.com/images/avatars/647493-B9E.png";
+  const [myFollows, setMyFollows] = useState<string[]>([]);
+  const imageBeforeUpdate ="https://cdn.drawception.com/images/avatars/647493-B9E.png";
   const [profilePic, setProfilePic] = useState<string[]>([]);
   let isMe = route.params.id === myUser.id;
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
+  const isFocused = useIsFocused();
 
   useEffect(() => {
-    checkCurrentUser();
+    setCurrentUser();
     getReviews();
     getLiked();
     compareLikedIds();
     imagesLoaded();
-    checkCurrentUser();
-  }, [isMe]);
+  }, []);
 
-  const checkCurrentUser = async () => {
-    if (!isMe) {
+  useEffect(() => {
+    if (isFocused) {
+      getMyFollowing();
+    }
+  }, [isFocused]);
+
+  const setCurrentUser = async () => {
+    try {
       const user = await getOneDocById("users", route.params.id);
       setUser(user as User);
-    } else {
-      setMyProfile(true);
-      setUser(myUser);
+      if (isMe) {
+        setMyProfile(true);
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -85,9 +95,48 @@ export default function ProfileScreen({
     }
   };
 
-  const toggleButton = () => {
+  // Gets a list of all users I follow to be able to check if I follow user of current profile page (unless profile is mine)
+  const getMyFollowing = async () => {
+    try {
+      const user = await getOneDocById("users", myUser.id);
+      if (user?.following) {
+        setMyFollows(user.following);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // checks if I follow the user
+  const isAlreadyFollowing = () => {
+    let selected = myFollows.some((id) => {
+      return id == route.params.id;
+    });
+    return selected;
+  };
+
+  const updateDb = async (newData) => {
+    let newObj = { following: newData };
+    try {
+      await updateSingleProperty("users", myUser.id, newObj);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const toggleFollow = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setFollow(!follow);
+    if (!isAlreadyFollowing()) {
+      setFollow(true);
+      let newArray = [...myFollows, route.params.id];
+      updateDb(newArray);
+      setMyFollows([...myFollows, route.params.id]);
+    } else {
+      let newArray = myFollows.filter((id) => id !== route.params.id);
+      setMyFollows(newArray);
+      updateDb(newArray);
+      setFollow(false);
+    }
   };
 
   // Modal functionality
@@ -265,8 +314,8 @@ export default function ProfileScreen({
 
             {!myProfile && (
               <TouchableOpacity
-                style={[follow ? styles.borderButtonLike : styles.button]}
-                onPress={toggleButton}
+                style={[follow ? styles.borderButtonFollow : styles.button]}
+                onPress={toggleFollow}
               >
                 <Text
                   darkColor="#201A28"
@@ -367,7 +416,7 @@ export default function ProfileScreen({
                   </View>
                   <View style={styles.column}>
                     <Text
-                      lightColor="#fff"
+                      lightColor="#333"
                       darkColor="#fff"
                       style={styles.modalText}
                     >
@@ -385,7 +434,7 @@ export default function ProfileScreen({
                     </TouchableOpacity>
 
                     <Text
-                      lightColor="#fff"
+                      lightColor="#333"
                       darkColor="#fff"
                       style={styles.modalText}
                     >
@@ -450,7 +499,9 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   button: {
-    backgroundColor: "#FFFD54",
+    borderColor: "#575060",
+    borderWidth: 0.2,
+    backgroundColor: "transparent",
     padding: 10,
     borderRadius: 6,
     width: 100,
@@ -465,22 +516,23 @@ const styles = StyleSheet.create({
   },
   borderButton: {
     borderWidth: 0.2,
-    borderColor: "#575060",
+    borderColor: "#783bc9",
     padding: 15,
     borderRadius: 6,
     width: 300,
-    height: 50,
+    height: 40,
     marginTop: 10,
     marginBottom: 10,
     textAlign: "center",
   },
-  borderButtonLike: {
-    borderWidth: 0.2,
-    borderColor: "#575060",
-    padding: 15,
+  borderButtonFollow: {
+    backgroundColor: "#FFFD54",
+    borderWidth: 0.5,
+    borderColor: "#783BC9",
+    padding: 10,
     borderRadius: 6,
     width: 100,
-    height: 50,
+    height: 40,
     marginTop: 10,
     marginBottom: 10,
     textAlign: "center",
@@ -489,7 +541,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "bold",
     fontSize: 17,
-    color: "#fff",
   },
   box: {
     display: "flex",
@@ -543,18 +594,14 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "flex-start",
     width: "100%",
-    height: "100%",
   },
   top: {
     marginLeft: 300,
     marginBottom: 20,
   },
   modalView: {
-    margin: 10,
-    marginTop: 100,
-    height: 500,
-    backgroundColor: "#261F30",
-    borderRadius: 20,
+    maxHeight: 400,
+    borderRadius: 6,
     padding: 35,
     shadowColor: "#000",
     shadowOffset: {
@@ -566,12 +613,10 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   modalText: {
-    margin: 15,
-    textAlign: "center",
     fontSize: 15,
+    fontWeight: "bold",
   },
   modalTextHeader: {
-    margin: 12,
     textAlign: "center",
     fontSize: 20,
   },
@@ -600,5 +645,19 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 50,
     marginRight: 10,
+  },
+  favortiesScroll: {
+    width: "85%",
+  },
+  layover: {
+    height: "100%",
+    width: "100%",
+    position: "absolute",
+    top: 0,
+    right: 0,
+    backgroundColor: "rgba(0,0,0,0.7)",
+    zIndex: 100,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
