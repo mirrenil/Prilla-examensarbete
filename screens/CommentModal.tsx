@@ -7,6 +7,7 @@ import {
   ScrollView,
   Keyboard,
   KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { Review } from "../Interfaces";
 import {
@@ -127,45 +128,49 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
   } else {
     return (
       <ScrollView contentContainerStyle={styles.wrapper}>
-        <View>
-          <View style={[styles.border, styles.comment]}>
-            <Image source={{ uri: author?.image }} style={styles.image} />
-            <View style={styles.textWrapper}>
-              <Text>{author?.name}</Text>
-              <Text>{review?.description}</Text>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
+          <View>
+            <View style={[styles.border, styles.comment]}>
+              <Image source={{ uri: author?.image }} style={styles.image} />
+              <View style={styles.textWrapper}>
+                <Text>{author?.name}</Text>
+                <Text>{review?.description}</Text>
+              </View>
             </View>
-          </View>
-          <ScrollView>
-            {comments.map((c) => {
-              return (
-                <View style={styles.comment}>
-                  <Image source={{ uri: c.image }} style={styles.image} />
-                  <View style={styles.textWrapper}>
-                    <Text>{c.author}</Text>
-                    <Text>{c?.text}</Text>
+            <ScrollView>
+              {comments.map((c) => {
+                return (
+                  <View style={styles.comment}>
+                    <Image source={{ uri: c.image }} style={styles.image} />
+                    <View style={styles.textWrapper}>
+                      <Text>{c.author}</Text>
+                      <Text>{c?.text}</Text>
+                    </View>
                   </View>
-                </View>
-              );
-            })}
-          </ScrollView>
-        </View>
+                );
+              })}
+            </ScrollView>
+          </View>
 
-        <View style={styles.inputWrapper}>
-          <TextInput
-            placeholder="Lämna en kommentar..."
-            style={styles.input}
-            value={input}
-            onChangeText={setInput}
-            multiline={true}
-            numberOfLines={1}
-          />
-          <TouchableOpacity
-            onPress={handleSubmit}
-            disabled={input ? false : true}
-          >
-            <Text>Skicka</Text>
-          </TouchableOpacity>
-        </View>
+          <View style={styles.inputWrapper}>
+            <TextInput
+              placeholder="Lämna en kommentar..."
+              style={styles.input}
+              value={input}
+              onChangeText={setInput}
+              multiline={true}
+              numberOfLines={1}
+            />
+            <TouchableOpacity
+              onPress={handleSubmit}
+              disabled={input ? false : true}
+            >
+              <Text>Skicka</Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
       </ScrollView>
     );
   }
