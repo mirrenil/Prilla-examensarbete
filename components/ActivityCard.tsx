@@ -73,8 +73,6 @@ export const ActivityCard = ({ review }: Props) => {
       let filteredList = allLikes.filter((id) => id !== myUser.id);
       filteredList.push(myUser.id);
       newData = { likes: filteredList };
-      console.log("alllikes: ", allLikes);
-      console.log(newData);
     } else {
       newData = { likes: [myUser.id] };
     }
@@ -92,7 +90,6 @@ export const ActivityCard = ({ review }: Props) => {
     if (review.likes) {
       let likesArray = review.likes;
       let filteredList = likesArray.filter((id) => id !== myUser.id);
-      console.log("removed from list: ", filteredList);
       try {
         await updateSingleProperty("recensioner", review.id, {
           likes: filteredList,
