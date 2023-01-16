@@ -1,6 +1,13 @@
 import { View, Text, TextInput } from "../components/Themed";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Image, useColorScheme } from "react-native";
+import {
+  StyleSheet,
+  Image,
+  useColorScheme,
+  ScrollView,
+  Keyboard,
+  KeyboardAvoidingView,
+} from "react-native";
 import { Review } from "../Interfaces";
 import {
   addNewDoc,
@@ -15,31 +22,35 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { ReviewComment } from "../Interfaces";
 import { useSelector } from "react-redux";
 import { currentReduxUser } from "../redux/signin";
-import { update } from "lodash";
+import { useIsFocused } from "@react-navigation/native";
+import { Comment } from "../Interfaces";
 
 interface User {
   name: string;
   image: string;
 }
 
+interface FullComment {
+  author: string;
+  image: string;
+  text: string;
+  // id?: string;
+}
 export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
   const [review, setReview] = useState<Review>();
   const [author, setAuthor] = useState<User>();
   const [input, setInput] = useState<string>();
-  const [comments, setComments] = useState<ReviewComment>();
+  const [comments, setComments] = useState<FullComment[]>([]);
   const myUser = useSelector(currentReduxUser);
+  let isFocused = useIsFocused();
 
   useEffect(() => {
     getReview();
   }, []);
 
   useEffect(() => {
-    getAuthor();
-    if (review?.comments) {
-      review?.comments.map((c) => {
-        getComments(c);
-      });
-    }
+    getReviewAuthor();
+    getCommentData();
   }, [review]);
 
   const getReview = async () => {
@@ -51,58 +62,95 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
     }
   };
 
-  const getAuthor = async () => {
+  const getReviewAuthor = async () => {
     try {
       let user = await getOneDocById("users", review?.userID);
       if (user) {
         setAuthor({ name: user.displayName, image: user.photo });
-        console.log(user.photo);
       }
     } catch (err) {
       console.log(err);
     }
   };
 
-  const getComments = async (comment: string) => {
+  const getCommentAuthor = async (id: string) => {
     try {
+      let user = await getOneDocById("users", id);
+      return user;
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  const getCommentData = async () => {
+    if (review?.comments?.length) {
+      let commentsArray: FullComment[] = [];
+      for (let i = 0; i < review?.comments.length; i++) {
+        try {
+          let user = await getCommentAuthor(review?.comments[i].authorID);
+          if (user) {
+            commentsArray.push({
+              author: user.displayName,
+              image: user.photo,
+              text: review?.comments[i].text,
+            });
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      }
+      setComments(commentsArray);
     }
   };
 
   const handleSubmit = async () => {
+    let newObj = {};
     let newData: ReviewComment = {
       authorID: myUser.id,
-      reviewID: route.params.id,
       text: input!,
     };
-    console.log(newData);
-
+    if (review?.comments) {
+      newObj = { comments: [...review.comments, newData] };
+    } else {
+      newObj = { comments: [newData] };
+    }
     try {
-      await addNewDoc("comments", newData).then((doc) => {
-        let newObj = review?.comments || [];
-        newObj.push(doc!);
-        updateSingleProperty("recensioner", route.params.id, {
-          comments: newObj,
-        });
-      });
+      await updateSingleProperty("recensioner", route.params.id, newObj);
     } catch (err) {
       console.log(err);
     }
+    setInput("");
+    getReview();
   };
 
-  if (!author && !review) {
-    <ActivityIndicator size="small" color="#0000ff" />;
+  if (!review && !author) {
+    return <ActivityIndicator size="small" color="#0000ff" />;
   } else {
     return (
-      <View style={styles.wrapper}>
-        <View style={styles.authorWrapper}>
-          <Image source={{ uri: author?.image }} style={styles.image} />
-          <View style={styles.textWrapper}>
-            <Text>{author?.name}</Text>
-            <Text>{review?.description}</Text>
+      <ScrollView contentContainerStyle={styles.wrapper}>
+        <View>
+          <View style={[styles.border, styles.comment]}>
+            <Image source={{ uri: author?.image }} style={styles.image} />
+            <View style={styles.textWrapper}>
+              <Text>{author?.name}</Text>
+              <Text>{review?.description}</Text>
+            </View>
           </View>
+          <ScrollView>
+            {comments.map((c) => {
+              return (
+                <View style={styles.comment}>
+                  <Image source={{ uri: c.image }} style={styles.image} />
+                  <View style={styles.textWrapper}>
+                    <Text>{c.author}</Text>
+                    <Text>{c?.text}</Text>
+                  </View>
+                </View>
+              );
+            })}
+          </ScrollView>
         </View>
+
         <View style={styles.inputWrapper}>
           <TextInput
             placeholder="Lämna en kommentar..."
@@ -111,8 +159,6 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
             onChangeText={setInput}
             multiline={true}
             numberOfLines={1}
-            returnKeyType="search"
-            returnKeyLabel="search"
           />
           <TouchableOpacity
             onPress={handleSubmit}
@@ -121,7 +167,7 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
             <Text>Skicka</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
     );
   }
 };
@@ -130,9 +176,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     height: "100%",
   },
-  authorWrapper: {
+  comment: {
     padding: 10,
     flexDirection: "row",
+  },
+  border: {
     borderBottomColor: "rgba(255,255,255,0.3)",
     borderBottomWidth: 1,
   },
@@ -152,8 +200,12 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
   },
   inputWrapper: {
+    width: "100%",
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "rgba(255,255,255,0.3)",
+    backgroundColor: "#484152",
+    position: "absolute",
+    bottom: 0,
+    right: 0,
   },
 });
