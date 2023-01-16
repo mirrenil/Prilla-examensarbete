@@ -17,7 +17,7 @@ export default function StartScreen({
   }, []);
 
   const getReviews = useCallback(async () => {
-    let newData = [];
+    let newData: any[] = [];
     let data = await getAllDocsInCollection("recensioner");
 
     if (data?.length) {
