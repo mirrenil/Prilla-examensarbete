@@ -1,7 +1,7 @@
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { View, Image, Text, StyleSheet, Alert } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useSelector } from "react-redux";
@@ -21,17 +21,10 @@ export const ReviewCard = ({ review }: Props) => {
   const [product, setProduct] = useState<Product>();
   const myUser = useSelector(currentReduxUser);
   const navigation = useNavigation();
-  const isFocused = useIsFocused();
 
   useEffect(() => {
     getProduct();
   }, []);
-
-  useEffect(() => {
-    if (isFocused) {
-      getProduct();
-    }
-  }, [isFocused]);
 
   const getProduct = async () => {
     let data = await getOneDocById("produkter", review.productID);
@@ -40,29 +33,32 @@ export const ReviewCard = ({ review }: Props) => {
     }
   };
 
-  const handleRemove = async (id: string) => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    Alert.alert(
-      "Är du säker på att du vill ta bort din recension?",
-      "Du kan inte ångra dig!",
-      [
-        {
-          text: "Avbryt",
-          onPress: () => console.log("AVBRYT Pressed"),
-          style: "cancel",
-        },
-        {
-          text: "Ja",
-          onPress: () => {
-            console.log("JA Pressed");
-            const specificReview = doc(db, "recensioner", id);
-            deleteDoc(specificReview);
+  const handleRemove = useCallback(
+    async (id: string) => {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      Alert.alert(
+        "Är du säker på att du vill ta bort din recension?",
+        "Du kan inte ångra dig!",
+        [
+          {
+            text: "Avbryt",
+            onPress: () => console.log("AVBRYT Pressed"),
+            style: "cancel",
           },
-        },
-      ]
-    );
-    getProduct();
-  };
+          {
+            text: "Ja",
+            onPress: () => {
+              const specificReview = doc(db, "recensioner", id);
+              deleteDoc(specificReview);
+              console.log(specificReview, "deleted");
+            },
+          },
+        ]
+      );
+      getProduct();
+    },
+    [product]
+  );
 
   if (product) {
     return (

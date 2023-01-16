@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
 import { getAllDocsInCollection } from "../helper";
@@ -16,7 +16,7 @@ export default function StartScreen({
     getReviews();
   }, []);
 
-  const getReviews = async () => {
+  const getReviews = useCallback(async () => {
     let newData = [];
     let data = await getAllDocsInCollection("recensioner");
 
@@ -24,7 +24,7 @@ export default function StartScreen({
       newData = data;
     }
     setReviews(newData);
-  };
+  }, [reviews]);
 
   return (
     <ScrollView>
