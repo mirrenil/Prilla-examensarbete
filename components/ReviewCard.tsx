@@ -21,10 +21,13 @@ export const ReviewCard = ({ review }: Props) => {
   const [product, setProduct] = useState<Product>();
   const myUser = useSelector(currentReduxUser);
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
 
   useEffect(() => {
-    getProduct();
-  }, []);
+    if (isFocused) {
+      getProduct();
+    }
+  }, [isFocused]);
 
   const getProduct = async () => {
     let data = await getOneDocById("produkter", review.productID);
@@ -50,12 +53,11 @@ export const ReviewCard = ({ review }: Props) => {
             onPress: () => {
               const specificReview = doc(db, "recensioner", id);
               deleteDoc(specificReview);
-              console.log(specificReview, "deleted");
+              getProduct();
             },
           },
         ]
       );
-      getProduct();
     },
     [product]
   );

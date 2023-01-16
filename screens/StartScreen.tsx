@@ -6,15 +6,19 @@ import { Review } from "../Interfaces";
 import Tabbar from "../components/Tabbar";
 import { RootTabScreenProps } from "../types";
 import { ActivityCard } from "../components/ActivityCard";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function StartScreen({
   navigation,
 }: RootTabScreenProps<"Home">) {
   const [reviews, setReviews] = useState<Review[]>([]);
+  const isFocused = useIsFocused();
 
   useEffect(() => {
-    getReviews();
-  }, []);
+    if (isFocused) {
+      getReviews();
+    }
+  }, [isFocused]);
 
   const getReviews = async () => {
     let newData: any[] = [];
