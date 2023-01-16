@@ -16,7 +16,7 @@ export default function StartScreen({
     getReviews();
   }, []);
 
-  const getReviews = useCallback(async () => {
+  const getReviews = async () => {
     let newData: any[] = [];
     let data = await getAllDocsInCollection("recensioner");
 
@@ -24,7 +24,7 @@ export default function StartScreen({
       newData = data;
     }
     setReviews(newData);
-  }, [reviews]);
+  };
 
   return (
     <ScrollView>
