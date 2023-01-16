@@ -44,7 +44,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
 
   const pushReviewToProductsReviewArray = async (id: string) => {
     product?.reviews.push(id);
-    let newData = { Reviews: product?.reviews };
+    let newData = { reviews: product?.reviews };
     try {
       await updateSingleProperty("produkter", route.params.id, newData);
     } catch (err) {
@@ -63,11 +63,12 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
       newRating = JSON.parse(string);
 
       const newData = {
-        Rating: newRating,
+        rating: newRating,
       };
 
       try {
         await updateSingleProperty("produkter", route.params.id, newData);
+        console.log("updated rating", newRating);
       } catch (err) {
         console.log(err);
       }
