@@ -17,10 +17,6 @@ const userSignInSlice = createSlice({
       state.email = action.payload.currentUser.email;
       state.photo = action.payload.currentUser.photoURL;
     },
-    // updateUser: (state, action) => {
-    //   console.log("action: ", action);
-    //   state.photo = action.payload.photo;
-    // },
     setSignOutState: (state) => {
       state = { displayName: "", id: "", email: "", photo: "" };
     },
