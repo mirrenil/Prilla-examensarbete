@@ -43,25 +43,7 @@ function ProductDetailScreen({
     getProductReviews();
     getProductData();
     getLiked();
-  }, []);
-
-  useEffect(() => {
-    if (isFocused) {
-      getRating();
-    }
   }, [isFocused]);
-
-  // get the rating of the product
-  const getRating = useCallback(() => {
-    let thisRating = 0;
-    if (reviews.length > 0) {
-      for (let rev of reviews) {
-        thisRating += rev.rating;
-      }
-      thisRating = thisRating / reviews.length;
-    }
-    return thisRating;
-  }, [reviews, product?.rating]);
 
   const getProductData = async () => {
     try {
