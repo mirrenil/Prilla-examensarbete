@@ -89,17 +89,9 @@ export const ReviewCard = ({ review }: Props) => {
         <View style={styles.description}>
           <Text>{review.description}</Text>
         </View>
-        <View style={{ flexDirection: "row" }}>
-          {review.tags.map((tag: Tag) => {
-            return (
-              <View style={styles.tagsContainer}>
-                <Text style={styles.tagName}>{tag?.name}</Text>
-              </View>
-            );
-          })}
-
+        <View style={{ position: "relative" }}>
           {review.userID === myUser?.id && (
-            <View style={{ position: "absolute", left: "85%" }}>
+            <View style={styles.removeIcon}>
               <FontAwesome5
                 name="trash"
                 size={24}
@@ -108,6 +100,15 @@ export const ReviewCard = ({ review }: Props) => {
               />
             </View>
           )}
+        </View>
+        <View style={{ flexDirection: "row" }}>
+          {review.tags.map((tag: Tag) => {
+            return (
+              <View style={styles.tagsContainer}>
+                <Text style={styles.tagName}>{tag?.name}</Text>
+              </View>
+            );
+          })}
         </View>
       </View>
     );
@@ -150,6 +151,7 @@ const styles = StyleSheet.create({
   },
   description: {
     padding: 10,
+    width: "80%",
     flexDirection: "row",
   },
   tagsContainer: {
@@ -164,5 +166,10 @@ const styles = StyleSheet.create({
   tagName: {
     textAlign: "center",
     fontWeight: "bold",
+  },
+  removeIcon: {
+    position: "absolute",
+    left: "90%",
+    bottom: 30,
   },
 });
