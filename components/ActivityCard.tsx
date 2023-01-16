@@ -140,7 +140,9 @@ export const ActivityCard = ({ review }: Props) => {
             <AntDesign name="hearto" size={26} color="#783BC9" />
           </TouchableOpacity>
         )}
-        <Text>{likesCount >= 1 ? likesCount : null}</Text>
+        <Text style={{ marginLeft: 10, marginRight: 10 }}>
+          {likesCount >= 1 ? likesCount : null}
+        </Text>
         <TouchableOpacity
           onPress={() => navigation.navigate("Comment", { id: review.id })}
         >
