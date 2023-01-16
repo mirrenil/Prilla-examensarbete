@@ -55,7 +55,7 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
       <Text style={styles.slogan}>GOTTA SNUS THEM ALL</Text>
       <View
         style={styles.separator}
-        lightColor="#eee"
+        lightColor="#D3D3D3"
         darkColor="rgba(255,255,255,0.1)"
       />
 
@@ -83,7 +83,7 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
           return (
             <View style={styles.container}>
               <TextInput
-                lightColor="#AF90D9"
+                lightColor="#fff"
                 darkColor="#413C48"
                 placeholder="Email"
                 style={styles.input}
@@ -97,7 +97,7 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
               )}
 
               <TextInput
-                lightColor="#AF90D9"
+                lightColor="#fff"
                 darkColor="#413C48"
                 placeholder="Password"
                 style={styles.input}
@@ -117,7 +117,9 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
                   Haptics.ImpactFeedbackStyle.Light;
                 }}
               >
-                <Text style={styles.text}>Glömt lösenord?</Text>
+                <Text style={styles.text} lightColor="#333" darkColor="#fff">
+                  Glömt lösenord?
+                </Text>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -137,7 +139,7 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
                   Haptics.ImpactFeedbackStyle.Light;
                 }}
               >
-                <Text style={styles.text}>
+                <Text style={styles.text} lightColor="#333" darkColor="#fff">
                   Har du inget konto än? Skapa ett här!
                 </Text>
               </TouchableOpacity>
@@ -151,6 +153,7 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
 
 const styles = StyleSheet.create({
   screen: {
+    // backgroundColor: "#c19ce5",
     alignItems: "center",
     justifyContent: "center",
     height: "100%",
@@ -158,6 +161,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     marginBottom: 50,
+    // backgroundColor: "#c19ce5",
   },
   input: {
     fontSize: 17,
@@ -166,6 +170,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     padding: 10,
     borderRadius: 6,
+    border: ".1px solid #D3D3D3",
   },
   button: {
     backgroundColor: "#FFFD54",
@@ -184,16 +189,13 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   text: {
-    color: "#fff",
     textAlign: "center",
     fontSize: 17,
     marginTop: 10,
   },
   title: {
     fontFamily: "OleoScript",
-    fontStyle: "normal",
     fontSize: 50,
-    fontWeight: "bold",
     color: "#FFFD54",
   },
   slogan: {

@@ -28,7 +28,7 @@ function ForgotPasswordScreen({
       <Text style={styles.slogan}>GOTTA SNUS THEM ALL</Text>
       <View
         style={styles.separator}
-        lightColor="#eee"
+        lightColor="#D3D3D3"
         darkColor="rgba(255,255,255,0.1)"
       />
 
@@ -47,11 +47,11 @@ function ForgotPasswordScreen({
 
           return (
             <View style={styles.container}>
-              <Text style={styles.text} lightColor="#fff" darkColor="#fff">
+              <Text style={styles.text} lightColor="#333" darkColor="#fff">
                 För att återställa ditt lösenord behöver vi din email
               </Text>
               <TextInput
-                lightColor="#AF90D9"
+                lightColor="#fff"
                 darkColor="#413C48"
                 style={styles.input}
                 placeholder="Email"
@@ -100,6 +100,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     padding: 10,
     borderRadius: 6,
+    border: "1px solid #333",
   },
   button: {
     backgroundColor: "#FFFD54",

@@ -22,10 +22,12 @@ const Tabbar = () => {
               style={styles.icon}
               name="trending-up"
               size={30}
-              color="white"
+              color="#FFFD54"
             />
           </View>
-          <Text style={styles.text}>Trendande sorter</Text>
+          <Text style={styles.text} lightColor="#333" darkColor="#fff">
+            Trendande sorter
+          </Text>
         </View>
       </View>
 
@@ -40,7 +42,7 @@ const Tabbar = () => {
               style={styles.icon}
               name="bar-chart-2"
               size={34}
-              color="white"
+              color="#FFFD54"
             />
           </View>
           <Text style={styles.text}>Toppbetyg</Text>
@@ -71,7 +73,6 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 6,
   },
   text: {
-    color: "white",
     fontSize: 20,
     marginLeft: 20,
   },
@@ -91,7 +92,7 @@ const styles = StyleSheet.create({
     right: 10,
   },
   lightContainer: {
-    backgroundColor: "#C6ADE8",
+    backgroundColor: "#fff",
   },
   darkContainer: {
     backgroundColor: "#3D3745",

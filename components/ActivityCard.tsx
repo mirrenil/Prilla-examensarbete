@@ -24,8 +24,8 @@ interface CommentWithUsername {
 
 export const ActivityCard = ({ review }: Props) => {
   const [author, setAuthor] = useState<User>();
-  const navigation = useNavigation();
   const [like, setLike] = useState<boolean>(false);
+  const navigation = useNavigation();
   const [comment, setComment] = useState<CommentWithUsername>();
   const myUser = useSelector(currentReduxUser);
   const [likesCount, setLikesCount] = useState<number>(0);
@@ -39,6 +39,11 @@ export const ActivityCard = ({ review }: Props) => {
     getCommentsData();
     checkIfLiked();
   }, [isFocused]);
+
+  const toggleButton = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setLike(!like);
+  };
 
   const getReviewAuthor = async () => {
     let data = await getOneDocById("users", review.userID);
