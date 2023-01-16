@@ -228,7 +228,8 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
             value={text}
             onChangeText={setText}
             multiline={true}
-            numberOfLines={10}
+            numberOfLines={5}
+            maxLength={130}
           />
           <View style={popupStyles.buttons}>
             <TouchableOpacity
