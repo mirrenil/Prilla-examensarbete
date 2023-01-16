@@ -27,10 +27,15 @@ export const ActivityCard = ({ review }: Props) => {
   const [like, setLike] = useState<boolean>(false);
   const [comment, setComment] = useState<CommentWithUsername>();
   const myUser = useSelector(currentReduxUser);
+  const [likesCount, setLikesCount] = useState<number>(0);
 
   useEffect(() => {
+    if (review.likes) {
+      setLikesCount(review.likes.length);
+    }
     getReviewAuthor();
     getCommentsData();
+    checkIfLiked();
   }, []);
 
   const getReviewAuthor = async () => {
@@ -42,40 +47,60 @@ export const ActivityCard = ({ review }: Props) => {
 
   const getCommentsData = async () => {
     if (review?.comments?.length) {
-      let user = await getOneDocById("users", review.comments[0].authorID);
-      if (user) {
-        setComment({
-          author: user.displayName,
-          image: user.photo,
-          text: review.comments[0].text,
-        });
+      try {
+        let user = await getOneDocById("users", review.comments[0].authorID);
+        if (user) {
+          setComment({
+            author: user.displayName,
+            image: user.photo,
+            text: review.comments[0].text,
+          });
+        }
+      } catch (err) {
+        console.log(err);
       }
     }
   };
 
-  const toggleLikeButton = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setLike(!like);
-    // addlikeToDb();
-  };
-
   const addLike = async () => {
+    let newData = {};
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    let allLikes = [...review.likes];
-    const newData = { likes: [...allLikes, myUser.id] };
-    console.log(newData);
+    setLikesCount(likesCount + 1);
+    if (review.likes) {
+      let allLikes = review.likes;
+      newData = { likes: [...allLikes, myUser.id] };
+    } else {
+      newData = { likes: [myUser.id] };
+    }
     try {
       await updateSingleProperty("recensioner", review.id, newData);
-      setLike(true);
     } catch (err) {
       console.log(err);
     }
   };
 
-  const removeLike = () => {
+  const removeLike = async () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    let allLikes = review.likes.filter((id) => id !== myUser.id);
-    console.log(allLikes);
+    setLikesCount(likesCount - 1);
+
+    if (review.likes) {
+      let likesArray = review.likes;
+      let filteredList = likesArray.filter((id) => id !== myUser.id);
+      try {
+        await updateSingleProperty("recensioner", review.id, {
+          likes: filteredList,
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
+  const checkIfLiked = () => {
+    if (review.likes) {
+      let isLiked = review.likes.some((id) => id === myUser.id);
+      setLike(isLiked);
+    }
   };
 
   return (
@@ -93,14 +118,25 @@ export const ActivityCard = ({ review }: Props) => {
       </ImageBackground>
       <View style={styles.social}>
         {like ? (
-          <TouchableOpacity onPress={removeLike}>
+          <TouchableOpacity
+            onPress={() => {
+              removeLike();
+              setLike(false);
+            }}
+          >
             <AntDesign name="heart" size={24} color="#783BC9" />
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity onPress={addLike}>
+          <TouchableOpacity
+            onPress={() => {
+              addLike();
+              setLike(true);
+            }}
+          >
             <AntDesign name="hearto" size={26} color="#783BC9" />
           </TouchableOpacity>
         )}
+        <Text>{likesCount >= 1 ? likesCount : null}</Text>
         <TouchableOpacity
           onPress={() => navigation.navigate("Comment", { id: review.id })}
         >
