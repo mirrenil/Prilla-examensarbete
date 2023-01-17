@@ -35,9 +35,6 @@ const TrendingScreen = ({ navigation }: RootStackScreenProps<"Trending">) => {
   const sortProducts = (filteredList: any) => {
     let mostRev: Product[] = [];
     let sorted = filteredList.sort((p: Product) => p.reviews.length >= 4);
-    // let lengths = sorted.map(function (r: Product) {
-    //   return r.reviews.length;
-    // });
     const backwards = sorted.reverse();
     console.log(backwards);
     for (let i = 0; i < 5; i++) {
@@ -45,8 +42,6 @@ const TrendingScreen = ({ navigation }: RootStackScreenProps<"Trending">) => {
     }
     setProducts(mostRev);
   };
-
-  console.log(products);
 
   return (
     <ScrollView>
