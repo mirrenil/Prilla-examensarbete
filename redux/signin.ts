@@ -4,6 +4,7 @@ const initialState = {
   displayName: "",
   id: "",
   email: "",
+  photo: "",
 };
 
 const userSignInSlice = createSlice({
@@ -14,9 +15,10 @@ const userSignInSlice = createSlice({
       state.displayName = action.payload.currentUser.displayName;
       state.id = action.payload.currentUser.uid;
       state.email = action.payload.currentUser.email;
+      state.photo = action.payload.currentUser.photoURL;
     },
     setSignOutState: (state) => {
-      state = { displayName: "", id: "", email: "" };
+      state = { displayName: "", id: "", email: "", photo: "" };
     },
   },
 });
