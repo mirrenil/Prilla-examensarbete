@@ -38,7 +38,7 @@ export default {
   },
   dark: {
     text: "#fff",
-    header: "#3E394F",
+    header: "#1B1324",
     background: "transparent",
     menu: "#1B1324",
     primary: {
