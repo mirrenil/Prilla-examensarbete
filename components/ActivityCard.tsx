@@ -74,26 +74,29 @@ export const ActivityCard = ({ review, updateReviews }: Props) => {
         </View>
         <ReviewCard key={review.id} review={review} />
       </ImageBackground>
-      <View style={styles.social}>
-        <TouchableOpacity onPress={toggleButton}>
-          {like ? (
-            <AntDesign name="heart" size={24} color="#783BC9" />
-          ) : (
-            <AntDesign name="hearto" size={26} color="#783BC9" />
-          )}
-        </TouchableOpacity>
+      <View style={styles.buttonsWrapper}>
+        <View style={styles.socials}>
+          <TouchableOpacity onPress={toggleButton}>
+            {like ? (
+              <AntDesign name="heart" size={24} color="#783BC9" />
+            ) : (
+              <AntDesign name="hearto" size={26} color="#783BC9" />
+            )}
+          </TouchableOpacity>
 
-        <MaterialCommunityIcons
-          style={{ marginLeft: 10 }}
-          name="comment-outline"
-          size={26}
-          color="#783BC9"
-        />
+          <MaterialCommunityIcons
+            style={{ marginLeft: 10 }}
+            name="comment-outline"
+            size={26}
+            color="#783BC9"
+          />
+        </View>
+
         {review.userID === myUser?.id && (
-          <View style={styles.removeIcon}>
+          <View>
             <FontAwesome5
               name="trash"
-              size={24}
+              size={20}
               color="#783BC9"
               onPress={() => handleRemove(review.id as string)}
             />
@@ -121,14 +124,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginLeft: 10,
   },
-  social: {
+  buttonsWrapper: {
+    height: 50,
     paddingLeft: 30,
+    paddingRight: 30,
     flexDirection: "row",
-    justifyContent: "flex-start",
+    justifyContent: "space-between",
   },
-  removeIcon: {
-    position: "absolute",
-    left: "90%",
-    bottom: 30,
+  socials: {
+    flexDirection: "row",
   },
 });

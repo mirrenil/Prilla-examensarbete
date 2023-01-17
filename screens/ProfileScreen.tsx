@@ -15,6 +15,7 @@ import { RootTabScreenProps } from "../types";
 import { useDispatch, useSelector } from "react-redux";
 import { currentReduxUser, setSignOutState } from "../redux/signin";
 import {
+  deleteDocById,
   getAllDocsInCollection,
   getDocsWithSpecificValue,
   getOneDocById,
@@ -31,6 +32,7 @@ import {
 } from "firebase/auth";
 import { auth } from "../firebase";
 import { useIsFocused } from "@react-navigation/native";
+import { ActivityCard } from "../components/ActivityCard";
 
 export default function ProfileScreen({
   navigation,
@@ -81,6 +83,7 @@ export default function ProfileScreen({
   };
 
   const getReviews = async () => {
+    console.log("get revs");
     try {
       let data = await getDocsWithSpecificValue(
         "recensioner",
@@ -360,7 +363,7 @@ export default function ProfileScreen({
             </View>
           )}
           {reviews.map((review: Review) => {
-            return <ReviewCard key={review.id} review={review} />;
+            return <ActivityCard review={review} updateReviews={getReviews} />;
           })}
         </View>
         <View>
@@ -545,7 +548,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignContent: "center",
-    marginLeft: 20,
+    margin: 10,
   },
   favorites: {
     marginLeft: 20,
