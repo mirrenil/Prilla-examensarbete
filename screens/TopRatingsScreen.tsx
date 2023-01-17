@@ -1,4 +1,4 @@
-import { ScrollView } from "react-native";
+import { ScrollView, View, StyleSheet } from "react-native";
 import * as Haptics from "expo-haptics";
 import { RootStackScreenProps } from "../types";
 import React, { useEffect, useState } from "react";
@@ -8,7 +8,9 @@ import { ProductCard } from "../components/ProductCard";
 import { useIsFocused } from "@react-navigation/native";
 import { Text } from "../components/Themed";
 
-const TrendingModal = ({ navigation }: RootStackScreenProps<"Trending">) => {
+const TopRatingsScreen = ({
+  navigation,
+}: RootStackScreenProps<"TopRating">) => {
   const [products, setProducts] = useState<Product[]>([]);
   const isFocused = useIsFocused();
 
@@ -41,14 +43,31 @@ const TrendingModal = ({ navigation }: RootStackScreenProps<"Trending">) => {
     <ScrollView>
       {products.map((product) => {
         return (
-          <>
-            <Text>{products.indexOf(product) + 1}</Text>
-            <ProductCard product={product} />
-          </>
+          <View style={styles.container}>
+            <Text style={styles.number}>{products.indexOf(product) + 1}</Text>
+            <View style={styles.product}>
+              <ProductCard product={product} />
+            </View>
+          </View>
         );
       })}
     </ScrollView>
   );
 };
 
-export default TrendingModal;
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  number: {
+    fontSize: 20,
+    paddingLeft: 30,
+  },
+  product: {
+    width: "90%",
+    paddingLeft: 10,
+  },
+});
+
+export default TopRatingsScreen;
