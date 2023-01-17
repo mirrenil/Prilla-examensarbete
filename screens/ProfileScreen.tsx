@@ -52,7 +52,8 @@ export default function ProfileScreen({
   const favoritesArray: any = [];
   let photoURLS: string[] = [];
   const [myFollows, setMyFollows] = useState<string[]>([]);
-  const imageBeforeUpdate ="https://cdn.drawception.com/images/avatars/647493-B9E.png";
+  const imageBeforeUpdate =
+    "https://cdn.drawception.com/images/avatars/647493-B9E.png";
   const [profilePic, setProfilePic] = useState<string[]>([]);
   let isMe = route.params.id === myUser.id;
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
@@ -365,72 +366,59 @@ export default function ProfileScreen({
                 />
               ))}
             </View>
+            {reviews.map((review: Review) => {
+              return (
+                <ActivityCard review={review} updateReviews={getReviews} />
+              );
+            })}
           </View>
-        </View>
-        <View
-          style={styles.separator}
-          lightColor="#D3D3D3"
-          darkColor="rgba(255,255,255,0.1)"
-        />
-        <View style={styles.activities}>
-          {myProfile ? (
-            <View style={styles.box}>
-              <Text lightColor="#333" darkColor="#fff" style={styles.text}>
-                Mina aktiviteter
-              </Text>
-              <AntDesign name="right" size={20} color="white" />
-            </View>
-          ) : (
-            <View style={styles.box}>
-              <Text lightColor="#333" darkColor="#fff" style={styles.text}>
-                {user.displayName}'s aktiviteter
-              </Text>
-              <AntDesign name="right" size={20} color="white" />
-            </View>
-          )}
-          {reviews.map((review: Review) => {
-            return <ActivityCard review={review} updateReviews={getReviews} />;
-          })}
-        </View>
-        <View>
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-              setModalVisible(!modalVisible);
-            }}
-          >
-            <View style={styles.layover}>
-              <View
-                lightColor="#FFF"
-                darkColor="#261F30"
-                style={styles.modalView}
-              >
-                <View>
-                  <AntDesign
-                    name="left"
-                    size={20}
-                    color="#D3D3D3"
-                    onPress={() => setModalVisible(!modalVisible)}
-                  />
-                  <Text
-                    lightColor="#333"
-                    darkColor="#fff"
-                    style={styles.modalTextHeader}
-                  >
-                    Inställningar
-                  </Text>
-                </View>
-                <View style={styles.column}>
-                  <Text
-                    lightColor="#333"
-                    darkColor="#fff"
-                    style={styles.modalText}
-                  >
-                    Lösenord
-                  </Text>
-                  {/* <TouchableOpacity> */}
+          <View>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalVisible}
+              onRequestClose={() => {
+                setModalVisible(!modalVisible);
+              }}
+            >
+              <View style={styles.layover}>
+                <View
+                  lightColor="#FFF"
+                  darkColor="#261F30"
+                  style={styles.modalView}
+                >
+                  <View>
+                    <AntDesign
+                      name="left"
+                      size={20}
+                      color="#D3D3D3"
+                      onPress={() => setModalVisible(!modalVisible)}
+                    />
+                    <Text
+                      lightColor="#333"
+                      darkColor="#fff"
+                      style={styles.modalTextHeader}
+                    >
+                      Inställningar
+                    </Text>
+                  </View>
+                  <View style={styles.column}>
+                    <Text
+                      lightColor="#333"
+                      darkColor="#fff"
+                      style={styles.modalText}
+                    >
+                      Lösenord
+                    </Text>
+                    <Text
+                      lightColor="#fff"
+                      darkColor="#fff"
+                      style={styles.modalTextHeader}
+                    >
+                      Inställningar
+                    </Text>
+                  </View>
+                  <View style={styles.column}>
                     <Text
                       lightColor="#333"
                       darkColor="#fff"
