@@ -33,15 +33,20 @@ const TrendingScreen = ({ navigation }: RootStackScreenProps<"Trending">) => {
   };
 
   const sortProducts = (filteredList: any) => {
+    let mostRev: Product[] = [];
     let sorted = filteredList.sort((p: Product) => p.reviews.length >= 4);
-
-    let lengths = sorted.map(function (r: Product) {
-      return r.reviews.length;
-    });
-    const backwards = lengths.reverse();
+    // let lengths = sorted.map(function (r: Product) {
+    //   return r.reviews.length;
+    // });
+    const backwards = sorted.reverse();
     console.log(backwards);
-    setProducts(backwards as Product[]);
+    for (let i = 0; i < 5; i++) {
+      mostRev.push(backwards[i]);
+    }
+    setProducts(mostRev);
   };
+
+  console.log(products);
 
   return (
     <ScrollView>

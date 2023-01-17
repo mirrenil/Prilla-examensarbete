@@ -20,6 +20,15 @@ const TopRatingsScreen = ({
     }
   }, [isFocused]);
 
+  const getProductData = async () => {
+    try {
+      let data = await getAllDocsInCollection("produkter");
+      sortProducts(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const sortProducts = (data: any) => {
     let tenTopArray: Product[] = [];
     let sorted = data.sort(({ rating: a }, { rating: b }) => b - a);
@@ -28,15 +37,6 @@ const TopRatingsScreen = ({
       console.log(sorted[i].name);
     }
     setProducts(tenTopArray);
-  };
-
-  const getProductData = async () => {
-    try {
-      let data = await getAllDocsInCollection("produkter");
-      sortProducts(data);
-    } catch (err) {
-      console.log(err);
-    }
   };
 
   return (
