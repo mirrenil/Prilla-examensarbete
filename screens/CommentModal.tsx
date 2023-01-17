@@ -121,12 +121,16 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
     return <ActivityIndicator size="small" color="#0000ff" />;
   } else {
     return (
-      <KeyboardAwareScrollView
-        style={styles.scrollView}
-        enableOnAndroid
-        scrollToOverflowEnabled
-        extraHeight={125}
-      >
+      // <KeyboardAvoidingView
+      //   behavior={Platform.OS === "ios" ? "padding" : "height"}
+      // >
+      // <KeyboardAwareScrollView
+      //   style={styles.scrollView}
+      //   enableOnAndroid
+      //   scrollToOverflowEnabled
+      //   extraHeight={125}
+      // >
+      <>
         <ScrollView contentContainerStyle={styles.wrapper}>
           <View>
             <View style={[styles.border, styles.comment]}>
@@ -173,7 +177,9 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
             />
           </TouchableOpacity>
         </View>
-      </KeyboardAwareScrollView>
+        {/* </KeyboardAwareScrollView> */}
+        {/* // </KeyboardAvoidingView> */}
+      </>
     );
   }
 };
@@ -216,9 +222,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#151416",
     width: "100%",
     alignItems: "center",
-    position: "absolute",
-    bottom: 0,
-    right: 0,
   },
   scrollView: {
     paddingHorizontal: 20,
