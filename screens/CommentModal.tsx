@@ -1,6 +1,12 @@
 import { View, Text, TextInput } from "../components/Themed";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Image, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  Image,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import { Review } from "../Interfaces";
 import { getOneDocById, updateSingleProperty } from "../helper";
 import { RootStackScreenProps } from "../types";
@@ -11,6 +17,7 @@ import { useSelector } from "react-redux";
 import { currentReduxUser } from "../redux/signin";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Feather } from "@expo/vector-icons";
+import { TypeFlags } from "typescript";
 
 interface User {
   name: string;
@@ -22,6 +29,7 @@ interface CommentWithUsername {
   image: string;
   text: string;
 }
+let inputHeight = 20;
 
 export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
   const [review, setReview] = useState<Review>();
@@ -113,29 +121,36 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
     return <ActivityIndicator size="small" color="#0000ff" />;
   } else {
     return (
-      <KeyboardAwareScrollView style={styles.wrapper} extraHeight={130}>
-        <View>
-          <View style={[styles.border, styles.comment]}>
-            <Image source={{ uri: author?.image }} style={styles.image} />
-            <View style={styles.textWrapper}>
-              <Text>{author?.name}</Text>
-              <Text>{review?.description}</Text>
+      <KeyboardAwareScrollView
+        style={styles.scrollView}
+        enableOnAndroid
+        scrollToOverflowEnabled
+        extraHeight={125}
+      >
+        <ScrollView contentContainerStyle={styles.wrapper}>
+          <View>
+            <View style={[styles.border, styles.comment]}>
+              <Image source={{ uri: author?.image }} style={styles.image} />
+              <View style={styles.textWrapper}>
+                <Text>{author?.name}</Text>
+                <Text>{review?.description}</Text>
+              </View>
             </View>
-          </View>
-          <ScrollView>
             {comments.map((c) => {
               return (
-                <View style={styles.comment}>
-                  <Image source={{ uri: c.image }} style={styles.image} />
-                  <View style={styles.textWrapper}>
-                    <Text>{c.author}</Text>
-                    <Text>{c?.text}</Text>
+                <View style={styles.commentWrapper}>
+                  <View style={styles.comment}>
+                    <Image source={{ uri: c.image }} style={styles.image} />
+                    <View style={styles.textWrapper}>
+                      <Text>{c.author}</Text>
+                      <Text>{c?.text}</Text>
+                    </View>
                   </View>
                 </View>
               );
             })}
-          </ScrollView>
-        </View>
+          </View>
+        </ScrollView>
         <View style={styles.inputWrapper}>
           <TextInput
             placeholderTextColor={"#fff"}
@@ -163,10 +178,15 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
   }
 };
 const styles = StyleSheet.create({
-  wrapper: { paddingHorizontal: 20, flex: 1 },
+  wrapper: {
+    justifyContent: "space-between",
+  },
   comment: {
     padding: 10,
     flexDirection: "row",
+  },
+  commentWrapper: {
+    marginBottom: inputHeight,
   },
   border: {
     borderBottomColor: "rgba(255,255,255,0.3)",
@@ -185,8 +205,7 @@ const styles = StyleSheet.create({
     height: 40,
     width: "80%",
     padding: 10,
-    borderRadius: 6,
-    marginTop: 5,
+    marginTop: 10,
   },
   inputWrapper: {
     padding: 10,
@@ -195,5 +214,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginBottom: 20,
     backgroundColor: "#151416",
+    width: "100%",
+    alignItems: "center",
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+  },
+  scrollView: {
+    paddingHorizontal: 20,
+    maxHeight: "100%",
   },
 });
