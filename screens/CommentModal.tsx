@@ -121,17 +121,16 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
     return <ActivityIndicator size="small" color="#0000ff" />;
   } else {
     return (
-      // <KeyboardAvoidingView
-      //   behavior={Platform.OS === "ios" ? "padding" : "height"}
-      // >
-      // <KeyboardAwareScrollView
-      //   style={styles.scrollView}
-      //   enableOnAndroid
-      //   scrollToOverflowEnabled
-      //   extraHeight={125}
-      // >
-      <>
-        <ScrollView contentContainerStyle={styles.wrapper}>
+      <KeyboardAwareScrollView
+        style={styles.scrollView}
+        scrollToOverflowEnabled
+        extraHeight={125}
+      >
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.keyboardAvoiding}
+        >
+          {/* <ScrollView contentContainerStyle={styles.wrapper}> */}
           <View>
             <View style={[styles.border, styles.comment]}>
               <Image source={{ uri: author?.image }} style={styles.image} />
@@ -154,32 +153,31 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
               );
             })}
           </View>
-        </ScrollView>
-        <View style={styles.inputWrapper}>
-          <TextInput
-            placeholderTextColor={"#fff"}
-            placeholder="Lämna en kommentar..."
-            style={styles.input}
-            value={input}
-            onChangeText={setInput}
-            multiline={true}
-            numberOfLines={1}
-          />
-          <TouchableOpacity
-            onPress={handleSubmit}
-            disabled={input ? false : true}
-          >
-            <Feather
-              name="send"
-              size={24}
-              color="white"
-              style={{ marginTop: 5 }}
+          {/* </ScrollView> */}
+          <View style={styles.inputWrapper}>
+            <TextInput
+              placeholderTextColor={"#fff"}
+              placeholder="Lämna en kommentar..."
+              style={styles.input}
+              value={input}
+              onChangeText={setInput}
+              multiline={true}
+              numberOfLines={1}
             />
-          </TouchableOpacity>
-        </View>
-        {/* </KeyboardAwareScrollView> */}
-        {/* // </KeyboardAvoidingView> */}
-      </>
+            <TouchableOpacity
+              onPress={handleSubmit}
+              disabled={input ? false : true}
+            >
+              <Feather
+                name="send"
+                size={24}
+                color="white"
+                style={{ marginTop: 5 }}
+              />
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      </KeyboardAwareScrollView>
     );
   }
 };
@@ -218,13 +216,19 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     borderRadius: 6,
     flexDirection: "row",
-    marginBottom: 20,
+    // marginBottom: 20,
     backgroundColor: "#151416",
     width: "100%",
     alignItems: "center",
+    position: "absolute",
+    bottom: 0,
+    right: 0,
   },
   scrollView: {
     paddingHorizontal: 20,
     maxHeight: "100%",
+  },
+  keyboardAvoiding: {
+    flex: 1,
   },
 });
