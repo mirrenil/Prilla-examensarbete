@@ -1,23 +1,19 @@
 import { View, Text, TextInput } from "../components/Themed";
 import React, { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  Image,
-  ScrollView,
-  KeyboardAvoidingView,
-  Platform,
-} from "react-native";
+import { StyleSheet, Image, Keyboard } from "react-native";
 import { Review } from "../Interfaces";
 import { getOneDocById, updateSingleProperty } from "../helper";
 import { RootStackScreenProps } from "../types";
 import { ActivityIndicator } from "react-native-paper";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import {
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from "react-native-gesture-handler";
 import { ReviewComment } from "../Interfaces";
 import { useSelector } from "react-redux";
 import { currentReduxUser } from "../redux/signin";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Feather } from "@expo/vector-icons";
-import { TypeFlags } from "typescript";
 
 interface User {
   name: string;
@@ -121,16 +117,8 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
     return <ActivityIndicator size="small" color="#0000ff" />;
   } else {
     return (
-      <KeyboardAwareScrollView
-        style={styles.scrollView}
-        scrollToOverflowEnabled
-        extraHeight={125}
-      >
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          style={styles.keyboardAvoiding}
-        >
-          {/* <ScrollView contentContainerStyle={styles.wrapper}> */}
+      <KeyboardAwareScrollView style={styles.scrollView} extraHeight={125}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View>
             <View style={[styles.border, styles.comment]}>
               <Image source={{ uri: author?.image }} style={styles.image} />
@@ -153,7 +141,7 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
               );
             })}
           </View>
-          {/* </ScrollView> */}
+
           <View style={styles.inputWrapper}>
             <TextInput
               placeholderTextColor={"#fff"}
@@ -176,15 +164,12 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
               />
             </TouchableOpacity>
           </View>
-        </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
       </KeyboardAwareScrollView>
     );
   }
 };
 const styles = StyleSheet.create({
-  wrapper: {
-    justifyContent: "space-between",
-  },
   comment: {
     padding: 10,
     flexDirection: "row",
@@ -216,17 +201,17 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     borderRadius: 6,
     flexDirection: "row",
-    // marginBottom: 20,
     backgroundColor: "#151416",
     width: "100%",
     alignItems: "center",
     position: "absolute",
     bottom: 0,
     right: 0,
+    marginBottom: inputHeight,
   },
   scrollView: {
     paddingHorizontal: 20,
-    maxHeight: "100%",
+    maxHeight: "50vh",
   },
   keyboardAvoiding: {
     flex: 1,
