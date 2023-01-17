@@ -31,7 +31,7 @@ export const ProductCard = ({ product }: Props) => {
           <RateInactive rating={product.rating ?? 0} />
           <Text style={margin.left}>{product.rating}</Text>
         </View>
-        <Text>{product.reviews.length} ratings</Text>
+        <Text>{product.reviews.length} recensioner</Text>
       </View>
     </View>
   );
