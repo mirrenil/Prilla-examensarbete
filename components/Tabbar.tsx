@@ -1,4 +1,5 @@
 import { Feather } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { StyleSheet, Image, View } from "react-native";
 import { Text } from "../components/Themed";
@@ -8,6 +9,17 @@ const Tabbar = () => {
   const colorScheme = useColorScheme();
   const themeContainerStyle =
     colorScheme === "light" ? styles.lightContainer : styles.darkContainer;
+  const navigate = useNavigation();
+
+  const sortTopRated = () => {
+    console.log("Toppbetyg");
+    navigate.navigate("TopRating");
+  };
+
+  const sortTrending = () => {
+    console.log("Trendande sorter");
+    navigate.navigate("Trending");
+  };
 
   return (
     <View style={styles.container}>
@@ -25,7 +37,12 @@ const Tabbar = () => {
               color="#FFFD54"
             />
           </View>
-          <Text style={styles.text} lightColor="#333" darkColor="#fff">
+          <Text
+            style={styles.text}
+            lightColor="#333"
+            darkColor="#fff"
+            onPress={() => sortTrending()}
+          >
             Trendande sorter
           </Text>
         </View>
@@ -45,7 +62,14 @@ const Tabbar = () => {
               color="#FFFD54"
             />
           </View>
-          <Text style={styles.text}>Toppbetyg</Text>
+          <Text
+            style={styles.text}
+            lightColor="#333"
+            darkColor="#fff"
+            onPress={() => sortTopRated()}
+          >
+            Toppbetyg
+          </Text>
         </View>
       </View>
     </View>
