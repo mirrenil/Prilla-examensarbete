@@ -27,6 +27,10 @@ import SignupScreen from "../screens/SignupScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import ForgotPasswordScreen from "../screens/ForgotPasswordScreen";
 import AgeCheckScreen from "../screens/AgeCheckScreen";
+import ReviewModal from "../screens/ReviewModal";
+import TopRatingsScreen from "../screens/TopRatingsScreen";
+import TrendingScreen from "../screens/TrendingScreen";
+import ProductDetailScreen from "../screens/DetailScreen";
 import LinkingConfiguration from "./LinkingConfiguration";
 import Constants from "expo-constants";
 
@@ -36,11 +40,7 @@ import {
   RootTabScreenProps,
 } from "../types";
 import store from "../redux/store";
-import ProductDetailScreen from "../screens/DetailScreen";
 import { currentReduxUser } from "../redux/signin";
-import ReviewModal from "../screens/ReviewModal";
-import TrendingModal from "../screens/TrendingScreen";
-import TopRatingsModal from "../screens/TopRatingsScreen";
 
 export default function Navigation({
   colorScheme,
@@ -109,12 +109,12 @@ function RootNavigator() {
         <Stack.Screen
           options={{ title: "Trendande sorter" }}
           name="Trending"
-          component={TrendingModal}
+          component={TrendingScreen}
         />
         <Stack.Screen
           options={{ title: "Toppbetyg" }}
           name="TopRating"
-          component={TopRatingsModal}
+          component={TopRatingsScreen}
         />
       </Stack.Group>
     </Stack.Navigator>
