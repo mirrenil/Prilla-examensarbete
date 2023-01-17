@@ -8,6 +8,7 @@ import {
   where,
   addDoc,
   updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { db } from "./firebase";
 
@@ -95,6 +96,17 @@ export const addNewDoc = async (collectionName, newData) => {
       }
     );
     return response;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const deleteDocById = async (collectionName, id) => {
+  try {
+    console.log(collectionName, id);
+    const ref = doc(db, collectionName, id);
+    let data = await deleteDoc(ref);
+    return data;
   } catch (err) {
     console.log(err);
   }
