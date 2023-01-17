@@ -1,20 +1,23 @@
-import { View, Text, TextInput } from "../components/Themed";
-import { StyleSheet, Image, TouchableOpacity, ScrollView } from "react-native";
+import { ScrollView } from "react-native";
 import * as Haptics from "expo-haptics";
 import { RootStackScreenProps } from "../types";
 import React, { useEffect, useState } from "react";
 import { Product } from "../Interfaces";
 import { getAllDocsInCollection } from "../helper";
 import { ProductCard } from "../components/ProductCard";
+import { useIsFocused } from "@react-navigation/native";
 
 const TopRatingsModal = ({ navigation }: RootStackScreenProps<"TopRating">) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const isFocused = useIsFocused();
 
   useEffect(() => {
-    getProductData();
-    filteredByRating();
-  }, []);
+    if (isFocused) {
+      getProductData();
+      filteredByRating();
+    }
+  }, [isFocused]);
 
   const getProductData = async () => {
     try {
@@ -39,15 +42,5 @@ const TopRatingsModal = ({ navigation }: RootStackScreenProps<"TopRating">) => {
     </ScrollView>
   );
 };
-
-// const styles = StyleSheet.create({
-//   item: {
-//     height: 50,
-//     borderRadius: 6,
-//     backgroundColor: "rgba(255,255,255,0.5)",
-//     padding: 10,
-//     margin: 10,
-//   },
-// });
 
 export default TopRatingsModal;
