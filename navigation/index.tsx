@@ -39,6 +39,8 @@ import store from "../redux/store";
 import ProductDetailScreen from "../screens/DetailScreen";
 import { currentReduxUser } from "../redux/signin";
 import ReviewModal from "../screens/ReviewModal";
+import TrendingModal from "../screens/TrendingScreen";
+import TopRatingsModal from "../screens/TopRatingsScreen";
 
 export default function Navigation({
   colorScheme,
@@ -103,6 +105,16 @@ function RootNavigator() {
           name="Review"
           initialParams={{ id: "12 " }}
           component={ReviewModal}
+        />
+        <Stack.Screen
+          options={{ title: "Trendande sorter" }}
+          name="Trending"
+          component={TrendingModal}
+        />
+        <Stack.Screen
+          options={{ title: "Toppbetyg" }}
+          name="TopRating"
+          component={TopRatingsModal}
         />
       </Stack.Group>
     </Stack.Navigator>
