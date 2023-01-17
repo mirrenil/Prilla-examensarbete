@@ -1,3 +1,4 @@
+import { FontAwesome5 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { View, Image, Text, StyleSheet } from "react-native";
@@ -5,6 +6,8 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { getOneDocById } from "../helper";
 import { Review, Product, Tag } from "../Interfaces";
 import { RateInactive } from "./RateInactive";
+import { useSelector } from "react-redux";
+import { currentReduxUser } from "../redux/signin";
 
 interface Props {
   review: Review;
@@ -12,11 +15,14 @@ interface Props {
 
 export const ReviewCard = ({ review }: Props) => {
   const [product, setProduct] = useState<Product>();
+  const myUser = useSelector(currentReduxUser);
   const navigation = useNavigation();
 
   useEffect(() => {
     getProduct();
   }, []);
+
+  const handleRemove = (id: string) => {};
 
   const getProduct = async () => {
     let data = await getOneDocById("produkter", review.productID);
@@ -46,13 +52,25 @@ export const ReviewCard = ({ review }: Props) => {
             <View style={{ flexDirection: "row" }}>
               <RateInactive rating={review.rating} />
               <Text style={{ marginLeft: 25, marginTop: 10 }}>
-                {review.rating}/5
+                {review.rating} / 5
               </Text>
             </View>
           </View>
         </View>
         <View style={styles.description}>
           <Text>{review.description}</Text>
+        </View>
+        <View style={{ position: "relative" }}>
+          {review.userID === myUser?.id && (
+            <View style={styles.removeIcon}>
+              <FontAwesome5
+                name="trash"
+                size={24}
+                color="#783BC9"
+                onPress={() => handleRemove(review.id as string)}
+              />
+            </View>
+          )}
         </View>
         <View style={{ flexDirection: "row" }}>
           {review.tags.map((tag: Tag) => {
@@ -104,6 +122,7 @@ const styles = StyleSheet.create({
   },
   description: {
     padding: 10,
+    width: "80%",
     flexDirection: "row",
   },
   tagsContainer: {
@@ -118,5 +137,10 @@ const styles = StyleSheet.create({
   tagName: {
     textAlign: "center",
     fontWeight: "bold",
+  },
+  removeIcon: {
+    position: "absolute",
+    left: "90%",
+    bottom: 30,
   },
 });
