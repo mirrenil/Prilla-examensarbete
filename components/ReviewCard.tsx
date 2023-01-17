@@ -1,7 +1,8 @@
 import { FontAwesome5 } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
+
 import React, { useEffect, useState } from "react";
-import { View, Image, Text, StyleSheet } from "react-native";
+import { View, Image, Text, StyleSheet, Alert } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { getOneDocById } from "../helper";
 import { Review, Product, Tag } from "../Interfaces";
@@ -17,10 +18,13 @@ export const ReviewCard = ({ review }: Props) => {
   const [product, setProduct] = useState<Product>();
   const myUser = useSelector(currentReduxUser);
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
 
   useEffect(() => {
-    getProduct();
-  }, []);
+    if (isFocused) {
+      getProduct();
+    }
+  }, [isFocused]);
 
   const handleRemove = (id: string) => {};
 
