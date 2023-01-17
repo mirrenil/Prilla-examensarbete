@@ -1,30 +1,16 @@
 import { View, Text, TextInput } from "../components/Themed";
 import React, { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  Image,
-  useColorScheme,
-  ScrollView,
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-} from "react-native";
+import { StyleSheet, Image, ScrollView } from "react-native";
 import { Review } from "../Interfaces";
-import {
-  addNewDoc,
-  getOneDocById,
-  setOneDoc,
-  updateSingleProperty,
-} from "../helper";
+import { getOneDocById, updateSingleProperty } from "../helper";
 import { RootStackScreenProps } from "../types";
-import Colors from "../constants/Colors";
 import { ActivityIndicator } from "react-native-paper";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { ReviewComment } from "../Interfaces";
 import { useSelector } from "react-redux";
 import { currentReduxUser } from "../redux/signin";
-import { useIsFocused } from "@react-navigation/native";
-import { Comment } from "../Interfaces";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { Feather } from "@expo/vector-icons";
 
 interface User {
   name: string;
@@ -127,59 +113,57 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
     return <ActivityIndicator size="small" color="#0000ff" />;
   } else {
     return (
-      <ScrollView contentContainerStyle={styles.wrapper}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-        >
-          <View>
-            <View style={[styles.border, styles.comment]}>
-              <Image source={{ uri: author?.image }} style={styles.image} />
-              <View style={styles.textWrapper}>
-                <Text>{author?.name}</Text>
-                <Text>{review?.description}</Text>
-              </View>
+      <KeyboardAwareScrollView style={styles.wrapper} extraHeight={130}>
+        <View>
+          <View style={[styles.border, styles.comment]}>
+            <Image source={{ uri: author?.image }} style={styles.image} />
+            <View style={styles.textWrapper}>
+              <Text>{author?.name}</Text>
+              <Text>{review?.description}</Text>
             </View>
-            <ScrollView>
-              {comments.map((c) => {
-                return (
-                  <View style={styles.comment}>
-                    <Image source={{ uri: c.image }} style={styles.image} />
-                    <View style={styles.textWrapper}>
-                      <Text>{c.author}</Text>
-                      <Text>{c?.text}</Text>
-                    </View>
+          </View>
+          <ScrollView>
+            {comments.map((c) => {
+              return (
+                <View style={styles.comment}>
+                  <Image source={{ uri: c.image }} style={styles.image} />
+                  <View style={styles.textWrapper}>
+                    <Text>{c.author}</Text>
+                    <Text>{c?.text}</Text>
                   </View>
-                );
-              })}
-            </ScrollView>
-          </View>
-
-          <View style={styles.inputWrapper}>
-            <TextInput
-              placeholder="Lämna en kommentar..."
-              style={styles.input}
-              value={input}
-              onChangeText={setInput}
-              multiline={true}
-              numberOfLines={1}
+                </View>
+              );
+            })}
+          </ScrollView>
+        </View>
+        <View style={styles.inputWrapper}>
+          <TextInput
+            placeholderTextColor={"#fff"}
+            placeholder="Lämna en kommentar..."
+            style={styles.input}
+            value={input}
+            onChangeText={setInput}
+            multiline={true}
+            numberOfLines={1}
+          />
+          <TouchableOpacity
+            onPress={handleSubmit}
+            disabled={input ? false : true}
+          >
+            <Feather
+              name="send"
+              size={24}
+              color="white"
+              style={{ marginTop: 5 }}
             />
-            <TouchableOpacity
-              onPress={handleSubmit}
-              disabled={input ? false : true}
-            >
-              <Text>Skicka</Text>
-            </TouchableOpacity>
-          </View>
-        </KeyboardAvoidingView>
-      </ScrollView>
+          </TouchableOpacity>
+        </View>
+      </KeyboardAwareScrollView>
     );
   }
 };
 const styles = StyleSheet.create({
-  wrapper: {
-    justifyContent: "space-between",
-    height: "100%",
-  },
+  wrapper: { paddingHorizontal: 20, flex: 1 },
   comment: {
     padding: 10,
     flexDirection: "row",
@@ -198,18 +182,18 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   input: {
-    height: 50,
+    height: 40,
     width: "80%",
     padding: 10,
-    backgroundColor: "transparent",
+    borderRadius: 6,
+    marginTop: 5,
   },
   inputWrapper: {
-    width: "100%",
+    padding: 10,
+    justifyContent: "space-around",
+    borderRadius: 6,
     flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#484152",
-    position: "absolute",
-    bottom: 0,
-    right: 0,
+    marginBottom: 20,
+    backgroundColor: "#151416",
   },
 });
