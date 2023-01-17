@@ -1,4 +1,5 @@
 import * as ImagePicker from "expo-image-picker";
+import { Constants } from "expo-constants";
 import React, { useEffect, useState } from "react";
 import { Platform, Image } from "react-native";
 import { View, Text } from "./Themed";
@@ -7,9 +8,11 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 
 interface Props {
   handleUpload: (a: any) => void;
+  showIcon?: boolean;
+  setChosenImg?: () => void;
 }
 
-const ImageUpload = ({ handleUpload }: Props) => {
+const ImageUpload = ({ handleUpload, showIcon, setChosenImg }: Props) => {
   const [image, setImage] = useState<any>(null);
 
   useEffect(() => {
@@ -80,12 +83,14 @@ const ImageUpload = ({ handleUpload }: Props) => {
           onPress={PickImage}
           style={{ alignItems: "center", margin: 10 }}
         >
-          <MaterialIcons
-            name="add-a-photo"
-            size={50}
-            color="#783BC9"
-            style={{ paddingBottom: 10 }}
-          />
+          {showIcon && (
+            <MaterialIcons
+              name="add-a-photo"
+              size={50}
+              color="white"
+              style={{ paddingBottom: 10 }}
+            />
+          )}
           <Text>Lägg till foto</Text>
         </TouchableOpacity>
       )}
