@@ -4,14 +4,9 @@ import { useIsFocused, useNavigation } from "@react-navigation/native";
 import React, { useCallback, useEffect, useState } from "react";
 import { View, Image, Text, StyleSheet, Alert } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useSelector } from "react-redux";
 import { getOneDocById } from "../helper";
 import { Review, Product, Tag } from "../Interfaces";
-import { currentReduxUser } from "../redux/signin";
 import { RateInactive } from "./RateInactive";
-import * as Haptics from "expo-haptics";
-import { deleteDoc, doc } from "firebase/firestore";
-import { db } from "../firebase";
 
 interface Props {
   review: Review;
@@ -19,7 +14,6 @@ interface Props {
 
 export const ReviewCard = ({ review }: Props) => {
   const [product, setProduct] = useState<Product>();
-  const myUser = useSelector(currentReduxUser);
   const navigation = useNavigation();
   const isFocused = useIsFocused();
 
@@ -35,32 +29,6 @@ export const ReviewCard = ({ review }: Props) => {
       setProduct(data as Product);
     }
   };
-
-  const handleRemove = useCallback(
-    async (id: string) => {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-      Alert.alert(
-        "Är du säker på att du vill ta bort din recension?",
-        "Du kan inte ångra dig!",
-        [
-          {
-            text: "Avbryt",
-            onPress: () => console.log("AVBRYT Pressed"),
-            style: "cancel",
-          },
-          {
-            text: "Ja",
-            onPress: () => {
-              const specificReview = doc(db, "recensioner", id);
-              deleteDoc(specificReview);
-              getProduct();
-            },
-          },
-        ]
-      );
-    },
-    [product]
-  );
 
   if (product) {
     return (
@@ -90,18 +58,6 @@ export const ReviewCard = ({ review }: Props) => {
         </View>
         <View style={styles.description}>
           <Text>{review.description}</Text>
-        </View>
-        <View style={{ position: "relative" }}>
-          {review.userID === myUser?.id && (
-            <View style={styles.removeIcon}>
-              <FontAwesome5
-                name="trash"
-                size={24}
-                color="#783BC9"
-                onPress={() => handleRemove(review.id as string)}
-              />
-            </View>
-          )}
         </View>
         <View style={{ flexDirection: "row" }}>
           {review.tags.map((tag: Tag) => {
@@ -168,10 +124,5 @@ const styles = StyleSheet.create({
   tagName: {
     textAlign: "center",
     fontWeight: "bold",
-  },
-  removeIcon: {
-    position: "absolute",
-    left: "90%",
-    bottom: 30,
   },
 });

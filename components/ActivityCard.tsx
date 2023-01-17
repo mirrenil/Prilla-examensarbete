@@ -1,21 +1,28 @@
 import { Text } from "./Themed";
-import { Image, ImageBackground, StyleSheet, View } from "react-native";
+import { Alert, Image, ImageBackground, StyleSheet, View } from "react-native";
 import { Review, User } from "../Interfaces";
 import { ReviewCard } from "./ReviewCard";
 import React, { useEffect, useState } from "react";
-import { getOneDocById } from "../helper";
+import { deleteDocById, getOneDocById } from "../helper";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
-import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  AntDesign,
+  FontAwesome5,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
+import { useSelector } from "react-redux";
+import { currentReduxUser } from "../redux/signin";
 interface Props {
   review: Review;
+  updateReviews: () => void;
 }
 
-export const ActivityCard = ({ review }: Props) => {
+export const ActivityCard = ({ review, updateReviews }: Props) => {
   const [author, setAuthor] = useState<User>();
   const [like, setLike] = useState<boolean>(false);
-  const navigation = useNavigation();
+  const myUser = useSelector(currentReduxUser);
 
   useEffect(() => {
     getReviewAuthor();
@@ -31,6 +38,27 @@ export const ActivityCard = ({ review }: Props) => {
     if (data) {
       setAuthor(data as User);
     }
+  };
+
+  const handleRemove = async (id: string) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    Alert.alert(
+      "Är du säker på att du vill ta bort din recension?",
+      "Du kan inte ångra dig!",
+      [
+        {
+          text: "Avbryt",
+          onPress: () => console.log("AVBRYT Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "Ja",
+          onPress: () => {
+            deleteDocById("recensioner", id).then(() => updateReviews());
+          },
+        },
+      ]
+    );
   };
 
   return (
@@ -61,6 +89,16 @@ export const ActivityCard = ({ review }: Props) => {
           size={26}
           color="#783BC9"
         />
+        {review.userID === myUser?.id && (
+          <View style={styles.removeIcon}>
+            <FontAwesome5
+              name="trash"
+              size={24}
+              color="#783BC9"
+              onPress={() => handleRemove(review.id as string)}
+            />
+          </View>
+        )}
       </View>
     </View>
   );
@@ -87,5 +125,10 @@ const styles = StyleSheet.create({
     paddingLeft: 30,
     flexDirection: "row",
     justifyContent: "flex-start",
+  },
+  removeIcon: {
+    position: "absolute",
+    left: "90%",
+    bottom: 30,
   },
 });
