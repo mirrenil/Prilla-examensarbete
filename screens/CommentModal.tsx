@@ -1,6 +1,6 @@
 import { View, Text, TextInput } from "../components/Themed";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Image, Keyboard } from "react-native";
+import { StyleSheet, Image, Keyboard, Platform } from "react-native";
 import { Review } from "../Interfaces";
 import { getOneDocById, updateSingleProperty } from "../helper";
 import { RootStackScreenProps } from "../types";
@@ -25,7 +25,6 @@ interface CommentWithUsername {
   image: string;
   text: string;
 }
-let inputHeight = 20;
 
 export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
   const [review, setReview] = useState<Review>();
@@ -169,6 +168,9 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
     );
   }
 };
+let inputHeight = 20;
+const scrollViewHeight = Platform.OS === "ios" ? "50vh" : "100%";
+
 const styles = StyleSheet.create({
   comment: {
     padding: 10,
@@ -211,7 +213,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     paddingHorizontal: 20,
-    maxHeight: "50vh",
+    maxHeight: scrollViewHeight,
   },
   keyboardAvoiding: {
     flex: 1,
