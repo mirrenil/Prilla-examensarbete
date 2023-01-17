@@ -98,7 +98,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
       createdAt: new Date(),
       tags: selectedTags,
       description: reviewText,
-      photo: image,
+      photo: image ? image : "",
       productID: route.params.id,
       rating: rating,
       userID: myUser.id,
@@ -260,7 +260,8 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
             value={text}
             onChangeText={setText}
             multiline={true}
-            numberOfLines={10}
+            numberOfLines={5}
+            maxLength={130}
           />
           <View style={popupStyles.buttons}>
             <TouchableOpacity

@@ -46,7 +46,7 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
           dispatch(
             setActiveUser({
               reduxEmail: result.user?.email,
-              currentUser: currentUser,
+              currentUser: result.user,
             })
           );
         }
@@ -56,6 +56,7 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
     } catch (error) {
       Haptics.NotificationFeedbackType.Error;
       Alert.alert("Felaktig email eller lösenord");
+      console.log(error, "error");
     }
   };
   return (
