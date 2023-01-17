@@ -104,7 +104,7 @@ export const addNewDoc = async (collectionName, newData) => {
 export const deleteDocById = async (collectionName, id) => {
   try {
     const ref = doc(db, collectionName, id);
-    let data = await deleteDoc(ref);
+    await deleteDoc(ref);
     return;
   } catch (err) {
     console.log(err);

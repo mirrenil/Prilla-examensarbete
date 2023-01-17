@@ -83,7 +83,6 @@ export default function ProfileScreen({
   };
 
   const getReviews = async () => {
-    console.log("get revs");
     try {
       let data = await getDocsWithSpecificValue(
         "recensioner",
