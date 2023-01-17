@@ -15,6 +15,7 @@ import { RootTabScreenProps } from "../types";
 import { useDispatch, useSelector } from "react-redux";
 import { currentReduxUser, setSignOutState } from "../redux/signin";
 import {
+  deleteDocById,
   getAllDocsInCollection,
   getDocsWithSpecificValue,
   getOneDocById,
@@ -33,6 +34,7 @@ import {
 import { auth } from "../firebase";
 import { PopUp } from "../components/PopUp";
 import { useIsFocused } from "@react-navigation/native";
+import { ActivityCard } from "../components/ActivityCard";
 
 export default function ProfileScreen({
   navigation,
@@ -50,7 +52,8 @@ export default function ProfileScreen({
   const favoritesArray: any = [];
   let photoURLS: string[] = [];
   const [myFollows, setMyFollows] = useState<string[]>([]);
-  const imageBeforeUpdate ="https://cdn.drawception.com/images/avatars/647493-B9E.png";
+  const imageBeforeUpdate =
+    "https://cdn.drawception.com/images/avatars/647493-B9E.png";
   const [profilePic, setProfilePic] = useState<string[]>([]);
   let isMe = route.params.id === myUser.id;
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
@@ -67,6 +70,7 @@ export default function ProfileScreen({
   useEffect(() => {
     if (isFocused) {
       getMyFollowing();
+      getReviews();
     }
   }, [isFocused]);
 
@@ -362,30 +366,10 @@ export default function ProfileScreen({
                 />
               ))}
             </View>
-          </View>
-          <View
-            style={styles.separator}
-            lightColor="#eee"
-            darkColor="rgba(255,255,255,0.1)"
-          />
-          <View style={styles.activities}>
-            {myProfile ? (
-              <View style={styles.box}>
-                <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
-                  Mina aktiviteter
-                </Text>
-                <AntDesign name="right" size={20} color="white" />
-              </View>
-            ) : (
-              <View style={styles.box}>
-                <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
-                  {user.displayName}'s aktiviteter
-                </Text>
-                <AntDesign name="right" size={20} color="white" />
-              </View>
-            )}
             {reviews.map((review: Review) => {
-              return <ReviewCard key={review.id} review={review} />;
+              return (
+                <ActivityCard review={review} updateReviews={getReviews} />
+              );
             })}
           </View>
           <View>
@@ -397,15 +381,35 @@ export default function ProfileScreen({
                 setModalVisible(!modalVisible);
               }}
             >
-              <View>
-                <View style={styles.modalView}>
+              <View style={styles.layover}>
+                <View
+                  lightColor="#FFF"
+                  darkColor="#261F30"
+                  style={styles.modalView}
+                >
                   <View>
                     <AntDesign
                       name="left"
                       size={20}
-                      color="white"
+                      color="#D3D3D3"
                       onPress={() => setModalVisible(!modalVisible)}
                     />
+                    <Text
+                      lightColor="#333"
+                      darkColor="#fff"
+                      style={styles.modalTextHeader}
+                    >
+                      Inställningar
+                    </Text>
+                  </View>
+                  <View style={styles.column}>
+                    <Text
+                      lightColor="#333"
+                      darkColor="#fff"
+                      style={styles.modalText}
+                    >
+                      Lösenord
+                    </Text>
                     <Text
                       lightColor="#fff"
                       darkColor="#fff"
@@ -560,7 +564,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignContent: "center",
-    marginLeft: 20,
+    margin: 10,
   },
   favorites: {
     marginLeft: 20,

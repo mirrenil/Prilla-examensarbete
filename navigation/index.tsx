@@ -143,7 +143,7 @@ function BottomTabNavigator() {
         name="Home"
         component={StartScreen}
         options={({ navigation }: RootTabScreenProps<"Home">) => ({
-          title: "Utforska",
+          title: "",
           tabBarIcon: ({ color }) => (
             <Ionicons name="ios-home-outline" size={30} color={color} />
           ),
@@ -176,7 +176,7 @@ function BottomTabNavigator() {
         component={ProfileScreen}
         initialParams={{ id: user.id }}
         options={{
-          title: username,
+          title: "",
           tabBarIcon: ({ color }) => (
             <AntDesign name="user" size={30} color={color} />
           ),
