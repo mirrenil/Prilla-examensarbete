@@ -7,7 +7,7 @@ import { getAllDocsInCollection } from "../helper";
 import { ProductCard } from "../components/ProductCard";
 import { useIsFocused } from "@react-navigation/native";
 
-const TrendingModal = ({ navigation }: RootStackScreenProps<"Trending">) => {
+const TopRatingsModal = ({ navigation }: RootStackScreenProps<"TopRating">) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const isFocused = useIsFocused();
@@ -15,7 +15,7 @@ const TrendingModal = ({ navigation }: RootStackScreenProps<"Trending">) => {
   useEffect(() => {
     if (isFocused) {
       getProductData();
-      filteredByReviews();
+      filteredByRating();
     }
   }, [isFocused]);
 
@@ -28,9 +28,9 @@ const TrendingModal = ({ navigation }: RootStackScreenProps<"Trending">) => {
     }
   };
 
-  // filter the procucts by most reviews
-  const filteredByReviews = () => {
-    let filteredList = products.filter((p) => p.reviews.length >= 3);
+  // filter the procucts by highest rating
+  const filteredByRating = () => {
+    let filteredList = products.filter((p) => p.rating >= 4);
     setFilteredProducts(filteredList);
   };
 
@@ -42,5 +42,4 @@ const TrendingModal = ({ navigation }: RootStackScreenProps<"Trending">) => {
     </ScrollView>
   );
 };
-
-export default TrendingModal;
+export default TopRatingsModal;

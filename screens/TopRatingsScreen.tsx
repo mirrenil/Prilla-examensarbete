@@ -6,41 +6,49 @@ import { Product } from "../Interfaces";
 import { getAllDocsInCollection } from "../helper";
 import { ProductCard } from "../components/ProductCard";
 import { useIsFocused } from "@react-navigation/native";
+import { Text } from "../components/Themed";
 
-const TopRatingsModal = ({ navigation }: RootStackScreenProps<"TopRating">) => {
+const TrendingModal = ({ navigation }: RootStackScreenProps<"Trending">) => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const isFocused = useIsFocused();
 
   useEffect(() => {
     if (isFocused) {
       getProductData();
-      filteredByRating();
     }
   }, [isFocused]);
+
+  const sortProducts = (data: any) => {
+    let tenTopArray: Product[] = [];
+    let sorted = data.sort(({ rating: a }, { rating: b }) => b - a);
+    for (let i = 0; i < 10; i++) {
+      tenTopArray.push(sorted[i]);
+      console.log(sorted[i].name);
+    }
+    setProducts(tenTopArray);
+  };
 
   const getProductData = async () => {
     try {
       let data = await getAllDocsInCollection("produkter");
-      setProducts(data as Product[]);
+      sortProducts(data);
     } catch (err) {
       console.log(err);
     }
   };
 
-  // filter the procucts by highest rating
-  const filteredByRating = () => {
-    let filteredList = products.filter((p) => p.rating >= 4);
-    setFilteredProducts(filteredList);
-  };
-
   return (
     <ScrollView>
-      {filteredProducts.map((product) => {
-        return <ProductCard product={product} />;
+      {products.map((product) => {
+        return (
+          <>
+            <Text>{products.indexOf(product) + 1}</Text>
+            <ProductCard product={product} />
+          </>
+        );
       })}
     </ScrollView>
   );
 };
 
-export default TopRatingsModal;
+export default TrendingModal;
