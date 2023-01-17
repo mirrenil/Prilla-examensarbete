@@ -207,7 +207,7 @@ function BottomTabNavigator() {
         component={ProfileScreen}
         initialParams={{ id: user.id }}
         options={{
-          title: username,
+          title: "",
           tabBarIcon: ({ color }) => (
             <AntDesign name="user" size={24} color={color} />
           ),

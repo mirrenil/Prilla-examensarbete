@@ -31,7 +31,7 @@ import {
   signOut,
 } from "firebase/auth";
 import { auth } from "../firebase";
-import { gradientLight, gradientDark } from "../constants/Colors";
+import Colors, { gradientLight, gradientDark } from "../constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
 import { useIsFocused } from "@react-navigation/native";
 
@@ -54,7 +54,7 @@ export default function ProfileScreen({
   const profilePic =
     "https://cdn.drawception.com/images/avatars/647493-B9E.png";
   let isMe = route.params.id === myUser.id;
-  const colorScheme: any = useColorScheme();
+  const colorScheme = useColorScheme();
   let isLight = colorScheme == "light" ? true : false;
   const isFocused = useIsFocused();
 
@@ -233,12 +233,21 @@ export default function ProfileScreen({
           <View style={styles.container}>
             {myProfile ? (
               <View style={styles.top}>
-                <Feather
-                  name="settings"
-                  size={24}
-                  color="#FFFD54"
-                  onPress={() => setModalVisible(true)}
-                />
+                {isLight ? (
+                  <Feather
+                    name="settings"
+                    size={24}
+                    color="#783BC9"
+                    onPress={() => setModalVisible(true)}
+                  />
+                ) : (
+                  <Feather
+                    name="settings"
+                    size={24}
+                    color="#FFFD54"
+                    onPress={() => setModalVisible(true)}
+                  />
+                )}
               </View>
             ) : null}
             <View style={styles.topContainer}>
@@ -389,20 +398,16 @@ export default function ProfileScreen({
               }}
             >
               <View style={styles.layover}>
-                <View
-                  lightColor="#FFF"
-                  darkColor="#261F30"
-                  style={styles.modalView}
-                >
+                <View style={styles.modalView}>
                   <View>
                     <AntDesign
                       name="left"
                       size={20}
-                      color="#D3D3D3"
+                      color="#fff"
                       onPress={() => setModalVisible(!modalVisible)}
                     />
                     <Text
-                      lightColor="#333"
+                      lightColor="#fff"
                       darkColor="#fff"
                       style={styles.modalTextHeader}
                     >
@@ -411,18 +416,18 @@ export default function ProfileScreen({
                   </View>
                   <View style={styles.column}>
                     <Text
-                      lightColor="#333"
+                      lightColor="#fff"
                       darkColor="#fff"
                       style={styles.modalText}
                     >
                       Lösenord
                     </Text>
                     <TouchableOpacity
-                      style={styles.borderButton}
+                      style={styles.modalBorderButton}
                       onPress={() => resetPassword(userEmail as string)}
                     >
                       <Text
-                        lightColor="#333"
+                        lightColor="#fff"
                         darkColor="#fff"
                         style={styles.btnText}
                       >
@@ -431,18 +436,18 @@ export default function ProfileScreen({
                     </TouchableOpacity>
 
                     <Text
-                      lightColor="#333"
+                      lightColor="#fff"
                       darkColor="#fff"
                       style={styles.modalText}
                     >
                       Radera konto
                     </Text>
                     <TouchableOpacity
-                      style={styles.borderButton}
+                      style={styles.modalBorderButton}
                       onPress={() => deleteAccount()}
                     >
                       <Text
-                        lightColor="#333"
+                        lightColor="#fff"
                         darkColor="#fff"
                         style={styles.btnText}
                       >
@@ -450,18 +455,18 @@ export default function ProfileScreen({
                       </Text>
                     </TouchableOpacity>
                     <Text
-                      lightColor="#333"
+                      lightColor="#fff"
                       darkColor="#fff"
                       style={styles.modalText}
                     >
                       Logga ut
                     </Text>
                     <TouchableOpacity
-                      style={styles.borderButton}
+                      style={styles.modalBorderButton}
                       onPress={handleSignOut}
                     >
                       <Text
-                        lightColor="#333"
+                        lightColor="#fff"
                         darkColor="#fff"
                         style={styles.btnText}
                       >
@@ -532,6 +537,16 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     width: 300,
     height: 40,
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  modalBorderButton: {
+    borderWidth: 0.5,
+    borderColor: "#FFFD54",
+    padding: 15,
+    borderRadius: 6,
+    width: 300,
+    height: 50,
     marginTop: 10,
     marginBottom: 10,
   },
@@ -610,18 +625,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   modalView: {
-    backgroundColor: "#C8A0FE",
+    backgroundColor: "#857E8E",
     maxHeight: 400,
     borderRadius: 6,
     padding: 35,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
   },
   modalText: {
     fontSize: 15,
