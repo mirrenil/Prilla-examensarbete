@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, View, Text } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import * as Haptics from "expo-haptics";
 import { RootStackScreenProps } from "../types";
 import React, { useEffect, useState } from "react";
@@ -6,6 +6,7 @@ import { Product } from "../Interfaces";
 import { getAllDocsInCollection } from "../helper";
 import { ProductCard } from "../components/ProductCard";
 import { useIsFocused } from "@react-navigation/native";
+import { Text } from "../components/Themed";
 
 const TrendingScreen = ({ navigation }: RootStackScreenProps<"Trending">) => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -29,17 +30,17 @@ const TrendingScreen = ({ navigation }: RootStackScreenProps<"Trending">) => {
   const filterByRating = (data: any) => {
     let filteredList = data.filter((p: Product) => p.reviews.length >= 3);
     sortProducts(filteredList);
-    console.log(filteredList);
   };
 
   const sortProducts = (filteredList: any) => {
-    let tenTopArray: Product[] = [];
-    let sorted = filteredList.sort(({ reviews: a }, { reviews: b }) => b - a);
-    for (let i = 0; i < 5; i++) {
-      tenTopArray.push(sorted[i]);
-      console.log(sorted[i].name);
-    }
-    setProducts(tenTopArray);
+    let sorted = filteredList.sort((p: Product) => p.reviews.length >= 4);
+
+    let lengths = sorted.map(function (r: Product) {
+      return r.reviews.length;
+    });
+    const backwards = lengths.reverse();
+    console.log(backwards);
+    setProducts(backwards as Product[]);
   };
 
   return (
