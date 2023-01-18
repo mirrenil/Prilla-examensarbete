@@ -35,6 +35,7 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
 
   // STYLING VARIABLES
   let inputHeight = 20;
+  const iosKeyboardHeight = 291;
   const isAndroid = Platform.OS === "ios" ? false : true;
   const scrollViewHeight = Platform.OS === "ios" ? "50vh" : "100%";
 
@@ -153,9 +154,25 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
       alignItems: "center",
       position: "absolute",
       zIndex: 100,
-      bottom: 0,
       right: 0,
       marginBottom: isAndroid ? 0 : inputHeight,
+      bottom: 0,
+    },
+    inputWrapperIos: {
+      flexDirection: "row",
+      justifyContent: "space-around",
+      alignItems: "center",
+      alignContent: "center",
+      borderRadius: 6,
+      padding: 10,
+      backgroundColor: "#151416",
+      width: "100%",
+      marginBottom: inputHeight,
+    },
+    inputIos: {
+      height: 40,
+      padding: 10,
+      width: "80%",
     },
     scrollView: {
       paddingHorizontal: 20,
@@ -201,11 +218,11 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
               })}
             </View>
             {!isAndroid && (
-              <View style={styles.inputWrapper}>
+              <View style={styles.inputWrapperIos}>
                 <TextInput
                   placeholderTextColor={"#fff"}
                   placeholder="Lämna en kommentar..."
-                  style={styles.input}
+                  style={styles.inputIos}
                   value={input}
                   onChangeText={setInput}
                   multiline={true}
@@ -215,12 +232,7 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
                   onPress={handleSubmit}
                   disabled={input ? false : true}
                 >
-                  <Feather
-                    name="send"
-                    size={24}
-                    color="white"
-                    style={{ marginTop: 5 }}
-                  />
+                  <Feather name="send" size={24} color="white" />
                 </TouchableOpacity>
               </View>
             )}
