@@ -68,7 +68,13 @@ export default function StartScreen({
         </View>
         <Tabbar />
         {reviews.map((review) => {
-          return <ActivityCard key={review.id} review={review} updateReviews={getReviews}/>;
+          return (
+            <ActivityCard
+              key={review.id}
+              review={review}
+              updateReviews={getReviews}
+            />
+          );
         })}
       </ScrollView>
     </LinearGradient>

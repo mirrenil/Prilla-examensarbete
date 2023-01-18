@@ -5,6 +5,7 @@ import { Platform, Image } from "react-native";
 import { View, Text } from "./Themed";
 import { MaterialIcons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { uploadImageAndGetURL } from "../helper";
 
 interface Props {
   handleUpload: (a: any) => void;
@@ -43,6 +44,13 @@ const ImageUpload = ({ handleUpload, setChosenImg }: Props) => {
       if (!result.canceled) {
         setImage(result.assets[0].uri);
         handleUpload(result.assets[0].uri);
+        const response = await fetch(result.assets[0].uri);
+        const blob = await response.blob();
+        let firebaseImageURL = await uploadImageAndGetURL(
+          result.assets[0].uri,
+          blob
+        );
+        console.log("test: ", firebaseImageURL);
       }
     } catch (err) {
       console.log(err);
