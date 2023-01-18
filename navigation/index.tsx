@@ -126,6 +126,18 @@ function RootNavigator() {
         component={NotFoundScreen}
         options={{ title: "Oops!" }}
       />
+
+      <Stack.Screen
+        options={{ title: "Trendande sorter" }}
+        name="Trending"
+        component={TrendingScreen}
+      />
+      <Stack.Screen
+        options={{ title: "Toppbetyg" }}
+        name="TopRating"
+        component={TopRatingsScreen}
+      />
+
       <Stack.Group screenOptions={{ presentation: "modal" }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
         <Stack.Screen
@@ -134,16 +146,7 @@ function RootNavigator() {
           initialParams={{ id: "12" }}
           component={ReviewModal}
         />
-        <Stack.Screen
-          options={{ title: "Trendande sorter" }}
-          name="Trending"
-          component={TrendingScreen}
-        />
-        <Stack.Screen
-          options={{ title: "Toppbetyg" }}
-          name="TopRating"
-          component={TopRatingsScreen}
-        />
+
         <Stack.Screen
           options={{ title: "Lämna kommentar" }}
           name="Comment"
