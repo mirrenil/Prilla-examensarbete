@@ -7,7 +7,6 @@ import {
   Alert,
   Modal,
   Image,
-  Pressable,
 } from "react-native";
 import * as Haptics from "expo-haptics";
 import { Text, View } from "../components/Themed";
@@ -15,7 +14,6 @@ import { RootTabScreenProps } from "../types";
 import { useDispatch, useSelector } from "react-redux";
 import { currentReduxUser, setSignOutState } from "../redux/signin";
 import {
-  deleteDocById,
   getAllDocsInCollection,
   getDocsWithSpecificValue,
   getOneDocById,
@@ -23,7 +21,6 @@ import {
 } from "../helper";
 import { Review, User } from "../Interfaces";
 import { ScrollView } from "react-native-gesture-handler";
-import { ReviewCard } from "../components/ReviewCard";
 import {
   sendPasswordResetEmail,
   deleteUser,
@@ -317,19 +314,35 @@ export default function ProfileScreen({
             )}
 
             {!myProfile && (
-              <TouchableOpacity
-                style={[follow ? styles.borderButtonFollow : styles.button]}
-                onPress={toggleFollow}
-              >
-                <Text
-                  darkColor="#201A28"
-                  lightColor="#201A28"
-                  style={[follow ? styles.borderButtonText : styles.buttonText]}
-                >
-                  {follow ? "Följer" : "Följ"}{" "}
-                  {follow && <AntDesign name="down" size={14} color="white" />}
-                </Text>
-              </TouchableOpacity>
+              <View>
+                {!isAlreadyFollowing() ? (
+                  <TouchableOpacity
+                    style={styles.borderButtonFollow}
+                    onPress={toggleFollow}
+                  >
+                    <Text
+                      darkColor="#201A28"
+                      lightColor="#201A28"
+                      style={styles.buttonText}
+                    >
+                      Följ
+                    </Text>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    style={styles.followingButton}
+                    onPress={toggleFollow}
+                  >
+                    <Text
+                      darkColor="#fff"
+                      lightColor="#333"
+                      style={styles.borderButtonText}
+                    >
+                      Följer <AntDesign name="down" size={14} color="#333" />
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </View>
             )}
           </View>
 
@@ -506,7 +519,7 @@ const styles = StyleSheet.create({
     height: 1,
     width: "100%",
   },
-  button: {
+  followingButton: {
     borderColor: "#575060",
     borderWidth: 0.2,
     backgroundColor: "transparent",
