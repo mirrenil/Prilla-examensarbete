@@ -8,6 +8,7 @@ import { RootTabScreenProps } from "../types";
 import { ActivityCard } from "../components/ActivityCard";
 import Colors, { gradientDark, gradientLight } from "../constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function StartScreen({
   navigation,
@@ -15,10 +16,13 @@ export default function StartScreen({
   const [reviews, setReviews] = useState<Review[]>([]);
   const colorScheme: any = useColorScheme();
   let isLight = colorScheme == "light" ? true : false;
+  const isFocused = useIsFocused();
 
   useEffect(() => {
-    getReviews();
-  }, []);
+    if (isFocused) {
+      getReviews();
+    }
+  }, [isFocused]);
 
   const getReviews = async () => {
     let newData: Review[] = [];
@@ -64,7 +68,7 @@ export default function StartScreen({
         </View>
         <Tabbar />
         {reviews.map((review) => {
-          return <ActivityCard key={review.id} review={review} />;
+          return <ActivityCard key={review.id} review={review} updateReviews={getReviews}/>;
         })}
       </ScrollView>
     </LinearGradient>
