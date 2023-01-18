@@ -184,86 +184,86 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
     },
   });
 
-  // if (!review && !author) {
-  return <LoadingSpinner />;
-  // } else {
-  //   return (
-  //     <>
-  //       <KeyboardAwareScrollView
-  //         style={styles.scrollView}
-  //         extraHeight={125}
-  //         scrollEnabled
-  //       >
-  //         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-  //           <View>
-  //             <View style={[styles.border, styles.comment]}>
-  //               <Image source={{ uri: author?.image }} style={styles.image} />
-  //               <View style={styles.textWrapper}>
-  //                 <Text>{author?.name}</Text>
-  //                 <Text>{review?.description}</Text>
-  //               </View>
-  //             </View>
-  //             {comments.map((c) => {
-  //               return (
-  //                 <View style={styles.commentWrapper}>
-  //                   <View style={styles.comment}>
-  //                     <Image source={{ uri: c.image }} style={styles.image} />
-  //                     <View style={styles.textWrapper}>
-  //                       <Text>{c.author}</Text>
-  //                       <Text>{c?.text}</Text>
-  //                     </View>
-  //                   </View>
-  //                 </View>
-  //               );
-  //             })}
-  //           </View>
-  //           {!isAndroid && (
-  //             <View style={styles.inputWrapperIos}>
-  //               <TextInput
-  //                 placeholderTextColor={"#fff"}
-  //                 placeholder="Lämna en kommentar..."
-  //                 style={styles.inputIos}
-  //                 value={input}
-  //                 onChangeText={setInput}
-  //                 multiline={true}
-  //                 numberOfLines={1}
-  //               />
-  //               <TouchableOpacity
-  //                 onPress={handleSubmit}
-  //                 disabled={input ? false : true}
-  //               >
-  //                 <Feather name="send" size={24} color="white" />
-  //               </TouchableOpacity>
-  //             </View>
-  //           )}
-  //         </TouchableWithoutFeedback>
-  //       </KeyboardAwareScrollView>
-  //       {isAndroid && (
-  //         <View style={styles.inputWrapper}>
-  //           <TextInput
-  //             placeholderTextColor={"#fff"}
-  //             placeholder="Lämna en kommentar..."
-  //             style={styles.input}
-  //             value={input}
-  //             onChangeText={setInput}
-  //             multiline={true}
-  //             numberOfLines={1}
-  //             autoFocus={true}
-  //           />
-  //           <TouchableOpacity
-  //             onPress={handleSubmit}
-  //             disabled={input ? false : true}
-  //           >
-  //             <Feather
-  //               name="send"
-  //               size={24}
-  //               color="white"
-  //               style={{ marginTop: 5 }}
-  //             />
-  //           </TouchableOpacity>
-  //         </View>
-  //       )}
-  //     </>
-  //   );
-  // }
+  if (!review && !author) {
+    return <LoadingSpinner />;
+  } else {
+    return (
+      <>
+        <KeyboardAwareScrollView
+          style={styles.scrollView}
+          extraHeight={125}
+          scrollEnabled
+        >
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View>
+              <View style={[styles.border, styles.comment]}>
+                <Image source={{ uri: author?.image }} style={styles.image} />
+                <View style={styles.textWrapper}>
+                  <Text>{author?.name}</Text>
+                  <Text>{review?.description}</Text>
+                </View>
+              </View>
+              {comments.map((c) => {
+                return (
+                  <View style={styles.commentWrapper}>
+                    <View style={styles.comment}>
+                      <Image source={{ uri: c.image }} style={styles.image} />
+                      <View style={styles.textWrapper}>
+                        <Text>{c.author}</Text>
+                        <Text>{c?.text}</Text>
+                      </View>
+                    </View>
+                  </View>
+                );
+              })}
+            </View>
+            {!isAndroid && (
+              <View style={styles.inputWrapperIos}>
+                <TextInput
+                  placeholderTextColor={"#fff"}
+                  placeholder="Lämna en kommentar..."
+                  style={styles.inputIos}
+                  value={input}
+                  onChangeText={setInput}
+                  multiline={true}
+                  numberOfLines={1}
+                />
+                <TouchableOpacity
+                  onPress={handleSubmit}
+                  disabled={input ? false : true}
+                >
+                  <Feather name="send" size={24} color="white" />
+                </TouchableOpacity>
+              </View>
+            )}
+          </TouchableWithoutFeedback>
+        </KeyboardAwareScrollView>
+        {isAndroid && (
+          <View style={styles.inputWrapper}>
+            <TextInput
+              placeholderTextColor={"#fff"}
+              placeholder="Lämna en kommentar..."
+              style={styles.input}
+              value={input}
+              onChangeText={setInput}
+              multiline={true}
+              numberOfLines={1}
+              autoFocus={true}
+            />
+            <TouchableOpacity
+              onPress={handleSubmit}
+              disabled={input ? false : true}
+            >
+              <Feather
+                name="send"
+                size={24}
+                color="white"
+                style={{ marginTop: 5 }}
+              />
+            </TouchableOpacity>
+          </View>
+        )}
+      </>
+    );
+  }
 };
