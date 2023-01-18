@@ -367,18 +367,28 @@ export default function ProfileScreen({
                 </Text>
               </View>
             )}
-
-            <View style={styles.row}>
-              {urls.map((url, index) => (
-                <Image
-                  key={index}
-                  style={styles.favoritesImage}
-                  source={{
-                    uri: url,
-                  }}
-                />
-              ))}
+            <View style={{ flexDirection: "row" }}>
+              <ScrollView horizontal style={styles.favortiesScroll}>
+                <View style={styles.row}>
+                  {urls.map((url, index) => (
+                    <Image
+                      key={index}
+                      style={styles.favoritesImage}
+                      source={{
+                        uri: url,
+                      }}
+                    />
+                  ))}
+                </View>
+              </ScrollView>
+              <AntDesign
+                name="right"
+                size={34}
+                color="white"
+                style={{ marginTop: 20 }}
+              />
             </View>
+
             {reviews.map((review: Review) => {
               return (
                 <ActivityCard review={review} updateReviews={getReviews} />
@@ -590,8 +600,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
-    width: "100%",
     height: 80,
+    width: "90%",
   },
   left: {
     flexDirection: "column",
@@ -668,7 +678,8 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   favortiesScroll: {
-    width: "85%",
+    width: "70%",
+    flexDirection: "row",
   },
   layover: {
     height: "100%",
