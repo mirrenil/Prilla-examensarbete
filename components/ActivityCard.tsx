@@ -27,7 +27,7 @@ interface CommentWithUsername {
   text: string;
 }
 
-export const ActivityCard = ({ review }: Props) => {
+export const ActivityCard = ({ review, updateReviews }: Props) => {
   const [author, setAuthor] = useState<User>();
   const [like, setLike] = useState<boolean>(false);
   const navigation = useNavigation();
@@ -44,11 +44,6 @@ export const ActivityCard = ({ review }: Props) => {
     getCommentsData();
     checkIfLiked();
   }, [isFocused]);
-
-  const toggleButton = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setLike(!like);
-  };
 
   const getReviewAuthor = async () => {
     let data = await getOneDocById("users", review.userID);
@@ -138,7 +133,7 @@ export const ActivityCard = ({ review }: Props) => {
   };
 
   return (
-    <View style={styles.wrapper}>
+    <View>
       <ImageBackground
         source={{ uri: review.photo }}
         resizeMode="cover"
@@ -170,13 +165,10 @@ export const ActivityCard = ({ review }: Props) => {
             <AntDesign name="hearto" size={26} color="#783BC9" />
           </TouchableOpacity>
         )}
-        <Text style={{ marginLeft: 10, marginRight: 10 }}>
-          {likesCount >= 1 ? likesCount : null}
-        </Text>
+        <Text>{likesCount >= 1 ? likesCount : null}</Text>
         <TouchableOpacity
           onPress={() => navigation.navigate("Comment", { id: review.id })}
         >
-
           <MaterialCommunityIcons
             style={{ marginLeft: 10 }}
             name="comment-outline"
@@ -184,10 +176,8 @@ export const ActivityCard = ({ review }: Props) => {
             color="#783BC9"
           />
         </TouchableOpacity>
-
         </View>
-
-        {review.userID === myUser?.id && (
+         {review.userID === myUser?.id && (
           <View>
             <FontAwesome5
               name="trash"
@@ -197,8 +187,7 @@ export const ActivityCard = ({ review }: Props) => {
             />
           </View>
         )}
-
-      </View>
+    
       {comment && (
         <TouchableOpacity
           onPress={() => navigation.navigate("Comment", { id: review.id })}
@@ -215,8 +204,8 @@ export const ActivityCard = ({ review }: Props) => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
-  wrapper: {},
   image: {
     paddingBottom: 10,
     minHeight: 230,
@@ -239,7 +228,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginLeft: 10,
   },
-
   social: {
     paddingLeft: 10,
     width: 90,
@@ -260,5 +248,5 @@ const styles = StyleSheet.create({
     height: 30,
     width: 30,
     borderRadius: 100,
-    },
+  }
 });
