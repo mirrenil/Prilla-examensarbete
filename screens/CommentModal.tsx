@@ -1,18 +1,11 @@
 import { View, Text, TextInput } from "../components/Themed";
 import React, { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  Image,
-  Keyboard,
-  Platform,
-  Dimensions,
-} from "react-native";
+import { StyleSheet, Image, Keyboard, Platform } from "react-native";
 import { Review } from "../Interfaces";
 import { getOneDocById, updateSingleProperty } from "../helper";
 import { RootStackScreenProps } from "../types";
 import { ActivityIndicator } from "react-native-paper";
 import {
-  ScrollView,
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native-gesture-handler";
@@ -39,14 +32,11 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
   const [input, setInput] = useState<string>();
   const [comments, setComments] = useState<CommentWithUsername[]>([]);
   const myUser = useSelector(currentReduxUser);
-  // const keyboardHeight = useKeyboardHeight();
 
   // STYLING VARIABLES
   let inputHeight = 20;
   const isAndroid = Platform.OS === "ios" ? false : true;
   const scrollViewHeight = Platform.OS === "ios" ? "50vh" : "100%";
-
-  // console.log(keyboardHeight);
 
   useEffect(() => {
     getReview();
@@ -133,7 +123,7 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
       flexDirection: "row",
     },
     commentWrapper: {
-      marginBottom: inputHeight,
+      marginBottom: 10,
     },
     border: {
       borderBottomColor: "rgba(255,255,255,0.3)",
@@ -152,7 +142,6 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
       height: 40,
       width: "80%",
       padding: 10,
-      marginTop: 10,
     },
     inputWrapper: {
       padding: 10,
@@ -166,11 +155,12 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
       zIndex: 100,
       bottom: 0,
       right: 0,
-      // marginBottom: inputHeight,
+      marginBottom: isAndroid ? 0 : inputHeight,
     },
     scrollView: {
       paddingHorizontal: 20,
       maxHeight: scrollViewHeight,
+      marginBottom: inputHeight + 20,
     },
     keyboardAvoiding: {
       flex: 1,
