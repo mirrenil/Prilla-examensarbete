@@ -473,7 +473,11 @@ export default function ProfileScreen({
       </>
     );
   } else {
-    return <ActivityIndicator size="small" color="#0000ff" />;
+    return (
+      <View style={styles.loading}>
+        <ActivityIndicator size="small" color="#0000ff" />
+      </View>
+    );
   }
 }
 
@@ -663,5 +667,10 @@ const styles = StyleSheet.create({
     zIndex: 100,
     justifyContent: "center",
     alignItems: "center",
+  },
+  loading: {
+    position: "absolute",
+    top: 200,
+    left: 200,
   },
 });

@@ -328,7 +328,11 @@ function ProductDetailScreen({
       </ScrollView>
     );
   } else {
-    return <ActivityIndicator size="small" color="#0000ff" />;
+    return (
+      <View style={styles.loading}>
+        <ActivityIndicator size="small" color="#0000ff" />
+      </View>
+    );
   }
 }
 
@@ -460,6 +464,11 @@ const styles = StyleSheet.create({
   tagName: {
     textAlign: "center",
     fontWeight: "bold",
+  },
+  loading: {
+    position: "absolute",
+    top: 200,
+    left: 200,
   },
 });
 
