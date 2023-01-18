@@ -31,6 +31,7 @@ import ReviewModal from "../screens/ReviewModal";
 import TopRatingsScreen from "../screens/TopRatingsScreen";
 import TrendingScreen from "../screens/TrendingScreen";
 import ProductDetailScreen from "../screens/DetailScreen";
+import { CommentModal } from "../screens/CommentModal";
 import LinkingConfiguration from "./LinkingConfiguration";
 import Constants from "expo-constants";
 
@@ -130,7 +131,7 @@ function RootNavigator() {
         <Stack.Screen
           options={{ title: "Lämna recension" }}
           name="Review"
-          initialParams={{ id: "12 " }}
+          initialParams={{ id: "12" }}
           component={ReviewModal}
         />
         <Stack.Screen
@@ -142,6 +143,12 @@ function RootNavigator() {
           options={{ title: "Toppbetyg" }}
           name="TopRating"
           component={TopRatingsScreen}
+        />
+        <Stack.Screen
+          options={{ title: "Lämna kommentar" }}
+          name="Comment"
+          initialParams={{ id: "12" }}
+          component={CommentModal}
         />
       </Stack.Group>
     </Stack.Navigator>

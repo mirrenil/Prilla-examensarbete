@@ -22,6 +22,7 @@ export type RootStackParamList = {
   Review: { id: string };
   Trending: undefined;
   TopRating: undefined;
+  Comment: { id: string };
   NotFound: undefined;
   Loading: undefined;
   Signin: undefined;

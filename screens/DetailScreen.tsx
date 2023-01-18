@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import {
   StyleSheet,
@@ -24,6 +24,7 @@ import Colors, { gradientDark, gradientLight } from "../constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
 import { useSelector } from "react-redux";
 import { currentReduxUser } from "../redux/signin";
+import { useIsFocused } from "@react-navigation/native";
 
 interface ReviewWithAuthor extends Review {
   author: string;
@@ -41,12 +42,13 @@ function ProductDetailScreen({
   const [liked, setLiked] = useState<boolean>(false);
   const myUser = useSelector(currentReduxUser);
   const [usersLikedArray, setUsersLikedArray] = useState<string[]>([]);
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     getProductReviews();
     getProductData();
     getLiked();
-  }, []);
+  }, [isFocused]);
 
   const getProductData = async () => {
     try {
