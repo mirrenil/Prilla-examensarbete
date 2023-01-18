@@ -3,11 +3,9 @@ import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   TouchableOpacity,
-  ActivityIndicator,
   Alert,
   Modal,
   Image,
-  Pressable,
   useColorScheme,
 } from "react-native";
 import * as Haptics from "expo-haptics";
@@ -16,7 +14,6 @@ import { RootTabScreenProps } from "../types";
 import { useDispatch, useSelector } from "react-redux";
 import { currentReduxUser, setSignOutState } from "../redux/signin";
 import {
-  deleteDocById,
   getAllDocsInCollection,
   getDocsWithSpecificValue,
   getOneDocById,
@@ -24,7 +21,6 @@ import {
 } from "../helper";
 import { Review, User } from "../Interfaces";
 import { ScrollView } from "react-native-gesture-handler";
-import { ReviewCard } from "../components/ReviewCard";
 import {
   sendPasswordResetEmail,
   deleteUser,
@@ -38,6 +34,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { PopUp } from "../components/PopUp";
 import { useIsFocused } from "@react-navigation/native";
 import { ActivityCard } from "../components/ActivityCard";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function ProfileScreen({
   navigation,
@@ -256,7 +253,6 @@ export default function ProfileScreen({
             : [gradientDark.from, gradientDark.to]
         }
       >
-
         {popUpOpen ? (
           <PopUp
             setProfilePic={(img) => handleImgUpload(img)}
@@ -338,19 +334,35 @@ export default function ProfileScreen({
             )}
 
             {!myProfile && (
-              <TouchableOpacity
-                style={[follow ? styles.borderButtonFollow : styles.button]}
-                onPress={toggleFollow}
-              >
-                <Text
-                  darkColor="#201A28"
-                  lightColor="#201A28"
-                  style={[follow ? styles.borderButtonText : styles.buttonText]}
-                >
-                  {follow ? "Följer" : "Följ"}{" "}
-                  {follow && <AntDesign name="down" size={14} color="white" />}
-                </Text>
-              </TouchableOpacity>
+              <View>
+                {!isAlreadyFollowing() ? (
+                  <TouchableOpacity
+                    style={styles.borderButtonFollow}
+                    onPress={toggleFollow}
+                  >
+                    <Text
+                      darkColor="#201A28"
+                      lightColor="#201A28"
+                      style={styles.buttonText}
+                    >
+                      Följ
+                    </Text>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    style={styles.followingButton}
+                    onPress={toggleFollow}
+                  >
+                    <Text
+                      darkColor="#fff"
+                      lightColor="#333"
+                      style={styles.borderButtonText}
+                    >
+                      Följer <AntDesign name="down" size={14} color="#333" />
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </View>
             )}
           </View>
 
@@ -375,18 +387,28 @@ export default function ProfileScreen({
                 </Text>
               </View>
             )}
-
-            <View style={styles.row}>
-              {urls.map((url, index) => (
-                <Image
-                  key={index}
-                  style={styles.favoritesImage}
-                  source={{
-                    uri: url,
-                  }}
-                />
-              ))}
+            <View style={{ flexDirection: "row" }}>
+              <ScrollView horizontal style={styles.favortiesScroll}>
+                <View style={styles.row}>
+                  {urls.map((url, index) => (
+                    <Image
+                      key={index}
+                      style={styles.favoritesImage}
+                      source={{
+                        uri: url,
+                      }}
+                    />
+                  ))}
+                </View>
+              </ScrollView>
+              <AntDesign
+                name="right"
+                size={34}
+                color="white"
+                style={{ marginTop: 20 }}
+              />
             </View>
+
             {reviews.map((review: Review) => {
               return (
                 <ActivityCard review={review} updateReviews={getReviews} />
@@ -494,7 +516,7 @@ export default function ProfileScreen({
       </LinearGradient>
     );
   } else {
-    return <ActivityIndicator size="small" color="#0000ff" />;
+    return <LoadingSpinner />;
   }
 }
 
@@ -523,7 +545,7 @@ const styles = StyleSheet.create({
     height: 1,
     width: "100%",
   },
-  button: {
+  followingButton: {
     borderColor: "#575060",
     borderWidth: 0.2,
     backgroundColor: "transparent",
@@ -606,8 +628,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
-    width: "100%",
     height: 80,
+    width: "90%",
   },
   left: {
     flexDirection: "column",
@@ -679,7 +701,8 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   favortiesScroll: {
-    width: "85%",
+    width: "70%",
+    flexDirection: "row",
   },
   layover: {
     height: "100%",
@@ -689,6 +712,10 @@ const styles = StyleSheet.create({
     right: 0,
     backgroundColor: "rgba(0,0,0,0.7)",
     zIndex: 100,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loading: {
     justifyContent: "center",
     alignItems: "center",
   },
