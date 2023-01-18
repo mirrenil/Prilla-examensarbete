@@ -95,23 +95,13 @@ export const ReviewCard = ({ review }: Props) => {
       <View style={styles.wrapper}>
         <View style={styles.productData}>
           <Image style={styles.image} source={{ uri: product.photo }} />
-          <View
-            // lightColor="#7e7885"
-            // darkColor="#3D3745"
-            // lightColor="transparent"
-            style={styles.textAndRating}
-          >
+          <View style={styles.textAndRating}>
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate("Product", { id: review.productID })
               }
             >
-              <View
-                // lightColor="#7e7885"
-                // darkColor="#3D3745"
-                // lightColor="transparent"
-                style={styles.productText}
-              >
+              <View style={styles.productText}>
                 <Text
                   style={styles.textBold}
                   lightColor="#fff"
@@ -124,12 +114,7 @@ export const ReviewCard = ({ review }: Props) => {
                 </Text>
               </View>
             </TouchableOpacity>
-            <View
-              // lightColor="#7e7885"
-              darkColor="#3D3745"
-              // lightColor="transparent"
-              style={{ flexDirection: "row" }}
-            >
+            <View darkColor="#3D3745" style={{ flexDirection: "row" }}>
               <RateInactive rating={review.rating} />
               <Text lightColor="#fff" style={{ marginLeft: 25, marginTop: 10 }}>
                 {review.rating} / 5
@@ -137,27 +122,10 @@ export const ReviewCard = ({ review }: Props) => {
             </View>
           </View>
         </View>
-        <View
-          // lightColor="#7e7885"
-          darkColor="#3D3745"
-          // lightColor="transparent"
-          style={styles.description}
-        >
+        <View darkColor="#3D3745" style={styles.description}>
           <Text lightColor="#fff" darkColor="#fff">
             {review.description}
           </Text>
-        </View>
-        <View style={{ position: "relative" }}>
-          {review.userID === myUser?.id && (
-            <View style={styles.removeIcon}>
-              <FontAwesome5
-                name="trash"
-                size={24}
-                color="#783BC9"
-                onPress={() => handleRemove(review.id as string)}
-              />
-            </View>
-          )}
         </View>
         <View style={{ flexDirection: "row" }}>
           {review.tags.map((tag: Tag) => {

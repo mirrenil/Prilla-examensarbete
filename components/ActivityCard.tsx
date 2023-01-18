@@ -1,5 +1,12 @@
 import { Text } from "./Themed";
-import { Alert, Image, ImageBackground, StyleSheet, View } from "react-native";
+import {
+  Alert,
+  Image,
+  ImageBackground,
+  StyleSheet,
+  useColorScheme,
+  View,
+} from "react-native";
 import { Review, User } from "../Interfaces";
 import { ReviewCard } from "./ReviewCard";
 import React, { useEffect, useState } from "react";
@@ -15,6 +22,7 @@ import * as Haptics from "expo-haptics";
 import { useSelector } from "react-redux";
 import { currentReduxUser } from "../redux/signin";
 import { useIsFocused } from "@react-navigation/native";
+import Colors from "../constants/Colors";
 
 interface Props {
   review: Review;
@@ -35,6 +43,7 @@ export const ActivityCard = ({ review, updateReviews }: Props) => {
   const myUser = useSelector(currentReduxUser);
   const [likesCount, setLikesCount] = useState<number>(0);
   let isFocused = useIsFocused();
+  const colorScheme: any = useColorScheme();
 
   useEffect(() => {
     if (review.likes) {
@@ -133,8 +142,62 @@ export const ActivityCard = ({ review, updateReviews }: Props) => {
     );
   };
 
+  const styles = StyleSheet.create({
+    wrapper: {
+      backgroundColor: Colors[colorScheme].primary.dark,
+      marginVertical: 10,
+    },
+    image: {
+      paddingBottom: 10,
+      minHeight: 230,
+      justifyContent: "space-between",
+      alignItems: "center",
+    },
+    userInfo: {
+      flexDirection: "row",
+      alignItems: "center",
+      width: "100%",
+      padding: 10,
+    },
+    profilePic: {
+      height: 30,
+      width: 30,
+      borderRadius: 100,
+    },
+    username: {
+      fontWeight: "bold",
+      marginLeft: 10,
+    },
+    buttons: {
+      paddingLeft: 10,
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      padding: 10,
+    },
+    comment: {
+      padding: 10,
+      flexDirection: "row",
+    },
+    textWrapper: {
+      width: "70%",
+      marginLeft: 10,
+    },
+    commentImg: {
+      height: 30,
+      width: 30,
+      borderRadius: 100,
+    },
+  });
+
   return (
-    <View>
+    <View style={styles.wrapper}>
+      <View style={styles.userInfo}>
+        <Image source={{ uri: author?.photo }} style={styles.profilePic} />
+        <Text lightColor="#333" style={styles.username}>
+          {author?.displayName}
+        </Text>
+      </View>
       <ImageBackground
         source={{ uri: review.photo }}
         resizeMode="cover"
@@ -148,48 +211,51 @@ export const ActivityCard = ({ review, updateReviews }: Props) => {
         </View>
         <ReviewCard key={review.id} review={review} />
       </ImageBackground>
-      <View style={styles.social}>
-        {like ? (
+      <View style={styles.buttons}>
+        <View style={{ flexDirection: "row" }}>
+          {like ? (
+            <TouchableOpacity
+              onPress={() => {
+                removeLike();
+                setLike(false);
+              }}
+            >
+              <AntDesign name="heart" size={24} color="#783BC9" />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={() => {
+                addLike();
+                setLike(true);
+              }}
+            >
+              <AntDesign name="hearto" size={26} color="#783BC9" />
+            </TouchableOpacity>
+          )}
+          <Text>{likesCount >= 1 ? likesCount : null}</Text>
           <TouchableOpacity
-            onPress={() => {
-              removeLike();
-              setLike(false);
-            }}
+            onPress={() => navigation.navigate("Comment", { id: review.id })}
           >
-            <AntDesign name="heart" size={24} color="#783BC9" />
+            <MaterialCommunityIcons
+              style={{ marginLeft: 10 }}
+              name="comment-outline"
+              size={26}
+              color="#783BC9"
+            />
           </TouchableOpacity>
-        ) : (
-          <TouchableOpacity
-            onPress={() => {
-              addLike();
-              setLike(true);
-            }}
-          >
-            <AntDesign name="hearto" size={26} color="#783BC9" />
-          </TouchableOpacity>
-        )}
-        <Text>{likesCount >= 1 ? likesCount : null}</Text>
-        <TouchableOpacity
-          onPress={() => navigation.navigate("Comment", { id: review.id })}
-        >
-          <MaterialCommunityIcons
-            style={{ marginLeft: 10 }}
-            name="comment-outline"
-            size={26}
-            color="#783BC9"
-          />
-        </TouchableOpacity>
-      </View>
-      {review.userID === myUser?.id && (
-        <View>
-          <FontAwesome5
-            name="trash"
-            size={20}
-            color="#783BC9"
-            onPress={() => handleRemove(review.id as string)}
-          />
         </View>
-      )}
+
+        {review.userID === myUser?.id && (
+          <View>
+            <FontAwesome5
+              name="trash"
+              size={20}
+              color="#783BC9"
+              onPress={() => handleRemove(review.id as string)}
+            />
+          </View>
+        )}
+      </View>
 
       {comment && (
         <TouchableOpacity
@@ -207,48 +273,3 @@ export const ActivityCard = ({ review, updateReviews }: Props) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  image: {
-    paddingBottom: 10,
-    minHeight: 230,
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  userInfo: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "100%",
-    padding: 10,
-  },
-  profilePic: {
-    height: 30,
-    width: 30,
-    borderRadius: 100,
-  },
-  username: {
-    fontWeight: "bold",
-    marginLeft: 10,
-  },
-  social: {
-    paddingLeft: 10,
-    width: 90,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: 10,
-  },
-  comment: {
-    padding: 10,
-    flexDirection: "row",
-  },
-  textWrapper: {
-    width: "70%",
-    marginLeft: 10,
-  },
-  commentImg: {
-    height: 30,
-    width: 30,
-    borderRadius: 100,
-  },
-});
