@@ -51,6 +51,5 @@ export interface Product {
 
 export interface ReviewComment {
   authorID: string;
-  // reviewID: string;
   text: string;
 }
