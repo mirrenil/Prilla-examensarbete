@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   TouchableOpacity,
-  ActivityIndicator,
   Alert,
   Modal,
   Image,
@@ -35,6 +34,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { PopUp } from "../components/PopUp";
 import { useIsFocused } from "@react-navigation/native";
 import { ActivityCard } from "../components/ActivityCard";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function ProfileScreen({
   navigation,
@@ -516,11 +516,7 @@ export default function ProfileScreen({
       </LinearGradient>
     );
   } else {
-    return (
-      <View style={styles.loading}>
-        <ActivityIndicator size="small" color="#0000ff" />
-      </View>
-    );
+    return <LoadingSpinner />;
   }
 }
 

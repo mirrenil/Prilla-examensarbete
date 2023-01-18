@@ -5,7 +5,6 @@ import {
   Image,
   ImageBackground,
   TouchableOpacity,
-  ActivityIndicator,
   useColorScheme,
 } from "react-native";
 import * as Haptics from "expo-haptics";
@@ -25,6 +24,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useSelector } from "react-redux";
 import { currentReduxUser } from "../redux/signin";
 import { useIsFocused } from "@react-navigation/native";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 interface ReviewWithAuthor extends Review {
   author: string;
@@ -422,11 +422,6 @@ function ProductDetailScreen({
       borderRadius: 6,
       marginTop: 15,
     },
-    loading: {
-      position: "absolute",
-      top: 200,
-      left: 200,
-    },
   });
 
   if (product && reviews) {
@@ -567,11 +562,7 @@ function ProductDetailScreen({
       </LinearGradient>
     );
   } else {
-    return (
-      <View style={styles.loading}>
-        <ActivityIndicator size="small" color="#0000ff" />
-      </View>
-    );
+    return <LoadingSpinner />;
   }
 }
 

@@ -3,12 +3,12 @@ import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { ActivityIndicator } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
 import Navigation from "./navigation";
+import LoadingSpinner from "./components/LoadingSpinner";
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
@@ -19,11 +19,7 @@ export default function App() {
   });
 
   if (!isLoadingComplete && !loaded) {
-    return (
-      <View style={styles.loading}>
-        <ActivityIndicator size="small" color="#0000ff" />
-      </View>
-    );
+    return <LoadingSpinner />;
   } else {
     return (
       <SafeAreaProvider>
@@ -35,10 +31,3 @@ export default function App() {
     );
   }
 }
-const styles = StyleSheet.create({
-  loading: {
-    position: "absolute",
-    top: 200,
-    left: 200,
-  },
-});
