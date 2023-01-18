@@ -7,6 +7,7 @@ import {
   Alert,
   Modal,
   Image,
+  useColorScheme,
 } from "react-native";
 import * as Haptics from "expo-haptics";
 import { Text, View } from "../components/Themed";
@@ -29,6 +30,8 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth } from "../firebase";
+import Colors, { gradientLight, gradientDark } from "../constants/Colors";
+import { LinearGradient } from "expo-linear-gradient";
 import { PopUp } from "../components/PopUp";
 import { useIsFocused } from "@react-navigation/native";
 import { ActivityCard } from "../components/ActivityCard";
@@ -53,6 +56,8 @@ export default function ProfileScreen({
     "https://cdn.drawception.com/images/avatars/647493-B9E.png";
   const [profilePic, setProfilePic] = useState<string[]>([]);
   let isMe = route.params.id === myUser.id;
+  const colorScheme = useColorScheme();
+  let isLight = colorScheme == "light" ? true : false;
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
   const isFocused = useIsFocused();
 
@@ -241,7 +246,13 @@ export default function ProfileScreen({
 
   if (user) {
     return (
-      <>
+      <LinearGradient
+        colors={
+          isLight
+            ? [gradientLight.from, gradientLight.to]
+            : [gradientDark.from, gradientDark.to]
+        }
+      >
         {popUpOpen ? (
           <PopUp
             setProfilePic={(img) => handleImgUpload(img)}
@@ -254,12 +265,21 @@ export default function ProfileScreen({
           <View style={styles.container}>
             {myProfile ? (
               <View style={styles.top}>
-                <Feather
-                  name="settings"
-                  size={24}
-                  color="#FFFD54"
-                  onPress={() => setModalVisible(true)}
-                />
+                {isLight ? (
+                  <Feather
+                    name="settings"
+                    size={24}
+                    color="#783BC9"
+                    onPress={() => setModalVisible(true)}
+                  />
+                ) : (
+                  <Feather
+                    name="settings"
+                    size={24}
+                    color="#FFFD54"
+                    onPress={() => setModalVisible(true)}
+                  />
+                )}
               </View>
             ) : null}
             <View style={styles.topContainer}>
@@ -269,19 +289,19 @@ export default function ProfileScreen({
                 </Text>
                 <Text
                   darkColor="#fff"
-                  lightColor="#fff"
+                  lightColor="#333"
                   style={styles.textMedium}
                 >
                   {reviews.length}
                 </Text>
               </View>
               <View style={styles.right}>
-                <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
+                <Text darkColor="#fff" lightColor="#333" style={styles.text}>
                   Följer
                 </Text>
                 <Text
                   darkColor="#fff"
-                  lightColor="#fff"
+                  lightColor="#333"
                   style={styles.textMedium}
                 >
                   {user.following ? user.following.length : 0}
@@ -414,11 +434,11 @@ export default function ProfileScreen({
                     <AntDesign
                       name="left"
                       size={20}
-                      color="#D3D3D3"
+                      color="#fff"
                       onPress={() => setModalVisible(!modalVisible)}
                     />
                     <Text
-                      lightColor="#333"
+                      lightColor="#fff"
                       darkColor="#fff"
                       style={styles.modalTextHeader}
                     >
@@ -427,7 +447,7 @@ export default function ProfileScreen({
                   </View>
                   <View style={styles.column}>
                     <Text
-                      lightColor="#333"
+                      lightColor="#fff"
                       darkColor="#fff"
                       style={styles.modalText}
                     >
@@ -461,7 +481,7 @@ export default function ProfileScreen({
                     </TouchableOpacity>
 
                     <Text
-                      lightColor="#333"
+                      lightColor="#fff"
                       darkColor="#fff"
                       style={styles.modalText}
                     >
@@ -493,7 +513,7 @@ export default function ProfileScreen({
             </Modal>
           </View>
         </ScrollView>
-      </>
+      </LinearGradient>
     );
   } else {
     return (
@@ -545,16 +565,28 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 17,
   },
+  btnText: {
+    textAlign: "center",
+  },
   borderButton: {
-    borderWidth: 0.2,
-    borderColor: "#783bc9",
+    borderWidth: 0.5,
+    borderColor: "#FFFD54",
     padding: 15,
     borderRadius: 6,
     width: 300,
     height: 40,
     marginTop: 10,
     marginBottom: 10,
-    textAlign: "center",
+  },
+  modalBorderButton: {
+    borderWidth: 0.5,
+    borderColor: "#FFFD54",
+    padding: 15,
+    borderRadius: 6,
+    width: 300,
+    height: 50,
+    marginTop: 10,
+    marginBottom: 10,
   },
   borderButtonFollow: {
     backgroundColor: "#FFFD54",
@@ -631,25 +663,20 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   modalView: {
+    backgroundColor: "#857E8E",
     maxHeight: 400,
     borderRadius: 6,
     padding: 35,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
   },
   modalText: {
     fontSize: 15,
-    fontWeight: "bold",
+    fontWeight: "500",
+    backgroundColor: "transparent",
   },
   modalTextHeader: {
     textAlign: "center",
     fontSize: 20,
+    marginBottom: 20,
   },
   input: {
     borderWidth: 0.2,

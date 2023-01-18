@@ -2,19 +2,30 @@ import { sendPasswordResetEmail } from "firebase/auth";
 import { Formik } from "formik";
 import * as yup from "yup";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Alert, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Alert,
+  TouchableOpacity,
+  useColorScheme,
+} from "react-native";
+import * as Haptics from "expo-haptics";
 import { Text, View, TextInput } from "../components/Themed";
 import { RootStackScreenProps } from "../types";
 import { auth } from "../firebase";
+import { LinearGradient } from "expo-linear-gradient";
+import { gradientLight, gradientDark } from "../constants/Colors";
 
 function ForgotPasswordScreen({
   navigation,
 }: RootStackScreenProps<"ForgotPassword">) {
   const [email, setEmail] = useState("");
+  const colorScheme: any = useColorScheme();
+  let isLight = colorScheme == "light" ? true : false;
 
   const resetPassword = async (email: string) => {
     try {
       const reset = await sendPasswordResetEmail(auth, email);
+      Haptics.NotificationFeedbackType.Success;
       Alert.alert("Återställningslänk skickad till din email");
       navigation.navigate("Signin");
     } catch (error) {
@@ -23,7 +34,14 @@ function ForgotPasswordScreen({
   };
 
   return (
-    <View style={styles.screen}>
+    <LinearGradient
+      colors={
+        isLight
+          ? [gradientLight.from, gradientLight.to]
+          : [gradientDark.from, gradientDark.to]
+      }
+      style={styles.screen}
+    >
       <Text style={styles.title}>Prilla</Text>
       <Text style={styles.slogan}>GOTTA SNUS THEM ALL</Text>
       <View
@@ -74,7 +92,7 @@ function ForgotPasswordScreen({
           );
         }}
       </Formik>
-    </View>
+    </LinearGradient>
   );
 }
 const styles = StyleSheet.create({
@@ -104,7 +122,7 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "#FFFD54",
-    padding: 10,
+    padding: 15,
     borderRadius: 6,
     width: 300,
     height: 50,
@@ -137,9 +155,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   error: {
-    fontSize: 10,
-    color: "red",
-    margin: 5,
+    fontSize: 12,
+    color: "#BF0404",
+    fontWeight: "bold",
+    margin: 7,
   },
 });
 

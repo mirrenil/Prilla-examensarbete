@@ -71,6 +71,7 @@ export const setOneDoc = async (collectionName, newData, id) => {
   }
 };
 
+// Update one property only
 export const updateSingleProperty = async (
   collectionName,
   documentId,
@@ -86,6 +87,7 @@ export const updateSingleProperty = async (
   }
 };
 
+// Add a new document and set its referense to its id
 export const addNewDoc = async (collectionName, newData) => {
   try {
     let response = await addDoc(collection(db, collectionName), newData).then(

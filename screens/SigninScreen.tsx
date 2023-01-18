@@ -1,6 +1,11 @@
 import * as WebBrowser from "expo-web-browser";
 import React, { useEffect, useState } from "react";
-import { Alert, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  Alert,
+  StyleSheet,
+  TouchableOpacity,
+  useColorScheme,
+} from "react-native";
 import { Text, View, TextInput } from "../components/Themed";
 import { Formik } from "formik";
 import * as yup from "yup";
@@ -15,6 +20,8 @@ import { RootStackScreenProps } from "../types";
 import { auth } from "../firebase";
 import { useDispatch } from "react-redux";
 import { setActiveUser } from "../redux/signin";
+import { LinearGradient } from "expo-linear-gradient";
+import { gradientDark, gradientLight } from "../constants/Colors";
 
 export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
   const [currentUser, setcurrentUser] = useState<User>();
@@ -23,6 +30,8 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
     password: "",
   });
   const dispatch = useDispatch();
+  const colorScheme: any = useColorScheme();
+  let isLight = colorScheme == "light" ? true : false;
 
   useEffect(() => {
     const unsubrcribe = onAuthStateChanged(auth, (user) => {
@@ -46,13 +55,20 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
 
       navigation.navigate("Root");
     } catch (error) {
+      Haptics.NotificationFeedbackType.Error;
       Alert.alert("Felaktig email eller lösenord");
       console.log(error, "error");
     }
   };
-
   return (
-    <View style={styles.screen}>
+    <LinearGradient
+      colors={
+        isLight
+          ? [gradientLight.from, gradientLight.to]
+          : [gradientDark.from, gradientDark.to]
+      }
+      style={styles.screen}
+    >
       <Text style={styles.title}>Prilla</Text>
       <Text style={styles.slogan}>GOTTA SNUS THEM ALL</Text>
       <View
@@ -69,7 +85,7 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
           password: yup
             .string()
             .min(6, "Password should be of minimum 6 characters length")
-            .required(),
+            .required("Please, provide a password!"),
         })}
       >
         {({ values, errors, touched, handleBlur, handleChange }) => {
@@ -84,6 +100,10 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
 
           return (
             <View style={styles.container}>
+              {touched.email &&
+                errors.email &&
+                (Haptics.NotificationFeedbackType.Error,
+                (<Text style={styles.error}>{errors.email}</Text>))}
               <TextInput
                 lightColor="#fff"
                 darkColor="#413C48"
@@ -94,9 +114,10 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
                 autoCapitalize="none"
                 onBlur={handleBlur("email")}
               />
-              {touched.email && errors.email && (
-                <Text style={styles.error}>{errors.email}</Text>
-              )}
+              {touched.password &&
+                errors.password &&
+                (Haptics.NotificationFeedbackType.Error,
+                (<Text style={styles.error}>{errors.password}</Text>))}
 
               <TextInput
                 lightColor="#fff"
@@ -109,9 +130,6 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
                 autoCapitalize="none"
                 onBlur={handleBlur("password")}
               />
-              {touched.password && errors.password && (
-                <Text style={styles.error}>{errors.password}</Text>
-              )}
 
               <TouchableOpacity
                 onPress={() => {
@@ -149,7 +167,7 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
           );
         }}
       </Formik>
-    </View>
+    </LinearGradient>
   );
 }
 
@@ -209,8 +227,9 @@ const styles = StyleSheet.create({
     width: "60%",
   },
   error: {
-    fontSize: 10,
-    color: "red",
-    margin: 5,
+    fontSize: 12,
+    color: "#BF0404",
+    fontWeight: "bold",
+    margin: 7,
   },
 });

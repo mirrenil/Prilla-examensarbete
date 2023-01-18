@@ -43,6 +43,7 @@
     "react-native": "0.70.5",
     "react-native-bouncy-checkbox": "^3.0.6",
     "react-native-gesture-handler": "^2.8.0",
+    "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-paper": "^5.1.2",
     "react-native-radio-buttons-group": "^2.2.11",
     "react-native-rating-element": "^5.4.0",
@@ -51,9 +52,10 @@
     "react-native-web": "~0.18.9",
     "react-redux": "^8.0.5",
     "react-redux-firebase": "^3.11.0",
-    "redux-thunk": "^2.4.2",
+    "yarn": "^1.22.19",
     "yup": "^0.32.11",
-    "yarn": "^1.22.19"
+    "expo-linear-gradient": "~12.0.1",
+    "redux-thunk": "^2.4.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
