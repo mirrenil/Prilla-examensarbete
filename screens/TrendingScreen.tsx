@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, useColorScheme, View } from "react-native";
 import * as Haptics from "expo-haptics";
 import { RootStackScreenProps } from "../types";
 import React, { useEffect, useState } from "react";
@@ -8,9 +8,14 @@ import { ProductCard } from "../components/ProductCard";
 import { useIsFocused } from "@react-navigation/native";
 import { Text } from "../components/Themed";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { LinearGradient } from "expo-linear-gradient";
+import { gradientLight, gradientDark } from "../constants/Colors";
 
 const TrendingScreen = ({ navigation }: RootStackScreenProps<"Trending">) => {
   const [products, setProducts] = useState<Product[]>([]);
+  const colorScheme: any = useColorScheme();
+  let isLight = colorScheme == "light" ? true : false;
+
   const isFocused = useIsFocused();
 
   useEffect(() => {
@@ -44,24 +49,33 @@ const TrendingScreen = ({ navigation }: RootStackScreenProps<"Trending">) => {
   };
 
   return (
-    <ScrollView>
-      {products.map((product) => {
-        return (
-          <View style={styles.container}>
-            <Text style={styles.number}>{products.indexOf(product) + 1}</Text>
-            <View style={styles.product}>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate("Product", { id: product.id })
-                }
-              >
-                <ProductCard product={product} />
-              </TouchableOpacity>
+    <LinearGradient
+      colors={
+        isLight
+          ? [gradientLight.from, gradientLight.to]
+          : [gradientDark.from, gradientDark.to]
+      }
+    >
+      <ScrollView>
+        {products.map((product) => {
+          return (
+            <View style={styles.container}>
+              <Text style={styles.number}>{products.indexOf(product) + 1}</Text>
+              <View style={styles.product}>
+                <TouchableOpacity
+                  onPress={() => {
+                    Haptics.ImpactFeedbackStyle.Heavy;
+                    navigation.navigate("Product", { id: product.id });
+                  }}
+                >
+                  <ProductCard product={product} />
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-        );
-      })}
-    </ScrollView>
+          );
+        })}
+      </ScrollView>
+    </LinearGradient>
   );
 };
 
