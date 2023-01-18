@@ -37,8 +37,7 @@ export default function App() {
 }
 const styles = StyleSheet.create({
   loading: {
-    position: "absolute",
-    top: 200,
-    left: 200,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

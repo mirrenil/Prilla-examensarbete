@@ -720,8 +720,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   loading: {
-    position: "absolute",
-    top: 200,
-    left: 200,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
