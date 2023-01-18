@@ -110,147 +110,144 @@ export const ActivityCard = ({ review, updateReviews }: Props) => {
       let isLiked = review.likes.some((id) => id === myUser.id);
       setLike(isLiked);
     }
+  };
 
-    const handleRemove = async (id: string) => {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-      Alert.alert(
-        "Är du säker på att du vill ta bort din recension?",
-        "Du kan inte ångra dig!",
-        [
-          {
-            text: "Avbryt",
-            onPress: () => console.log("AVBRYT Pressed"),
-            style: "cancel",
+  const handleRemove = async (id: string) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    Alert.alert(
+      "Är du säker på att du vill ta bort din recension?",
+      "Du kan inte ångra dig!",
+      [
+        {
+          text: "Avbryt",
+          onPress: () => console.log("AVBRYT Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "Ja",
+          onPress: () => {
+            deleteDocById("recensioner", id).then(() => updateReviews());
           },
-          {
-            text: "Ja",
-            onPress: () => {
-              deleteDocById("recensioner", id).then(() => updateReviews());
-            },
-          },
-        ]
-      );
-    };
-
-    return (
-      <View>
-        <ImageBackground
-          source={{ uri: review.photo }}
-          resizeMode="cover"
-          style={styles.image}
-        >
-          <View style={styles.userInfo}>
-            <Image source={{ uri: author?.photo }} style={styles.profilePic} />
-            <Text style={styles.username}>{author?.displayName}</Text>
-          </View>
-          <ReviewCard key={review.id} review={review} />
-        </ImageBackground>
-        <View style={styles.social}>
-          {like ? (
-            <TouchableOpacity
-              onPress={() => {
-                removeLike();
-                setLike(false);
-              }}
-            >
-              <AntDesign name="heart" size={24} color="#783BC9" />
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              onPress={() => {
-                addLike();
-                setLike(true);
-              }}
-            >
-              <AntDesign name="hearto" size={26} color="#783BC9" />
-            </TouchableOpacity>
-          )}
-          <Text>{likesCount >= 1 ? likesCount : null}</Text>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("Comment", { id: review.id })}
-          >
-            <MaterialCommunityIcons
-              style={{ marginLeft: 10 }}
-              name="comment-outline"
-              size={26}
-              color="#783BC9"
-            />
-          </TouchableOpacity>
-        </View>
-        {review.userID === myUser?.id && (
-          <View>
-            <FontAwesome5
-              name="trash"
-              size={20}
-              color="#783BC9"
-              onPress={() => handleRemove(review.id as string)}
-            />
-          </View>
-        )}
-
-        {comment && (
-          <TouchableOpacity
-            onPress={() => navigation.navigate("Comment", { id: review.id })}
-          >
-            <View style={styles.comment}>
-              <Image
-                source={{ uri: comment?.image }}
-                style={styles.commentImg}
-              />
-              <View style={styles.textWrapper}>
-                <Text>{comment?.author}</Text>
-                <Text>{comment?.text}</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-        )}
-      </View>
+        },
+      ]
     );
   };
 
-  const styles = StyleSheet.create({
-    image: {
-      paddingBottom: 10,
-      minHeight: 230,
-      justifyContent: "space-between",
-      alignItems: "center",
-    },
-    userInfo: {
-      backgroundColor: "rgba(0,0,0,0.5)",
-      flexDirection: "row",
-      alignItems: "center",
-      width: "100%",
-      padding: 10,
-    },
-    profilePic: {
-      height: 30,
-      width: 30,
-      borderRadius: 100,
-    },
-    username: {
-      fontWeight: "bold",
-      marginLeft: 10,
-    },
-    social: {
-      paddingLeft: 10,
-      width: 90,
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
-      padding: 10,
-    },
-    comment: {
-      padding: 10,
-      flexDirection: "row",
-    },
-    textWrapper: {
-      width: "70%",
-      marginLeft: 10,
-    },
-    commentImg: {
-      height: 30,
-      width: 30,
-      borderRadius: 100,
-    },
-  });
+  return (
+    <View>
+      <ImageBackground
+        source={{ uri: review.photo }}
+        resizeMode="cover"
+        style={styles.image}
+      >
+        <View style={styles.userInfo}>
+          <Image source={{ uri: author?.photo }} style={styles.profilePic} />
+          <Text style={styles.username}>{author?.displayName}</Text>
+        </View>
+        <ReviewCard key={review.id} review={review} />
+      </ImageBackground>
+      <View style={styles.social}>
+        {like ? (
+          <TouchableOpacity
+            onPress={() => {
+              removeLike();
+              setLike(false);
+            }}
+          >
+            <AntDesign name="heart" size={24} color="#783BC9" />
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            onPress={() => {
+              addLike();
+              setLike(true);
+            }}
+          >
+            <AntDesign name="hearto" size={26} color="#783BC9" />
+          </TouchableOpacity>
+        )}
+        <Text>{likesCount >= 1 ? likesCount : null}</Text>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Comment", { id: review.id })}
+        >
+          <MaterialCommunityIcons
+            style={{ marginLeft: 10 }}
+            name="comment-outline"
+            size={26}
+            color="#783BC9"
+          />
+        </TouchableOpacity>
+      </View>
+      {review.userID === myUser?.id && (
+        <View>
+          <FontAwesome5
+            name="trash"
+            size={20}
+            color="#783BC9"
+            onPress={() => handleRemove(review.id as string)}
+          />
+        </View>
+      )}
+
+      {comment && (
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Comment", { id: review.id })}
+        >
+          <View style={styles.comment}>
+            <Image source={{ uri: comment?.image }} style={styles.commentImg} />
+            <View style={styles.textWrapper}>
+              <Text>{comment?.author}</Text>
+              <Text>{comment?.text}</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+      )}
+    </View>
+  );
 };
+
+const styles = StyleSheet.create({
+  image: {
+    paddingBottom: 10,
+    minHeight: 230,
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  userInfo: {
+    backgroundColor: "rgba(0,0,0,0.5)",
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+    padding: 10,
+  },
+  profilePic: {
+    height: 30,
+    width: 30,
+    borderRadius: 100,
+  },
+  username: {
+    fontWeight: "bold",
+    marginLeft: 10,
+  },
+  social: {
+    paddingLeft: 10,
+    width: 90,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 10,
+  },
+  comment: {
+    padding: 10,
+    flexDirection: "row",
+  },
+  textWrapper: {
+    width: "70%",
+    marginLeft: 10,
+  },
+  commentImg: {
+    height: 30,
+    width: 30,
+    borderRadius: 100,
+  },
+});
