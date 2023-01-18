@@ -34,19 +34,19 @@ export const RateActive = ({ handleChange }: Props) => {
         full: (
           <Image
             style={styles.circle}
-            source={require("../assets/images/1.png")}
+            source={require("../assets/images/rating/1.png")}
           />
         ),
         half: (
           <Image
             style={styles.circle}
-            source={require("../assets/images/0_5.png")}
+            source={require("../assets/images/rating/0_5.png")}
           />
         ),
         empty: (
           <Image
             style={styles.circle}
-            source={require("../assets/images/0.png")}
+            source={require("../assets/images/rating/0.png")}
           />
         ),
       }}

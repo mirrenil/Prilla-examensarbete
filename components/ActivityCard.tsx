@@ -69,8 +69,10 @@ export const ActivityCard = ({ review, updateReviews }: Props) => {
         style={styles.image}
       >
         <View style={styles.userInfo}>
-          <Text>User Pic</Text>
-          <Text style={styles.username}>{author?.displayName}</Text>
+          <Image source={{ uri: author?.photo }} />
+          <Text lightColor="#333" style={styles.username}>
+            {author?.displayName}
+          </Text>
         </View>
         <ReviewCard key={review.id} review={review} />
       </ImageBackground>
