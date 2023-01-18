@@ -142,7 +142,7 @@ export const ActivityCard = ({ review, updateReviews }: Props) => {
       >
         <View style={styles.userInfo}>
           <Image source={{ uri: author?.photo }} style={styles.profilePic} />
-          <Text lightColor="#333" style={styles.username}>
+          <Text lightColor="#333" darkColor="#fff" style={styles.username}>
             {author?.displayName}
           </Text>
         </View>
@@ -216,7 +216,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   userInfo: {
-    backgroundColor: "rgba(0,0,0,0.5)",
     flexDirection: "row",
     alignItems: "center",
     width: "100%",
