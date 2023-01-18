@@ -7,6 +7,7 @@ import { getAllDocsInCollection } from "../helper";
 import { ProductCard } from "../components/ProductCard";
 import { useIsFocused } from "@react-navigation/native";
 import { Text } from "../components/Themed";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const TrendingScreen = ({ navigation }: RootStackScreenProps<"Trending">) => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -49,7 +50,13 @@ const TrendingScreen = ({ navigation }: RootStackScreenProps<"Trending">) => {
           <View style={styles.container}>
             <Text style={styles.number}>{products.indexOf(product) + 1}</Text>
             <View style={styles.product}>
-              <ProductCard product={product} />
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("Product", { id: product.id })
+                }
+              >
+                <ProductCard product={product} />
+              </TouchableOpacity>
             </View>
           </View>
         );

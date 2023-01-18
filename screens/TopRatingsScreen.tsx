@@ -1,4 +1,4 @@
-import { ScrollView, View, StyleSheet } from "react-native";
+import { ScrollView, View, StyleSheet, TouchableOpacity } from "react-native";
 import * as Haptics from "expo-haptics";
 import { RootStackScreenProps } from "../types";
 import React, { useEffect, useState } from "react";
@@ -46,7 +46,13 @@ const TopRatingsScreen = ({
           <View style={styles.container}>
             <Text style={styles.number}>{products.indexOf(product) + 1}</Text>
             <View style={styles.product}>
-              <ProductCard product={product} />
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("Product", { id: product.id })
+                }
+              >
+                <ProductCard product={product} />
+              </TouchableOpacity>
             </View>
           </View>
         );
