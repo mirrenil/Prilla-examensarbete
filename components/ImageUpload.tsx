@@ -1,4 +1,5 @@
 import * as ImagePicker from "expo-image-picker";
+import { Constants } from "expo-constants";
 import React, { useEffect, useState } from "react";
 import { Platform, Image } from "react-native";
 import { View, Text } from "./Themed";
@@ -7,16 +8,17 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 
 interface Props {
   handleUpload: (a: any) => void;
+  setChosenImg?: () => void;
 }
 
-const ImageUpload = ({ handleUpload }: Props) => {
+const ImageUpload = ({ handleUpload, setChosenImg }: Props) => {
   const [image, setImage] = useState<any>(null);
 
   useEffect(() => {
-    test();
+    PermissionImageUpload();
   }, []);
 
-  const test = async () => {
+  const PermissionImageUpload = async () => {
     try {
       if (Platform.OS !== "web") {
         const { status } =
@@ -83,7 +85,7 @@ const ImageUpload = ({ handleUpload }: Props) => {
           <MaterialIcons
             name="add-a-photo"
             size={50}
-            color="#783BC9"
+            color="white"
             style={{ paddingBottom: 10 }}
           />
           <Text>Lägg till foto</Text>

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Pressable, StyleSheet } from "react-native";
+import { Pressable, StyleSheet, Alert, useColorScheme } from "react-native";
 import { View, Text } from "../components/Themed";
 import { getAllDocsInCollection } from "../helper";
 import { Tag } from "../Interfaces";
+import Colors from "../constants/Colors";
 
 interface Props {
   handleInput: (a: Tag[]) => void;
@@ -11,6 +12,7 @@ interface Props {
 const Tags = ({ handleInput }: Props) => {
   const [tags, setTags] = useState<Tag[]>([]);
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+  const colorScheme: any = useColorScheme();
 
   const styles = StyleSheet.create({
     tagsSection: {},
@@ -26,7 +28,9 @@ const Tags = ({ handleInput }: Props) => {
       borderRadius: 6,
     },
     selected: {
-      backgroundColor: "#783BC9",
+      // backgroundColor: "#783BC9",
+      backgroundColor: Colors[colorScheme].section,
+      color: "white",
       opacity: 0.9,
     },
     sectionTitle: {
@@ -65,7 +69,13 @@ const Tags = ({ handleInput }: Props) => {
   };
 
   const toggleSelectTag = (tag: Tag) => {
+    let limit = 4;
     if (!isAlreadySelected(tag)) {
+      if (selectedTags.length >= limit) {
+        removeSelectedTag(tag);
+        Alert.alert("Du kan inte välja fler än 4 taggar");
+        return;
+      }
       let list = selectedTags;
       list.push(tag);
       handleInput(list);
@@ -77,7 +87,7 @@ const Tags = ({ handleInput }: Props) => {
 
   return (
     <View style={[styles.tagsSection]}>
-      <Text style={styles.sectionTitle}>Välj taggar</Text>
+      <Text style={styles.sectionTitle}>Välj upp till fyra taggar</Text>
       <View style={styles.tags}>
         {tags.map((tag) => {
           let isSelected: boolean = isAlreadySelected(tag);

@@ -8,6 +8,7 @@ import {
   Modal,
   Image,
   Pressable,
+  useColorScheme,
 } from "react-native";
 import * as Haptics from "expo-haptics";
 import { Text, View } from "../components/Themed";
@@ -15,6 +16,7 @@ import { RootTabScreenProps } from "../types";
 import { useDispatch, useSelector } from "react-redux";
 import { currentReduxUser, setSignOutState } from "../redux/signin";
 import {
+  deleteDocById,
   getAllDocsInCollection,
   getDocsWithSpecificValue,
   getOneDocById,
@@ -28,9 +30,14 @@ import {
   deleteUser,
   getAuth,
   signOut,
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "../firebase";
+import Colors, { gradientLight, gradientDark } from "../constants/Colors";
+import { LinearGradient } from "expo-linear-gradient";
+import { PopUp } from "../components/PopUp";
 import { useIsFocused } from "@react-navigation/native";
+import { ActivityCard } from "../components/ActivityCard";
 
 export default function ProfileScreen({
   navigation,
@@ -48,9 +55,13 @@ export default function ProfileScreen({
   const favoritesArray: any = [];
   let photoURLS: string[] = [];
   const [myFollows, setMyFollows] = useState<string[]>([]);
-  const profilePic =
+  const imageBeforeUpdate =
     "https://cdn.drawception.com/images/avatars/647493-B9E.png";
+  const [profilePic, setProfilePic] = useState<string[]>([]);
   let isMe = route.params.id === myUser.id;
+  const colorScheme = useColorScheme();
+  let isLight = colorScheme == "light" ? true : false;
+  const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
   const isFocused = useIsFocused();
 
   useEffect(() => {
@@ -64,6 +75,7 @@ export default function ProfileScreen({
   useEffect(() => {
     if (isFocused) {
       getMyFollowing();
+      getReviews();
     }
   }, [isFocused]);
 
@@ -169,7 +181,7 @@ export default function ProfileScreen({
         navigation.navigate("Signin");
       })
       .catch((error: any) => {
-        console.error(error);
+        console.log(error);
       });
   };
 
@@ -215,115 +227,156 @@ export default function ProfileScreen({
     }
   };
 
+  const handleImgUpload = async (image: any) => {
+    const auth = getAuth();
+    let myImg: string[] = [];
+    let newData = { photo: image };
+    try {
+      await updateSingleProperty("users", myUser?.id, newData).then(() => {
+        if (auth.currentUser) {
+          updateProfile(auth.currentUser, { photoURL: image }).then(() =>
+            console.log("Profile updated")
+          );
+        }
+        myImg.push(image);
+        setProfilePic(myImg);
+      });
+      setPopUpOpen(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   if (user) {
     return (
-      <ScrollView style={styles.screen}>
-        <View style={styles.container}>
-          {myProfile && (
-            <View style={styles.top}>
-              <Feather
-                name="settings"
-                size={24}
-                color="#FFFD54"
-                onPress={() => setModalVisible(true)}
-              />
-            </View>
-          )}
-          <View style={styles.topContainer}>
-            <View style={styles.left}>
-              <Text darkColor="#fff" lightColor="#333" style={styles.text}>
-                Recensioner
-              </Text>
-              <Text
-                darkColor="#fff"
-                lightColor="#333"
-                style={styles.textMedium}
-              >
-                {reviews.length}
-              </Text>
-            </View>
-            <View style={styles.right}>
-              <Text darkColor="#fff" lightColor="#333" style={styles.text}>
-                Följer
-              </Text>
-              <Text
-                darkColor="#fff"
-                lightColor="#fff"
-                style={styles.textMedium}
-              >
-                {user.following ? user.following.length : 0}
-              </Text>
-            </View>
-          </View>
-          {myProfile ? (
-            <View style={styles.center}>
-              <Image source={{ uri: profilePic }} style={styles.image} />
-              <Text darkColor="#fff" lightColor="#333" style={styles.text}>
-                {myUser.displayName}
-              </Text>
-            </View>
-          ) : (
-            <View style={styles.center}>
-              <Image source={{ uri: profilePic }} style={styles.image} />
-              <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
-                {user.displayName}
-              </Text>
-            </View>
-          )}
+      <LinearGradient
+        colors={
+          isLight
+            ? [gradientLight.from, gradientLight.to]
+            : [gradientDark.from, gradientDark.to]
+        }
+      >
 
-          {!myProfile && (
-            <View>
-              {!isAlreadyFollowing() ? (
-                <Pressable
-                  style={styles.borderButtonFollow}
-                  onPress={toggleFollow}
+        {popUpOpen ? (
+          <PopUp
+            setProfilePic={(img) => handleImgUpload(img)}
+            closePopUp={() => {
+              setPopUpOpen(false);
+            }}
+          />
+        ) : null}
+        <ScrollView style={styles.screen}>
+          <View style={styles.container}>
+            {myProfile ? (
+              <View style={styles.top}>
+                {isLight ? (
+                  <Feather
+                    name="settings"
+                    size={24}
+                    color="#783BC9"
+                    onPress={() => setModalVisible(true)}
+                  />
+                ) : (
+                  <Feather
+                    name="settings"
+                    size={24}
+                    color="#FFFD54"
+                    onPress={() => setModalVisible(true)}
+                  />
+                )}
+              </View>
+            ) : null}
+            <View style={styles.topContainer}>
+              <View style={styles.left}>
+                <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
+                  Recensioner
+                </Text>
+                <Text
+                  darkColor="#fff"
+                  lightColor="#333"
+                  style={styles.textMedium}
                 >
-                  <Text
-                    darkColor="#201A28"
-                    lightColor="#201A28"
-                    style={styles.buttonText}
-                  >
-                    Följ
-                  </Text>
-                </Pressable>
-              ) : (
-                <Pressable style={styles.button} onPress={toggleFollow}>
-                  <Text
-                    darkColor="#fff"
-                    lightColor="#fff"
-                    style={styles.borderButtonText}
-                  >
-                    Följer <AntDesign name="down" size={14} color="white" />
-                  </Text>
-                </Pressable>
-              )}
+                  {reviews.length}
+                </Text>
+              </View>
+              <View style={styles.right}>
+                <Text darkColor="#fff" lightColor="#333" style={styles.text}>
+                  Följer
+                </Text>
+                <Text
+                  darkColor="#fff"
+                  lightColor="#333"
+                  style={styles.textMedium}
+                >
+                  {user.following ? user.following.length : 0}
+                </Text>
+              </View>
             </View>
-          )}
-        </View>
+            {myProfile ? (
+              <View style={styles.center}>
+                <TouchableOpacity onPress={() => setPopUpOpen(true)}>
+                  <Image
+                    source={{ uri: profilePic[0] || user?.photo }}
+                    style={styles.image}
+                  />
+                </TouchableOpacity>
 
-        <View
-          style={styles.separator}
-          lightColor="#D3D3D3"
-          darkColor="rgba(255,255,255,0.1)"
-        />
-        <View style={styles.favorites}>
-          {myProfile ? (
-            <View style={styles.box}>
-              <Text lightColor="#333" darkColor="#fff" style={styles.text}>
-                Mina favoriter
-                <AntDesign name="right" size={16} color="white" />
-              </Text>
-            </View>
-          ) : (
-            <View style={styles.box}>
-              <Text lightColor="#333" darkColor="#fff" style={styles.text}>
-                {user.displayName}'s favoriter
-                <AntDesign name="right" size={16} color="white" />
-              </Text>
-            </View>
-          )}
-          <View style={styles.row}>
-            <ScrollView horizontal scrollEnabled style={styles.favortiesScroll}>
+                <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
+                  {myUser.displayName}
+                </Text>
+              </View>
+            ) : (
+              <View style={styles.center}>
+                <Image
+                  source={{ uri: imageBeforeUpdate }}
+                  style={styles.image}
+                />
+                <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
+                  {user?.displayName}
+                </Text>
+              </View>
+            )}
+
+            {!myProfile && (
+              <TouchableOpacity
+                style={[follow ? styles.borderButtonFollow : styles.button]}
+                onPress={toggleFollow}
+              >
+                <Text
+                  darkColor="#201A28"
+                  lightColor="#201A28"
+                  style={[follow ? styles.borderButtonText : styles.buttonText]}
+                >
+                  {follow ? "Följer" : "Följ"}{" "}
+                  {follow && <AntDesign name="down" size={14} color="white" />}
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
+
+          <View
+            style={styles.separator}
+            lightColor="#eee"
+            darkColor="rgba(255,255,255,0.1)"
+          />
+          <View style={styles.favorites}>
+            {myProfile ? (
+              <View style={styles.box}>
+                <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
+                  Mina favoriter
+                  <AntDesign name="right" size={16} color="white" />
+                </Text>
+              </View>
+            ) : (
+              <View style={styles.box}>
+                <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
+                  {user.displayName}'s favoriter
+                  <AntDesign name="right" size={16} color="white" />
+                </Text>
+              </View>
+            )}
+
+            <View style={styles.row}>
               {urls.map((url, index) => (
                 <Image
                   key={index}
@@ -333,124 +386,112 @@ export default function ProfileScreen({
                   }}
                 />
               ))}
-            </ScrollView>
-            <AntDesign name="right" size={30} color="white" />
+            </View>
+            {reviews.map((review: Review) => {
+              return (
+                <ActivityCard review={review} updateReviews={getReviews} />
+              );
+            })}
           </View>
-        </View>
-        <View
-          style={styles.separator}
-          lightColor="#D3D3D3"
-          darkColor="rgba(255,255,255,0.1)"
-        />
-        <View style={styles.activities}>
-          {myProfile ? (
-            <View style={styles.box}>
-              <Text lightColor="#333" darkColor="#fff" style={styles.text}>
-                Mina aktiviteter
-              </Text>
-              <AntDesign name="right" size={20} color="white" />
-            </View>
-          ) : (
-            <View style={styles.box}>
-              <Text lightColor="#333" darkColor="#fff" style={styles.text}>
-                {user.displayName}'s aktiviteter
-              </Text>
-              <AntDesign name="right" size={20} color="white" />
-            </View>
-          )}
-          {reviews.map((review: Review) => {
-            return <ReviewCard key={review.id} review={review} />;
-          })}
-        </View>
-        <View>
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-              setModalVisible(!modalVisible);
-            }}
-          >
-            <View style={styles.layover}>
-              <View
-                lightColor="#FFF"
-                darkColor="#261F30"
-                style={styles.modalView}
-              >
-                <View>
-                  <AntDesign
-                    name="left"
-                    size={20}
-                    color="#D3D3D3"
-                    onPress={() => setModalVisible(!modalVisible)}
-                  />
-                  <Text
-                    lightColor="#333"
-                    darkColor="#fff"
-                    style={styles.modalTextHeader}
-                  >
-                    Inställningar
-                  </Text>
-                </View>
-                <View style={styles.column}>
-                  <Text
-                    lightColor="#333"
-                    darkColor="#fff"
-                    style={styles.modalText}
-                  >
-                    Lösenord
-                  </Text>
-                  <TouchableOpacity>
+          <View>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalVisible}
+              onRequestClose={() => {
+                setModalVisible(!modalVisible);
+              }}
+            >
+              <View style={styles.layover}>
+                <View
+                  lightColor="#FFF"
+                  darkColor="#261F30"
+                  style={styles.modalView}
+                >
+                  <View>
+                    <AntDesign
+                      name="left"
+                      size={20}
+                      color="#fff"
+                      onPress={() => setModalVisible(!modalVisible)}
+                    />
+                    <Text
+                      lightColor="#fff"
+                      darkColor="#fff"
+                      style={styles.modalTextHeader}
+                    >
+                      Inställningar
+                    </Text>
+                  </View>
+                  <View style={styles.column}>
+                    <Text
+                      lightColor="#fff"
+                      darkColor="#fff"
+                      style={styles.modalText}
+                    >
+                      Lösenord
+                    </Text>
+                    <Text
+                      lightColor="#fff"
+                      darkColor="#fff"
+                      style={styles.modalTextHeader}
+                    >
+                      Inställningar
+                    </Text>
+                  </View>
+                  <View style={styles.column}>
                     <Text
                       lightColor="#333"
                       darkColor="#fff"
-                      style={styles.borderButton}
-                      onPress={() => resetPassword(userEmail as string)}
+                      style={styles.modalText}
                     >
-                      Skicka återställnings länk till e-post
+                      Lösenord
                     </Text>
-                  </TouchableOpacity>
+                    <TouchableOpacity>
+                      <Text
+                        lightColor="#fff"
+                        darkColor="#fff"
+                        style={styles.borderButton}
+                        onPress={() => resetPassword(userEmail as string)}
+                      >
+                        Skicka återställnings länk till e-post
+                      </Text>
+                    </TouchableOpacity>
 
-                  <Text
-                    lightColor="#333"
-                    darkColor="#fff"
-                    style={styles.modalText}
-                  >
-                    Radera konto
-                  </Text>
-                  <TouchableOpacity>
                     <Text
-                      lightColor="#333"
+                      lightColor="#fff"
                       darkColor="#fff"
-                      style={styles.borderButton}
-                      onPress={() => deleteAccount()}
+                      style={styles.modalText}
                     >
-                      Vill du radera ditt konto?
+                      Radera konto
                     </Text>
-                  </TouchableOpacity>
-                  <Text
-                    lightColor="#333"
-                    darkColor="#fff"
-                    style={styles.modalText}
-                  >
-                    Logga ut
-                  </Text>
-                  <TouchableOpacity>
-                    <Text
-                      lightColor="#333"
-                      darkColor="#fff"
-                      style={styles.borderButton}
-                      onPress={handleSignOut}
-                    >
-                      Logga ut
-                    </Text>
-                  </TouchableOpacity>
+                    <TouchableOpacity>
+                      <Text
+                        lightColor="#fff"
+                        darkColor="#fff"
+                        style={styles.borderButton}
+                        onPress={() => deleteAccount()}
+                      >
+                        Vill du radera ditt konto?
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                      <Text
+                        lightColor="#fff"
+                        darkColor="#fff"
+                        style={styles.borderButton}
+                        onPress={handleSignOut}
+                      >
+                        Logga ut
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
-            </View>
-          </Modal>
-        </View>
-      </ScrollView>
+            </Modal>
+          </View>
+        </ScrollView>
+      </LinearGradient>
     );
   } else {
     return <ActivityIndicator size="small" color="#0000ff" />;
@@ -498,16 +539,28 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 17,
   },
+  btnText: {
+    textAlign: "center",
+  },
   borderButton: {
-    borderWidth: 0.2,
-    borderColor: "#783bc9",
+    borderWidth: 0.5,
+    borderColor: "#FFFD54",
     padding: 15,
     borderRadius: 6,
     width: 300,
     height: 40,
     marginTop: 10,
     marginBottom: 10,
-    textAlign: "center",
+  },
+  modalBorderButton: {
+    borderWidth: 0.5,
+    borderColor: "#FFFD54",
+    padding: 15,
+    borderRadius: 6,
+    width: 300,
+    height: 50,
+    marginTop: 10,
+    marginBottom: 10,
   },
   borderButtonFollow: {
     backgroundColor: "#FFFD54",
@@ -544,7 +597,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignContent: "center",
-    marginLeft: 20,
+    margin: 10,
   },
   favorites: {
     marginLeft: 20,
@@ -584,25 +637,20 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   modalView: {
+    backgroundColor: "#857E8E",
     maxHeight: 400,
     borderRadius: 6,
     padding: 35,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
   },
   modalText: {
     fontSize: 15,
-    fontWeight: "bold",
+    fontWeight: "500",
+    backgroundColor: "transparent",
   },
   modalTextHeader: {
     textAlign: "center",
     fontSize: 20,
+    marginBottom: 20,
   },
   input: {
     borderWidth: 0.2,

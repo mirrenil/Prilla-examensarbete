@@ -2,8 +2,6 @@
  * Learn more about Light and Dark modes:
  * https://docs.expo.io/guides/color-schemes/
  */
-
-import React from "react";
 import {
   Text as DefaultText,
   View as DefaultView,
@@ -52,7 +50,7 @@ export function Text(props: TextProps) {
 export function View(props: ViewProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
   const backgroundColor = useThemeColor(
-    { light: lightColor, dark: darkColor },
+    { light: "transparent", dark: "transparent" },
     "background"
   );
 
