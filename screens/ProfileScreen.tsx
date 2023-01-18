@@ -284,7 +284,7 @@ export default function ProfileScreen({
                   lightColor="#fff"
                   style={styles.textMedium}
                 >
-                  {/* {user?.follow} right now hard coded value*/} 1
+                  {user.following ? user.following.length : 0}
                 </Text>
               </View>
             </View>
