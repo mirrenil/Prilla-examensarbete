@@ -52,9 +52,10 @@
     "react-native-web": "~0.18.9",
     "react-redux": "^8.0.5",
     "react-redux-firebase": "^3.11.0",
-    "redux-thunk": "^2.4.2",
+    "yarn": "^1.22.19",
     "yup": "^0.32.11",
-    "yarn": "^1.22.19"
+    "expo-linear-gradient": "~12.0.1",
+    "redux-thunk": "^2.4.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

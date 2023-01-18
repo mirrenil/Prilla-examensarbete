@@ -17,7 +17,6 @@ export const PopUp = ({ setProfilePic, closePopUp }: Props) => {
         <Text style={[popupStyles.fatText]}>Hantera profilbild</Text>
         <ImageUpload
           handleUpload={(image) => setProfilePic(image)}
-          showIcon={false}
         />
         {image ? (
           <TouchableOpacity>

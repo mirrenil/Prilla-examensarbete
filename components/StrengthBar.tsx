@@ -1,11 +1,13 @@
 import { RatingBar } from "@aashu-dubey/react-native-rating-bar";
 import React from "react";
-import { StyleSheet, Image } from "react-native";
+import { StyleSheet, Image, useColorScheme } from "react-native";
 
 interface Props {
   strength?: number;
 }
 export const StrengthBar = ({ strength }: Props) => {
+  const colorScheme = useColorScheme();
+  let isLight = colorScheme == "light" ? true : false;
   const handleRating = (value: number) => {
     console.log(value);
   };
@@ -21,20 +23,37 @@ export const StrengthBar = ({ strength }: Props) => {
       rateStyles={{
         starContainer: styles.single,
       }}
-      ratingElement={{
-        full: (
-          <Image
-            style={styles.circle}
-            source={require("../assets/images/strength_one.png")}
-          />
-        ),
-        empty: (
-          <Image
-            style={styles.circle}
-            source={require("../assets/images/strength_empty.png")}
-          />
-        ),
-      }}
+      ratingElement={
+        isLight
+          ? {
+              full: (
+                <Image
+                  style={styles.circle}
+                  source={require("../assets/images/strength/strength_one_light.png")}
+                />
+              ),
+              empty: (
+                <Image
+                  style={styles.circle}
+                  source={require("../assets/images/strength/strength_empty_light.png")}
+                />
+              ),
+            }
+          : {
+              full: (
+                <Image
+                  style={styles.circle}
+                  source={require("../assets/images/strength/strength_one.png")}
+                />
+              ),
+              empty: (
+                <Image
+                  style={styles.circle}
+                  source={require("../assets/images/strength/strength_empty.png")}
+                />
+              ),
+            }
+      }
       onRatingUpdate={(value) => handleRating(value)}
     />
   );

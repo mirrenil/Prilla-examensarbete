@@ -4,7 +4,7 @@ import React from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ActivityIndicator } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-
+import { LinearGradient } from "expo-linear-gradient";
 import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
 import Navigation from "./navigation";

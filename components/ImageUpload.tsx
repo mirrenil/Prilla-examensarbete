@@ -8,18 +8,17 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 
 interface Props {
   handleUpload: (a: any) => void;
-  showIcon?: boolean;
   setChosenImg?: () => void;
 }
 
-const ImageUpload = ({ handleUpload, showIcon, setChosenImg }: Props) => {
+const ImageUpload = ({ handleUpload, setChosenImg }: Props) => {
   const [image, setImage] = useState<any>(null);
 
   useEffect(() => {
-    test();
+    PermissionImageUpload();
   }, []);
 
-  const test = async () => {
+  const PermissionImageUpload = async () => {
     try {
       if (Platform.OS !== "web") {
         const { status } =
@@ -83,14 +82,12 @@ const ImageUpload = ({ handleUpload, showIcon, setChosenImg }: Props) => {
           onPress={PickImage}
           style={{ alignItems: "center", margin: 10 }}
         >
-          {showIcon && (
-            <MaterialIcons
-              name="add-a-photo"
-              size={50}
-              color="white"
-              style={{ paddingBottom: 10 }}
-            />
-          )}
+          <MaterialIcons
+            name="add-a-photo"
+            size={50}
+            color="white"
+            style={{ paddingBottom: 10 }}
+          />
           <Text>Lägg till foto</Text>
         </TouchableOpacity>
       )}
