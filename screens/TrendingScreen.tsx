@@ -36,7 +36,6 @@ const TrendingScreen = ({ navigation }: RootStackScreenProps<"Trending">) => {
     let mostRev: Product[] = [];
     let sorted = filteredList.sort((p: Product) => p.reviews.length >= 4);
     const backwards = sorted.reverse();
-    console.log(backwards);
     for (let i = 0; i < 5; i++) {
       mostRev.push(backwards[i]);
     }
