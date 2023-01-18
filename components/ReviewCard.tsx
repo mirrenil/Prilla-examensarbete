@@ -1,6 +1,8 @@
-import { useNavigation } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
-import { View, Image, Text, StyleSheet } from "react-native";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
+
+import React, { useCallback, useEffect, useState } from "react";
+import { View, Image, Text, StyleSheet, Alert } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { getOneDocById } from "../helper";
 import { Review, Product, Tag } from "../Interfaces";
@@ -13,10 +15,13 @@ interface Props {
 export const ReviewCard = ({ review }: Props) => {
   const [product, setProduct] = useState<Product>();
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
 
   useEffect(() => {
-    getProduct();
-  }, []);
+    if (isFocused) {
+      getProduct();
+    }
+  }, [isFocused]);
 
   const getProduct = async () => {
     let data = await getOneDocById("produkter", review.productID);
@@ -104,6 +109,7 @@ const styles = StyleSheet.create({
   },
   description: {
     padding: 10,
+    width: "80%",
     flexDirection: "row",
   },
   tagsContainer: {

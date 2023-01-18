@@ -1,12 +1,16 @@
 import { Text } from "./Themed";
-import { Image, ImageBackground, StyleSheet, View } from "react-native";
+import { Alert, Image, ImageBackground, StyleSheet, View } from "react-native";
 import { Review, User } from "../Interfaces";
 import { ReviewCard } from "./ReviewCard";
 import React, { useEffect, useState } from "react";
-import { getOneDocById, updateSingleProperty } from "../helper";
+import { deleteDocById, getOneDocById, updateSingleProperty } from "../helper";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
-import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  AntDesign,
+  FontAwesome5,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { useSelector } from "react-redux";
 import { currentReduxUser } from "../redux/signin";
@@ -14,6 +18,7 @@ import { useIsFocused } from "@react-navigation/native";
 
 interface Props {
   review: Review;
+  updateReviews: () => void;
 }
 
 interface CommentWithUsername {
@@ -110,6 +115,26 @@ export const ActivityCard = ({ review }: Props) => {
       let isLiked = review.likes.some((id) => id === myUser.id);
       setLike(isLiked);
     }
+
+  const handleRemove = async (id: string) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    Alert.alert(
+      "Är du säker på att du vill ta bort din recension?",
+      "Du kan inte ångra dig!",
+      [
+        {
+          text: "Avbryt",
+          onPress: () => console.log("AVBRYT Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "Ja",
+          onPress: () => {
+            deleteDocById("recensioner", id).then(() => updateReviews());
+          },
+        },
+      ]
+    );
   };
 
   return (
@@ -151,6 +176,7 @@ export const ActivityCard = ({ review }: Props) => {
         <TouchableOpacity
           onPress={() => navigation.navigate("Comment", { id: review.id })}
         >
+
           <MaterialCommunityIcons
             style={{ marginLeft: 10 }}
             name="comment-outline"
@@ -158,6 +184,20 @@ export const ActivityCard = ({ review }: Props) => {
             color="#783BC9"
           />
         </TouchableOpacity>
+
+        </View>
+
+        {review.userID === myUser?.id && (
+          <View>
+            <FontAwesome5
+              name="trash"
+              size={20}
+              color="#783BC9"
+              onPress={() => handleRemove(review.id as string)}
+            />
+          </View>
+        )}
+
       </View>
       {comment && (
         <TouchableOpacity
@@ -199,6 +239,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginLeft: 10,
   },
+
   social: {
     paddingLeft: 10,
     width: 90,
@@ -219,5 +260,5 @@ const styles = StyleSheet.create({
     height: 30,
     width: 30,
     borderRadius: 100,
-  },
+    },
 });

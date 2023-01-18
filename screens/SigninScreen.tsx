@@ -1,3 +1,4 @@
+import * as WebBrowser from "expo-web-browser";
 import React, { useEffect, useState } from "react";
 import { Alert, StyleSheet, TouchableOpacity } from "react-native";
 import { Text, View, TextInput } from "../components/Themed";
@@ -154,7 +155,6 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
 
 const styles = StyleSheet.create({
   screen: {
-    // backgroundColor: "#c19ce5",
     alignItems: "center",
     justifyContent: "center",
     height: "100%",
@@ -162,7 +162,6 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     marginBottom: 50,
-    // backgroundColor: "#c19ce5",
   },
   input: {
     fontSize: 17,

@@ -253,7 +253,7 @@ function ProductDetailScreen({
                   {product?.rating ? product.rating : 0}
                 </Text>
               </View>
-              <Text>{product?.reviews.length} Ratings</Text>
+              <Text>{reviews.length} Ratings</Text>
               <View style={styles.interactions}>
                 <TouchableOpacity
                   onPress={() =>
