@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
+import { ActivityIndicator, StyleSheet, useColorScheme } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Searchbar } from "react-native-paper";
 import { ProductCard } from "../components/ProductCard";
-import { View } from "../components/Themed";
+import { View, Text } from "../components/Themed";
 import { getAllDocsInCollection } from "../helper";
 import { Product } from "../Interfaces";
 import { RootTabScreenProps } from "../types";
+import { LinearGradient } from "expo-linear-gradient";
+import Colors, { gradientDark, gradientLight } from "../constants/Colors";
 
 export default function SearchScreen({
   navigation,
@@ -14,6 +16,8 @@ export default function SearchScreen({
   const [searchInput, setSearchInput] = useState<string>("");
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const colorScheme: any = useColorScheme();
+  let isLight = colorScheme == "light" ? true : false;
 
   useEffect(() => {
     getAllProducts();
@@ -42,22 +46,45 @@ export default function SearchScreen({
   };
 
   return (
-    <ScrollView>
-      <View style={search.container}>
-        <Searchbar
-          placeholder="Sök"
-          onChangeText={setSearchInput}
-          value={searchInput}
-          icon="magnify"
-          style={search.bar}
+    <LinearGradient
+      colors={
+        isLight
+          ? [gradientLight.from, gradientLight.to]
+          : [gradientDark.from, gradientDark.to]
+      }
+    >
+      {allProducts.length ? (
+        <ScrollView style={{ height: "100%" }}>
+          <View style={search.container}>
+            <Searchbar
+              placeholder="Sök"
+              onChangeText={setSearchInput}
+              value={searchInput}
+              icon="magnify"
+              style={search.bar}
+            />
+          </View>
+          <View>
+            {filteredProducts.length ? (
+              filteredProducts.map((product) => {
+                return <ProductCard product={product} />;
+              })
+            ) : (
+              <Text style={{ alignSelf: "center" }}>
+                Sökningen gav inga träffar.
+              </Text>
+            )}
+            {/* {} */}
+          </View>
+        </ScrollView>
+      ) : (
+        <ActivityIndicator
+          style={{ height: "100%" }}
+          size={50}
+          color={Colors[colorScheme].secondary}
         />
-      </View>
-      <View>
-        {filteredProducts.map((product) => {
-          return <ProductCard product={product} />;
-        })}
-      </View>
-    </ScrollView>
+      )}
+    </LinearGradient>
   );
 }
 
@@ -65,7 +92,7 @@ const search = StyleSheet.create({
   bar: {
     height: 40,
     borderRadius: 6,
-    backgroundColor: "rgba(255,255,255,0.5)",
+    backgroundColor: "white",
   },
   container: {
     padding: 10,

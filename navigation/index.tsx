@@ -66,19 +66,46 @@ export default function Navigation({
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
+  const colorScheme = useColorScheme();
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="Signin" component={SigninScreen} />
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: Colors[colorScheme].menu,
+        },
+        headerTintColor: Colors[colorScheme].text,
+      }}
+    >
+      <Stack.Screen
+        name="Signin"
+        component={SigninScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
 
-      <Stack.Screen name="Signup" component={SignupScreen} />
+      <Stack.Screen
+        name="Signup"
+        component={SignupScreen}
+        options={{ headerShown: false }}
+      />
 
-      <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+      <Stack.Screen
+        name="ForgotPassword"
+        component={ForgotPasswordScreen}
+        options={{ headerShown: false }}
+      />
 
-      <Stack.Screen name="AgeCheck" component={AgeCheckScreen} />
+      <Stack.Screen
+        name="AgeCheck"
+        component={AgeCheckScreen}
+        options={{ headerShown: false }}
+      />
 
       <Stack.Screen
         name="Product"
         initialParams={{ id: "13" }}
+        options={{ title: "Produkter" }}
         component={ProductDetailScreen}
       />
 
@@ -136,17 +163,20 @@ function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="Home"
+      // initialRouteName="Home"
       screenOptions={{
         headerStyle: {
-          backgroundColor: Colors[colorScheme].background,
+          backgroundColor: Colors[colorScheme].header,
           height: 100,
+        },
+        headerTitleStyle: {
+          color: Colors[colorScheme].text,
         },
         tabBarActiveTintColor: Colors[colorScheme].tint,
         tabBarInactiveTintColor: Colors[colorScheme].tabIconDefault,
         tabBarStyle: {
-          backgroundColor: Colors[colorScheme].background,
-          height: 100,
+          backgroundColor: Colors[colorScheme].menu,
+          height: "11%",
           padding: 15,
         },
       }}
@@ -156,8 +186,9 @@ function BottomTabNavigator() {
         component={StartScreen}
         options={({ navigation }: RootTabScreenProps<"Home">) => ({
           title: "",
+          headerTitle: "Hem",
           tabBarIcon: ({ color }) => (
-            <Ionicons name="ios-home-outline" size={30} color={color} />
+            <Ionicons name="ios-home-outline" size={24} color={color} />
           ),
         })}
       />
@@ -169,7 +200,7 @@ function BottomTabNavigator() {
           // headerShown: false,
           headerStyle: { height: Constants.statusBarHeight },
           tabBarIcon: ({ color }) => (
-            <AntDesign name="search1" size={30} color={color} />
+            <AntDesign name="search1" size={24} color={color} />
           ),
         }}
       />
@@ -179,7 +210,7 @@ function BottomTabNavigator() {
         options={{
           title: "",
           tabBarIcon: ({ color }) => (
-            <Ionicons name="notifications-outline" size={30} color={color} />
+            <Ionicons name="notifications-outline" size={24} color={color} />
           ),
         }}
       />
@@ -190,7 +221,7 @@ function BottomTabNavigator() {
         options={{
           title: "",
           tabBarIcon: ({ color }) => (
-            <AntDesign name="user" size={30} color={color} />
+            <AntDesign name="user" size={24} color={color} />
           ),
         }}
       />

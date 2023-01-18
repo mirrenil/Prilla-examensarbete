@@ -1,8 +1,16 @@
 import React, { useState } from "react";
-import { StyleSheet, Alert, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Alert,
+  TouchableOpacity,
+  useColorScheme,
+} from "react-native";
+import * as Haptics from "expo-haptics";
 import { Text, View } from "../components/Themed";
 import { RootStackScreenProps } from "../types";
 import RadioGroup, { RadioButtonProps } from "react-native-radio-buttons-group";
+import { gradientLight, gradientDark } from "../constants/Colors";
+import { LinearGradient } from "expo-linear-gradient";
 
 const ageOptions: RadioButtonProps[] = [
   {
@@ -20,6 +28,8 @@ const ageOptions: RadioButtonProps[] = [
 function AgeCheckScreen({ navigation }: RootStackScreenProps<"AgeCheck">) {
   const [radioButtons, setRadioButtons] =
     useState<RadioButtonProps[]>(ageOptions);
+  const colorScheme: any = useColorScheme();
+  let isLight = colorScheme == "light" ? true : false;
 
   const onPressRadioButton = (ageOption: RadioButtonProps[]) => {
     setRadioButtons(ageOption);
@@ -33,12 +43,20 @@ function AgeCheckScreen({ navigation }: RootStackScreenProps<"AgeCheck">) {
         console.log(error);
       }
     } else {
+      Haptics.NotificationFeedbackType.Error;
       Alert.alert("Tyvärr är du inte gammal nog för att använda Prilla");
     }
   };
 
   return (
-    <View style={styles.screen}>
+    <LinearGradient
+      colors={
+        isLight
+          ? [gradientLight.from, gradientLight.to]
+          : [gradientDark.from, gradientDark.to]
+      }
+      style={styles.screen}
+    >
       <Text style={styles.title}>Prilla</Text>
       <Text style={styles.slogan}>GOTTA SNUS THEM ALL</Text>
       <View
@@ -60,7 +78,7 @@ function AgeCheckScreen({ navigation }: RootStackScreenProps<"AgeCheck">) {
           <Text style={styles.buttonText}>Validera ålder</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </LinearGradient>
   );
 }
 const styles = StyleSheet.create({
@@ -123,9 +141,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   error: {
-    fontSize: 10,
-    color: "red",
-    margin: 5,
+    fontSize: 12,
+    color: "#BF0404",
+    fontWeight: "bold",
+    margin: 7,
   },
 });
 

@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     right: 10,
   },
   lightContainer: {
-    backgroundColor: "#fff",
+    backgroundColor: "#DCC4FD",
   },
   darkContainer: {
     backgroundColor: "#3D3745",
