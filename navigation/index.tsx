@@ -39,6 +39,7 @@ import store from "../redux/store";
 import ProductDetailScreen from "../screens/DetailScreen";
 import { currentReduxUser } from "../redux/signin";
 import ReviewModal from "../screens/ReviewModal";
+import { CommentModal } from "../screens/CommentModal";
 
 export default function Navigation({
   colorScheme,
@@ -128,8 +129,14 @@ function RootNavigator() {
         <Stack.Screen
           options={{ title: "Lämna recension" }}
           name="Review"
-          initialParams={{ id: "12 " }}
+          initialParams={{ id: "12" }}
           component={ReviewModal}
+        />
+        <Stack.Screen
+          options={{ title: "Lämna kommentar" }}
+          name="Comment"
+          initialParams={{ id: "12" }}
+          component={CommentModal}
         />
       </Stack.Group>
     </Stack.Navigator>
