@@ -11,6 +11,44 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import { db } from "./firebase";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { Alert } from "react-native";
+
+//You can inspect references to better understand the files they point to using the fullPath, name, and bucket properties.
+//These properties get the full path of the file, the name of the file, and the bucket the file is stored in.
+// ex: mountainsRef.fullPath
+// STRUCTURE: https://stackoverflow.com/questions/38267536/firebase-storage-structure-example
+/**
+ *
+ * @param {string} imageName
+ * @param {Blob} blob
+ * @returns image URL
+ */
+export const uploadImageAndGetURL = async (imageName, blob) => {
+  try {
+    const filename = imageName.split("/").pop();
+    const storage = getStorage();
+    const imageRef = ref(storage, `images/${filename}`);
+    await uploadBytes(imageRef, blob);
+    let imageURL = await getDownloadURL(ref(storage, `images/${filename}`));
+    return imageURL;
+  } catch (err) {
+    switch (err.code) {
+      case "storage/object-not-found":
+        Alert.alert("Ursäkta! Något gick fel");
+        break;
+      case "storage/unauthorized":
+        Alert.alert("Ursäkta! Något gick fel");
+        break;
+      case "storage/canceled":
+        Alert.alert("Ursäkta! Något gick fel");
+        break;
+      case "storage/unknown":
+        Alert.alert("Ursäkta! Något gick fel");
+        break;
+    }
+  }
+};
 
 //Gets one document in a collection by doc id
 export const getOneDocById = async (collectionName, id) => {
