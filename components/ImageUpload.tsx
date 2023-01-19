@@ -5,14 +5,18 @@ import { Platform, Image } from "react-native";
 import { View, Text } from "./Themed";
 import { MaterialIcons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { uploadImageAndGetURL } from "../helper";
 
 interface Props {
   handleUpload: (a: any) => void;
   setChosenImg?: () => void;
+  changeProfilePicIsTrue?: boolean;
 }
 
-const ImageUpload = ({ handleUpload, setChosenImg }: Props) => {
+const ImageUpload = ({
+  handleUpload,
+  setChosenImg,
+  changeProfilePicIsTrue,
+}: Props) => {
   const [image, setImage] = useState<any>(null);
 
   useEffect(() => {
@@ -44,13 +48,6 @@ const ImageUpload = ({ handleUpload, setChosenImg }: Props) => {
       if (!result.canceled) {
         setImage(result.assets[0].uri);
         handleUpload(result.assets[0].uri);
-        const response = await fetch(result.assets[0].uri);
-        const blob = await response.blob();
-        let firebaseImageURL = await uploadImageAndGetURL(
-          result.assets[0].uri,
-          blob
-        );
-        console.log("test: ", firebaseImageURL);
       }
     } catch (err) {
       console.log(err);
@@ -60,7 +57,7 @@ const ImageUpload = ({ handleUpload, setChosenImg }: Props) => {
   return (
     <View
       style={{
-        height: 100,
+        minHeight: changeProfilePicIsTrue ? 50 : 100,
         justifyContent: "center",
         alignItems: "center",
       }}
@@ -70,6 +67,7 @@ const ImageUpload = ({ handleUpload, setChosenImg }: Props) => {
           <TouchableOpacity
             onPress={() => {
               setImage(null);
+              handleUpload(null);
             }}
           >
             <MaterialIcons name="remove-circle" size={24} color="red" />
@@ -90,13 +88,19 @@ const ImageUpload = ({ handleUpload, setChosenImg }: Props) => {
           onPress={PickImage}
           style={{ alignItems: "center", margin: 10 }}
         >
-          <MaterialIcons
-            name="add-a-photo"
-            size={50}
-            color="white"
-            style={{ paddingBottom: 10 }}
-          />
-          <Text>Lägg till foto</Text>
+          {changeProfilePicIsTrue ? (
+            <Text>Ändra profilbild</Text>
+          ) : (
+            <>
+              <MaterialIcons
+                name="add-a-photo"
+                size={50}
+                color="white"
+                style={{ paddingBottom: 10 }}
+              />
+              <Text>Lägg till foto</Text>
+            </>
+          )}
         </TouchableOpacity>
       )}
     </View>

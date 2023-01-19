@@ -14,23 +14,21 @@ import { db } from "./firebase";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { Alert } from "react-native";
 
-//You can inspect references to better understand the files they point to using the fullPath, name, and bucket properties.
-//These properties get the full path of the file, the name of the file, and the bucket the file is stored in.
-// ex: mountainsRef.fullPath
-// STRUCTURE: https://stackoverflow.com/questions/38267536/firebase-storage-structure-example
 /**
  *
+ * @param {string} userId
  * @param {string} imageName
- * @param {Blob} blob
- * @returns image URL
+ * @returns image firebase URL
  */
-export const uploadImageAndGetURL = async (imageName, blob) => {
+export const uploadImageAndGetURL = async (userId, imageName) => {
   try {
+    const response = await fetch(imageName);
+    const blob = await response.blob();
     const filename = imageName.split("/").pop();
     const storage = getStorage();
-    const imageRef = ref(storage, `images/${filename}`);
+    const imageRef = ref(storage, `${userId}/${filename}`);
     await uploadBytes(imageRef, blob);
-    let imageURL = await getDownloadURL(ref(storage, `images/${filename}`));
+    let imageURL = await getDownloadURL(ref(storage, `${userId}/${filename}`));
     return imageURL;
   } catch (err) {
     switch (err.code) {
