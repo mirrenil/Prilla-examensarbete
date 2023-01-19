@@ -40,7 +40,7 @@ export default function LoadingScreen({
           navigation.navigate("Signin");
         }}
       >
-        <Text style={styles.buttonText}>Sign In</Text>
+        <Text style={styles.buttonText}>Logga in</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
@@ -49,7 +49,7 @@ export default function LoadingScreen({
           navigation.navigate("Signup");
         }}
       >
-        <Text style={styles.buttonText}>Sign Up</Text>
+        <Text style={styles.buttonText}>Registrera dig</Text>
       </TouchableOpacity>
     </LinearGradient>
   );
