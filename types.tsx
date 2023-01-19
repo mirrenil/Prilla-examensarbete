@@ -20,6 +20,8 @@ export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
   Modal: undefined;
   Review: { id: string };
+  Trending: undefined;
+  TopRating: undefined;
   Comment: { id: string };
   NotFound: undefined;
   Loading: undefined;

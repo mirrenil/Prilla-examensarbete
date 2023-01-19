@@ -1,11 +1,13 @@
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import React, { useCallback, useEffect, useState } from "react";
-import {  Image,  StyleSheet, Alert, useColorScheme } from "react-native";
+import { Image, StyleSheet, Alert, useColorScheme } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { getOneDocById } from "../helper";
 import { Review, Product, Tag } from "../Interfaces";
 import { RateInactive } from "./RateInactive";
+import { useSelector } from "react-redux";
+import { currentReduxUser } from "../redux/signin";
 import { Text, View } from "../components/Themed";
 import Colors from "../constants/Colors";
 
@@ -15,6 +17,7 @@ interface Props {
 
 export const ReviewCard = ({ review }: Props) => {
   const [product, setProduct] = useState<Product>();
+  const myUser = useSelector(currentReduxUser);
   const navigation = useNavigation();
   const colorScheme: any = useColorScheme();
   const isFocused = useIsFocused();
@@ -24,6 +27,8 @@ export const ReviewCard = ({ review }: Props) => {
       getProduct();
     }
   }, [isFocused]);
+
+  const handleRemove = (id: string) => {};
 
   const getProduct = async () => {
     let data = await getOneDocById("produkter", review.productID);
@@ -78,6 +83,11 @@ export const ReviewCard = ({ review }: Props) => {
       textAlign: "center",
       fontWeight: "bold",
     },
+    removeIcon: {
+      position: "absolute",
+      left: "90%",
+      bottom: 30,
+    },
   });
 
   if (product) {
@@ -85,23 +95,13 @@ export const ReviewCard = ({ review }: Props) => {
       <View style={styles.wrapper}>
         <View style={styles.productData}>
           <Image style={styles.image} source={{ uri: product.photo }} />
-          <View
-            // lightColor="#7e7885"
-            // darkColor="#3D3745"
-            // lightColor="transparent"
-            style={styles.textAndRating}
-          >
+          <View style={styles.textAndRating}>
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate("Product", { id: review.productID })
               }
             >
-              <View
-                // lightColor="#7e7885"
-                // darkColor="#3D3745"
-                // lightColor="transparent"
-                style={styles.productText}
-              >
+              <View style={styles.productText}>
                 <Text
                   style={styles.textBold}
                   lightColor="#fff"
@@ -114,12 +114,7 @@ export const ReviewCard = ({ review }: Props) => {
                 </Text>
               </View>
             </TouchableOpacity>
-            <View
-              // lightColor="#7e7885"
-              darkColor="#3D3745"
-              // lightColor="transparent"
-              style={{ flexDirection: "row" }}
-            >
+            <View darkColor="#3D3745" style={{ flexDirection: "row" }}>
               <RateInactive rating={review.rating} />
               <Text lightColor="#fff" style={{ marginLeft: 25, marginTop: 10 }}>
                 {review.rating} / 5
@@ -127,12 +122,7 @@ export const ReviewCard = ({ review }: Props) => {
             </View>
           </View>
         </View>
-        <View
-          // lightColor="#7e7885"
-          darkColor="#3D3745"
-          // lightColor="transparent"
-          style={styles.description}
-        >
+        <View darkColor="#3D3745" style={styles.description}>
           <Text lightColor="#fff" darkColor="#fff">
             {review.description}
           </Text>
