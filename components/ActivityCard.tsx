@@ -145,12 +145,12 @@ export const ActivityCard = ({ review, updateReviews }: Props) => {
   const styles = StyleSheet.create({
     wrapper: {
       backgroundColor: Colors[colorScheme].primary.dark,
-      marginVertical: 10,
+      marginVertical: 1,
     },
     image: {
       paddingBottom: 10,
-      minHeight: 230,
-      justifyContent: "space-between",
+      minHeight: 260,
+      justifyContent: "flex-end",
       alignItems: "center",
     },
     userInfo: {
