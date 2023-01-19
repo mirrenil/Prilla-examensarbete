@@ -12,7 +12,7 @@ import {
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
-import { ColorSchemeName, Pressable } from "react-native";
+import { ColorSchemeName } from "react-native";
 import { Provider, useSelector } from "react-redux";
 
 import Colors from "../constants/Colors";
@@ -170,11 +170,70 @@ function SearchStackScreen() {
   );
 }
 
+const SignInStack = createNativeStackNavigator<RootStackParamList>();
+
+function SignInStackScreen() {
+  const colorScheme = useColorScheme();
+  return (
+    <SignInStack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: Colors[colorScheme].menu,
+        },
+        headerTintColor: Colors[colorScheme].text,
+        headerTitle: "",
+      }}
+    >
+      <SignInStack.Screen
+        name="Loading"
+        component={LoadingScreen}
+        options={{ headerShown: false }}
+      />
+      <SignInStack.Screen
+        name="Signin"
+        component={SigninScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+
+      <SignInStack.Screen
+        name="Signup"
+        component={SignupScreen}
+        options={{ headerShown: false }}
+      />
+
+      <SignInStack.Screen
+        name="ForgotPassword"
+        component={ForgotPasswordScreen}
+        options={{ headerShown: false }}
+      />
+
+      <SignInStack.Screen
+        name="AgeCheck"
+        component={AgeCheckScreen}
+        options={{ headerShown: false }}
+      />
+      <SignInStack.Screen
+        name="NotFound"
+        component={NotFoundScreen}
+        options={{ title: "Hoppsan! Denna sida finns inte" }}
+      />
+      <SignInStack.Screen
+        name="Root"
+        component={BottomTabNavigator}
+        options={{ headerShown: false }}
+      />
+    </SignInStack.Navigator>
+  );
+}
+
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   const colorScheme = useColorScheme();
-  const isLoggedIn = useSelector(currentReduxUser);
+  const currentUser = useSelector(currentReduxUser);
+
   return (
     <Stack.Navigator
       screenOptions={{
@@ -184,34 +243,14 @@ function RootNavigator() {
         headerTintColor: Colors[colorScheme].text,
       }}
     >
-      {isLoggedIn ? (
-        <Stack.Group>
-          <Stack.Screen
-            name="Signin"
-            component={SigninScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-
-          <Stack.Screen
-            name="Signup"
-            component={SignupScreen}
-            options={{ headerShown: false }}
-          />
-
-          <Stack.Screen
-            name="ForgotPassword"
-            component={ForgotPasswordScreen}
-            options={{ headerShown: false }}
-          />
-
-          <Stack.Screen
-            name="AgeCheck"
-            component={AgeCheckScreen}
-            options={{ headerShown: false }}
-          />
-        </Stack.Group>
+      {currentUser ? (
+        <Stack.Screen
+          name="Signin"
+          component={SignInStackScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
       ) : (
         <Stack.Screen
           name="Root"
