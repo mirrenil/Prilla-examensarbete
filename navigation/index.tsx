@@ -17,7 +17,6 @@ import { Provider, useSelector } from "react-redux";
 
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
-import ModalScreen from "../screens/ModalScreen";
 import LoadingScreen from "../screens/LoadingScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
 import StartScreen from "../screens/StartScreen";
