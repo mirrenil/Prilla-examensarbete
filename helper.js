@@ -15,7 +15,8 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { Alert } from "react-native";
 
 /**
- *
+ * Takes uploaded image and creates a blob (binary large object) and uploads it to firebase storage.
+ * Every user gets its own file named with users id
  * @param {string} userId
  * @param {string} imageName
  * @returns image firebase URL
