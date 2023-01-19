@@ -31,8 +31,8 @@ export const getOneDocById = async (collectionName, id) => {
 export const getAllDocsInCollection = async (collectionName) => {
   let documents = [];
   const ref = query(
-    collection(db, collectionName),
-    orderBy("createdAt", "desc")
+    collection(db, collectionName)
+    // orderBy("createdAt", "desc")
   );
   try {
     const docs = await getDocs(ref);
