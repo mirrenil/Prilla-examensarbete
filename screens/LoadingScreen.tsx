@@ -1,12 +1,17 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, useColorScheme } from "react-native";
 import React from "react";
 import { Text, View } from "../components/Themed";
 import { RootStackScreenProps } from "../types";
 import { useFonts } from "expo-font";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { LinearGradient } from "expo-linear-gradient";
+import { gradientDark, gradientLight } from "../constants/Colors";
 
 export default function LoadingScreen({
   navigation,
 }: RootStackScreenProps<"Loading">) {
+  const colorScheme: any = useColorScheme();
+  let isLight = colorScheme == "light" ? true : false;
   const [loaded] = useFonts({
     OleoScript: require("../assets/fonts/OleoScript-Regular.ttf"),
   });
@@ -15,11 +20,31 @@ export default function LoadingScreen({
     return null;
   }
   return (
-    <View style={styles.container}>
+    <LinearGradient
+      colors={
+        isLight
+          ? [gradientLight.from, gradientLight.to]
+          : [gradientDark.from, gradientDark.to]
+      }
+      style={styles.container}
+    >
       <Text style={styles.title}>Prilla</Text>
       <Text style={styles.slogan}>GOTTA SNUS THEM ALL</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="#eee" />
-    </View>
+
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("Signin")}
+      >
+        <Text style={styles.buttonText}>Sign In</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("Signup")}
+      >
+        <Text style={styles.buttonText}>Sign Up</Text>
+      </TouchableOpacity>
+    </LinearGradient>
   );
 }
 
@@ -45,5 +70,21 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     height: 1,
     width: "80%",
+  },
+
+  button: {
+    backgroundColor: "#FFFD54",
+    padding: 10,
+    borderRadius: 6,
+    width: 200,
+    height: 50,
+    marginBottom: 20,
+  },
+  buttonText: {
+    color: "#201A28",
+    textAlign: "center",
+    fontWeight: "bold",
+    fontSize: 17,
+    marginTop: 5,
   },
 });
