@@ -33,7 +33,7 @@ export const ProductCard = ({ product }: Props) => {
       marginBottom: 10,
     },
     left: {
-      marginLeft: 10,
+      marginLeft: 20,
     },
     top: {
       marginTop: 10,
@@ -90,8 +90,8 @@ export const ProductCard = ({ product }: Props) => {
           }}
         >
           <RateInactive rating={product.rating ?? 0} />
-          <Text style={margin.left} lightColor="white">
-            {product.rating}
+          <Text style={[margin.left, margin.top]} lightColor="white">
+            {product.rating} / 5
           </Text>
         </View>
         <Text lightColor="white">{product.reviews.length} ratings</Text>

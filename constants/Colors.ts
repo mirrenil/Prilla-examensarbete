@@ -43,7 +43,7 @@ export default {
     menu: "#1B1324",
     primary: {
       normal: primaryPurple,
-      dark: "#4F2586",
+      dark: "rgba(0,0,0,0.5)",
     },
     secondary: "#FFFD54",
     grey: {

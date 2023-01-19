@@ -67,8 +67,17 @@ export default function StartScreen({
           </View>
         </View>
         <Tabbar />
+        <Text style={{ fontWeight: "bold", fontSize: 16, padding: 10 }}>
+          Ny aktivitet
+        </Text>
         {reviews.map((review) => {
-          return <ActivityCard key={review.id} review={review} updateReviews={getReviews}/>;
+          return (
+            <ActivityCard
+              key={review.id}
+              review={review}
+              updateReviews={getReviews}
+            />
+          );
         })}
       </ScrollView>
     </LinearGradient>

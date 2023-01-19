@@ -27,6 +27,11 @@ import SignupScreen from "../screens/SignupScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import ForgotPasswordScreen from "../screens/ForgotPasswordScreen";
 import AgeCheckScreen from "../screens/AgeCheckScreen";
+import ReviewModal from "../screens/ReviewModal";
+import TopRatingsScreen from "../screens/TopRatingsScreen";
+import TrendingScreen from "../screens/TrendingScreen";
+import ProductDetailScreen from "../screens/DetailScreen";
+import { CommentModal } from "../screens/CommentModal";
 import LinkingConfiguration from "./LinkingConfiguration";
 import Constants from "expo-constants";
 
@@ -36,10 +41,7 @@ import {
   RootTabScreenProps,
 } from "../types";
 import store from "../redux/store";
-import ProductDetailScreen from "../screens/DetailScreen";
 import { currentReduxUser } from "../redux/signin";
-import ReviewModal from "../screens/ReviewModal";
-import { CommentModal } from "../screens/CommentModal";
 
 export default function Navigation({
   colorScheme,
@@ -124,6 +126,18 @@ function RootNavigator() {
         component={NotFoundScreen}
         options={{ title: "Oops!" }}
       />
+
+      <Stack.Screen
+        options={{ title: "Trendande sorter" }}
+        name="Trending"
+        component={TrendingScreen}
+      />
+      <Stack.Screen
+        options={{ title: "Toppbetyg" }}
+        name="TopRating"
+        component={TopRatingsScreen}
+      />
+
       <Stack.Group screenOptions={{ presentation: "modal" }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
         <Stack.Screen
@@ -132,6 +146,7 @@ function RootNavigator() {
           initialParams={{ id: "12" }}
           component={ReviewModal}
         />
+
         <Stack.Screen
           options={{ title: "Lämna kommentar" }}
           name="Comment"
