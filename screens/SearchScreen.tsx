@@ -6,13 +6,10 @@ import { ProductCard } from "../components/ProductCard";
 import { View, Text } from "../components/Themed";
 import { getAllDocsInCollection } from "../helper";
 import { Product } from "../Interfaces";
-import { RootTabScreenProps } from "../types";
 import { LinearGradient } from "expo-linear-gradient";
 import Colors, { gradientDark, gradientLight } from "../constants/Colors";
 
-export default function SearchScreen({
-  navigation,
-}: RootTabScreenProps<"Search">) {
+export default function SearchScreen() {
   const [searchInput, setSearchInput] = useState<string>("");
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
