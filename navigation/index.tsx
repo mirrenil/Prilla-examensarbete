@@ -98,11 +98,13 @@ function HomeStackScreen() {
           component={CommentModal}
         />
       </HomeStack.Group>
-      {/* <HomeStack.Screen
+
+      <HomeStack.Screen
         name="Profile"
         component={ProfileScreen}
         initialParams={{ id: "13" }}
-      /> */}
+      />
+
       <HomeStack.Screen
         name="TopRating"
         component={TopRatingsScreen}
@@ -170,54 +172,6 @@ function SearchStackScreen() {
   );
 }
 
-const ProfileStack = createNativeStackNavigator<RootStackParamList>();
-
-function ProfileStackScreen() {
-  const colorScheme = useColorScheme();
-  return (
-    <ProfileStack.Navigator
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: Colors[colorScheme].menu,
-        },
-        headerTintColor: Colors[colorScheme].text,
-        headerTitle: "Profil",
-      }}
-    >
-      <ProfileStack.Screen
-        name="Profile"
-        component={ProfileScreen}
-        initialParams={{ id: "13" }}
-      />
-      <ProfileStack.Screen
-        name="Product"
-        component={ProductDetailScreen}
-        initialParams={{ id: "13" }}
-        options={{ title: "Produkt detaljer" }}
-      />
-      <ProfileStack.Group screenOptions={{ presentation: "modal" }}>
-        <ProfileStack.Screen
-          options={{ title: "Lämna recension" }}
-          name="Review"
-          initialParams={{ id: "12" }}
-          component={ReviewModal}
-        />
-        <ProfileStack.Screen
-          options={{ title: "Lämna kommentar" }}
-          name="Comment"
-          initialParams={{ id: "12" }}
-          component={CommentModal}
-        />
-      </ProfileStack.Group>
-      <ProfileStack.Screen
-        name="NotFound"
-        component={NotFoundScreen}
-        options={{ title: "Hoppsan! Denna sida finns inte" }}
-      />
-    </ProfileStack.Navigator>
-  );
-}
-
 const SignInStack = createNativeStackNavigator<RootStackParamList>();
 
 function SignInStackScreen() {
@@ -280,7 +234,8 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   const colorScheme = useColorScheme();
-  const isLoggedIn = useSelector(currentReduxUser);
+  const currentUser = useSelector(currentReduxUser);
+
   return (
     <Stack.Navigator
       screenOptions={{
@@ -290,7 +245,7 @@ function RootNavigator() {
         headerTintColor: Colors[colorScheme].text,
       }}
     >
-      {isLoggedIn ? (
+      {currentUser ? (
         <Stack.Screen
           name="Signin"
           component={SignInStackScreen}
@@ -364,7 +319,7 @@ function BottomTabNavigator() {
 
       <BottomTab.Screen
         name="Profile"
-        component={ProfileStackScreen}
+        component={ProfileScreen}
         initialParams={{ id: myUser.id }}
         options={{
           title: "",
