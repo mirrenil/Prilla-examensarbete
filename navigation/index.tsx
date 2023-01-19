@@ -12,7 +12,7 @@ import {
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
-import { ColorSchemeName, Pressable } from "react-native";
+import { ColorSchemeName, Pressable, Image } from "react-native";
 import { Provider, useSelector } from "react-redux";
 
 import Colors from "../constants/Colors";
@@ -38,6 +38,7 @@ import Constants from "expo-constants";
 import { RootStackParamList, RootTabParamList } from "../types";
 import store from "../redux/store";
 import { currentReduxUser } from "../redux/signin";
+import { View } from "../components/Themed";
 
 export default function Navigation({
   colorScheme,
@@ -325,7 +326,15 @@ function BottomTabNavigator() {
           title: "",
           headerShown: false,
           tabBarIcon: ({ color }) => (
-            <AntDesign name="user" size={24} color={color} />
+            <View>
+              <Image
+                style={{ height: 30, width: 30, borderRadius: 100 }}
+                source={{
+                  uri: myUser.photo,
+                }}
+              />
+            </View>
+            // <AntDesign name="user" size={24} color={color} />
           ),
         }}
       />
