@@ -196,7 +196,7 @@ export const ActivityCard = ({ review, updateReviews }: Props) => {
           onPress={() => navigation.navigate("Comment", { id: review.id })}
         >
           <View style={styles.comment}>
-            {/* <Image source={{ uri: comment?.image }} style={styles.commentImg} /> */}
+            <Image source={{ uri: comment?.image }} style={styles.commentImg} />
             <View style={styles.textWrapper}>
               <Text>{comment?.author}</Text>
               <Text>{comment?.text}</Text>
