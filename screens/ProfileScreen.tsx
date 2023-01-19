@@ -233,9 +233,7 @@ export default function ProfileScreen({
       await updateSingleProperty("users", myUser?.id, { photo: imageURL }).then(
         () => {
           if (auth.currentUser) {
-            updateProfile(auth.currentUser, { photoURL: imageURL }).then(() =>
-              console.log("Profile updated")
-            );
+            updateProfile(auth.currentUser, { photoURL: imageURL });
           }
           setProfilePic(imageURL);
         }
