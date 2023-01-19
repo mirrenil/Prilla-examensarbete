@@ -12,7 +12,7 @@ import {
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
-import { ColorSchemeName, Pressable, Image } from "react-native";
+import { ColorSchemeName, Image } from "react-native";
 import { Provider, useSelector } from "react-redux";
 
 import Colors from "../constants/Colors";
@@ -99,13 +99,11 @@ function HomeStackScreen() {
           component={CommentModal}
         />
       </HomeStack.Group>
-
       <HomeStack.Screen
         name="Profile"
         component={ProfileScreen}
         initialParams={{ id: "13" }}
       />
-
       <HomeStack.Screen
         name="TopRating"
         component={TopRatingsScreen}
@@ -324,17 +322,9 @@ function BottomTabNavigator() {
         initialParams={{ id: myUser.id }}
         options={{
           title: "",
-          headerShown: false,
+          headerTitle: "Profil",
           tabBarIcon: ({ color }) => (
-            <View>
-              <Image
-                style={{ height: 30, width: 30, borderRadius: 100 }}
-                source={{
-                  uri: myUser.photo,
-                }}
-              />
-            </View>
-            // <AntDesign name="user" size={24} color={color} />
+            <AntDesign name="user" size={24} color={color} />
           ),
         }}
       />
