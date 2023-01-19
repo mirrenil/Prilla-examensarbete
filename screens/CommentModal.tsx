@@ -4,7 +4,6 @@ import { StyleSheet, Image, Keyboard, Platform } from "react-native";
 import { Review } from "../Interfaces";
 import { getOneDocById, updateSingleProperty } from "../helper";
 import { RootStackScreenProps } from "../types";
-import { ActivityIndicator } from "react-native-paper";
 import {
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -14,6 +13,7 @@ import { useSelector } from "react-redux";
 import { currentReduxUser } from "../redux/signin";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Feather } from "@expo/vector-icons";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 interface User {
   name: string;
@@ -185,7 +185,7 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
   });
 
   if (!review && !author) {
-    return <ActivityIndicator size="small" color="#0000ff" />;
+    return <LoadingSpinner />;
   } else {
     return (
       <>

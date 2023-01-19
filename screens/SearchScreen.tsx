@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, StyleSheet, useColorScheme } from "react-native";
+import { StyleSheet, useColorScheme } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Searchbar } from "react-native-paper";
 import { ProductCard } from "../components/ProductCard";
@@ -9,6 +9,7 @@ import { Product } from "../Interfaces";
 import { RootTabScreenProps } from "../types";
 import { LinearGradient } from "expo-linear-gradient";
 import Colors, { gradientDark, gradientLight } from "../constants/Colors";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function SearchScreen({
   navigation,
@@ -78,11 +79,7 @@ export default function SearchScreen({
           </View>
         </ScrollView>
       ) : (
-        <ActivityIndicator
-          style={{ height: "100%" }}
-          size={50}
-          color={Colors[colorScheme].secondary}
-        />
+        <LoadingSpinner />
       )}
     </LinearGradient>
   );
