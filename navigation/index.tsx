@@ -18,6 +18,7 @@ import { Provider, useSelector } from "react-redux";
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 import ModalScreen from "../screens/ModalScreen";
+import LoadingScreen from "../screens/LoadingScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
 import StartScreen from "../screens/StartScreen";
 import SearchScreen from "../screens/SearchScreen";
@@ -92,11 +93,11 @@ function HomeStackScreen() {
           component={CommentModal}
         />
       </HomeStack.Group>
-      <HomeStack.Screen
+      {/* <HomeStack.Screen
         name="Profile"
         component={ProfileScreen}
         initialParams={{ id: "13" }}
-      />
+      /> */}
       <HomeStack.Screen name="TopRating" component={TopRatingsScreen} />
       <HomeStack.Screen name="Trending" component={TrendingScreen} />
 
@@ -211,6 +212,11 @@ function SignInStackScreen() {
       }}
     >
       <SignInStack.Screen
+        name="Loading"
+        component={LoadingScreen}
+        options={{ headerShown: false }}
+      />
+      <SignInStack.Screen
         name="Signin"
         component={SigninScreen}
         options={{
@@ -241,7 +247,7 @@ function SignInStackScreen() {
         options={{ title: "Oops!" }}
       />
       <SignInStack.Screen
-        name="Root"
+        name="Home"
         component={HomeStackScreen}
         options={{ headerShown: false }}
       />
@@ -253,7 +259,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   const colorScheme = useColorScheme();
-  const currentlySignedInUser = useSelector(currentReduxUser);
+  const isLoggedIn = useSelector(currentReduxUser);
   return (
     <Stack.Navigator
       screenOptions={{
@@ -263,7 +269,7 @@ function RootNavigator() {
         headerTintColor: Colors[colorScheme].text,
       }}
     >
-      {/* {currentlySignedInUser ? (
+      {isLoggedIn ? (
         <Stack.Screen
           name="Signin"
           component={SignInStackScreen}
@@ -271,15 +277,15 @@ function RootNavigator() {
             headerShown: false,
           }}
         />
-      ) : ( */}
-      <Stack.Screen
-        name="Root"
-        component={BottomTabNavigator}
-        options={{
-          headerShown: false,
-        }}
-      />
-      {/* )} */}
+      ) : (
+        <Stack.Screen
+          name="Root"
+          component={BottomTabNavigator}
+          options={{
+            headerShown: false,
+          }}
+        />
+      )}
     </Stack.Navigator>
   );
 }
