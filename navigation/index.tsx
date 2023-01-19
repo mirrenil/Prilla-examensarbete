@@ -76,7 +76,7 @@ function HomeStackScreen() {
       <HomeStack.Screen
         name="Root"
         component={StartScreen}
-        options={{ title: "" }}
+        options={{ title: "Hem" }}
       />
       <HomeStack.Screen
         name="Product"
