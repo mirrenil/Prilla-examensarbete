@@ -7,7 +7,6 @@ import {
   Alert,
   Modal,
   Image,
-  Pressable,
   useColorScheme,
 } from "react-native";
 import * as Haptics from "expo-haptics";
@@ -16,15 +15,14 @@ import { RootTabScreenProps } from "../types";
 import { useDispatch, useSelector } from "react-redux";
 import { currentReduxUser, setSignOutState } from "../redux/signin";
 import {
-  deleteDocById,
   getAllDocsInCollection,
   getDocsWithSpecificValue,
   getOneDocById,
   updateSingleProperty,
+  uploadImageAndGetURL,
 } from "../helper";
 import { Review, User } from "../Interfaces";
 import { ScrollView } from "react-native-gesture-handler";
-import { ReviewCard } from "../components/ReviewCard";
 import {
   sendPasswordResetEmail,
   deleteUser,
@@ -55,9 +53,7 @@ export default function ProfileScreen({
   const favoritesArray: any = [];
   let photoURLS: string[] = [];
   const [myFollows, setMyFollows] = useState<string[]>([]);
-  const imageBeforeUpdate =
-    "https://cdn.drawception.com/images/avatars/647493-B9E.png";
-  const [profilePic, setProfilePic] = useState<string[]>([]);
+  const [profilePic, setProfilePic] = useState<string>();
   let isMe = route.params.id === myUser.id;
   const colorScheme = useColorScheme();
   let isLight = colorScheme == "light" ? true : false;
@@ -83,6 +79,7 @@ export default function ProfileScreen({
     try {
       const user = await getOneDocById("users", route.params.id);
       setUser(user as User);
+      setProfilePic(user?.photo);
       if (isMe) {
         setMyProfile(true);
       }
@@ -228,19 +225,21 @@ export default function ProfileScreen({
   };
 
   const handleImgUpload = async (image: any) => {
-    const auth = getAuth();
-    let myImg: string[] = [];
-    let newData = { photo: image };
     try {
-      await updateSingleProperty("users", myUser?.id, newData).then(() => {
-        if (auth.currentUser) {
-          updateProfile(auth.currentUser, { photoURL: image }).then(() =>
-            console.log("Profile updated")
-          );
+      let imageURL = await uploadImageAndGetURL(myUser.id, image);
+      if (!imageURL) {
+        return Alert.alert("ursäkta! Något gick fel. Prova igen.");
+      }
+      await updateSingleProperty("users", myUser?.id, { photo: imageURL }).then(
+        () => {
+          if (auth.currentUser) {
+            updateProfile(auth.currentUser, { photoURL: imageURL }).then(() =>
+              console.log("Profile updated")
+            );
+          }
+          setProfilePic(imageURL);
         }
-        myImg.push(image);
-        setProfilePic(myImg);
-      });
+      );
       setPopUpOpen(false);
     } catch (err) {
       console.log(err);
@@ -256,9 +255,9 @@ export default function ProfileScreen({
             : [gradientDark.from, gradientDark.to]
         }
       >
-
         {popUpOpen ? (
           <PopUp
+            userPhoto={user.photo}
             setProfilePic={(img) => handleImgUpload(img)}
             closePopUp={() => {
               setPopUpOpen(false);
@@ -312,31 +311,21 @@ export default function ProfileScreen({
                 </Text>
               </View>
             </View>
-            {myProfile ? (
-              <View style={styles.center}>
-                <TouchableOpacity onPress={() => setPopUpOpen(true)}>
-                  <Image
-                    source={{ uri: profilePic[0] || user?.photo }}
-                    style={styles.image}
-                  />
-                </TouchableOpacity>
+            <View style={styles.center}>
+              {myProfile ? (
+                <>
+                  <TouchableOpacity onPress={() => setPopUpOpen(true)}>
+                    <Image source={{ uri: profilePic }} style={styles.image} />
+                  </TouchableOpacity>
 
-                <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
-                  {myUser.displayName}
-                </Text>
-              </View>
-            ) : (
-              <View style={styles.center}>
-                <Image
-                  source={{ uri: imageBeforeUpdate }}
-                  style={styles.image}
-                />
-                <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
-                  {user?.displayName}
-                </Text>
-              </View>
-            )}
-
+                  <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
+                    {myUser.displayName}
+                  </Text>
+                </>
+              ) : (
+                <Image source={{ uri: profilePic }} style={styles.image} />
+              )}
+            </View>
             {!myProfile && (
               <TouchableOpacity
                 style={[follow ? styles.borderButtonFollow : styles.button]}
