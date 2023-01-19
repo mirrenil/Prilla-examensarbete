@@ -6,6 +6,7 @@ import { useFonts } from "expo-font";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { LinearGradient } from "expo-linear-gradient";
 import { gradientDark, gradientLight } from "../constants/Colors";
+import * as Haptics from "expo-haptics";
 
 export default function LoadingScreen({
   navigation,
@@ -34,13 +35,19 @@ export default function LoadingScreen({
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("Signin")}
+        onPress={() => {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          navigation.navigate("Signin");
+        }}
       >
         <Text style={styles.buttonText}>Sign In</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("Signup")}
+        onPress={() => {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          navigation.navigate("Signup");
+        }}
       >
         <Text style={styles.buttonText}>Sign Up</Text>
       </TouchableOpacity>
