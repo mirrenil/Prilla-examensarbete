@@ -35,10 +35,12 @@ export const uploadImageAndGetURL = async (imageName, blob) => {
   } catch (err) {
     switch (err.code) {
       case "storage/object-not-found":
-        Alert.alert("Ursäkta! Något gick fel");
+        Alert.alert("Något gick fel! Det verkar som att filen inte existerar.");
         break;
       case "storage/unauthorized":
-        Alert.alert("Ursäkta! Något gick fel");
+        Alert.alert(
+          "Något gick fel! Det verkar som att du inte har behörighet "
+        );
         break;
       case "storage/canceled":
         Alert.alert("Ursäkta! Något gick fel");
