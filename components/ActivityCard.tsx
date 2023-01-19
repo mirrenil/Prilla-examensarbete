@@ -192,16 +192,16 @@ export const ActivityCard = ({ review, updateReviews }: Props) => {
 
   return (
     <View style={styles.wrapper}>
-      <View style={styles.userInfo}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate("Profile", { id: author!.id })}
-        >
-          <Image source={{ uri: author?.photo }} style={styles.profilePic} />
-          <Text lightColor="#333" style={styles.username}>
-            {author?.displayName}
-          </Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        style={styles.userInfo}
+        onPress={() => navigation.navigate("Profile", { id: author!.id })}
+      >
+        <Image source={{ uri: author?.photo }} style={styles.profilePic} />
+        <Text lightColor="#333" style={styles.username}>
+          {author?.displayName}
+        </Text>
+      </TouchableOpacity>
+
       <ImageBackground
         source={{ uri: review.photo }}
         resizeMode="cover"
