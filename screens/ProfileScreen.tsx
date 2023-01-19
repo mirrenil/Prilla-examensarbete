@@ -24,7 +24,6 @@ import {
 } from "../helper";
 import { Review, User } from "../Interfaces";
 import { ScrollView } from "react-native-gesture-handler";
-import { ReviewCard } from "../components/ReviewCard";
 import {
   sendPasswordResetEmail,
   deleteUser,
@@ -65,17 +64,14 @@ export default function ProfileScreen({
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    setCurrentUser();
-    getReviews();
-    getLiked();
-    compareLikedIds();
-    imagesLoaded();
-  }, []);
-
-  useEffect(() => {
     if (isFocused) {
+      setCurrentUser();
       getMyFollowing();
       getReviews();
+      getReviews();
+      getLiked();
+      compareLikedIds();
+      imagesLoaded();
     }
   }, [isFocused]);
 
