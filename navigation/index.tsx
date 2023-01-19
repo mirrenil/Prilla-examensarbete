@@ -12,7 +12,7 @@ import {
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
-import { ColorSchemeName } from "react-native";
+import { ColorSchemeName, Image } from "react-native";
 import { Provider, useSelector } from "react-redux";
 
 import Colors from "../constants/Colors";
@@ -37,6 +37,7 @@ import Constants from "expo-constants";
 import { RootStackParamList, RootTabParamList } from "../types";
 import store from "../redux/store";
 import { currentReduxUser } from "../redux/signin";
+import { View } from "../components/Themed";
 
 export default function Navigation({
   colorScheme,
