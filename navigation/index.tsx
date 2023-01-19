@@ -26,7 +26,6 @@ import SigninScreen from "../screens/SigninScreen";
 import SignupScreen from "../screens/SignupScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import ForgotPasswordScreen from "../screens/ForgotPasswordScreen";
-import AgeCheckScreen from "../screens/AgeCheckScreen";
 import ReviewModal from "../screens/ReviewModal";
 import TopRatingsScreen from "../screens/TopRatingsScreen";
 import TrendingScreen from "../screens/TrendingScreen";
@@ -94,12 +93,6 @@ function RootNavigator() {
       <Stack.Screen
         name="ForgotPassword"
         component={ForgotPasswordScreen}
-        options={{ headerShown: false }}
-      />
-
-      <Stack.Screen
-        name="AgeCheck"
-        component={AgeCheckScreen}
         options={{ headerShown: false }}
       />
 
