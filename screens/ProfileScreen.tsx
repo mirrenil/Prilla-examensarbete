@@ -178,7 +178,7 @@ export default function ProfileScreen({
       .then(() => {
         dispatch(setSignOutState());
         setMyProfile(false);
-        navigation.navigate("Signin");
+        navigation.navigate("Loading");
       })
       .catch((error: any) => {
         console.log(error);
@@ -256,7 +256,6 @@ export default function ProfileScreen({
             : [gradientDark.from, gradientDark.to]
         }
       >
-
         {popUpOpen ? (
           <PopUp
             setProfilePic={(img) => handleImgUpload(img)}
