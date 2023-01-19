@@ -354,40 +354,40 @@ export default function ProfileScreen({
             lightColor="#eee"
             darkColor="rgba(255,255,255,0.1)"
           />
-          <View style={styles.favorites}>
-            {myProfile ? (
-              <View style={styles.box}>
-                <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
-                  Mina favoriter
-                  <AntDesign name="right" size={16} color="white" />
-                </Text>
-              </View>
-            ) : (
-              <View style={styles.box}>
-                <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
-                  {user.displayName}'s favoriter
-                  <AntDesign name="right" size={16} color="white" />
-                </Text>
-              </View>
-            )}
-
-            <View style={styles.row}>
-              {urls.map((url, index) => (
-                <Image
-                  key={index}
-                  style={styles.favoritesImage}
-                  source={{
-                    uri: url,
-                  }}
-                />
-              ))}
+          {myProfile ? (
+            <View style={styles.box}>
+              <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
+                Mina favoriter
+                <AntDesign name="right" size={16} color="white" />
+              </Text>
             </View>
-            {reviews.map((review: Review) => {
-              return (
-                <ActivityCard review={review} updateReviews={getReviews} />
-              );
-            })}
+          ) : (
+            <View style={styles.box}>
+              <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
+                {user.displayName}'s favoriter
+                <AntDesign name="right" size={16} color="white" />
+              </Text>
+            </View>
+          )}
+
+          <View style={styles.row}>
+            {urls.map((url, index) => (
+              <Image
+                key={index}
+                style={styles.favoritesImage}
+                source={{
+                  uri: url,
+                }}
+              />
+            ))}
           </View>
+          <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
+            Aktivitet
+            <AntDesign name="right" size={16} color="white" />
+          </Text>
+          {reviews.map((review: Review) => {
+            return <ActivityCard review={review} updateReviews={getReviews} />;
+          })}
           <View>
             <Modal
               animationType="slide"
@@ -587,6 +587,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 17,
     marginBottom: 10,
+    marginLeft: 10,
   },
   activities: {
     flexDirection: "column",
@@ -594,15 +595,13 @@ const styles = StyleSheet.create({
     alignContent: "center",
     margin: 10,
   },
-  favorites: {
-    marginLeft: 20,
-  },
   row: {
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
     width: "100%",
     height: 80,
+    marginLeft: 10,
   },
   left: {
     flexDirection: "column",
