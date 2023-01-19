@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 import { currentReduxUser } from "../redux/signin";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Feather } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 interface User {
   name: string;
@@ -24,6 +25,7 @@ interface CommentWithUsername {
   author: string;
   image: string;
   text: string;
+  id: string;
 }
 
 export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
@@ -31,6 +33,7 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
   const [author, setAuthor] = useState<User>();
   const [input, setInput] = useState<string>();
   const [comments, setComments] = useState<CommentWithUsername[]>([]);
+  const navigation = useNavigation();
   const myUser = useSelector(currentReduxUser);
 
   // STYLING VARIABLES
@@ -88,6 +91,7 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
               author: user.displayName,
               image: user.photo,
               text: review?.comments[i].text,
+              id: user.id,
             });
           }
         } catch (err) {
@@ -209,8 +213,15 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
                     <View style={styles.comment}>
                       <Image source={{ uri: c.image }} style={styles.image} />
                       <View style={styles.textWrapper}>
-                        <Text>{c.author}</Text>
-                        <Text>{c?.text}</Text>
+                        <TouchableOpacity
+                          onPress={() =>
+                            navigation.navigate("Profile", {
+                              id: c.id,
+                            })
+                          }
+                        >
+                          <Text>{c.author}</Text>
+                        </TouchableOpacity>
                       </View>
                     </View>
                   </View>
