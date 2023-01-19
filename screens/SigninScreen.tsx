@@ -165,7 +165,7 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
 
                   <TouchableOpacity
                     onPress={() => {
-                      navigation.navigate("AgeCheck");
+                      navigation.navigate("Signup");
                       Haptics.ImpactFeedbackStyle.Light;
                     }}
                   >
