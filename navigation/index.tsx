@@ -21,7 +21,6 @@ import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
 import StartScreen from "../screens/StartScreen";
 import SearchScreen from "../screens/SearchScreen";
-import NotificationsScreen from "../screens/NotificationsScreen";
 import SigninScreen from "../screens/SigninScreen";
 import SignupScreen from "../screens/SignupScreen";
 import ProfileScreen from "../screens/ProfileScreen";
@@ -35,11 +34,7 @@ import { CommentModal } from "../screens/CommentModal";
 import LinkingConfiguration from "./LinkingConfiguration";
 import Constants from "expo-constants";
 
-import {
-  RootStackParamList,
-  RootTabParamList,
-  RootTabScreenProps,
-} from "../types";
+import { RootStackParamList, RootTabParamList } from "../types";
 import store from "../redux/store";
 import { currentReduxUser } from "../redux/signin";
 
@@ -64,10 +59,201 @@ export default function Navigation({
  * A root stack navigator is often used for displaying modals on top of all other content.
  * https://reactnavigation.org/docs/modal
  */
+const HomeStack = createNativeStackNavigator<RootStackParamList>();
+
+function HomeStackScreen() {
+  const colorScheme = useColorScheme();
+  return (
+    <HomeStack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: Colors[colorScheme].menu,
+        },
+        headerTintColor: Colors[colorScheme].text,
+      }}
+    >
+      <HomeStack.Screen name="Root" component={StartScreen} />
+      <HomeStack.Screen
+        name="Product"
+        component={ProductDetailScreen}
+        initialParams={{ id: "13" }}
+      />
+      <HomeStack.Group screenOptions={{ presentation: "modal" }}>
+        <HomeStack.Screen
+          options={{ title: "Lämna recension" }}
+          name="Review"
+          initialParams={{ id: "12" }}
+          component={ReviewModal}
+        />
+        <HomeStack.Screen
+          options={{ title: "Lämna kommentar" }}
+          name="Comment"
+          initialParams={{ id: "12" }}
+          component={CommentModal}
+        />
+      </HomeStack.Group>
+      <HomeStack.Screen
+        name="Profile"
+        component={ProfileScreen}
+        initialParams={{ id: "13" }}
+      />
+      <HomeStack.Screen name="TopRating" component={TopRatingsScreen} />
+      <HomeStack.Screen name="Trending" component={TrendingScreen} />
+
+      <HomeStack.Screen
+        name="NotFound"
+        component={NotFoundScreen}
+        options={{ title: "Oops!" }}
+      />
+    </HomeStack.Navigator>
+  );
+}
+
+const SearchStack = createNativeStackNavigator<RootStackParamList>();
+
+function SearchStackScreen() {
+  const colorScheme = useColorScheme();
+  return (
+    <SearchStack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: Colors[colorScheme].menu,
+        },
+        headerTintColor: Colors[colorScheme].text,
+      }}
+    >
+      <SearchStack.Screen name="Search" component={SearchScreen} />
+      <SearchStack.Screen
+        name="Product"
+        component={ProductDetailScreen}
+        initialParams={{ id: "13" }}
+      />
+      <SearchStack.Group screenOptions={{ presentation: "modal" }}>
+        <SearchStack.Screen
+          options={{ title: "Lämna recension" }}
+          name="Review"
+          initialParams={{ id: "12" }}
+          component={ReviewModal}
+        />
+        <SearchStack.Screen
+          options={{ title: "Lämna kommentar" }}
+          name="Comment"
+          initialParams={{ id: "12" }}
+          component={CommentModal}
+        />
+      </SearchStack.Group>
+      <SearchStack.Screen
+        name="NotFound"
+        component={NotFoundScreen}
+        options={{ title: "Oops!" }}
+      />
+    </SearchStack.Navigator>
+  );
+}
+
+const ProfileStack = createNativeStackNavigator<RootStackParamList>();
+
+function ProfileStackScreen() {
+  const colorScheme = useColorScheme();
+  return (
+    <ProfileStack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: Colors[colorScheme].menu,
+        },
+        headerTintColor: Colors[colorScheme].text,
+      }}
+    >
+      <ProfileStack.Screen
+        name="Profile"
+        component={ProfileScreen}
+        initialParams={{ id: "13" }}
+      />
+      <ProfileStack.Screen
+        name="Product"
+        component={ProductDetailScreen}
+        initialParams={{ id: "13" }}
+      />
+      <ProfileStack.Group screenOptions={{ presentation: "modal" }}>
+        <ProfileStack.Screen
+          options={{ title: "Lämna recension" }}
+          name="Review"
+          initialParams={{ id: "12" }}
+          component={ReviewModal}
+        />
+        <ProfileStack.Screen
+          options={{ title: "Lämna kommentar" }}
+          name="Comment"
+          initialParams={{ id: "12" }}
+          component={CommentModal}
+        />
+      </ProfileStack.Group>
+      <ProfileStack.Screen
+        name="NotFound"
+        component={NotFoundScreen}
+        options={{ title: "Oops!" }}
+      />
+    </ProfileStack.Navigator>
+  );
+}
+
+const SignInStack = createNativeStackNavigator<RootStackParamList>();
+
+function SignInStackScreen() {
+  const colorScheme = useColorScheme();
+  return (
+    <SignInStack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: Colors[colorScheme].menu,
+        },
+        headerTintColor: Colors[colorScheme].text,
+      }}
+    >
+      <SignInStack.Screen
+        name="Signin"
+        component={SigninScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+
+      <SignInStack.Screen
+        name="Signup"
+        component={SignupScreen}
+        options={{ headerShown: false }}
+      />
+
+      <SignInStack.Screen
+        name="ForgotPassword"
+        component={ForgotPasswordScreen}
+        options={{ headerShown: false }}
+      />
+
+      <SignInStack.Screen
+        name="AgeCheck"
+        component={AgeCheckScreen}
+        options={{ headerShown: false }}
+      />
+      <SignInStack.Screen
+        name="NotFound"
+        component={NotFoundScreen}
+        options={{ title: "Oops!" }}
+      />
+      <SignInStack.Screen
+        name="Root"
+        component={HomeStackScreen}
+        options={{ headerShown: false }}
+      />
+    </SignInStack.Navigator>
+  );
+}
+
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   const colorScheme = useColorScheme();
+  const currentlySignedInUser = useSelector(currentReduxUser);
   return (
     <Stack.Navigator
       screenOptions={{
@@ -77,103 +263,36 @@ function RootNavigator() {
         headerTintColor: Colors[colorScheme].text,
       }}
     >
+      {/* {currentlySignedInUser ? (
+        <Stack.Screen
+          name="Signin"
+          component={SignInStackScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+      ) : ( */}
       <Stack.Screen
-        name="Signin"
-        component={SigninScreen}
+        name="Root"
+        component={BottomTabNavigator}
         options={{
           headerShown: false,
         }}
       />
-
-      <Stack.Screen
-        name="Signup"
-        component={SignupScreen}
-        options={{ headerShown: false }}
-      />
-
-      <Stack.Screen
-        name="ForgotPassword"
-        component={ForgotPasswordScreen}
-        options={{ headerShown: false }}
-      />
-
-      <Stack.Screen
-        name="AgeCheck"
-        component={AgeCheckScreen}
-        options={{ headerShown: false }}
-      />
-
-      <Stack.Screen
-        name="Product"
-        initialParams={{ id: "13" }}
-        options={{ title: "Produkter" }}
-        component={ProductDetailScreen}
-      />
-
-      <Stack.Screen
-        name="Profile"
-        initialParams={{ id: "13" }}
-        component={ProfileScreen}
-      />
-
-      <Stack.Screen
-        name="Root"
-        component={BottomTabNavigator}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="NotFound"
-        component={NotFoundScreen}
-        options={{ title: "Oops!" }}
-      />
-
-      <Stack.Screen
-        options={{ title: "Trendande sorter" }}
-        name="Trending"
-        component={TrendingScreen}
-      />
-      <Stack.Screen
-        options={{ title: "Toppbetyg" }}
-        name="TopRating"
-        component={TopRatingsScreen}
-      />
-
-      <Stack.Group screenOptions={{ presentation: "modal" }}>
-        <Stack.Screen name="Modal" component={ModalScreen} />
-        <Stack.Screen
-          options={{ title: "Lämna recension" }}
-          name="Review"
-          initialParams={{ id: "12" }}
-          component={ReviewModal}
-        />
-
-        <Stack.Screen
-          options={{ title: "Lämna kommentar" }}
-          name="Comment"
-          initialParams={{ id: "12" }}
-          component={CommentModal}
-        />
-      </Stack.Group>
+      {/* )} */}
     </Stack.Navigator>
   );
 }
-
-/**
- * A bottom tab navigator displays tab buttons on the bottom of the display to switch screens.
- * https://reactnavigation.org/docs/bottom-tab-navigator
- *
- */
 
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
   const colorScheme = useColorScheme();
   const user = useSelector(currentReduxUser);
-  const username = user?.displayName;
 
   return (
     <BottomTab.Navigator
-      // initialRouteName="Home"
+      initialRouteName="Home"
       screenOptions={{
         headerStyle: {
           backgroundColor: Colors[colorScheme].header,
@@ -193,43 +312,36 @@ function BottomTabNavigator() {
     >
       <BottomTab.Screen
         name="Home"
-        component={StartScreen}
-        options={({ navigation }: RootTabScreenProps<"Home">) => ({
+        component={HomeStackScreen}
+        options={{
           title: "",
-          headerTitle: "Hem",
+          headerShown: false,
           tabBarIcon: ({ color }) => (
             <Ionicons name="ios-home-outline" size={24} color={color} />
           ),
-        })}
+        }}
       />
+
       <BottomTab.Screen
         name="Search"
-        component={SearchScreen}
+        component={SearchStackScreen}
         options={{
           title: "",
-          // headerShown: false,
+          headerShown: false,
           headerStyle: { height: Constants.statusBarHeight },
           tabBarIcon: ({ color }) => (
             <AntDesign name="search1" size={24} color={color} />
           ),
         }}
       />
-      <BottomTab.Screen
-        name="Notifications"
-        component={NotificationsScreen}
-        options={{
-          title: "",
-          tabBarIcon: ({ color }) => (
-            <Ionicons name="notifications-outline" size={24} color={color} />
-          ),
-        }}
-      />
+
       <BottomTab.Screen
         name="Profile"
-        component={ProfileScreen}
+        component={ProfileStackScreen}
         initialParams={{ id: user.id }}
         options={{
           title: "",
+          headerShown: false,
           tabBarIcon: ({ color }) => (
             <AntDesign name="user" size={24} color={color} />
           ),
