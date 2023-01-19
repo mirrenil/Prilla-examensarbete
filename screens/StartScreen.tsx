@@ -4,15 +4,13 @@ import { Text, View } from "../components/Themed";
 import { getAllDocsInCollection } from "../helper";
 import { Review } from "../Interfaces";
 import Tabbar from "../components/Tabbar";
-import { RootTabScreenProps } from "../types";
+import { RootStackScreenProps } from "../types";
 import { ActivityCard } from "../components/ActivityCard";
-import Colors, { gradientDark, gradientLight } from "../constants/Colors";
+import { gradientDark, gradientLight } from "../constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
 import { useIsFocused } from "@react-navigation/native";
 
-export default function StartScreen({
-  navigation,
-}: RootTabScreenProps<"Home">) {
+export default function StartScreen({}: RootStackScreenProps<"Root">) {
   const [reviews, setReviews] = useState<Review[]>([]);
   const colorScheme: any = useColorScheme();
   let isLight = colorScheme == "light" ? true : false;
@@ -68,7 +66,13 @@ export default function StartScreen({
         </View>
         <Tabbar />
         {reviews.map((review) => {
-          return <ActivityCard key={review.id} review={review} updateReviews={getReviews}/>;
+          return (
+            <ActivityCard
+              key={review.id}
+              review={review}
+              updateReviews={getReviews}
+            />
+          );
         })}
       </ScrollView>
     </LinearGradient>
