@@ -7,7 +7,7 @@ import {
   useColorScheme,
   View,
 } from "react-native";
-import { Review, User } from "../Interfaces";
+import { CommentWithUsername, Review, User } from "../Interfaces";
 import { ReviewCard } from "./ReviewCard";
 import React, { useEffect, useState } from "react";
 import { deleteDocById, getOneDocById, updateSingleProperty } from "../helper";
@@ -27,12 +27,6 @@ import Colors from "../constants/Colors";
 interface Props {
   review: Review;
   updateReviews: () => void;
-}
-
-interface CommentWithUsername {
-  author: string;
-  image: string;
-  text: string;
 }
 
 export const ActivityCard = ({ review, updateReviews }: Props) => {
@@ -70,6 +64,7 @@ export const ActivityCard = ({ review, updateReviews }: Props) => {
             author: user.displayName,
             image: user.photo,
             text: review.comments[0].text,
+            id: user.id,
           });
         }
       } catch (err) {

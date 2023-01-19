@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native-gesture-handler";
-import { ReviewComment } from "../Interfaces";
+import { ReviewComment, CommentWithUsername } from "../Interfaces";
 import { useSelector } from "react-redux";
 import { currentReduxUser } from "../redux/signin";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -19,13 +19,6 @@ import { useNavigation } from "@react-navigation/native";
 interface User {
   name: string;
   image: string;
-}
-
-interface CommentWithUsername {
-  author: string;
-  image: string;
-  text: string;
-  id: string;
 }
 
 export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
@@ -38,7 +31,6 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
 
   // STYLING VARIABLES
   let inputHeight = 20;
-  const iosKeyboardHeight = 291;
   const isAndroid = Platform.OS === "ios" ? false : true;
   const scrollViewHeight = Platform.OS === "ios" ? "50vh" : "100%";
 
