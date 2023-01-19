@@ -11,6 +11,45 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import { db } from "./firebase";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { Alert } from "react-native";
+
+/**
+ * Takes uploaded image and creates a blob (binary large object) and uploads it to firebase storage.
+ * Every user gets its own file named with users id
+ * @param {string} userId
+ * @param {string} imageName
+ * @returns image firebase URL
+ */
+export const uploadImageAndGetURL = async (userId, imageName) => {
+  try {
+    const response = await fetch(imageName);
+    const blob = await response.blob();
+    const filename = imageName.split("/").pop();
+    const storage = getStorage();
+    const imageRef = ref(storage, `${userId}/${filename}`);
+    await uploadBytes(imageRef, blob);
+    let imageURL = await getDownloadURL(ref(storage, `${userId}/${filename}`));
+    return imageURL;
+  } catch (err) {
+    switch (err.code) {
+      case "storage/object-not-found":
+        Alert.alert("Något gick fel! Det verkar som att filen inte existerar.");
+        break;
+      case "storage/unauthorized":
+        Alert.alert(
+          "Något gick fel! Det verkar som att du inte har behörighet "
+        );
+        break;
+      case "storage/canceled":
+        Alert.alert("Ursäkta! Något gick fel");
+        break;
+      case "storage/unknown":
+        Alert.alert("Ursäkta! Något gick fel");
+        break;
+    }
+  }
+};
 
 //Gets one document in a collection by doc id
 export const getOneDocById = async (collectionName, id) => {
