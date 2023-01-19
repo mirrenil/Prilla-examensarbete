@@ -98,11 +98,11 @@ function HomeStackScreen() {
           component={CommentModal}
         />
       </HomeStack.Group>
-      {/* <HomeStack.Screen
+      <HomeStack.Screen
         name="Profile"
         component={ProfileScreen}
         initialParams={{ id: "13" }}
-      /> */}
+      />
       <HomeStack.Screen
         name="TopRating"
         component={TopRatingsScreen}
@@ -170,112 +170,6 @@ function SearchStackScreen() {
   );
 }
 
-const ProfileStack = createNativeStackNavigator<RootStackParamList>();
-
-function ProfileStackScreen() {
-  const colorScheme = useColorScheme();
-  return (
-    <ProfileStack.Navigator
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: Colors[colorScheme].menu,
-        },
-        headerTintColor: Colors[colorScheme].text,
-        headerTitle: "Profil",
-      }}
-    >
-      <ProfileStack.Screen
-        name="Profile"
-        component={ProfileScreen}
-        initialParams={{ id: "13" }}
-      />
-      <ProfileStack.Screen
-        name="Product"
-        component={ProductDetailScreen}
-        initialParams={{ id: "13" }}
-        options={{ title: "Produkt detaljer" }}
-      />
-      <ProfileStack.Group screenOptions={{ presentation: "modal" }}>
-        <ProfileStack.Screen
-          options={{ title: "Lämna recension" }}
-          name="Review"
-          initialParams={{ id: "12" }}
-          component={ReviewModal}
-        />
-        <ProfileStack.Screen
-          options={{ title: "Lämna kommentar" }}
-          name="Comment"
-          initialParams={{ id: "12" }}
-          component={CommentModal}
-        />
-      </ProfileStack.Group>
-      <ProfileStack.Screen
-        name="NotFound"
-        component={NotFoundScreen}
-        options={{ title: "Hoppsan! Denna sida finns inte" }}
-      />
-    </ProfileStack.Navigator>
-  );
-}
-
-const SignInStack = createNativeStackNavigator<RootStackParamList>();
-
-function SignInStackScreen() {
-  const colorScheme = useColorScheme();
-  return (
-    <SignInStack.Navigator
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: Colors[colorScheme].menu,
-        },
-        headerTintColor: Colors[colorScheme].text,
-        headerTitle: "",
-      }}
-    >
-      <SignInStack.Screen
-        name="Loading"
-        component={LoadingScreen}
-        options={{ headerShown: false }}
-      />
-      <SignInStack.Screen
-        name="Signin"
-        component={SigninScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
-
-      <SignInStack.Screen
-        name="Signup"
-        component={SignupScreen}
-        options={{ headerShown: false }}
-      />
-
-      <SignInStack.Screen
-        name="ForgotPassword"
-        component={ForgotPasswordScreen}
-        options={{ headerShown: false }}
-      />
-
-      <SignInStack.Screen
-        name="AgeCheck"
-        component={AgeCheckScreen}
-        options={{ headerShown: false }}
-      />
-      <SignInStack.Screen
-        name="NotFound"
-        component={NotFoundScreen}
-        options={{ title: "Hoppsan! Denna sida finns inte" }}
-      />
-      <SignInStack.Screen
-        name="Root"
-        component={BottomTabNavigator}
-        options={{ headerShown: false }}
-      />
-    </SignInStack.Navigator>
-  );
-}
-
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
@@ -291,13 +185,33 @@ function RootNavigator() {
       }}
     >
       {isLoggedIn ? (
-        <Stack.Screen
-          name="Signin"
-          component={SignInStackScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
+        <Stack.Group>
+          <Stack.Screen
+            name="Signin"
+            component={SigninScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+
+          <Stack.Screen
+            name="Signup"
+            component={SignupScreen}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="ForgotPassword"
+            component={ForgotPasswordScreen}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="AgeCheck"
+            component={AgeCheckScreen}
+            options={{ headerShown: false }}
+          />
+        </Stack.Group>
       ) : (
         <Stack.Screen
           name="Root"
@@ -364,11 +278,11 @@ function BottomTabNavigator() {
 
       <BottomTab.Screen
         name="Profile"
-        component={ProfileStackScreen}
+        component={ProfileScreen}
         initialParams={{ id: myUser.id }}
         options={{
           title: "",
-          headerShown: false,
+          headerTitle: "Profil",
           tabBarIcon: ({ color }) => (
             <AntDesign name="user" size={24} color={color} />
           ),
