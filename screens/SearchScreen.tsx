@@ -63,8 +63,8 @@ export default function SearchScreen() {
           </View>
           <View>
             {filteredProducts.length ? (
-              filteredProducts.map((product) => {
-                return <ProductCard product={product} />;
+              filteredProducts.map((product, index) => {
+                return <ProductCard product={product} key={index} />;
               })
             ) : (
               <Text style={{ alignSelf: "center" }}>

@@ -57,7 +57,7 @@ const TrendingScreen = ({ navigation }: RootStackScreenProps<"Trending">) => {
       }
     >
       <ScrollView>
-        {products.map((product) => {
+        {products.map((product, index) => {
           return (
             <View style={styles.container}>
               <Text style={styles.number}>{products.indexOf(product) + 1}</Text>
@@ -68,7 +68,7 @@ const TrendingScreen = ({ navigation }: RootStackScreenProps<"Trending">) => {
                     navigation.navigate("Product", { id: product.id });
                   }}
                 >
-                  <ProductCard product={product} />
+                  <ProductCard key={index} product={product} />
                 </TouchableOpacity>
               </View>
             </View>

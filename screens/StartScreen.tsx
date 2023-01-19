@@ -65,13 +65,9 @@ export default function StartScreen({}: RootStackScreenProps<"Root">) {
           </View>
         </View>
         <Tabbar />
-        {reviews.map((review) => {
+        {reviews.map((review, id) => {
           return (
-            <ActivityCard
-              key={review.id}
-              review={review}
-              updateReviews={getReviews}
-            />
+            <ActivityCard key={id} review={review} updateReviews={getReviews} />
           );
         })}
       </ScrollView>
