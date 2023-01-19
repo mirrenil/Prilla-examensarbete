@@ -31,6 +31,9 @@ export type RootStackParamList = {
   Product: { id: string };
   AgeCheck: undefined;
   Profile: { id: string };
+  Home: undefined;
+  Search: undefined;
+  Notifications: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
