@@ -73,11 +73,16 @@ function HomeStackScreen() {
         headerTintColor: Colors[colorScheme].text,
       }}
     >
-      <HomeStack.Screen name="Root" component={StartScreen} />
+      <HomeStack.Screen
+        name="Root"
+        component={StartScreen}
+        options={{ title: "" }}
+      />
       <HomeStack.Screen
         name="Product"
         component={ProductDetailScreen}
         initialParams={{ id: "13" }}
+        options={{ title: "Produkt detaljer" }}
       />
       <HomeStack.Group screenOptions={{ presentation: "modal" }}>
         <HomeStack.Screen
@@ -98,13 +103,21 @@ function HomeStackScreen() {
         component={ProfileScreen}
         initialParams={{ id: "13" }}
       /> */}
-      <HomeStack.Screen name="TopRating" component={TopRatingsScreen} />
-      <HomeStack.Screen name="Trending" component={TrendingScreen} />
+      <HomeStack.Screen
+        name="TopRating"
+        component={TopRatingsScreen}
+        options={{ title: "Toppbetyg" }}
+      />
+      <HomeStack.Screen
+        name="Trending"
+        component={TrendingScreen}
+        options={{ title: "Trendande sorter" }}
+      />
 
       <HomeStack.Screen
         name="NotFound"
         component={NotFoundScreen}
-        options={{ title: "Oops!" }}
+        options={{ title: "Hoppsan! Denna sida finns inte" }}
       />
     </HomeStack.Navigator>
   );
@@ -123,11 +136,16 @@ function SearchStackScreen() {
         headerTintColor: Colors[colorScheme].text,
       }}
     >
-      <SearchStack.Screen name="Search" component={SearchScreen} />
+      <SearchStack.Screen
+        name="Search"
+        component={SearchScreen}
+        options={{ title: "Utforska" }}
+      />
       <SearchStack.Screen
         name="Product"
         component={ProductDetailScreen}
         initialParams={{ id: "13" }}
+        options={{ title: "Produkt detaljer" }}
       />
       <SearchStack.Group screenOptions={{ presentation: "modal" }}>
         <SearchStack.Screen
@@ -146,7 +164,7 @@ function SearchStackScreen() {
       <SearchStack.Screen
         name="NotFound"
         component={NotFoundScreen}
-        options={{ title: "Oops!" }}
+        options={{ title: "Hoppsan! Denna sida finns inte!" }}
       />
     </SearchStack.Navigator>
   );
@@ -163,6 +181,7 @@ function ProfileStackScreen() {
           backgroundColor: Colors[colorScheme].menu,
         },
         headerTintColor: Colors[colorScheme].text,
+        headerTitle: "Profil",
       }}
     >
       <ProfileStack.Screen
@@ -174,6 +193,7 @@ function ProfileStackScreen() {
         name="Product"
         component={ProductDetailScreen}
         initialParams={{ id: "13" }}
+        options={{ title: "Produkt detaljer" }}
       />
       <ProfileStack.Group screenOptions={{ presentation: "modal" }}>
         <ProfileStack.Screen
@@ -192,7 +212,7 @@ function ProfileStackScreen() {
       <ProfileStack.Screen
         name="NotFound"
         component={NotFoundScreen}
-        options={{ title: "Oops!" }}
+        options={{ title: "Hoppsan! Denna sida finns inte" }}
       />
     </ProfileStack.Navigator>
   );
@@ -209,6 +229,7 @@ function SignInStackScreen() {
           backgroundColor: Colors[colorScheme].menu,
         },
         headerTintColor: Colors[colorScheme].text,
+        headerTitle: "",
       }}
     >
       <SignInStack.Screen
@@ -244,11 +265,11 @@ function SignInStackScreen() {
       <SignInStack.Screen
         name="NotFound"
         component={NotFoundScreen}
-        options={{ title: "Oops!" }}
+        options={{ title: "Hoppsan! Denna sida finns inte" }}
       />
       <SignInStack.Screen
-        name="Home"
-        component={HomeStackScreen}
+        name="Root"
+        component={BottomTabNavigator}
         options={{ headerShown: false }}
       />
     </SignInStack.Navigator>
@@ -294,7 +315,7 @@ const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
   const colorScheme = useColorScheme();
-  const user = useSelector(currentReduxUser);
+  const myUser = useSelector(currentReduxUser);
 
   return (
     <BottomTab.Navigator
@@ -311,7 +332,7 @@ function BottomTabNavigator() {
         tabBarInactiveTintColor: Colors[colorScheme].tabIconDefault,
         tabBarStyle: {
           backgroundColor: Colors[colorScheme].menu,
-          height: "11%",
+          height: "10%",
           padding: 15,
         },
       }}
@@ -344,7 +365,7 @@ function BottomTabNavigator() {
       <BottomTab.Screen
         name="Profile"
         component={ProfileStackScreen}
-        initialParams={{ id: user.id }}
+        initialParams={{ id: myUser.id }}
         options={{
           title: "",
           headerShown: false,
