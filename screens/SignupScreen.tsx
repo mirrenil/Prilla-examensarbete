@@ -19,10 +19,12 @@ import { RootStackScreenProps } from "../types";
 import * as Haptics from "expo-haptics";
 import { LinearGradient } from "expo-linear-gradient";
 import { gradientDark, gradientLight } from "../constants/Colors";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
 
 let inputHeight = 20;
 
 export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
+  const [oldEnough, setOldEnough] = useState<boolean>(false);
   const [user, setUser] = useState({
     email: "",
     displayName: "",
@@ -46,23 +48,27 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
   };
 
   const signup = async () => {
-    try {
-      await createUserWithEmailAndPassword(
-        auth,
-        user.email,
-        user.password
-      ).then(() => {
-        if (auth.currentUser) {
-          updateProfile(auth.currentUser, {
-            displayName: user.displayName,
-          });
-        }
-      });
-      addUserToDb();
-      Alert.alert("Registrering lyckades!");
-      navigation.navigate("Signin");
-    } catch (error) {
-      Alert.alert("Denna användare finns redan registrerad");
+    if (oldEnough) {
+      try {
+        await createUserWithEmailAndPassword(
+          auth,
+          user.email,
+          user.password
+        ).then(() => {
+          if (auth.currentUser) {
+            updateProfile(auth.currentUser, {
+              displayName: user.displayName,
+            });
+          }
+        });
+        addUserToDb();
+        Alert.alert("Registrering lyckades!");
+        navigation.navigate("Signin");
+      } catch (error) {
+        Alert.alert("Denna användare finns redan registrerad");
+      }
+    } else {
+      Alert.alert("Du måste vara över 18 år för att registrera dig");
     }
   };
 
@@ -186,13 +192,36 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
                       onBlur={handleBlur("passwordConfirmation")}
                     />
                   </View>
+                  <View style={styles.bouncyCheckBox}>
+                    <BouncyCheckbox
+                      size={25}
+                      fillColor="green"
+                      unfillColor="transparent"
+                      text="Jag är 18 år eller äldre."
+                      iconStyle={{ borderColor: "green" }}
+                      innerIconStyle={{ borderWidth: 2 }}
+                      textStyle={{
+                        textDecorationLine: "none",
+                      }}
+                      onPress={() => {
+                        setOldEnough(true);
+                      }}
+                    />
+                  </View>
+
                   <TouchableOpacity
                     style={styles.button}
                     onPress={() => {
                       isValid();
                       Haptics.ImpactFeedbackStyle.Light;
                     }}
-                    disabled={!values.email}
+                    disabled={
+                      !values.email &&
+                      !values.displayName &&
+                      !values.password &&
+                      !values.passwordConfirmation &&
+                      !oldEnough
+                    }
                   >
                     <Text style={styles.buttonText}>Registrera dig</Text>
                   </TouchableOpacity>
@@ -268,5 +297,11 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     width: "100%",
     marginBottom: inputHeight,
+  },
+  bouncyCheckBox: {
+    flexDirection: "column",
+    alignItems: "center",
+    alignContent: "center",
+    marginBottom: 10,
   },
 });
