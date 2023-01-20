@@ -12,12 +12,10 @@ const Tabbar = () => {
   const navigate = useNavigation();
 
   const sortTopRated = () => {
-    console.log("Toppbetyg");
     navigate.navigate("TopRating");
   };
 
   const sortTrending = () => {
-    console.log("Trendande sorter");
     navigate.navigate("Trending");
   };
 

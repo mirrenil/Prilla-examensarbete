@@ -10,7 +10,12 @@ import * as Haptics from "expo-haptics";
 import { RootStackScreenProps } from "../types";
 import React, { useEffect, useState } from "react";
 import { Product, Tag } from "../Interfaces";
-import { addNewDoc, getOneDocById, updateSingleProperty } from "../helper";
+import {
+  addNewDoc,
+  getOneDocById,
+  updateSingleProperty,
+  uploadImageAndGetURL,
+} from "../helper";
 import { EvilIcons } from "@expo/vector-icons";
 import { RateActive } from "../components/RateActive";
 import ImageUpload from "../components/ImageUpload";
@@ -93,17 +98,19 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
 
   const handleSubmit = async () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    const rating = convertRating();
-    const newReview = {
-      createdAt: new Date(),
-      tags: selectedTags,
-      description: reviewText,
-      photo: image ? image : product?.photo,
-      productID: route.params.id,
-      rating: rating,
-      userID: myUser.id,
-    };
+
     try {
+      let firebaseImageURL = await uploadImageAndGetURL(myUser.id, image);
+      const rating = convertRating();
+      const newReview = {
+        createdAt: new Date(),
+        tags: selectedTags,
+        description: reviewText,
+        photo: firebaseImageURL,
+        productID: route.params.id,
+        rating: rating,
+        userID: myUser.id,
+      };
       let docId = await addNewDoc("recensioner", newReview);
       if (docId) {
         pushReviewToProductsReviewArray(docId);

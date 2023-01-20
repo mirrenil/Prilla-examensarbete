@@ -24,12 +24,23 @@ export default function StartScreen({}: RootStackScreenProps<"Root">) {
 
   const getReviews = async () => {
     let newData: Review[] = [];
-    let data = await getAllDocsInCollection("recensioner");
-
-    if (data?.length) {
-      newData = data;
+    try {
+      let data = await getAllDocsInCollection("recensioner");
+      if (data) {
+        let sorted = sortArray(data);
+        newData = sorted;
+      }
+      setReviews(newData);
+    } catch (err) {
+      console.log(err);
     }
-    setReviews(newData);
+  };
+
+  const sortArray = (array: Review[]) => {
+    let sorted = array?.sort((a: any, b: any) => {
+      return b.createdAt.toDate() - a.createdAt.toDate();
+    });
+    return sorted;
   };
 
   return (
@@ -65,9 +76,16 @@ export default function StartScreen({}: RootStackScreenProps<"Root">) {
           </View>
         </View>
         <Tabbar />
-        {reviews.map((review, id) => {
+        <Text style={{ fontWeight: "bold", fontSize: 16, padding: 10 }}>
+          Ny aktivitet
+        </Text>
+        {reviews.map((review) => {
           return (
-            <ActivityCard key={id} review={review} updateReviews={getReviews} />
+            <ActivityCard
+              key={review.id}
+              review={review}
+              updateReviews={getReviews}
+            />
           );
         })}
       </ScrollView>

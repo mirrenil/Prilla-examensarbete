@@ -5,6 +5,10 @@ import {
   StyleSheet,
   TouchableOpacity,
   useColorScheme,
+  Platform,
+  Keyboard,
+  TouchableWithoutFeedback,
+  KeyboardAvoidingView,
 } from "react-native";
 import { Text, View, TextInput } from "../components/Themed";
 import { Formik } from "formik";
@@ -82,11 +86,11 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
         initialValues={user}
         onSubmit={(values) => {}}
         validationSchema={yup.object().shape({
-          email: yup.string().email().required("Please, provide an email!"),
+          email: yup.string().email().required("Ange din email adress"),
           password: yup
             .string()
-            .min(6, "Password should be of minimum 6 characters length")
-            .required("Please, provide a password!"),
+            .min(6, "Lösenordet måste vara minst 6 tecken")
+            .required("Ange ditt lösenord"),
         })}
       >
         {({ values, errors, touched, handleBlur, handleChange }) => {
@@ -100,71 +104,83 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
           }, [email, password]);
 
           return (
-            <View style={styles.container}>
-              {touched.email &&
-                errors.email &&
-                (Haptics.NotificationFeedbackType.Error,
-                (<Text style={styles.error}>{errors.email}</Text>))}
-              <TextInput
-                lightColor="#fff"
-                darkColor="#413C48"
-                placeholder="Email"
-                style={styles.input}
-                value={email}
-                onChangeText={handleChange("email")}
-                autoCapitalize="none"
-                onBlur={handleBlur("email")}
-              />
-              {touched.password &&
-                errors.password &&
-                (Haptics.NotificationFeedbackType.Error,
-                (<Text style={styles.error}>{errors.password}</Text>))}
+            <KeyboardAvoidingView>
+              <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <View style={styles.container}>
+                  {touched.email &&
+                    errors.email &&
+                    (Haptics.NotificationFeedbackType.Error,
+                    (<Text style={styles.error}>{errors.email}</Text>))}
+                  <TextInput
+                    lightColor="#fff"
+                    darkColor="#413C48"
+                    placeholder="Email address"
+                    style={styles.input}
+                    value={email}
+                    onChangeText={handleChange("email")}
+                    autoCapitalize="none"
+                    onBlur={handleBlur("email")}
+                  />
+                  {touched.password &&
+                    errors.password &&
+                    (Haptics.NotificationFeedbackType.Error,
+                    (<Text style={styles.error}>{errors.password}</Text>))}
 
-              <TextInput
-                lightColor="#fff"
-                darkColor="#413C48"
-                placeholder="Password"
-                style={styles.input}
-                secureTextEntry
-                value={password}
-                onChangeText={handleChange("password")}
-                autoCapitalize="none"
-                onBlur={handleBlur("password")}
-              />
+                  <TextInput
+                    lightColor="#fff"
+                    darkColor="#413C48"
+                    placeholder="Lösenord"
+                    style={styles.input}
+                    secureTextEntry
+                    value={password}
+                    onChangeText={handleChange("password")}
+                    autoCapitalize="none"
+                    onBlur={handleBlur("password")}
+                  />
 
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate("ForgotPassword");
-                  Haptics.ImpactFeedbackStyle.Light;
-                }}
-              >
-                <Text style={styles.text} lightColor="#333" darkColor="#fff">
-                  Glömt lösenord?
-                </Text>
-              </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate("ForgotPassword");
+                      Haptics.ImpactFeedbackStyle.Light;
+                    }}
+                  >
+                    <Text
+                      style={styles.text}
+                      lightColor="#333"
+                      darkColor="#fff"
+                    >
+                      Glömt lösenord?
+                    </Text>
+                  </TouchableOpacity>
 
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => {
-                  login();
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                }}
-                disabled={!values.email || !values.password}
-              >
-                <Text style={styles.buttonText}>Logga in</Text>
-              </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => {
+                      login();
+                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                    }}
+                    disabled={!values.email || !values.password}
+                  >
+                    <Text style={styles.buttonText}>Logga in</Text>
+                  </TouchableOpacity>
 
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate("Signup");
-                  Haptics.ImpactFeedbackStyle.Light;
-                }}
-              >
-                <Text style={styles.text} lightColor="#333" darkColor="#fff">
-                  Har du inget konto än? Skapa ett här!
-                </Text>
-              </TouchableOpacity>
-            </View>
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate("Signup");
+                      Haptics.ImpactFeedbackStyle.Light;
+                    }}
+                  >
+                    <Text
+                      style={styles.text}
+                      lightColor="#333"
+                      darkColor="#fff"
+                    >
+                      Har du inget konto än? Skapa ett här!
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </TouchableWithoutFeedback>
+            </KeyboardAvoidingView>
           );
         }}
       </Formik>
@@ -232,5 +248,8 @@ const styles = StyleSheet.create({
     color: "#BF0404",
     fontWeight: "bold",
     margin: 7,
+  },
+  keyboardAvoiding: {
+    flex: 1,
   },
 });
