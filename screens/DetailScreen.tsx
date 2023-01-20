@@ -226,7 +226,11 @@ function ProductDetailScreen({
           return (
             <>
               <View lightColor="transparent" style={styles.reviewWrapper}>
-                <View lightColor="transparent" style={styles.reviewTop}>
+                <View
+                  key={rev.id}
+                  lightColor="transparent"
+                  style={styles.reviewTop}
+                >
                   <TouchableOpacity
                     style={{ marginTop: 10 }}
                     onPress={() => {
@@ -258,9 +262,9 @@ function ProductDetailScreen({
                   {rev.description}
                 </Text>
                 <View style={styles.tagsContainer}>
-                  {rev.tags.map((tag: Tag) => {
+                  {rev.tags.map((tag: Tag, index) => {
                     return (
-                      <View style={styles.tag}>
+                      <View key={index} style={styles.tag}>
                         <Text style={styles.tagName}>{tag?.name}</Text>
                       </View>
                     );
