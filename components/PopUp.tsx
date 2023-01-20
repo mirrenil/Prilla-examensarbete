@@ -1,3 +1,4 @@
+import { AntDesign } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import { TouchableOpacity, StyleSheet } from "react-native";
 import { View, Text, TextInput } from "../components/Themed";
@@ -6,30 +7,50 @@ import ImageUpload from "./ImageUpload";
 interface Props {
   setProfilePic: (a: any) => void;
   closePopUp: () => void;
+  userPhoto: string;
 }
 
-export const PopUp = ({ setProfilePic, closePopUp }: Props) => {
+export const PopUp = ({ setProfilePic, closePopUp, userPhoto }: Props) => {
   const [image, setImage] = useState<any>(null);
-
   return (
     <View style={popupStyles.layover}>
       <View style={popupStyles.popUp}>
         <Text style={[popupStyles.fatText]}>Hantera profilbild</Text>
-        <ImageUpload
-          handleUpload={(image) => setProfilePic(image)}
-        />
-        {image ? (
-          <TouchableOpacity>
-            <Text>Ta bort profilbild</Text>
-          </TouchableOpacity>
-        ) : null}
-        <View style={popupStyles.buttons}>
-          <TouchableOpacity style={popupStyles.button} onPress={closePopUp}>
-            <View>
-              <Text>Avbryt</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity
+          style={{ position: "absolute", top: 0, right: 0, padding: 10 }}
+          onPress={closePopUp}
+        >
+          <AntDesign name="close" size={24} color="white" />
+        </TouchableOpacity>
+
+        {userPhoto ? (
+          <>
+            {!image && (
+              <TouchableOpacity>
+                <Text>Ta bort profilbild</Text>
+              </TouchableOpacity>
+            )}
+            <ImageUpload
+              changeProfilePicIsTrue={true}
+              handleUpload={(image) => setImage(image)}
+            />
+          </>
+        ) : (
+          <ImageUpload
+            changeProfilePicIsTrue={false}
+            handleUpload={(image) => setImage(image)}
+          />
+        )}
+        {image && (
+          <View style={popupStyles.buttons}>
+            <TouchableOpacity
+              style={popupStyles.button}
+              onPress={() => setProfilePic(image)}
+            >
+              <Text>Spara profilbild</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
     </View>
   );
