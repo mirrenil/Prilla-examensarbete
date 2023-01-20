@@ -212,7 +212,7 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
                             })
                           }
                         >
-                          <Text>{c.author}</Text>
+                          <Text key={c.id}>{c.author}</Text>
                         </TouchableOpacity>
                       </View>
                     </View>
