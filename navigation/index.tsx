@@ -1,9 +1,4 @@
-/**
- * If you are not familiar with React Navigation, refer to the "Fundamentals" guide:
- * https://reactnavigation.org/docs/getting-started
- *
- */
-import { AntDesign, FontAwesome, Ionicons } from "@expo/vector-icons";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
   NavigationContainer,
@@ -11,8 +6,10 @@ import {
   DarkTheme,
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import * as React from "react";
-import { ColorSchemeName, Image } from "react-native";
+
+import React from "react";
+
+import { ColorSchemeName } from "react-native";
 import { Provider, useSelector } from "react-redux";
 
 import Colors from "../constants/Colors";
@@ -36,7 +33,6 @@ import Constants from "expo-constants";
 import { RootStackParamList, RootTabParamList } from "../types";
 import store from "../redux/store";
 import { currentReduxUser } from "../redux/signin";
-import { View } from "../components/Themed";
 
 export default function Navigation({
   colorScheme,
@@ -55,13 +51,9 @@ export default function Navigation({
   );
 }
 
-/**
- * A root stack navigator is often used for displaying modals on top of all other content.
- * https://reactnavigation.org/docs/modal
- */
 const HomeStack = createNativeStackNavigator<RootStackParamList>();
 
-function HomeStackScreen() {
+function HomeStackNavigator() {
   const colorScheme = useColorScheme();
   return (
     <HomeStack.Navigator
@@ -75,7 +67,7 @@ function HomeStackScreen() {
       <HomeStack.Screen
         name="Root"
         component={StartScreen}
-        options={{ title: "Hem" }}
+        options={{ title: "Utforska" }}
       />
       <HomeStack.Screen
         name="Product"
@@ -96,27 +88,26 @@ function HomeStackScreen() {
           initialParams={{ id: "12" }}
           component={CommentModal}
         />
+        <HomeStack.Screen
+          options={{ title: "Trendande sorter" }}
+          name="Trending"
+          component={TrendingScreen}
+        />
+        <HomeStack.Screen
+          options={{ title: "Toppbetyg" }}
+          name="TopRating"
+          component={TopRatingsScreen}
+        />
       </HomeStack.Group>
-      <HomeStack.Screen
-        name="Profile"
-        component={ProfileScreen}
-        initialParams={{ id: "13" }}
-      />
-      <HomeStack.Screen
-        name="TopRating"
-        component={TopRatingsScreen}
-        options={{ title: "Toppbetyg" }}
-      />
-      <HomeStack.Screen
-        name="Trending"
-        component={TrendingScreen}
-        options={{ title: "Trendande sorter" }}
-      />
-
       <HomeStack.Screen
         name="NotFound"
         component={NotFoundScreen}
-        options={{ title: "Hoppsan! Denna sida finns inte" }}
+        options={{ title: "Hoppsan! Denna sida finns inte!" }}
+      />
+      <HomeStack.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{ title: "Profil" }}
       />
     </HomeStack.Navigator>
   );
@@ -171,7 +162,7 @@ function SearchStackScreen() {
 
 const AuthStack = createNativeStackNavigator<RootStackParamList>();
 
-function AuthNavigator() {
+function AuthStackNavigator() {
   const colorScheme = useColorScheme();
   return (
     <AuthStack.Navigator
@@ -201,6 +192,7 @@ function AuthNavigator() {
         component={SignupScreen}
         options={{ headerShown: false }}
       />
+
       <AuthStack.Screen
         name="ForgotPassword"
         component={ForgotPasswordScreen}
@@ -215,14 +207,14 @@ function AuthNavigator() {
   );
 }
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const RootStack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   const colorScheme = useColorScheme();
   const currentUser = useSelector(currentReduxUser);
 
   return (
-    <Stack.Navigator
+    <RootStack.Navigator
       screenOptions={{
         headerStyle: {
           backgroundColor: Colors[colorScheme].menu,
@@ -230,16 +222,14 @@ function RootNavigator() {
         headerTintColor: Colors[colorScheme].text,
       }}
     >
-      {currentUser ? (
-        <Stack.Screen
+      {currentUser === null ? (
+        <RootStack.Screen
           name="Auth"
-          component={AuthNavigator}
-          options={{
-            headerShown: false,
-          }}
+          component={AuthStackNavigator}
+          options={{ headerShown: false }}
         />
       ) : (
-        <Stack.Screen
+        <RootStack.Screen
           name="Root"
           component={BottomTabNavigator}
           options={{
@@ -247,7 +237,7 @@ function RootNavigator() {
           }}
         />
       )}
-    </Stack.Navigator>
+    </RootStack.Navigator>
   );
 }
 
@@ -279,7 +269,7 @@ function BottomTabNavigator() {
     >
       <BottomTab.Screen
         name="Home"
-        component={HomeStackScreen}
+        component={HomeStackNavigator}
         options={{
           title: "",
           headerShown: false,
