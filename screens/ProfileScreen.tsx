@@ -399,7 +399,11 @@ export default function ProfileScreen({
 
             {reviews.map((review: Review) => {
               return (
-                <ActivityCard review={review} updateReviews={getReviews} />
+                <ActivityCard
+                  key={review.id}
+                  review={review}
+                  updateReviews={getReviews}
+                />
               );
             })}
           </View>
@@ -408,7 +412,13 @@ export default function ProfileScreen({
             <AntDesign name="right" size={16} color="white" />
           </Text>
           {reviews.map((review: Review) => {
-            return <ActivityCard review={review} updateReviews={getReviews} />;
+            return (
+              <ActivityCard
+                key={review.id}
+                review={review}
+                updateReviews={getReviews}
+              />
+            );
           })}
           <View>
             <Modal
