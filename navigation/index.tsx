@@ -169,12 +169,13 @@ function SearchStackScreen() {
   );
 }
 
-const SignInStack = createNativeStackNavigator<RootStackParamList>();
+const AuthStack = createNativeStackNavigator<RootStackParamList>();
 
-function SignInStackScreen() {
+function AuthNavigator() {
   const colorScheme = useColorScheme();
   return (
-    <SignInStack.Navigator
+    <AuthStack.Navigator
+      initialRouteName="Signin"
       screenOptions={{
         headerStyle: {
           backgroundColor: Colors[colorScheme].menu,
@@ -183,49 +184,29 @@ function SignInStackScreen() {
         headerTitle: "",
       }}
     >
-      <SignInStack.Screen
+      <AuthStack.Screen
         name="Loading"
         component={LoadingScreen}
         options={{ headerShown: false }}
       />
-      <SignInStack.Screen
+      <AuthStack.Screen
         name="Signin"
         component={SigninScreen}
         options={{
           headerShown: false,
         }}
       />
-
-      <SignInStack.Screen
+      <AuthStack.Screen
         name="Signup"
         component={SignupScreen}
         options={{ headerShown: false }}
       />
-
-      <SignInStack.Screen
+      <AuthStack.Screen
         name="ForgotPassword"
         component={ForgotPasswordScreen}
         options={{ headerShown: false }}
       />
-
-      <Stack.Screen
-        name="Product"
-        initialParams={{ id: "13" }}
-        options={{ title: "Produkter" }}
-        component={ProductDetailScreen}
-      />
-
-      <Stack.Screen
-        name="Profile"
-        initialParams={{ id: "13" }}
-        component={ProfileScreen}
-      />
-      <SignInStack.Screen
-        name="Root"
-        component={BottomTabNavigator}
-        options={{ headerShown: false }}
-      />
-    </SignInStack.Navigator>
+    </AuthStack.Navigator>
   );
 }
 
@@ -247,7 +228,7 @@ function RootNavigator() {
       {currentUser ? (
         <Stack.Screen
           name="Signin"
-          component={SignInStackScreen}
+          component={AuthNavigator}
           options={{
             headerShown: false,
           }}
