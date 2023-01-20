@@ -92,10 +92,20 @@ export default function ProfileScreen({
         "userID",
         route.params.id
       );
-      setReviews(data as Review[]);
+      if (data) {
+        let sorted = sortArray(data);
+        setReviews(sorted as Review[]);
+      }
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const sortArray = (array: Review[]) => {
+    let sorted = array?.sort((a: any, b: any) => {
+      return b.createdAt.toDate() - a.createdAt.toDate();
+    });
+    return sorted;
   };
 
   // Gets a list of all users I follow to be able to check if I follow user of current profile page (unless profile is mine)

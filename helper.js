@@ -9,6 +9,7 @@ import {
   addDoc,
   updateDoc,
   deleteDoc,
+  orderBy,
 } from "firebase/firestore";
 import { db } from "./firebase";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -68,8 +69,12 @@ export const getOneDocById = async (collectionName, id) => {
 //Gets all documents in one collection
 export const getAllDocsInCollection = async (collectionName) => {
   let documents = [];
+  const ref = query(
+    collection(db, collectionName)
+    // orderBy("createdAt", "desc")
+  );
   try {
-    const docs = await getDocs(collection(db, collectionName));
+    const docs = await getDocs(ref);
     docs.forEach((doc) => {
       documents.push(doc.data());
     });
