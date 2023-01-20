@@ -26,12 +26,23 @@ export default function StartScreen({
 
   const getReviews = async () => {
     let newData: Review[] = [];
-    let data = await getAllDocsInCollection("recensioner");
-
-    if (data?.length) {
-      newData = data;
+    try {
+      let data = await getAllDocsInCollection("recensioner");
+      if (data) {
+        let sorted = sortArray(data);
+        newData = sorted;
+      }
+      setReviews(newData);
+    } catch (err) {
+      console.log(err);
     }
-    setReviews(newData);
+  };
+
+  const sortArray = (array: Review[]) => {
+    let sorted = array?.sort((a: any, b: any) => {
+      return b.createdAt.toDate() - a.createdAt.toDate();
+    });
+    return sorted;
   };
 
   return (
