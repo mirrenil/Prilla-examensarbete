@@ -1,12 +1,10 @@
 import { StyleSheet, useColorScheme } from "react-native";
-import React from "react";
 import { Text, View } from "../components/Themed";
 import { RootStackScreenProps } from "../types";
 import { useFonts } from "expo-font";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { LinearGradient } from "expo-linear-gradient";
 import { gradientDark, gradientLight } from "../constants/Colors";
-import * as Haptics from "expo-haptics";
+import React, { useEffect } from "react";
 
 export default function LoadingScreen({
   navigation,
@@ -16,6 +14,12 @@ export default function LoadingScreen({
   const [loaded] = useFonts({
     OleoScript: require("../assets/fonts/OleoScript-Regular.ttf"),
   });
+
+  useEffect(() => {
+    setTimeout(() => {
+      navigation.navigate("Signin");
+    }, 2000);
+  }, []);
 
   if (!loaded) {
     return null;
@@ -32,25 +36,6 @@ export default function LoadingScreen({
       <Text style={styles.title}>Prilla</Text>
       <Text style={styles.slogan}>GOTTA SNUS THEM ALL</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="#eee" />
-
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => {
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-          navigation.navigate("Signin");
-        }}
-      >
-        <Text style={styles.buttonText}>Logga in</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => {
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-          navigation.navigate("Signup");
-        }}
-      >
-        <Text style={styles.buttonText}>Registrera dig</Text>
-      </TouchableOpacity>
     </LinearGradient>
   );
 }
