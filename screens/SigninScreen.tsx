@@ -54,7 +54,6 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
         }
       );
       setcurrentUser(myUser.currentUser);
-      console.log(currentUser, "currentUser");
       navigation.navigate("Root", { screen: "Home" });
     } catch (error) {
       Haptics.NotificationFeedbackType.Error;
