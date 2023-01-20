@@ -1,9 +1,4 @@
-/**
- * If you are not familiar with React Navigation, refer to the "Fundamentals" guide:
- * https://reactnavigation.org/docs/getting-started
- *
- */
-import { AntDesign, FontAwesome, Ionicons } from "@expo/vector-icons";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
   NavigationContainer,
@@ -12,7 +7,7 @@ import {
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
-import { ColorSchemeName, Image } from "react-native";
+import { ColorSchemeName } from "react-native";
 import { Provider, useSelector } from "react-redux";
 
 import Colors from "../constants/Colors";
@@ -36,7 +31,6 @@ import Constants from "expo-constants";
 import { RootStackParamList, RootTabParamList } from "../types";
 import store from "../redux/store";
 import { currentReduxUser } from "../redux/signin";
-import { View } from "../components/Themed";
 
 export default function Navigation({
   colorScheme,
@@ -55,10 +49,6 @@ export default function Navigation({
   );
 }
 
-/**
- * A root stack navigator is often used for displaying modals on top of all other content.
- * https://reactnavigation.org/docs/modal
- */
 const HomeStack = createNativeStackNavigator<RootStackParamList>();
 
 function HomeStackScreen() {
