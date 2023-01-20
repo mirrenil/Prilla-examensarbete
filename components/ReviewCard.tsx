@@ -24,8 +24,6 @@ export const ReviewCard = ({ review }: Props) => {
     }
   }, [isFocused]);
 
-  const handleRemove = (id: string) => {};
-
   const getProduct = async () => {
     let data = await getOneDocById("produkter", review.productID);
     if (data) {
