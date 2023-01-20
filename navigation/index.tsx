@@ -208,10 +208,17 @@ function SignInStackScreen() {
         options={{ headerShown: false }}
       />
 
-      <SignInStack.Screen
-        name="NotFound"
-        component={NotFoundScreen}
-        options={{ title: "Hoppsan! Denna sida finns inte" }}
+      <Stack.Screen
+        name="Product"
+        initialParams={{ id: "13" }}
+        options={{ title: "Produkter" }}
+        component={ProductDetailScreen}
+      />
+
+      <Stack.Screen
+        name="Profile"
+        initialParams={{ id: "13" }}
+        component={ProfileScreen}
       />
       <SignInStack.Screen
         name="Root"

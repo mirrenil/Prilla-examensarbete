@@ -3,11 +3,9 @@ import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   TouchableOpacity,
-  ActivityIndicator,
   Alert,
   Modal,
   Image,
-  Pressable,
   useColorScheme,
 } from "react-native";
 import * as Haptics from "expo-haptics";
@@ -16,11 +14,11 @@ import { RootTabScreenProps } from "../types";
 import { useDispatch, useSelector } from "react-redux";
 import { currentReduxUser, setSignOutState } from "../redux/signin";
 import {
-  deleteDocById,
   getAllDocsInCollection,
   getDocsWithSpecificValue,
   getOneDocById,
   updateSingleProperty,
+  uploadImageAndGetURL,
 } from "../helper";
 import { Review, User } from "../Interfaces";
 import { ScrollView } from "react-native-gesture-handler";
@@ -37,6 +35,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { PopUp } from "../components/PopUp";
 import { useIsFocused } from "@react-navigation/native";
 import { ActivityCard } from "../components/ActivityCard";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function ProfileScreen({
   navigation,
@@ -54,9 +53,7 @@ export default function ProfileScreen({
   const favoritesArray: any = [];
   let photoURLS: string[] = [];
   const [myFollows, setMyFollows] = useState<string[]>([]);
-  const imageBeforeUpdate =
-    "https://cdn.drawception.com/images/avatars/647493-B9E.png";
-  const [profilePic, setProfilePic] = useState<string[]>([]);
+  const [profilePic, setProfilePic] = useState<string>();
   let isMe = route.params.id === myUser.id;
   const colorScheme = useColorScheme();
   let isLight = colorScheme == "light" ? true : false;
@@ -79,6 +76,7 @@ export default function ProfileScreen({
     try {
       const user = await getOneDocById("users", route.params.id);
       setUser(user as User);
+      setProfilePic(user?.photo);
       if (isMe) {
         setMyProfile(true);
       }
@@ -94,10 +92,20 @@ export default function ProfileScreen({
         "userID",
         route.params.id
       );
-      setReviews(data as Review[]);
+      if (data) {
+        let sorted = sortArray(data);
+        setReviews(sorted as Review[]);
+      }
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const sortArray = (array: Review[]) => {
+    let sorted = array?.sort((a: any, b: any) => {
+      return b.createdAt.toDate() - a.createdAt.toDate();
+    });
+    return sorted;
   };
 
   // Gets a list of all users I follow to be able to check if I follow user of current profile page (unless profile is mine)
@@ -224,19 +232,19 @@ export default function ProfileScreen({
   };
 
   const handleImgUpload = async (image: any) => {
-    const auth = getAuth();
-    let myImg: string[] = [];
-    let newData = { photo: image };
     try {
-      await updateSingleProperty("users", myUser?.id, newData).then(() => {
-        if (auth.currentUser) {
-          updateProfile(auth.currentUser, { photoURL: image }).then(() =>
-            console.log("Profile updated")
-          );
+      let imageURL = await uploadImageAndGetURL(myUser.id, image);
+      if (!imageURL) {
+        return Alert.alert("ursäkta! Något gick fel. Prova igen.");
+      }
+      await updateSingleProperty("users", myUser?.id, { photo: imageURL }).then(
+        () => {
+          if (auth.currentUser) {
+            updateProfile(auth.currentUser, { photoURL: imageURL });
+          }
+          setProfilePic(imageURL);
         }
-        myImg.push(image);
-        setProfilePic(myImg);
-      });
+      );
       setPopUpOpen(false);
     } catch (err) {
       console.log(err);
@@ -254,6 +262,7 @@ export default function ProfileScreen({
       >
         {popUpOpen ? (
           <PopUp
+            userPhoto={user.photo}
             setProfilePic={(img) => handleImgUpload(img)}
             closePopUp={() => {
               setPopUpOpen(false);
@@ -307,45 +316,51 @@ export default function ProfileScreen({
                 </Text>
               </View>
             </View>
-            {myProfile ? (
-              <View style={styles.center}>
-                <TouchableOpacity onPress={() => setPopUpOpen(true)}>
-                  <Image
-                    source={{ uri: profilePic[0] || user?.photo }}
-                    style={styles.image}
-                  />
-                </TouchableOpacity>
+            <View style={styles.center}>
+              {myProfile ? (
+                <>
+                  <TouchableOpacity onPress={() => setPopUpOpen(true)}>
+                    <Image source={{ uri: profilePic }} style={styles.image} />
+                  </TouchableOpacity>
 
-                <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
-                  {myUser.displayName}
-                </Text>
-              </View>
-            ) : (
-              <View style={styles.center}>
-                <Image
-                  source={{ uri: imageBeforeUpdate }}
-                  style={styles.image}
-                />
-                <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
-                  {user?.displayName}
-                </Text>
-              </View>
-            )}
-
+                  <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
+                    {myUser.displayName}
+                  </Text>
+                </>
+              ) : (
+                <Image source={{ uri: profilePic }} style={styles.image} />
+              )}
+            </View>
             {!myProfile && (
-              <TouchableOpacity
-                style={[follow ? styles.borderButtonFollow : styles.button]}
-                onPress={toggleFollow}
-              >
-                <Text
-                  darkColor="#201A28"
-                  lightColor="#201A28"
-                  style={[follow ? styles.borderButtonText : styles.buttonText]}
-                >
-                  {follow ? "Följer" : "Följ"}{" "}
-                  {follow && <AntDesign name="down" size={14} color="white" />}
-                </Text>
-              </TouchableOpacity>
+              <View>
+                {!isAlreadyFollowing() ? (
+                  <TouchableOpacity
+                    style={styles.borderButtonFollow}
+                    onPress={toggleFollow}
+                  >
+                    <Text
+                      darkColor="#201A28"
+                      lightColor="#201A28"
+                      style={styles.buttonText}
+                    >
+                      Följ
+                    </Text>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    style={styles.followingButton}
+                    onPress={toggleFollow}
+                  >
+                    <Text
+                      darkColor="#fff"
+                      lightColor="#333"
+                      style={styles.borderButtonText}
+                    >
+                      Följer <AntDesign name="down" size={14} color="#333" />
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </View>
             )}
           </View>
 
@@ -354,32 +369,49 @@ export default function ProfileScreen({
             lightColor="#eee"
             darkColor="rgba(255,255,255,0.1)"
           />
-          {myProfile ? (
-            <View style={styles.box}>
-              <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
-                Mina favoriter
-                <AntDesign name="right" size={16} color="white" />
-              </Text>
-            </View>
-          ) : (
-            <View style={styles.box}>
-              <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
-                {user.displayName}'s favoriter
-                <AntDesign name="right" size={16} color="white" />
-              </Text>
-            </View>
-          )}
-
-          <View style={styles.row}>
-            {urls.map((url, index) => (
-              <Image
-                key={index}
-                style={styles.favoritesImage}
-                source={{
-                  uri: url,
-                }}
+          <View style={styles.favorites}>
+            {myProfile ? (
+              <View style={styles.box}>
+                <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
+                  Mina favoriter
+                  <AntDesign name="right" size={16} color="white" />
+                </Text>
+              </View>
+            ) : (
+              <View style={styles.box}>
+                <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
+                  {user.displayName}'s favoriter
+                  <AntDesign name="right" size={16} color="white" />
+                </Text>
+              </View>
+            )}
+            <View style={{ flexDirection: "row" }}>
+              <ScrollView horizontal style={styles.favortiesScroll}>
+                <View style={styles.row}>
+                  {urls.map((url, index) => (
+                    <Image
+                      key={index}
+                      style={styles.favoritesImage}
+                      source={{
+                        uri: url,
+                      }}
+                    />
+                  ))}
+                </View>
+              </ScrollView>
+              <AntDesign
+                name="right"
+                size={34}
+                color="white"
+                style={{ marginTop: 20 }}
               />
-            ))}
+            </View>
+
+            {reviews.map((review: Review) => {
+              return (
+                <ActivityCard review={review} updateReviews={getReviews} />
+              );
+            })}
           </View>
           <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
             Aktivitet
@@ -489,7 +521,7 @@ export default function ProfileScreen({
       </LinearGradient>
     );
   } else {
-    return <ActivityIndicator size="small" color="#0000ff" />;
+    return <LoadingSpinner />;
   }
 }
 
@@ -518,7 +550,7 @@ const styles = StyleSheet.create({
     height: 1,
     width: "100%",
   },
-  button: {
+  followingButton: {
     borderColor: "#575060",
     borderWidth: 0.2,
     backgroundColor: "transparent",
@@ -599,9 +631,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
-    width: "100%",
     height: 80,
     marginLeft: 10,
+    width: "90%",
   },
   left: {
     flexDirection: "column",
@@ -673,7 +705,8 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   favortiesScroll: {
-    width: "85%",
+    width: "70%",
+    flexDirection: "row",
   },
   layover: {
     height: "100%",
@@ -685,5 +718,12 @@ const styles = StyleSheet.create({
     zIndex: 100,
     justifyContent: "center",
     alignItems: "center",
+  },
+  loading: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  favorites: {
+    marginLeft: 20,
   },
 });
