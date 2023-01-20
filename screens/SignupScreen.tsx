@@ -34,7 +34,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
       displayName: user.displayName,
       id: auth.currentUser?.uid,
       createdAt: new Date(),
-      photo: "",
+      photo: "https://cdn.drawception.com/images/avatars/647493-B9E.png",
       liked: [],
     };
     setOneDoc("users", userToDB, auth.currentUser?.uid);
@@ -50,6 +50,8 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
         if (auth.currentUser) {
           updateProfile(auth.currentUser, {
             displayName: user.displayName,
+            photoURL:
+              "https://cdn.drawception.com/images/avatars/647493-B9E.png",
           });
         }
       });
