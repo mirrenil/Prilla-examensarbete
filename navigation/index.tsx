@@ -175,7 +175,7 @@ function AuthNavigator() {
   const colorScheme = useColorScheme();
   return (
     <AuthStack.Navigator
-      initialRouteName="Signin"
+      initialRouteName="Auth"
       screenOptions={{
         headerStyle: {
           backgroundColor: Colors[colorScheme].menu,
@@ -206,6 +206,11 @@ function AuthNavigator() {
         component={ForgotPasswordScreen}
         options={{ headerShown: false }}
       />
+      <AuthStack.Screen
+        name="Root"
+        component={BottomTabNavigator}
+        options={{ headerShown: false }}
+      />
     </AuthStack.Navigator>
   );
 }
@@ -227,7 +232,7 @@ function RootNavigator() {
     >
       {currentUser ? (
         <Stack.Screen
-          name="Signin"
+          name="Auth"
           component={AuthNavigator}
           options={{
             headerShown: false,
