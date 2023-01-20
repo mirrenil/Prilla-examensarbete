@@ -188,9 +188,11 @@ function ProductDetailScreen({
                 Smak
               </Text>
               <View lightColor="transparent" style={{ flexDirection: "row" }}>
-                {product?.flavor.map((f) => {
+                {product?.flavor.map((f, index) => {
                   return (
-                    <Text lightColor={Colors[colorScheme].text}>{f} </Text>
+                    <Text key={index} lightColor={Colors[colorScheme].text}>
+                      {f}
+                    </Text>
                   );
                 })}
               </View>
