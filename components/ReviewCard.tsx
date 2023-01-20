@@ -1,12 +1,10 @@
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { Image, StyleSheet, Alert, useColorScheme } from "react-native";
+import { Image, StyleSheet, useColorScheme } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { getOneDocById } from "../helper";
 import { Review, Product, Tag } from "../Interfaces";
 import { RateInactive } from "./RateInactive";
-import { useSelector } from "react-redux";
-import { currentReduxUser } from "../redux/signin";
 import { Text, View } from "../components/Themed";
 import Colors from "../constants/Colors";
 
