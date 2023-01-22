@@ -203,7 +203,9 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
       alignItems: "center",
     },
     popUp: {
-      backgroundColor: Colors[colorScheme].primary.dark,
+      backgroundColor: isLight
+        ? Colors[colorScheme].modal
+        : Colors[colorScheme].modal,
       width: "80%",
       height: 250,
       justifyContent: "space-around",
@@ -227,8 +229,6 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
       justifyContent: "center",
       textAlign: "center",
       backgroundColor: "transparent",
-      borderColor: "#783bc9",
-      borderWidth: 0.2,
     },
     input: {
       width: "70%",

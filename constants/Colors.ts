@@ -1,5 +1,3 @@
-// const tintColorLight = "#783bc9";
-// const tintColorDark = "#fff";
 const primaryPurple = "#783BC9";
 const activteColor = "#FFFD54";
 
@@ -29,7 +27,7 @@ export default {
       dark: "#3E394F",
     },
     section: "rgba(56,47,68,0.7)",
-
+    modal: "#AE89E0",
     folderTabActive: primaryPurple,
     folderTabInActive: primaryPurple,
     tint: activteColor,
@@ -51,11 +49,10 @@ export default {
       dark: "#3E394F",
     },
     section: "rgba(56,47,68,0.7)",
-
+    modal: "#2E233B",
     tint: primaryPurple,
     folderTabActive: primaryPurple,
     folderTabInActive: primaryPurple,
-    // tint: tintColorDark,
     tabIconDefault: "#404040",
     tabIconSelected: primaryPurple,
   },
