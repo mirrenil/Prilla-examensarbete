@@ -108,6 +108,7 @@ function HomeStackNavigator() {
         name="Profile"
         component={ProfileScreen}
         options={{ title: "Profil" }}
+        initialParams={{ id: "12" }}
       />
     </HomeStack.Navigator>
   );
@@ -222,7 +223,7 @@ function RootNavigator() {
         headerTintColor: Colors[colorScheme].text,
       }}
     >
-      {currentUser === null ? (
+      {currentUser === "" ? (
         <RootStack.Screen
           name="Auth"
           component={AuthStackNavigator}
