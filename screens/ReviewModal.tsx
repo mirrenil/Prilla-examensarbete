@@ -189,7 +189,6 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
       alignItems: "center",
     },
     ratingBackground: {
-      backgroundColor: null,
       borderRadius: 6,
       padding: 10,
     },
