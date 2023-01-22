@@ -1,4 +1,4 @@
-import { AntDesign, Feather } from "@expo/vector-icons";
+import { AntDesign, Entypo, Feather } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
@@ -295,7 +295,7 @@ export default function ProfileScreen({
             ) : null}
             <View style={styles.topContainer}>
               <View style={styles.left}>
-                <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
+                <Text darkColor="#fff" lightColor="#333" style={styles.text}>
                   Recensioner
                 </Text>
                 <Text
@@ -326,7 +326,7 @@ export default function ProfileScreen({
                     <Image source={{ uri: profilePic }} style={styles.image} />
                   </TouchableOpacity>
 
-                  <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
+                  <Text darkColor="#fff" lightColor="#333" style={styles.text}>
                     {myUser.displayName}
                   </Text>
                 </>
@@ -375,14 +375,14 @@ export default function ProfileScreen({
           <View style={styles.favorites}>
             {myProfile ? (
               <View style={styles.box}>
-                <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
+                <Text lightColor="#333" darkColor="#fff" style={styles.text}>
                   Mina favoriter
                   <AntDesign name="right" size={16} color="white" />
                 </Text>
               </View>
             ) : (
               <View style={styles.box}>
-                <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
+                <Text lightColor="#333" darkColor="#fff" style={styles.text}>
                   {user.displayName}'s favoriter
                   <AntDesign name="right" size={16} color="white" />
                 </Text>
@@ -409,12 +409,28 @@ export default function ProfileScreen({
                 style={{ marginTop: 20 }}
               />
             </View>
-
-            {reviews.map((review: Review) => {
-              return (
-                <ActivityCard review={review} updateReviews={getReviews} />
-              );
-            })}
+            <View style={styles.activities}>
+              {myProfile ? (
+                <View style={styles.box}>
+                  <Text lightColor="#333" darkColor="#fff" style={styles.text}>
+                    Mina aktiviteter
+                    <AntDesign name="right" size={16} color="white" />
+                  </Text>
+                </View>
+              ) : (
+                <View style={styles.box}>
+                  <Text lightColor="#333" darkColor="#fff" style={styles.text}>
+                    {user.displayName}'s aktiviteter
+                    <AntDesign name="right" size={16} color="white" />
+                  </Text>
+                </View>
+              )}
+              {reviews.map((review: Review) => {
+                return (
+                  <ActivityCard review={review} updateReviews={getReviews} />
+                );
+              })}
+            </View>
           </View>
           <View>
             <Modal
@@ -431,78 +447,45 @@ export default function ProfileScreen({
                   darkColor="#261F30"
                   style={styles.modalView}
                 >
-                  <View>
-                    <AntDesign
-                      name="left"
-                      size={20}
-                      color="#fff"
+                  <View style={styles.modalTextHeader}>
+                    <Text
+                      lightColor="#fff"
+                      darkColor="#fff"
+                      style={styles.modalTextHeader}
+                    >
+                      Inställningar
+                    </Text>
+                    <Entypo
+                      name="cross"
+                      size={24}
+                      color="white"
                       onPress={() => setModalVisible(!modalVisible)}
                     />
-                    <Text
-                      lightColor="#fff"
-                      darkColor="#fff"
-                      style={styles.modalTextHeader}
-                    >
-                      Inställningar
-                    </Text>
                   </View>
                   <View style={styles.column}>
-                    <Text
-                      lightColor="#fff"
-                      darkColor="#fff"
-                      style={styles.modalText}
-                    >
-                      Lösenord
-                    </Text>
-                    <Text
-                      lightColor="#fff"
-                      darkColor="#fff"
-                      style={styles.modalTextHeader}
-                    >
-                      Inställningar
-                    </Text>
-                  </View>
-                  <View style={styles.column}>
-                    <Text
-                      lightColor="#333"
-                      darkColor="#fff"
-                      style={styles.modalText}
-                    >
-                      Lösenord
-                    </Text>
-                    <TouchableOpacity>
+                    <TouchableOpacity style={styles.borderButton}>
                       <Text
                         lightColor="#fff"
                         darkColor="#fff"
-                        style={styles.borderButton}
                         onPress={() => resetPassword(userEmail as string)}
                       >
                         Skicka återställnings länk till e-post
                       </Text>
                     </TouchableOpacity>
 
-                    <Text
-                      lightColor="#fff"
-                      darkColor="#fff"
-                      style={styles.modalText}
-                    >
-                      Radera konto
-                    </Text>
-                    <TouchableOpacity>
+                    <TouchableOpacity style={styles.borderButton}>
                       <Text
                         lightColor="#fff"
                         darkColor="#fff"
-                        style={styles.borderButton}
                         onPress={() => deleteAccount()}
                       >
                         Vill du radera ditt konto?
                       </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity>
+                    <TouchableOpacity style={styles.borderButton}>
                       <Text
                         lightColor="#fff"
                         darkColor="#fff"
-                        style={styles.borderButton}
                         onPress={handleSignOut}
                       >
                         Logga ut
@@ -566,9 +549,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   borderButton: {
-    borderWidth: 0.5,
-    borderColor: "#FFFD54",
-    padding: 15,
+    //borderWidth: 0.5,
+    //borderColor: "#FFFD54",
+
     borderRadius: 6,
     width: 300,
     height: 40,
@@ -623,7 +606,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   favorites: {
-    marginLeft: 20,
+    marginLeft: 10,
   },
   row: {
     flexDirection: "row",
@@ -660,18 +643,22 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   modalView: {
-    backgroundColor: "#857E8E",
+    backgroundColor: "#333",
+    // backgroundColor: isLight
+    //   ? Colors[colorScheme].modal
+    //   : Colors[colorScheme].modal,
     maxHeight: 400,
     borderRadius: 6,
     padding: 35,
   },
   modalText: {
     fontSize: 15,
-    fontWeight: "500",
+
     backgroundColor: "transparent",
   },
   modalTextHeader: {
-    textAlign: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
     fontSize: 20,
     marginBottom: 20,
   },
@@ -711,7 +698,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     right: 0,
-    backgroundColor: "rgba(0,0,0,0.7)",
+    backgroundColor: "rgba(0,0,0,0.5)",
     zIndex: 100,
     justifyContent: "center",
     alignItems: "center",
