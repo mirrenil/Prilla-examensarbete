@@ -138,6 +138,11 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
       justifyContent: "space-evenly",
       padding: 10,
     },
+    sectionNoPadding: {
+      borderBottomColor: Colors[colorScheme].grey.light,
+      borderBottomWidth: 1,
+      justifyContent: "space-evenly",
+    },
     container: {},
     image: {
       height: 60,
@@ -184,7 +189,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
       alignItems: "center",
     },
     ratingBackground: {
-      backgroundColor: isLight ? Colors[colorScheme].primary.normal : null,
+      backgroundColor: null,
       borderRadius: 6,
       padding: 10,
     },
