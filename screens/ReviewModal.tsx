@@ -36,6 +36,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
   const colorScheme: any = useColorScheme();
   let isLight = colorScheme == "light" ? true : false;
   const myUser = useSelector(currentReduxUser);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     getProductData();
@@ -98,7 +99,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
 
   const handleSubmit = async () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-
+    setIsLoading(true);
     try {
       let firebaseImageURL = await uploadImageAndGetURL(myUser.id, image);
       const rating = convertRating();
@@ -117,6 +118,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
       }
       alert("Recension skickad!");
       navigation.goBack();
+      setIsLoading(false);
     } catch (err) {
       console.log(err);
     }
@@ -357,6 +359,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
             <TouchableOpacity
               style={styles.submitButton}
               onPress={handleSubmit}
+              disabled={isLoading}
             >
               <Text style={[{ color: "black" }, styles.fatText]}>
                 Publicera
