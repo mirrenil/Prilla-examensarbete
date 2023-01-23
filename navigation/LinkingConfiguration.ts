@@ -8,7 +8,6 @@ import { LinkingOptions } from "@react-navigation/native";
 import * as Linking from "expo-linking";
 
 import { RootStackParamList } from "../types";
-import { Product } from "../Interfaces";
 
 const linking: LinkingOptions<RootStackParamList> = {
   prefixes: [Linking.createURL("/")],
@@ -16,19 +15,22 @@ const linking: LinkingOptions<RootStackParamList> = {
     screens: {
       Root: {
         screens: {
-          Home: {
+          HomeStack: {
             screens: {
               HomeScreen: "Home",
+              ProductDetailScreen: "ProductDetail",
             },
           },
-          Search: {
+          SearchStack: {
             screens: {
               SearchScreen: "Search",
+              ProductDetailScreen: "ProductDetail",
             },
           },
-          Profile: {
+          ProfileStack: {
             screens: {
               ProfileScreen: "Profile",
+              ProductDetailScreen: "ProductDetail",
             },
           },
         },
