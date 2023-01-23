@@ -366,9 +366,7 @@ export default function ProfileScreen({
       marginBottom: 0,
     },
     modalView: {
-      backgroundColor: isLight
-        ? Colors[colorScheme].modal
-        : Colors[colorScheme].modal,
+      backgroundColor: isLight ? "#fff" : "#2E233C",
       maxHeight: 400,
       borderRadius: 6,
       padding: 35,
@@ -629,14 +627,10 @@ export default function ProfileScreen({
               }}
             >
               <View style={styles.layover}>
-                <View
-                  lightColor="#FFF"
-                  darkColor="#261F30"
-                  style={styles.modalView}
-                >
+                <View style={styles.modalView}>
                   <View style={styles.modalTextHeader}>
                     <Text
-                      lightColor="#fff"
+                      lightColor="#333"
                       darkColor="#fff"
                       style={styles.modalTextHeader}
                     >
@@ -645,14 +639,14 @@ export default function ProfileScreen({
                     <Entypo
                       name="cross"
                       size={24}
-                      color="white"
+                      color="black"
                       onPress={() => setModalVisible(!modalVisible)}
                     />
                   </View>
                   <View style={styles.column}>
                     <TouchableOpacity style={styles.borderButton}>
                       <Text
-                        lightColor="#fff"
+                        lightColor="#333"
                         darkColor="#fff"
                         onPress={() => resetPassword(userEmail as string)}
                       >
@@ -662,7 +656,7 @@ export default function ProfileScreen({
 
                     <TouchableOpacity style={styles.borderButton}>
                       <Text
-                        lightColor="#fff"
+                        lightColor="#333"
                         darkColor="#fff"
                         onPress={() => deleteAccount()}
                       >
@@ -671,7 +665,7 @@ export default function ProfileScreen({
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.borderButton}>
                       <Text
-                        lightColor="#fff"
+                        lightColor="#333"
                         darkColor="#fff"
                         onPress={handleSignOut}
                       >
