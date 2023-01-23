@@ -55,7 +55,7 @@ export default function ProfileScreen({
   const [myFollows, setMyFollows] = useState<string[]>([]);
   const [profilePic, setProfilePic] = useState<string>();
   let isMe = route.params.id === myUser.id;
-  const colorScheme = useColorScheme();
+  const colorScheme: any = useColorScheme();
   let isLight = colorScheme == "light" ? true : false;
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
   const isFocused = useIsFocused();
@@ -254,6 +254,175 @@ export default function ProfileScreen({
     }
   };
 
+  const styles = StyleSheet.create({
+    screen: {
+      height: "100%",
+    },
+    container: {
+      alignItems: "center",
+      justifyContent: "center",
+    },
+
+    followingButton: {
+      borderColor: "#575060",
+      borderWidth: 0.2,
+      backgroundColor: "transparent",
+      padding: 10,
+      borderRadius: 6,
+      width: 100,
+      height: 40,
+      marginTop: 10,
+      marginBottom: 10,
+    },
+    buttonText: {
+      textAlign: "center",
+      fontWeight: "bold",
+      fontSize: 17,
+    },
+    btnText: {
+      textAlign: "center",
+    },
+    borderButton: {
+      borderRadius: 6,
+      width: 300,
+      height: 30,
+      marginTop: 10,
+      marginBottom: 10,
+    },
+    borderButtonFollow: {
+      backgroundColor: "#FFFD54",
+      borderWidth: 0.5,
+      borderColor: "#783BC9",
+      padding: 10,
+      borderRadius: 6,
+      width: 100,
+      height: 40,
+      marginTop: 10,
+      marginBottom: 10,
+      textAlign: "center",
+    },
+    borderButtonText: {
+      textAlign: "center",
+      fontWeight: "bold",
+      fontSize: 17,
+    },
+    box: {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "flex-start",
+      alignContent: "center",
+      marginLeft: 10,
+    },
+    smallText: {
+      fontSize: 9,
+      margin: 10,
+    },
+    text: {
+      fontSize: 17,
+      marginBottom: 10,
+    },
+    activities: {
+      flexDirection: "column",
+      justifyContent: "center",
+      alignContent: "center",
+      margin: 10,
+    },
+    favorites: {
+      marginLeft: 20,
+    },
+    row: {
+      flexDirection: "row",
+      justifyContent: "space-evenly",
+      alignItems: "center",
+      height: 80,
+      width: "89%",
+    },
+    left: {
+      flexDirection: "column",
+      alignItems: "center",
+    },
+    center: {
+      flexDirection: "column",
+      alignItems: "center",
+      marginBottom: 10,
+    },
+    right: {
+      flexDirection: "column",
+      alignItems: "center",
+    },
+    topContainer: {
+      width: 550,
+      flexDirection: "row",
+      justifyContent: "space-evenly",
+      alignItems: "center",
+    },
+    column: {
+      flexDirection: "column",
+      justifyContent: "flex-start",
+      width: "100%",
+    },
+    top: {
+      marginLeft: 340,
+      marginBottom: 0,
+    },
+    modalView: {
+      backgroundColor: isLight
+        ? Colors[colorScheme].modal
+        : Colors[colorScheme].modal,
+      maxHeight: 400,
+      borderRadius: 6,
+      padding: 35,
+    },
+    modalText: {
+      fontSize: 15,
+
+      backgroundColor: "transparent",
+    },
+    modalTextHeader: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      fontSize: 20,
+      marginBottom: 10,
+      fontWeight: "bold",
+    },
+    image: {
+      width: 100,
+      height: 100,
+      borderRadius: 50,
+      marginBottom: 20,
+    },
+    textMedium: {
+      fontSize: 20,
+      padding: 10,
+    },
+    favoritesImage: {
+      width: 70,
+      height: 70,
+      borderRadius: 50,
+      marginRight: 10,
+    },
+    favoritesScroll: {
+      marginLeft: 10,
+      width: "90%",
+      flexDirection: "row",
+    },
+    layover: {
+      height: "100%",
+      width: "100%",
+      position: "absolute",
+      top: 0,
+      right: 0,
+      backgroundColor: "rgba(0,0,0,0.5)",
+      zIndex: 100,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    loading: {
+      justifyContent: "center",
+      alignItems: "center",
+    },
+  });
+
   if (user) {
     return (
       <LinearGradient
@@ -331,7 +500,12 @@ export default function ProfileScreen({
                   </Text>
                 </>
               ) : (
-                <Image source={{ uri: profilePic }} style={styles.image} />
+                <>
+                  <Image source={{ uri: profilePic }} style={styles.image} />
+                  <Text darkColor="#fff" lightColor="#333" style={styles.text}>
+                    {user.displayName}
+                  </Text>
+                </>
               )}
             </View>
             {!myProfile && (
@@ -367,11 +541,6 @@ export default function ProfileScreen({
             )}
           </View>
 
-          <View
-            style={styles.separator}
-            lightColor="#eee"
-            darkColor="rgba(255,255,255,0.1)"
-          />
           <View style={styles.favorites}>
             {myProfile ? (
               <View style={styles.box}>
@@ -389,7 +558,7 @@ export default function ProfileScreen({
               </View>
             )}
             <View style={{ flexDirection: "row" }}>
-              <ScrollView horizontal style={styles.favortiesScroll}>
+              <ScrollView horizontal style={styles.favoritesScroll}>
                 <View style={styles.row}>
                   {urls.map((url, index) => (
                     <Image
@@ -507,208 +676,3 @@ export default function ProfileScreen({
     return <LoadingSpinner />;
   }
 }
-
-const styles = StyleSheet.create({
-  screen: {
-    height: "100%",
-  },
-  container: {
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  title: {
-    fontFamily: "OleoScript",
-    fontStyle: "normal",
-    fontSize: 50,
-    fontWeight: "bold",
-    color: "#FFFD54",
-  },
-  slogan: {
-    fontSize: 15,
-    fontWeight: "bold",
-    color: "#FFFD54",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "100%",
-  },
-  followingButton: {
-    borderColor: "#575060",
-    borderWidth: 0.2,
-    backgroundColor: "transparent",
-    padding: 10,
-    borderRadius: 6,
-    width: 100,
-    height: 40,
-    marginTop: 10,
-    marginBottom: 10,
-  },
-  buttonText: {
-    textAlign: "center",
-    fontWeight: "bold",
-    fontSize: 17,
-  },
-  btnText: {
-    textAlign: "center",
-  },
-  borderButton: {
-    //borderWidth: 0.5,
-    //borderColor: "#FFFD54",
-
-    borderRadius: 6,
-    width: 300,
-    height: 40,
-    marginTop: 10,
-    marginBottom: 10,
-  },
-  modalBorderButton: {
-    borderWidth: 0.5,
-    borderColor: "#FFFD54",
-    padding: 15,
-    borderRadius: 6,
-    width: 300,
-    height: 50,
-    marginTop: 10,
-    marginBottom: 10,
-  },
-  borderButtonFollow: {
-    backgroundColor: "#FFFD54",
-    borderWidth: 0.5,
-    borderColor: "#783BC9",
-    padding: 10,
-    borderRadius: 6,
-    width: 100,
-    height: 40,
-    marginTop: 10,
-    marginBottom: 10,
-    textAlign: "center",
-  },
-  borderButtonText: {
-    textAlign: "center",
-    fontWeight: "bold",
-    fontSize: 17,
-  },
-  box: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    alignContent: "center",
-  },
-  smallText: {
-    fontSize: 9,
-    margin: 10,
-  },
-  text: {
-    fontSize: 17,
-    marginBottom: 10,
-  },
-  activities: {
-    flexDirection: "column",
-    justifyContent: "center",
-    alignContent: "center",
-    margin: 10,
-  },
-  favorites: {
-    marginLeft: 10,
-  },
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    alignItems: "center",
-    height: 80,
-    width: "90%",
-  },
-  left: {
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  center: {
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  right: {
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  topContainer: {
-    width: 550,
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    alignItems: "center",
-  },
-  column: {
-    flexDirection: "column",
-    justifyContent: "flex-start",
-    width: "100%",
-  },
-  top: {
-    marginLeft: 300,
-    marginBottom: 20,
-  },
-  modalView: {
-    backgroundColor: "#333",
-    // backgroundColor: isLight
-    //   ? Colors[colorScheme].modal
-    //   : Colors[colorScheme].modal,
-    maxHeight: 400,
-    borderRadius: 6,
-    padding: 35,
-  },
-  modalText: {
-    fontSize: 15,
-
-    backgroundColor: "transparent",
-  },
-  modalTextHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    fontSize: 20,
-    marginBottom: 20,
-  },
-  input: {
-    borderWidth: 0.2,
-    borderColor: "#575060",
-    borderRadius: 6,
-    textAlign: "center",
-    height: 50,
-    width: 300,
-    marginBottom: 10,
-    padding: 10,
-  },
-  image: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 20,
-  },
-  textMedium: {
-    fontSize: 20,
-    padding: 10,
-  },
-  favoritesImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 50,
-    marginRight: 10,
-  },
-  favortiesScroll: {
-    width: "70%",
-    flexDirection: "row",
-  },
-  layover: {
-    height: "100%",
-    width: "100%",
-    position: "absolute",
-    top: 0,
-    right: 0,
-    backgroundColor: "rgba(0,0,0,0.5)",
-    zIndex: 100,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  loading: {
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
