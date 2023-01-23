@@ -7,7 +7,7 @@ import {
   useColorScheme,
   View,
 } from "react-native";
-import { Review, User } from "../Interfaces";
+import { CommentWithUsername, Review, User } from "../Interfaces";
 import { ReviewCard } from "./ReviewCard";
 import React, { useEffect, useState } from "react";
 import { deleteDocById, getOneDocById, updateSingleProperty } from "../helper";
@@ -27,12 +27,6 @@ import Colors from "../constants/Colors";
 interface Props {
   review: Review;
   updateReviews: () => void;
-}
-
-interface CommentWithUsername {
-  author: string;
-  image: string;
-  text: string;
 }
 
 export const ActivityCard = ({ review, updateReviews }: Props) => {
@@ -64,12 +58,16 @@ export const ActivityCard = ({ review, updateReviews }: Props) => {
   const getCommentsData = async () => {
     if (review?.comments?.length) {
       try {
-        let user = await getOneDocById("users", review.comments[0].authorID);
+        let user = await getOneDocById(
+          "users",
+          review.comments[review.comments.length - 1].authorID
+        );
         if (user) {
           setComment({
             author: user.displayName,
             image: user.photo,
             text: review.comments[0].text,
+            id: user.id,
           });
         }
       } catch (err) {
@@ -192,12 +190,16 @@ export const ActivityCard = ({ review, updateReviews }: Props) => {
 
   return (
     <View style={styles.wrapper}>
-      <View style={styles.userInfo}>
+      <TouchableOpacity
+        style={styles.userInfo}
+        onPress={() => navigation.navigate("Profile", { id: author!.id })}
+      >
         <Image source={{ uri: author?.photo }} style={styles.profilePic} />
         <Text lightColor="#333" style={styles.username}>
           {author?.displayName}
         </Text>
-      </View>
+      </TouchableOpacity>
+
       <ImageBackground
         source={{ uri: review.photo }}
         resizeMode="cover"
@@ -258,8 +260,14 @@ export const ActivityCard = ({ review, updateReviews }: Props) => {
           <View style={styles.comment}>
             <Image source={{ uri: comment?.image }} style={styles.commentImg} />
             <View style={styles.textWrapper}>
-              <Text>{comment?.author}</Text>
-              <Text>{comment?.text}</Text>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("Profile", { id: review!.userID })
+                }
+              >
+                <Text>{comment?.author}</Text>
+                <Text>{comment?.text}</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </TouchableOpacity>

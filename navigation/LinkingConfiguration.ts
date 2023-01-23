@@ -15,35 +15,37 @@ const linking: LinkingOptions<RootStackParamList> = {
     screens: {
       Root: {
         screens: {
-          Home: {
+          HomeStack: {
             screens: {
-              HomeScreen: "one",
+              HomeScreen: "Home",
+              ProductDetailScreen: "ProductDetail",
             },
           },
-          Search: {
+          SearchStack: {
             screens: {
-              SearchScreen: "two",
+              SearchScreen: "Search",
+              ProductDetailScreen: "ProductDetail",
             },
           },
-          Notifications: {
+          ProfileStack: {
             screens: {
-              NotificationScreen: "three",
-            },
-          },
-          Profile: {
-            screens: {
-              ProfileScreen: "four",
+              ProfileScreen: "Profile",
+              ProductDetailScreen: "ProductDetail",
             },
           },
         },
       },
-      Modal: "modal",
+
       NotFound: "*",
+      Review: "Review",
+      Comment: "Comment",
+      Trending: "Trending",
+      TopRating: "TopRating",
+      Product: "Product",
       Loading: "loading",
       Signup: "Registrering",
       Signin: "Logga in",
       ForgotPassword: "Glömt lösenord",
-      AgeCheck: "Ålderskontroll",
     },
   },
 };
