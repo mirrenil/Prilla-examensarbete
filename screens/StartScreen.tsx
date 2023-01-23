@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet, useColorScheme } from "react-native";
 import { Text, View } from "../components/Themed";
-import { getAllDocsInCollection } from "../helper";
+import { getAllDocsInCollection, getOneDocById } from "../helper";
 import { Review } from "../Interfaces";
 import Tabbar from "../components/Tabbar";
 import { RootTabScreenProps } from "../types";
@@ -9,11 +9,15 @@ import { ActivityCard } from "../components/ActivityCard";
 import Colors, { gradientDark, gradientLight } from "../constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
 import { useIsFocused } from "@react-navigation/native";
+import { useSelector } from "react-redux";
+import { currentReduxUser } from "../redux/signin";
 
 export default function StartScreen({
   navigation,
 }: RootTabScreenProps<"Home">) {
+  const myUser = useSelector(currentReduxUser);
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [myFollows, setMyFollows] = useState<string[]>([]);
   const colorScheme: any = useColorScheme();
   let isLight = colorScheme == "light" ? true : false;
   const isFocused = useIsFocused();
@@ -21,20 +25,44 @@ export default function StartScreen({
   useEffect(() => {
     if (isFocused) {
       getReviews();
+      getMyFollowing();
     }
   }, [isFocused]);
+
+  const getMyFollowing = async () => {
+    try {
+      const user = await getOneDocById("users", myUser.id);
+      if (user?.following) {
+        setMyFollows(user.following);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const getReviews = async () => {
     let newData: Review[] = [];
     try {
       let data = await getAllDocsInCollection("recensioner");
       if (data) {
+        let sortedFollowing = sortFollowingReviews(data);
         let sorted = sortArray(data);
-        newData = sorted;
+        newData = sortedFollowing.concat(sorted);
       }
-      setReviews(newData);
+      setReviews(sortFollowingReviews(newData));
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  const sortFollowingReviews = (array: Review[]) => {
+    if (myFollows.length > 0) {
+      let sorted = array?.filter((review) => {
+        return myFollows.includes(review.userID);
+      });
+      return sorted;
+    } else {
+      return array;
     }
   };
 
