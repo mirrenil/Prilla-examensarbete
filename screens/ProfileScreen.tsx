@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import * as Haptics from "expo-haptics";
 import { Text, View } from "../components/Themed";
-import { RootTabScreenProps } from "../types";
+import { RootStackScreenProps } from "../types";
 import { useDispatch, useSelector } from "react-redux";
 import { currentReduxUser, setSignOutState } from "../redux/signin";
 import {
@@ -30,7 +30,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth } from "../firebase";
-import Colors, { gradientLight, gradientDark } from "../constants/Colors";
+import { gradientLight, gradientDark } from "../constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
 import { PopUp } from "../components/PopUp";
 import { useIsFocused } from "@react-navigation/native";
@@ -40,7 +40,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 export default function ProfileScreen({
   navigation,
   route,
-}: RootTabScreenProps<"Profile">) {
+}: RootStackScreenProps<"Profile">) {
   const [follow, setFollow] = useState<boolean>(false);
   const myUser = useSelector(currentReduxUser);
   const [myProfile, setMyProfile] = useState<boolean>(false);
@@ -61,17 +61,13 @@ export default function ProfileScreen({
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    setCurrentUser();
-    getReviews();
-    getLiked();
-    compareLikedIds();
-    imagesLoaded();
-  }, []);
-
-  useEffect(() => {
     if (isFocused) {
+      setCurrentUser();
       getMyFollowing();
       getReviews();
+      getLiked();
+      compareLikedIds();
+      imagesLoaded();
     }
   }, [isFocused]);
 
@@ -169,13 +165,26 @@ export default function ProfileScreen({
   const deleteAccount = async () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     const userToDelete = myUser;
-    deleteUser(userToDelete)
-      .then(() => {
-        Alert.alert("Ditt konto har raderats");
-      })
-      .catch((error) => {
-        Alert.alert("Något gick fel");
-      });
+    Alert.alert(
+      "Är du säker på att du vill ta bort ditt konto?",
+      "Du kan inte ångra dig!",
+      [
+        {
+          text: "Avbryt",
+          onPress: () => setModalVisible(false),
+          style: "cancel",
+        },
+        {
+          text: "Ja",
+          onPress: () => {
+            deleteUser(userToDelete);
+            Alert.alert("Ditt konto har raderats");
+            setModalVisible(false);
+            navigation.navigate("Signin");
+          },
+        },
+      ]
+    );
   };
 
   const handleSignOut = () => {
@@ -185,6 +194,7 @@ export default function ProfileScreen({
       .then(() => {
         dispatch(setSignOutState());
         setMyProfile(false);
+        setModalVisible(false);
         navigation.navigate("Signin");
       })
       .catch((error: any) => {

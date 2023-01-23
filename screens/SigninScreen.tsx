@@ -22,13 +22,14 @@ import {
 } from "@firebase/auth";
 import { RootStackScreenProps } from "../types";
 import { auth } from "../firebase";
-import { useDispatch } from "react-redux";
-import { setActiveUser } from "../redux/signin";
+import { useDispatch, useSelector } from "react-redux";
+import { currentReduxUser, setActiveUser } from "../redux/signin";
 import { LinearGradient } from "expo-linear-gradient";
 import { gradientDark, gradientLight } from "../constants/Colors";
 
 export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
-  const [currentUser, setcurrentUser] = useState<User>();
+  const myUser = useSelector(currentReduxUser);
+  const [currentUser, setcurrentUser] = useState<User>(myUser.currentUser);
   const [user, setUser] = useState({
     email: "",
     password: "",
@@ -56,8 +57,8 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
           );
         }
       );
-
-      navigation.navigate("Root");
+      setcurrentUser(myUser.currentUser);
+      navigation.navigate("Root", { screen: "Home" });
     } catch (error) {
       Haptics.NotificationFeedbackType.Error;
       Alert.alert("Felaktig email eller lösenord");

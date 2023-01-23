@@ -8,11 +8,12 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native-gesture-handler";
-import { ReviewComment } from "../Interfaces";
+import { ReviewComment, CommentWithUsername } from "../Interfaces";
 import { useSelector } from "react-redux";
 import { currentReduxUser } from "../redux/signin";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Feather } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import LoadingSpinner from "../components/LoadingSpinner";
 
 interface User {
@@ -20,22 +21,16 @@ interface User {
   image: string;
 }
 
-interface CommentWithUsername {
-  author: string;
-  image: string;
-  text: string;
-}
-
 export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
   const [review, setReview] = useState<Review>();
   const [author, setAuthor] = useState<User>();
   const [input, setInput] = useState<string>();
   const [comments, setComments] = useState<CommentWithUsername[]>([]);
+  const navigation = useNavigation();
   const myUser = useSelector(currentReduxUser);
 
   // STYLING VARIABLES
   let inputHeight = 20;
-  const iosKeyboardHeight = 291;
   const isAndroid = Platform.OS === "ios" ? false : true;
   const scrollViewHeight = Platform.OS === "ios" ? "50vh" : "100%";
 
@@ -88,6 +83,7 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
               author: user.displayName,
               image: user.photo,
               text: review?.comments[i].text,
+              id: user.id,
             });
           }
         } catch (err) {
@@ -114,6 +110,15 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
     } catch (err) {
       console.log(err);
     }
+    setComments([
+      ...comments,
+      {
+        author: myUser.displayName,
+        image: myUser.photo,
+        text: input!,
+        id: myUser.id,
+      },
+    ]);
     setInput("");
     getReview();
   };
@@ -209,8 +214,16 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
                     <View style={styles.comment}>
                       <Image source={{ uri: c.image }} style={styles.image} />
                       <View style={styles.textWrapper}>
-                        <Text>{c.author}</Text>
-                        <Text>{c?.text}</Text>
+                        <TouchableOpacity
+                          onPress={() =>
+                            navigation.navigate("Profile", {
+                              id: c.id,
+                            })
+                          }
+                        >
+                          <Text>{c.author}</Text>
+                        </TouchableOpacity>
+                        <Text>{c.text}</Text>
                       </View>
                     </View>
                   </View>
