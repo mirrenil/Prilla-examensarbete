@@ -182,6 +182,7 @@ export default function ProfileScreen({
       .then(() => {
         dispatch(setSignOutState());
         setMyProfile(false);
+        navigation.navigate("Signin");
       })
       .catch((error: any) => {
         console.log(error);

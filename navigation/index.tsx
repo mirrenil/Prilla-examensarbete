@@ -161,6 +161,57 @@ function SearchStackScreen() {
   );
 }
 
+const ProfileStack = createNativeStackNavigator<RootStackParamList>();
+
+function ProfileStackScreen() {
+  const colorScheme = useColorScheme();
+  const myUser = useSelector(currentReduxUser);
+  console.log("myUser", myUser);
+
+  return (
+    <ProfileStack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: Colors[colorScheme].menu,
+        },
+        headerTintColor: Colors[colorScheme].text,
+      }}
+    >
+      <ProfileStack.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{ headerShown: false }}
+        initialParams={{ id: myUser.id }}
+      />
+      <ProfileStack.Screen
+        name="Product"
+        component={ProductDetailScreen}
+        initialParams={{ id: "13" }}
+        options={{ title: "Produkt detaljer" }}
+      />
+      <ProfileStack.Group screenOptions={{ presentation: "modal" }}>
+        <ProfileStack.Screen
+          options={{ title: "Lämna recension" }}
+          name="Review"
+          initialParams={{ id: "12" }}
+          component={ReviewModal}
+        />
+        <ProfileStack.Screen
+          options={{ title: "Lämna kommentar" }}
+          name="Comment"
+          initialParams={{ id: "12" }}
+          component={CommentModal}
+        />
+      </ProfileStack.Group>
+      <ProfileStack.Screen
+        name="NotFound"
+        component={NotFoundScreen}
+        options={{ title: "Hoppsan! Denna sida finns inte!" }}
+      />
+    </ProfileStack.Navigator>
+  );
+}
+
 const AuthStack = createNativeStackNavigator<RootStackParamList>();
 
 function AuthStackNavigator() {
@@ -223,7 +274,7 @@ function RootNavigator() {
         headerTintColor: Colors[colorScheme].text,
       }}
     >
-      {currentUser === "" ? (
+      {currentUser.displayName === "" ? (
         <RootStack.Screen
           name="Auth"
           component={AuthStackNavigator}
@@ -295,7 +346,7 @@ function BottomTabNavigator() {
 
       <BottomTab.Screen
         name="Profile"
-        component={ProfileScreen}
+        component={ProfileStackScreen}
         initialParams={{ id: myUser.id }}
         options={{
           title: "",
