@@ -30,26 +30,19 @@ export default function StartScreen({
   useEffect(() => {
     if (isFocused) {
       getMyFollowing();
-      getReviews();
     }
   }, [isFocused]);
 
   const getMyFollowing = async () => {
     try {
-      const myFollowing = await getDocsWithSpecificValue(
-        "users",
-        "following",
-        myUser.id
-      );
-      console.log(myFollowing, "myFollowing");
-      if (myFollowing) {
-        myFollowingArray.push(...myFollowing);
-        console.log(myFollowingArray, "dem jag följer");
-        return myFollowingArray;
-      }
+      const user = await getOneDocById("users", myUser.id);
+      let myFollowing = user?.following;
+      myFollowingArray.push(...myFollowing);
+      getReviews();
     } catch (err) {
       console.log(err);
     }
+    return myFollowingArray;
   };
 
   const getReviews = async () => {
@@ -60,12 +53,12 @@ export default function StartScreen({
           .then((data) => {
             if (data) {
               newData.push(...data);
+              let sorted = sortArray(newData);
+              setReviews(sorted);
             }
           })
           .catch((err) => console.log(err));
       });
-      let sorted = sortArray(newData);
-      setReviews(sorted);
     } catch (err) {
       console.log(err);
     }
