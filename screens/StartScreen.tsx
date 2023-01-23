@@ -1,7 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet, useColorScheme } from "react-native";
 import { Text, View } from "../components/Themed";
-import { getAllDocsInCollection, getOneDocById } from "../helper";
+import {
+  getAllDocsInCollection,
+  getDocsWithSpecificValue,
+  getOneDocById,
+} from "../helper";
 import { Review } from "../Interfaces";
 import Tabbar from "../components/Tabbar";
 import { RootTabScreenProps } from "../types";
@@ -26,47 +30,44 @@ export default function StartScreen({
   useEffect(() => {
     if (isFocused) {
       getMyFollowing();
+      getReviews();
     }
   }, [isFocused]);
 
   const getMyFollowing = async () => {
     try {
-      const user = await getOneDocById("users", myUser.id);
-      if (user?.following) {
-        myFollowingArray.push(...user.following);
+      const myFollowing = await getDocsWithSpecificValue(
+        "users",
+        "following",
+        myUser.id
+      );
+      console.log(myFollowing, "myFollowing");
+      if (myFollowing) {
+        myFollowingArray.push(...myFollowing);
+        console.log(myFollowingArray, "dem jag följer");
+        return myFollowingArray;
       }
-      getReviews();
     } catch (err) {
       console.log(err);
     }
   };
 
   const getReviews = async () => {
-    getMyFollowing();
-    let newData: Review[] = [];
     try {
-      let data = await getAllDocsInCollection("recensioner");
-      if (data) {
-        let sorted = sortArray(data);
-        newData = sorted;
-      }
-      sortFollowingReviews(newData);
+      let newData: Review[] = [];
+      myFollowingArray.map((id) => {
+        getDocsWithSpecificValue("recensioner", "userID", id)
+          .then((data) => {
+            if (data) {
+              newData.push(...data);
+            }
+          })
+          .catch((err) => console.log(err));
+      });
+      let sorted = sortArray(newData);
+      setReviews(sorted);
     } catch (err) {
       console.log(err);
-    }
-  };
-
-  const sortFollowingReviews = (newData: Review[]) => {
-    // check if following array is empty and if userID in review is in following array
-    let isInMyFollwingArray = newData.some((item) => myFollowingArray.includes);
-    if (myFollowingArray.length > 0 && isInMyFollwingArray) {
-      // filter out reviews that are not in my following array
-      let sorted = newData.filter((review) =>
-        myFollowingArray.includes(review.userID)
-      );
-      setReviews(sorted);
-    } else {
-      return setReviews(newData);
     }
   };
 
