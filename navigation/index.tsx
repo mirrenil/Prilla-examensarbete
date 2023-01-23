@@ -57,6 +57,7 @@ function HomeStackNavigator() {
   const colorScheme = useColorScheme();
   return (
     <HomeStack.Navigator
+      initialRouteName="Home"
       screenOptions={{
         headerStyle: {
           backgroundColor: Colors[colorScheme].menu,
@@ -120,6 +121,7 @@ function SearchStackScreen() {
   const colorScheme = useColorScheme();
   return (
     <SearchStack.Navigator
+      initialRouteName="Search"
       screenOptions={{
         headerStyle: {
           backgroundColor: Colors[colorScheme].menu,
@@ -166,10 +168,10 @@ const ProfileStack = createNativeStackNavigator<RootStackParamList>();
 function ProfileStackScreen() {
   const colorScheme = useColorScheme();
   const myUser = useSelector(currentReduxUser);
-  console.log("myUser", myUser);
 
   return (
     <ProfileStack.Navigator
+      initialRouteName="Profile"
       screenOptions={{
         headerStyle: {
           backgroundColor: Colors[colorScheme].menu,
@@ -301,7 +303,7 @@ function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="Home"
+      initialRouteName="HomeStack"
       screenOptions={{
         headerStyle: {
           backgroundColor: Colors[colorScheme].header,
@@ -320,7 +322,7 @@ function BottomTabNavigator() {
       }}
     >
       <BottomTab.Screen
-        name="Home"
+        name="HomeStack"
         component={HomeStackNavigator}
         options={{
           title: "",
@@ -332,7 +334,7 @@ function BottomTabNavigator() {
       />
 
       <BottomTab.Screen
-        name="Search"
+        name="SearchStack"
         component={SearchStackScreen}
         options={{
           title: "",
@@ -345,7 +347,7 @@ function BottomTabNavigator() {
       />
 
       <BottomTab.Screen
-        name="Profile"
+        name="ProfileStack"
         component={ProfileStackScreen}
         initialParams={{ id: myUser.id }}
         options={{
