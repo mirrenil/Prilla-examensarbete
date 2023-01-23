@@ -45,24 +45,13 @@ export default function StartScreen({
     try {
       let data = await getAllDocsInCollection("recensioner");
       if (data) {
-        let sortedFollowing = sortFollowingReviews(data);
+        //let sortedFollowing = sortFollowingReviews(data);
         let sorted = sortArray(data);
-        newData = sortedFollowing.concat(sorted);
+        newData = sorted;
       }
-      setReviews(sortFollowingReviews(newData));
+      sortFollowingReviews(newData);
     } catch (err) {
       console.log(err);
-    }
-  };
-
-  const sortFollowingReviews = (array: Review[]) => {
-    if (myFollows.length > 0) {
-      let sorted = array?.filter((review) => {
-        return myFollows.includes(review.userID);
-      });
-      return sorted;
-    } else {
-      return array;
     }
   };
 
@@ -71,6 +60,17 @@ export default function StartScreen({
       return b.createdAt.toDate() - a.createdAt.toDate();
     });
     return sorted;
+  };
+
+  const sortFollowingReviews = (newData: Review[]) => {
+    if (myFollows.length > 0) {
+      let sorted = newData.filter((review) => {
+        return myFollows.includes(review.userID);
+      });
+      setReviews(sorted);
+    } else {
+      return setReviews(newData);
+    }
   };
 
   return (
