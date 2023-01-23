@@ -329,7 +329,11 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
               style={styles.reviewText}
               onPress={() => setPopUpOpen(true)}
             >
-              <EvilIcons name="pencil" size={24} color="white" />
+              {isLight ? (
+                <EvilIcons name="pencil" size={24} color="black" />
+              ) : (
+                <EvilIcons name="pencil" size={24} color="white" />
+              )}
               {reviewText ? (
                 <Text>{reviewText}</Text>
               ) : (
