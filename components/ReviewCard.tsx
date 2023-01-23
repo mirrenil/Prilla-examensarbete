@@ -1,13 +1,10 @@
-import { FontAwesome5 } from "@expo/vector-icons";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
-import React, { useCallback, useEffect, useState } from "react";
-import { Image, StyleSheet, Alert, useColorScheme } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Image, StyleSheet, useColorScheme } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { getOneDocById } from "../helper";
 import { Review, Product, Tag } from "../Interfaces";
 import { RateInactive } from "./RateInactive";
-import { useSelector } from "react-redux";
-import { currentReduxUser } from "../redux/signin";
 import { Text, View } from "../components/Themed";
 import Colors from "../constants/Colors";
 
@@ -17,7 +14,6 @@ interface Props {
 
 export const ReviewCard = ({ review }: Props) => {
   const [product, setProduct] = useState<Product>();
-  const myUser = useSelector(currentReduxUser);
   const navigation = useNavigation();
   const colorScheme: any = useColorScheme();
   const isFocused = useIsFocused();
@@ -27,8 +23,6 @@ export const ReviewCard = ({ review }: Props) => {
       getProduct();
     }
   }, [isFocused]);
-
-  const handleRemove = (id: string) => {};
 
   const getProduct = async () => {
     let data = await getOneDocById("produkter", review.productID);
