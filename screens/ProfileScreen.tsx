@@ -336,14 +336,13 @@ export default function ProfileScreen({
                   <TouchableOpacity onPress={() => setPopUpOpen(true)}>
                     <Image source={{ uri: profilePic }} style={styles.image} />
                   </TouchableOpacity>
-
-                  <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
-                    {myUser.displayName}
-                  </Text>
                 </>
               ) : (
                 <Image source={{ uri: profilePic }} style={styles.image} />
               )}
+              <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
+                {user.displayName}
+              </Text>
             </View>
             {!myProfile && (
               <View>
@@ -420,12 +419,6 @@ export default function ProfileScreen({
                 style={{ marginTop: 20 }}
               />
             </View>
-
-            {reviews.map((review: Review) => {
-              return (
-                <ActivityCard review={review} updateReviews={getReviews} />
-              );
-            })}
           </View>
           <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
             Aktivitet
