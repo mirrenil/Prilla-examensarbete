@@ -68,7 +68,7 @@ function HomeStackNavigator() {
       <HomeStack.Screen
         name="Root"
         component={StartScreen}
-        options={{ title: "Utforska" }}
+        options={{ headerShown: false }}
       />
       <HomeStack.Screen
         name="Product"
@@ -132,7 +132,7 @@ function SearchStackScreen() {
       <SearchStack.Screen
         name="Search"
         component={SearchScreen}
-        options={{ title: "Utforska" }}
+        options={{ headerShown: false }}
       />
       <SearchStack.Screen
         name="Product"
@@ -343,7 +343,6 @@ function BottomTabNavigator() {
         component={SearchStackScreen}
         options={{
           title: "",
-          headerShown: false,
           headerStyle: { height: Constants.statusBarHeight },
           tabBarIcon: ({ color }) => (
             <AntDesign name="search1" size={24} color={color} />
@@ -357,7 +356,7 @@ function BottomTabNavigator() {
         initialParams={{ id: myUser.id }}
         options={{
           title: "",
-          headerTitle: "Profil",
+          headerStyle: { height: Constants.statusBarHeight },
           tabBarIcon: ({ color }) => (
             <AntDesign name="user" size={24} color={color} />
           ),
