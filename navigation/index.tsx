@@ -73,20 +73,17 @@ function HomeStackNavigator() {
       <HomeStack.Screen
         name="Product"
         component={ProductDetailScreen}
-        initialParams={{ id: "13" }}
         options={{ title: "Produkt detaljer" }}
       />
       <HomeStack.Group screenOptions={{ presentation: "modal" }}>
         <HomeStack.Screen
           options={{ title: "Lämna recension" }}
           name="Review"
-          initialParams={{ id: "12" }}
           component={ReviewModal}
         />
         <HomeStack.Screen
           options={{ title: "Lämna kommentar" }}
           name="Comment"
-          initialParams={{ id: "12" }}
           component={CommentModal}
         />
         <HomeStack.Screen
@@ -109,7 +106,6 @@ function HomeStackNavigator() {
         name="Profile"
         component={ProfileScreen}
         options={{ title: "Profil" }}
-        initialParams={{ id: "12" }}
       />
     </HomeStack.Navigator>
   );
@@ -137,20 +133,22 @@ function SearchStackScreen() {
       <SearchStack.Screen
         name="Product"
         component={ProductDetailScreen}
-        initialParams={{ id: "13" }}
         options={{ title: "Produkt detaljer" }}
+      />
+      <SearchStack.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{ title: "" }}
       />
       <SearchStack.Group screenOptions={{ presentation: "modal" }}>
         <SearchStack.Screen
           options={{ title: "Lämna recension" }}
           name="Review"
-          initialParams={{ id: "12" }}
           component={ReviewModal}
         />
         <SearchStack.Screen
           options={{ title: "Lämna kommentar" }}
           name="Comment"
-          initialParams={{ id: "12" }}
           component={CommentModal}
         />
       </SearchStack.Group>
@@ -188,20 +186,17 @@ function ProfileStackScreen() {
       <ProfileStack.Screen
         name="Product"
         component={ProductDetailScreen}
-        initialParams={{ id: "13" }}
         options={{ title: "Produkt detaljer" }}
       />
       <ProfileStack.Group screenOptions={{ presentation: "modal" }}>
         <ProfileStack.Screen
           options={{ title: "Lämna recension" }}
           name="Review"
-          initialParams={{ id: "12" }}
           component={ReviewModal}
         />
         <ProfileStack.Screen
           options={{ title: "Lämna kommentar" }}
           name="Comment"
-          initialParams={{ id: "12" }}
           component={CommentModal}
         />
       </ProfileStack.Group>
