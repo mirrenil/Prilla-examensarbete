@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import * as Haptics from "expo-haptics";
 import { Text, View } from "../components/Themed";
-import { RootTabScreenProps } from "../types";
+import { RootStackScreenProps } from "../types";
 import { useDispatch, useSelector } from "react-redux";
 import { currentReduxUser, setSignOutState } from "../redux/signin";
 import {
@@ -40,7 +40,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 export default function ProfileScreen({
   navigation,
   route,
-}: RootTabScreenProps<"Profile">) {
+}: RootStackScreenProps<"Profile">) {
   const [follow, setFollow] = useState<boolean>(false);
   const myUser = useSelector(currentReduxUser);
   const [myProfile, setMyProfile] = useState<boolean>(false);
@@ -61,17 +61,14 @@ export default function ProfileScreen({
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    setCurrentUser();
-    getReviews();
-    getLiked();
-    compareLikedIds();
-    imagesLoaded();
-  }, []);
-
-  useEffect(() => {
     if (isFocused) {
+      setCurrentUser();
       getMyFollowing();
       getReviews();
+      getReviews();
+      getLiked();
+      compareLikedIds();
+      imagesLoaded();
     }
   }, [isFocused]);
 
@@ -169,13 +166,26 @@ export default function ProfileScreen({
   const deleteAccount = async () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     const userToDelete = myUser;
-    deleteUser(userToDelete)
-      .then(() => {
-        Alert.alert("Ditt konto har raderats");
-      })
-      .catch((error) => {
-        Alert.alert("Något gick fel");
-      });
+    Alert.alert(
+      "Är du säker på att du vill ta bort ditt konto?",
+      "Du kan inte ångra dig!",
+      [
+        {
+          text: "Avbryt",
+          onPress: () => setModalVisible(false),
+          style: "cancel",
+        },
+        {
+          text: "Ja",
+          onPress: () => {
+            deleteUser(userToDelete);
+            Alert.alert("Ditt konto har raderats");
+            setModalVisible(false);
+            navigation.navigate("Signin");
+          },
+        },
+      ]
+    );
   };
 
   const handleSignOut = () => {
@@ -185,6 +195,7 @@ export default function ProfileScreen({
       .then(() => {
         dispatch(setSignOutState());
         setMyProfile(false);
+        setModalVisible(false);
         navigation.navigate("Signin");
       })
       .catch((error: any) => {
@@ -339,19 +350,13 @@ export default function ProfileScreen({
                       <Entypo name="camera" size={15} color="#333333" />
                     </View>
                   </TouchableOpacity>
-                  <View style={{ flexDirection: "row" }}>
-                    <Text
-                      darkColor="#fff"
-                      lightColor="#fff"
-                      style={styles.text}
-                    >
-                      {myUser.displayName}
-                    </Text>
-                  </View>
                 </>
               ) : (
                 <Image source={{ uri: profilePic }} style={styles.image} />
               )}
+              <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
+                {user.displayName}
+              </Text>
             </View>
             {!myProfile && (
               <View>
@@ -428,10 +433,32 @@ export default function ProfileScreen({
                 style={{ marginTop: 20 }}
               />
             </View>
-
+          </View>
+          {myProfile ? (
+            <View style={{ marginLeft: 20, marginTop: 10 }}>
+              <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
+                Mina aktiviteter
+                <AntDesign name="right" size={16} color="white" />
+              </Text>
+            </View>
+          ) : (
+            <View style={{ marginLeft: 20, marginTop: 10 }}>
+              <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
+                {user.displayName}'s aktiviteter
+                <AntDesign name="right" size={16} color="white" />
+              </Text>
+            </View>
+          )}
+          <View>
             {reviews.map((review: Review) => {
               return (
-                <ActivityCard review={review} updateReviews={getReviews} />
+                <View style={{ marginLeft: 20, marginTop: 10 }}>
+                  <ActivityCard
+                    key={review.id}
+                    review={review}
+                    updateReviews={getReviews}
+                  />
+                </View>
               );
             })}
           </View>
@@ -634,6 +661,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 17,
     marginBottom: 10,
+    marginLeft: 10,
   },
   activities: {
     flexDirection: "column",
@@ -641,15 +669,16 @@ const styles = StyleSheet.create({
     alignContent: "center",
     margin: 10,
   },
-  favorites: {
-    marginLeft: 20,
-  },
   row: {
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
     height: 80,
+    marginLeft: 10,
     width: "90%",
+  },
+  favorites: {
+    marginLeft: 20,
   },
   left: {
     flexDirection: "column",
@@ -715,8 +744,8 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   favoritesImage: {
-    width: 60,
-    height: 60,
+    width: 70,
+    height: 70,
     borderRadius: 50,
     marginRight: 10,
   },

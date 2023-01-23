@@ -5,6 +5,10 @@
 /.pnp
 .pnp.js
 .env
+dist/assets
+dist/bundles
+dist/debug.html
+dist/metadata.json
 # testing
 /coverage
 
@@ -22,3 +26,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .vercel
+dist/metadata.json
+dist/debug.html
+dist/bundles
+dist/assets
