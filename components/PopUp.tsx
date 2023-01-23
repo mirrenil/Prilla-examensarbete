@@ -36,7 +36,7 @@ export const PopUp = ({ setProfilePic, closePopUp, userPhoto }: Props) => {
       height: 200,
       bottom: 0,
       position: "absolute",
-      backgroundColor: isLight ? "#AE89E0" : "#2E233C",
+      backgroundColor: isLight ? "#fff" : "#2E233C",
       justifyContent: "space-around",
       alignItems: "center",
       padding: 10,
@@ -62,21 +62,25 @@ export const PopUp = ({ setProfilePic, closePopUp, userPhoto }: Props) => {
   return (
     <View style={popupStyles.layover}>
       <View style={popupStyles.popUp}>
-        <Text lightColor="#fff" style={[popupStyles.fatText]}>
+        <Text lightColor="#333" style={[popupStyles.fatText]}>
           Hantera profilbild
         </Text>
         <TouchableOpacity
           style={{ position: "absolute", top: 0, right: 0, padding: 10 }}
           onPress={closePopUp}
         >
-          <AntDesign name="close" size={24} color="white" />
+          {isLight ? (
+            <AntDesign name="close" size={24} color="black" />
+          ) : (
+            <AntDesign name="close" size={24} color="white" />
+          )}
         </TouchableOpacity>
 
         {userPhoto ? (
           <>
             {!image && (
               <TouchableOpacity>
-                <Text lightColor="#fff" darkColor="#fff">
+                <Text lightColor="#333" darkColor="#fff">
                   Ta bort profilbild
                 </Text>
               </TouchableOpacity>
@@ -95,7 +99,7 @@ export const PopUp = ({ setProfilePic, closePopUp, userPhoto }: Props) => {
         {image && (
           <View style={popupStyles.buttons}>
             <TouchableOpacity onPress={() => setProfilePic(image)}>
-              <Text lightColor="#fff" darkColor="#fff">
+              <Text lightColor="#333" darkColor="#fff">
                 Spara profilbild
               </Text>
             </TouchableOpacity>

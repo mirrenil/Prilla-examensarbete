@@ -15,7 +15,7 @@ export default {
   light: {
     text: "#1B1324",
     header: "#fff",
-    menu: "#783BC9",
+    menu: "#fff",
     background: "#EBE6F3",
     primary: {
       normal: primaryPurple,
@@ -27,7 +27,7 @@ export default {
       dark: "#3E394F",
     },
     section: "rgba(56,47,68,0.7)",
-    modal: "#AE89E0",
+    modal: "#fff",
     folderTabActive: primaryPurple,
     folderTabInActive: primaryPurple,
     tint: activteColor,

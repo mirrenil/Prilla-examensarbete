@@ -89,7 +89,7 @@ const ImageUpload = ({
           style={{ alignItems: "center", margin: 10 }}
         >
           {changeProfilePicIsTrue ? (
-            <Text lightColor="#fff">Ändra profilbild</Text>
+            <Text lightColor="#333">Ändra profilbild</Text>
           ) : (
             <>
               <MaterialIcons
@@ -98,7 +98,7 @@ const ImageUpload = ({
                 color="white"
                 style={{ paddingBottom: 10 }}
               />
-              <Text>Lägg till foto</Text>
+              <Text lightColor="#333">Lägg till foto</Text>
             </>
           )}
         </TouchableOpacity>
