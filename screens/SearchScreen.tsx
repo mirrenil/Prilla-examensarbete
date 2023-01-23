@@ -68,14 +68,13 @@ export default function SearchScreen({
           <View>
             {filteredProducts.length ? (
               filteredProducts.map((product) => {
-                return <ProductCard product={product} />;
+                return <ProductCard key={product.id} product={product} />;
               })
             ) : (
               <Text style={{ alignSelf: "center" }}>
                 Sökningen gav inga träffar.
               </Text>
             )}
-            {/* {} */}
           </View>
         </ScrollView>
       ) : (
