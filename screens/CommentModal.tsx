@@ -110,6 +110,15 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
     } catch (err) {
       console.log(err);
     }
+    setComments([
+      ...comments,
+      {
+        author: myUser.displayName,
+        image: myUser.photo,
+        text: input!,
+        id: myUser.id,
+      },
+    ]);
     setInput("");
     getReview();
   };
