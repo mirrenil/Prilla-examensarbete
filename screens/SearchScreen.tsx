@@ -140,9 +140,9 @@ export default function SearchScreen({
                 filteredUsers.map((user) => {
                   return (
                     <TouchableOpacity
-                      onPress={() =>
-                        navigation.navigate("Profile", { id: user.id })
-                      }
+                      onPress={() => {
+                        navigation.navigate("Profile", { id: user.id });
+                      }}
                       style={styles.userInfo}
                     >
                       <Image
