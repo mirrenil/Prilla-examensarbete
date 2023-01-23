@@ -166,13 +166,26 @@ export default function ProfileScreen({
   const deleteAccount = async () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     const userToDelete = myUser;
-    deleteUser(userToDelete)
-      .then(() => {
-        Alert.alert("Ditt konto har raderats");
-      })
-      .catch((error) => {
-        Alert.alert("Något gick fel");
-      });
+    Alert.alert(
+      "Är du säker på att du vill ta bort ditt konto?",
+      "Du kan inte ångra dig!",
+      [
+        {
+          text: "Avbryt",
+          onPress: () => setModalVisible(false),
+          style: "cancel",
+        },
+        {
+          text: "Ja",
+          onPress: () => {
+            deleteUser(userToDelete);
+            Alert.alert("Ditt konto har raderats");
+            setModalVisible(false);
+            navigation.navigate("Signin");
+          },
+        },
+      ]
+    );
   };
 
   const handleSignOut = () => {
@@ -182,7 +195,8 @@ export default function ProfileScreen({
       .then(() => {
         dispatch(setSignOutState());
         setMyProfile(false);
-        navigation.navigate("Auth");
+        setModalVisible(false);
+        navigation.navigate("Signin");
       })
       .catch((error: any) => {
         console.log(error);
