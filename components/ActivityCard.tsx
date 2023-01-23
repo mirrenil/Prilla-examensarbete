@@ -58,7 +58,10 @@ export const ActivityCard = ({ review, updateReviews }: Props) => {
   const getCommentsData = async () => {
     if (review?.comments?.length) {
       try {
-        let user = await getOneDocById("users", review.comments[0].authorID);
+        let user = await getOneDocById(
+          "users",
+          review.comments[review.comments.length - 1].authorID
+        );
         if (user) {
           setComment({
             author: user.displayName,
