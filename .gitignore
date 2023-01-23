@@ -26,7 +26,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .vercel
-dist/debug.html
 dist/metadata.json
+dist/debug.html
 dist/bundles
 dist/assets

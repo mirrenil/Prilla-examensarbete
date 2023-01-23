@@ -447,19 +447,19 @@ export default function ProfileScreen({
               </Text>
             )}
           </View>
-          <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
-            Aktivitet
-            <AntDesign name="right" size={16} color="white" />
-          </Text>
-          {reviews.map((review: Review) => {
-            return (
-              <ActivityCard
-                key={review.id}
-                review={review}
-                updateReviews={getReviews}
-              />
-            );
-          })}
+          <View>
+            {reviews.map((review: Review) => {
+              return (
+                <View style={{ marginLeft: 20, marginTop: 10 }}>
+                  <ActivityCard
+                    key={review.id}
+                    review={review}
+                    updateReviews={getReviews}
+                  />
+                </View>
+              );
+            })}
+          </View>
           <View>
             <Modal
               animationType="slide"
@@ -675,6 +675,9 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     width: "90%",
   },
+  favorites: {
+    marginLeft: 20,
+  },
   left: {
     flexDirection: "column",
     alignItems: "center",
@@ -739,8 +742,8 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   favoritesImage: {
-    width: 60,
-    height: 60,
+    width: 70,
+    height: 70,
     borderRadius: 50,
     marginRight: 10,
   },
@@ -762,8 +765,5 @@ const styles = StyleSheet.create({
   loading: {
     justifyContent: "center",
     alignItems: "center",
-  },
-  favorites: {
-    marginLeft: 20,
   },
 });

@@ -6,9 +6,7 @@ import {
   DarkTheme,
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
-import React from "react";
-
+import * as React from "react";
 import { ColorSchemeName } from "react-native";
 import { Provider, useSelector } from "react-redux";
 
