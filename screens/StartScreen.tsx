@@ -19,7 +19,8 @@ import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function StartScreen({}: RootStackScreenProps<"Root">) {
   const myUser = useSelector(currentReduxUser);
-  const [reviews, setReviews] = useState<Review[]>([]);
+  const [friendsReviews, setFriendsReviews] = useState<Review[]>([]);
+  const [latestReviews, setLatestReviews] = useState<Review[]>([]);
   const myFollowingArray: string[] = [];
   const colorScheme: any = useColorScheme();
   let isLight = colorScheme == "light" ? true : false;
@@ -28,6 +29,7 @@ export default function StartScreen({}: RootStackScreenProps<"Root">) {
   useEffect(() => {
     if (isFocused) {
       getMyFollowing();
+      getLatestActivity();
     }
   }, [isFocused]);
 
@@ -52,7 +54,7 @@ export default function StartScreen({}: RootStackScreenProps<"Root">) {
             if (data) {
               newData.push(...data);
               let sorted = sortArray(newData);
-              setReviews(sorted);
+              setFriendsReviews(sorted);
             }
           })
           .catch((err) => console.log(err));
@@ -62,14 +64,30 @@ export default function StartScreen({}: RootStackScreenProps<"Root">) {
     }
   };
 
-  const sortArray = (array: Review[]) => {
+  const sortArray = (array: any) => {
     let sorted = array?.sort((a: any, b: any) => {
       return b.createdAt.toDate() - a.createdAt.toDate();
     });
     return sorted;
   };
 
-  if (reviews) {
+  const getLatestActivity = async () => {
+    try {
+      let data = await getAllDocsInCollection("recensioner");
+      data = data?.filter((d) => !ifAlreadyInList(d));
+      data = sortArray(data);
+      data = data?.splice(0, 5);
+      setLatestReviews(data as Review[]);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const ifAlreadyInList = (d) => {
+    return friendsReviews.some((r) => r.userID == d.userID);
+  };
+
+  if (friendsReviews) {
     return (
       <LinearGradient
         colors={
@@ -108,9 +126,21 @@ export default function StartScreen({}: RootStackScreenProps<"Root">) {
           </View>
           <Tabbar />
           <Text style={{ fontWeight: "bold", fontSize: 16, padding: 10 }}>
-            Ny aktivitet
+            Vänners aktivitet
           </Text>
-          {reviews.map((review) => {
+          {friendsReviews.map((review) => {
+            return (
+              <ActivityCard
+                key={review.id}
+                review={review}
+                updateReviews={getReviews}
+              />
+            );
+          })}
+          <Text style={{ fontWeight: "bold", fontSize: 16, padding: 10 }}>
+            Senast aktivitet
+          </Text>
+          {latestReviews.map((review) => {
             return (
               <ActivityCard
                 key={review.id}
