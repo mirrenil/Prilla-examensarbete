@@ -188,9 +188,11 @@ function ProductDetailScreen({
                 Smak
               </Text>
               <View lightColor="transparent" style={{ flexDirection: "row" }}>
-                {product?.flavor.map((f) => {
+                {product?.flavor.map((f, index) => {
                   return (
-                    <Text lightColor={Colors[colorScheme].text}>{f} </Text>
+                    <Text key={index} lightColor={Colors[colorScheme].text}>
+                      {f}
+                    </Text>
                   );
                 })}
               </View>
@@ -224,7 +226,11 @@ function ProductDetailScreen({
           return (
             <>
               <View lightColor="transparent" style={styles.reviewWrapper}>
-                <View lightColor="transparent" style={styles.reviewTop}>
+                <View
+                  key={rev.id}
+                  lightColor="transparent"
+                  style={styles.reviewTop}
+                >
                   <TouchableOpacity
                     style={{ marginTop: 10 }}
                     onPress={() => {
@@ -256,9 +262,9 @@ function ProductDetailScreen({
                   {rev.description}
                 </Text>
                 <View style={styles.tagsContainer}>
-                  {rev.tags.map((tag: Tag) => {
+                  {rev.tags.map((tag: Tag, index) => {
                     return (
-                      <View style={styles.tag}>
+                      <View key={index} style={styles.tag}>
                         <Text style={styles.tagName}>{tag?.name}</Text>
                       </View>
                     );

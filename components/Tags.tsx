@@ -89,7 +89,7 @@ const Tags = ({ handleInput }: Props) => {
     <View style={[styles.tagsSection]}>
       <Text style={styles.sectionTitle}>Välj upp till fyra taggar</Text>
       <View style={styles.tags}>
-        {tags.map((tag) => {
+        {tags.map((tag, index) => {
           let isSelected: boolean = isAlreadySelected(tag);
           return (
             <Pressable
@@ -99,7 +99,7 @@ const Tags = ({ handleInput }: Props) => {
                 toggleSelectTag(tag);
               }}
             >
-              <Text>{tag.name}</Text>
+              <Text key={index}>{tag.name}</Text>
             </Pressable>
           );
         })}
