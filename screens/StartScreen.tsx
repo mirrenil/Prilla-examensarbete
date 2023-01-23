@@ -8,18 +8,16 @@ import {
 } from "../helper";
 import { Review } from "../Interfaces";
 import Tabbar from "../components/Tabbar";
-import { RootTabScreenProps } from "../types";
+import { RootStackScreenProps } from "../types";
 import { ActivityCard } from "../components/ActivityCard";
-import Colors, { gradientDark, gradientLight } from "../constants/Colors";
+import { gradientDark, gradientLight } from "../constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
 import { useIsFocused } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { currentReduxUser } from "../redux/signin";
 import LoadingSpinner from "../components/LoadingSpinner";
 
-export default function StartScreen({
-  navigation,
-}: RootTabScreenProps<"Home">) {
+export default function StartScreen({}: RootStackScreenProps<"Root">) {
   const myUser = useSelector(currentReduxUser);
   const [reviews, setReviews] = useState<Review[]>([]);
   const myFollowingArray: string[] = [];

@@ -45,7 +45,6 @@ const TopRatingsScreen = ({
     let sorted = data.sort(({ rating: a }, { rating: b }) => b - a);
     for (let i = 0; i < 10; i++) {
       tenTopArray.push(sorted[i]);
-      console.log(sorted[i].name);
     }
     setProducts(tenTopArray);
   };
@@ -59,7 +58,7 @@ const TopRatingsScreen = ({
       }
     >
       <ScrollView>
-        {products.map((product) => {
+        {products.map((product, index) => {
           return (
             <View style={styles.container}>
               <Text style={styles.number}>{products.indexOf(product) + 1}</Text>
@@ -70,7 +69,7 @@ const TopRatingsScreen = ({
                     navigation.navigate("Product", { id: product.id });
                   }}
                 >
-                  <ProductCard product={product} />
+                  <ProductCard key={index} product={product} />
                 </TouchableOpacity>
               </View>
             </View>

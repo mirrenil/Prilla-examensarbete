@@ -8,9 +8,6 @@ interface Props {
 export const StrengthBar = ({ strength }: Props) => {
   const colorScheme = useColorScheme();
   let isLight = colorScheme == "light" ? true : false;
-  const handleRating = (value: number) => {
-    console.log(value);
-  };
 
   return (
     <RatingBar
@@ -54,7 +51,6 @@ export const StrengthBar = ({ strength }: Props) => {
               ),
             }
       }
-      onRatingUpdate={(value) => handleRating(value)}
     />
   );
 };

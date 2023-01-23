@@ -5,6 +5,10 @@
 /.pnp
 .pnp.js
 .env
+dist/assets
+dist/bundles
+dist/debug.html
+dist/metadata.json
 # testing
 /coverage
 
