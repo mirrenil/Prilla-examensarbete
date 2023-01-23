@@ -17,7 +17,7 @@ export default function StartScreen({
 }: RootTabScreenProps<"Home">) {
   const myUser = useSelector(currentReduxUser);
   const [reviews, setReviews] = useState<Review[]>([]);
-  const [myFollows, setMyFollows] = useState<string[]>([]);
+  const myFollowingArray: string[] = [];
   const colorScheme: any = useColorScheme();
   let isLight = colorScheme == "light" ? true : false;
   const isFocused = useIsFocused();
@@ -33,7 +33,7 @@ export default function StartScreen({
     try {
       const user = await getOneDocById("users", myUser.id);
       if (user?.following) {
-        setMyFollows(user.following);
+        myFollowingArray.push(...user.following);
       }
     } catch (err) {
       console.log(err);
@@ -45,7 +45,6 @@ export default function StartScreen({
     try {
       let data = await getAllDocsInCollection("recensioner");
       if (data) {
-        //let sortedFollowing = sortFollowingReviews(data);
         let sorted = sortArray(data);
         newData = sorted;
       }
@@ -55,22 +54,25 @@ export default function StartScreen({
     }
   };
 
+  const sortFollowingReviews = (newData: Review[]) => {
+    // check if following array is empty and if userID in review is in following array
+    let isInMyFollwingArray = newData.some((item) => myFollowingArray.includes);
+    if (myFollowingArray.length > 0 && isInMyFollwingArray) {
+      // filter out reviews that are not in my following array
+      let sorted = newData.filter((review) =>
+        myFollowingArray.includes(review.userID)
+      );
+      setReviews(sorted);
+    } else {
+      return setReviews(newData);
+    }
+  };
+
   const sortArray = (array: Review[]) => {
     let sorted = array?.sort((a: any, b: any) => {
       return b.createdAt.toDate() - a.createdAt.toDate();
     });
     return sorted;
-  };
-
-  const sortFollowingReviews = (newData: Review[]) => {
-    if (myFollows.length > 0) {
-      let sorted = newData.filter((review) => {
-        return myFollows.includes(review.userID);
-      });
-      setReviews(sorted);
-    } else {
-      return setReviews(newData);
-    }
   };
 
   return (
