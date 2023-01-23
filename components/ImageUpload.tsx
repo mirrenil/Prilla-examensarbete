@@ -89,7 +89,7 @@ const ImageUpload = ({
           style={{ alignItems: "center", margin: 10 }}
         >
           {changeProfilePicIsTrue ? (
-            <Text>Ändra profilbild</Text>
+            <Text lightColor="#fff">Ändra profilbild</Text>
           ) : (
             <>
               <MaterialIcons
