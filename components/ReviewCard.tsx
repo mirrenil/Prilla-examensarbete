@@ -122,9 +122,9 @@ export const ReviewCard = ({ review }: Props) => {
           </Text>
         </View>
         <View style={{ flexDirection: "row" }}>
-          {review.tags.map((tag: Tag) => {
+          {review.tags.map((tag: Tag, index) => {
             return (
-              <View style={styles.container}>
+              <View key={index} style={styles.container}>
                 <Text lightColor="#fff" style={styles.name}>
                   {tag?.name}
                 </Text>
