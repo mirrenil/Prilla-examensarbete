@@ -89,7 +89,96 @@ export default function SearchScreen({
           : [gradientDark.from, gradientDark.to]
       }
     >
-      <ScrollView style={{ height: "100%" }}>
+      {!allProducts.length || !allUsers.length ? (
+        <LoadingSpinner />
+      ) : (
+        <ScrollView style={{ height: "100%" }}>
+          <View style={search.container}>
+            <Searchbar
+              placeholder="Sök"
+              onChangeText={setSearchInput}
+              value={searchInput}
+              icon="magnify"
+              style={search.bar}
+            />
+            <View style={search.icons}>
+              <TouchableOpacity
+                onPress={() => {
+                  setIsOnProductSearch(true);
+                }}
+              >
+                <MaterialIcons
+                  name="format-list-bulleted"
+                  size={24}
+                  color="white"
+                  style={[
+                    search.icon,
+                    isOnProductSearch ? search.active : search.inActive,
+                  ]}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  setIsOnProductSearch(false);
+                }}
+              >
+                <MaterialCommunityIcons
+                  name="account-search-outline"
+                  size={24}
+                  color="white"
+                  style={[
+                    search.icon,
+                    isOnProductSearch ? search.inActive : search.active,
+                  ]}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+          {!isOnProductSearch ? (
+            <>
+              {filteredUsers.length ? (
+                filteredUsers.map((user) => {
+                  return (
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate("Profile", { id: user.id })
+                      }
+                      style={styles.userInfo}
+                    >
+                      <Image
+                        source={{ uri: user.photo }}
+                        style={styles.profilePic}
+                      />
+                      <Text lightColor="#333" style={styles.username}>
+                        {user.displayName}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })
+              ) : (
+                <Text style={{ alignSelf: "center" }}>
+                  Sökningen gav inga träffar.
+                </Text>
+              )}
+            </>
+          ) : (
+            <>
+              <View>
+                {filteredProducts.length ? (
+                  filteredProducts.map((product) => {
+                    return <ProductCard product={product} />;
+                  })
+                ) : (
+                  <Text style={{ alignSelf: "center" }}>
+                    Sökningen gav inga träffar.
+                  </Text>
+                )}
+              </View>
+            </>
+          )}
+        </ScrollView>
+      )}
+      {/* <ScrollView style={{ height: "100%" }}>
         <View style={search.container}>
           <Searchbar
             placeholder="Sök"
@@ -173,7 +262,7 @@ export default function SearchScreen({
             </View>
           </>
         )}
-      </ScrollView>
+      </ScrollView> */}
     </LinearGradient>
   );
 }
