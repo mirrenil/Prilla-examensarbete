@@ -1,4 +1,4 @@
-import { AntDesign, Feather } from "@expo/vector-icons";
+import { AntDesign, Entypo, Feather, MaterialIcons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
@@ -335,6 +335,20 @@ export default function ProfileScreen({
                 <>
                   <TouchableOpacity onPress={() => setPopUpOpen(true)}>
                     <Image source={{ uri: profilePic }} style={styles.image} />
+                    <View
+                      style={{
+                        height: 25,
+                        width: 25,
+                        borderRadius: 100,
+                        backgroundColor: "rgba(255,255,255,0.5)",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        position: "absolute",
+                        right: 0,
+                      }}
+                    >
+                      <Entypo name="camera" size={15} color="#333333" />
+                    </View>
                   </TouchableOpacity>
                 </>
               ) : (
