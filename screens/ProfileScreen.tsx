@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import * as Haptics from "expo-haptics";
 import { Text, View } from "../components/Themed";
-import { RootTabScreenProps } from "../types";
+import { RootStackScreenProps } from "../types";
 import { useDispatch, useSelector } from "react-redux";
 import { currentReduxUser, setSignOutState } from "../redux/signin";
 import {
@@ -40,7 +40,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 export default function ProfileScreen({
   navigation,
   route,
-}: RootTabScreenProps<"Profile">) {
+}: RootStackScreenProps<"Profile">) {
   const [follow, setFollow] = useState<boolean>(false);
   const myUser = useSelector(currentReduxUser);
   const [myProfile, setMyProfile] = useState<boolean>(false);
@@ -166,13 +166,26 @@ export default function ProfileScreen({
   const deleteAccount = async () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     const userToDelete = myUser;
-    deleteUser(userToDelete)
-      .then(() => {
-        Alert.alert("Ditt konto har raderats");
-      })
-      .catch((error) => {
-        Alert.alert("Något gick fel");
-      });
+    Alert.alert(
+      "Är du säker på att du vill ta bort ditt konto?",
+      "Du kan inte ångra dig!",
+      [
+        {
+          text: "Avbryt",
+          onPress: () => setModalVisible(false),
+          style: "cancel",
+        },
+        {
+          text: "Ja",
+          onPress: () => {
+            deleteUser(userToDelete);
+            Alert.alert("Ditt konto har raderats");
+            setModalVisible(false);
+            navigation.navigate("Signin");
+          },
+        },
+      ]
+    );
   };
 
   const handleSignOut = () => {
@@ -182,7 +195,8 @@ export default function ProfileScreen({
       .then(() => {
         dispatch(setSignOutState());
         setMyProfile(false);
-        navigation.navigate("Loading");
+        setModalVisible(false);
+        navigation.navigate("Signin");
       })
       .catch((error: any) => {
         console.log(error);
@@ -336,19 +350,13 @@ export default function ProfileScreen({
                       <Entypo name="camera" size={15} color="#333333" />
                     </View>
                   </TouchableOpacity>
-                  <View style={{ flexDirection: "row" }}>
-                    <Text
-                      darkColor="#fff"
-                      lightColor="#fff"
-                      style={styles.text}
-                    >
-                      {myUser.displayName}
-                    </Text>
-                  </View>
                 </>
               ) : (
                 <Image source={{ uri: profilePic }} style={styles.image} />
               )}
+              <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
+                {user.displayName}
+              </Text>
             </View>
             {!myProfile && (
               <View>

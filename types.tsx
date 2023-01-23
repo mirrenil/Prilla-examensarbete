@@ -29,21 +29,19 @@ export type RootStackParamList = {
   Signup: undefined;
   ForgotPassword: undefined;
   Product: { id: string };
-  AgeCheck: undefined;
   Profile: { id: string };
   Home: undefined;
   Search: undefined;
-  Notifications: undefined;
+  Auth: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
   NativeStackScreenProps<RootStackParamList, Screen>;
 
 export type RootTabParamList = {
-  Home: undefined;
-  Search: undefined;
-  Notifications: undefined;
-  Profile: { id: string };
+  HomeStack: undefined;
+  SearchStack: undefined;
+  ProfileStack: { id: string };
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
