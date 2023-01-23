@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import * as Haptics from "expo-haptics";
 import { Text, View } from "../components/Themed";
-import { RootTabScreenProps } from "../types";
+import { RootStackScreenProps } from "../types";
 import { useDispatch, useSelector } from "react-redux";
 import { currentReduxUser, setSignOutState } from "../redux/signin";
 import {
@@ -40,7 +40,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 export default function ProfileScreen({
   navigation,
   route,
-}: RootTabScreenProps<"Profile">) {
+}: RootStackScreenProps<"Profile">) {
   const [follow, setFollow] = useState<boolean>(false);
   const myUser = useSelector(currentReduxUser);
   const [myProfile, setMyProfile] = useState<boolean>(false);
@@ -182,7 +182,7 @@ export default function ProfileScreen({
       .then(() => {
         dispatch(setSignOutState());
         setMyProfile(false);
-        navigation.navigate("Signin");
+        navigation.navigate("Auth");
       })
       .catch((error: any) => {
         console.log(error);
