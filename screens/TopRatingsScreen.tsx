@@ -45,7 +45,6 @@ const TopRatingsScreen = ({
     let sorted = data.sort(({ rating: a }, { rating: b }) => b - a);
     for (let i = 0; i < 10; i++) {
       tenTopArray.push(sorted[i]);
-      console.log(sorted[i].name);
     }
     setProducts(tenTopArray);
   };
