@@ -52,6 +52,7 @@ export default function ProfileScreen({
   const [urls, setUrls] = useState<string[]>([]);
   const favoritesArray: any = [];
   let photoURLS: string[] = [];
+  let followingArray: string[] = [];
   const [myFollows, setMyFollows] = useState<string[]>([]);
   const [profilePic, setProfilePic] = useState<string>();
   let isMe = route.params.id === myUser.id;
@@ -147,6 +148,7 @@ export default function ProfileScreen({
       let newArray = [...myFollows, route.params.id];
       updateDb(newArray);
       setMyFollows([...myFollows, route.params.id]);
+      followingArray.push(...myFollows, route.params.id);
     } else {
       let newArray = myFollows.filter((id) => id !== route.params.id);
       setMyFollows(newArray);
