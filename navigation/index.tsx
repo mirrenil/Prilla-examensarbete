@@ -210,6 +210,11 @@ function ProfileStackScreen() {
         component={NotFoundScreen}
         options={{ title: "Hoppsan! Denna sida finns inte!" }}
       />
+      <ProfileStack.Screen
+        name="Signin"
+        component={SigninScreen}
+        options={{ headerShown: false }}
+      />
     </ProfileStack.Navigator>
   );
 }
