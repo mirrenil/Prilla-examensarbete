@@ -110,11 +110,7 @@ export default function StartScreen({}: RootStackScreenProps<"Root">) {
                   23
                 </Text>
               </Text>
-              <View
-                style={styles.separator}
-                lightColor="#fff"
-                darkColor="#fff"
-              />
+              <View style={styles.separator} />
               <View style={styles.logosWrapper}>
                 <Text style={styles.prilla}>Prilla</Text>
                 <Image
@@ -165,6 +161,7 @@ const styles = StyleSheet.create({
     height: 200,
   },
   heroTextWrapper: {
+    top: 25,
     position: "absolute",
     width: "50%",
     height: "100%",
@@ -186,6 +183,7 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
   },
   numbers: {
+    marginTop: 10,
     fontSize: 40,
     color: "white",
     lineHeight: 60,
@@ -206,15 +204,16 @@ const styles = StyleSheet.create({
     fontSize: 35,
     color: "#FFFD54",
   },
-  separator: {
-    marginVertical: 0.1,
-    height: 1,
-    width: "50%",
-  },
   headlines: {
     fontWeight: "bold",
     fontSize: 16,
     paddingHorizontal: 10,
     paddingVertical: 30,
+  },
+  separator: {
+    marginVertical: 0.1,
+    height: 1,
+    width: "60%",
+    backgroundColor: "white",
   },
 });
