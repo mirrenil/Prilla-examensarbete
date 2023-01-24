@@ -55,7 +55,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
 
   const handleTags = (tagList: Tag[]) => {
     setSelectedTags(tagList);
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
   };
 
   const pushReviewToProductsReviewArray = async (id: string) => {
@@ -107,7 +107,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
         createdAt: new Date(),
         tags: selectedTags,
         description: reviewText,
-        photo: firebaseImageURL,
+        photo: firebaseImageURL || null,
         productID: route.params.id,
         rating: rating,
         userID: myUser.id,
