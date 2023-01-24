@@ -1,23 +1,22 @@
 import * as ImagePicker from "expo-image-picker";
-import { Constants } from "expo-constants";
 import React, { useEffect, useState } from "react";
-import { Platform, Image } from "react-native";
+import { Platform, Image, Button, Alert } from "react-native";
 import { View, Text } from "./Themed";
 import { MaterialIcons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
-
+import { useIsFocused } from "@react-navigation/native";
 interface Props {
   handleUpload: (a: any) => void;
   setChosenImg?: () => void;
   changeProfilePicIsTrue?: boolean;
 }
 
-const ImageUpload = ({
+export const ImageUpload = ({
   handleUpload,
-  setChosenImg,
   changeProfilePicIsTrue,
 }: Props) => {
   const [image, setImage] = useState<any>(null);
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     PermissionImageUpload();
@@ -29,15 +28,31 @@ const ImageUpload = ({
         const { status } =
           await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (status !== "granted") {
-          alert("Permission denied");
+          alert("Åtkomst nekad");
         }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    try {
+      const { status } = await ImagePicker.requestCameraPermissionsAsync();
+      if (status !== "granted") {
+        alert("För att ta en bild behöver du ge åtkomst till din kamera");
       }
     } catch (err) {
       console.log(err);
     }
   };
 
-  const PickImage = async () => {
+  const takePicture = async () => {
+    const result = await ImagePicker.launchCameraAsync();
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+      handleUpload(result.assets[0].uri);
+    }
+  };
+
+  const pickImage = async () => {
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -50,16 +65,16 @@ const ImageUpload = ({
         handleUpload(result.assets[0].uri);
       }
     } catch (err) {
-      console.log(err);
+      console.log(err, "error");
     }
   };
 
   return (
     <View
       style={{
-        minHeight: changeProfilePicIsTrue ? 50 : 100,
         justifyContent: "center",
         alignItems: "center",
+        minHeight: changeProfilePicIsTrue ? 50 : 100,
       }}
     >
       {image ? (
@@ -72,7 +87,6 @@ const ImageUpload = ({
           >
             <MaterialIcons name="remove-circle" size={24} color="red" />
           </TouchableOpacity>
-
           <Image
             source={{ uri: image }}
             style={{
@@ -84,27 +98,47 @@ const ImageUpload = ({
           />
         </View>
       ) : (
-        <TouchableOpacity
-          onPress={PickImage}
-          style={{ alignItems: "center", margin: 10 }}
-        >
-          {changeProfilePicIsTrue ? (
-            <Text lightColor="#333">Ändra profilbild</Text>
-          ) : (
-            <>
-              <MaterialIcons
-                name="add-a-photo"
-                size={50}
-                color="white"
-                style={{ paddingBottom: 10 }}
-              />
-              <Text lightColor="#333">Lägg till foto</Text>
-            </>
-          )}
-        </TouchableOpacity>
+        <View style={{ flexDirection: "row" }}>
+          <TouchableOpacity
+            onPress={pickImage}
+            style={{ alignItems: "center", margin: 10 }}
+          >
+            {changeProfilePicIsTrue ? (
+              <>
+                <MaterialIcons
+                  name="add-photo-alternate"
+                  size={50}
+                  color="white"
+                  style={{ paddingBottom: 10 }}
+                />
+                <Text lightColor="#333">Ändra profilbild</Text>
+              </>
+            ) : (
+              <>
+                <MaterialIcons
+                  name="add-photo-alternate"
+                  size={50}
+                  color="white"
+                  style={{ paddingBottom: 10 }}
+                />
+                <Text lightColor="#333">Lägg till foto</Text>
+              </>
+            )}
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={takePicture}
+            style={{ alignItems: "center", margin: 10 }}
+          >
+            <MaterialIcons
+              name="add-a-photo"
+              size={50}
+              color="white"
+              style={{ paddingBottom: 10 }}
+            />
+            <Text lightColor="#333">Använd kamera</Text>
+          </TouchableOpacity>
+        </View>
       )}
     </View>
   );
 };
-
-export default ImageUpload;

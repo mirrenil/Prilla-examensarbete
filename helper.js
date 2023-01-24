@@ -9,7 +9,6 @@ import {
   addDoc,
   updateDoc,
   deleteDoc,
-  orderBy,
 } from "firebase/firestore";
 import { db } from "./firebase";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -141,6 +140,7 @@ export const addNewDoc = async (collectionName, newData) => {
         return docRef.id;
       }
     );
+    console.log(JSON.stringify(response), "response");
     return response;
   } catch (err) {
     console.log(err);

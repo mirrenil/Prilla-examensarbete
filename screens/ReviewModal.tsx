@@ -18,8 +18,7 @@ import {
 } from "../helper";
 import { EvilIcons } from "@expo/vector-icons";
 import { RateActive } from "../components/RateActive";
-import ImageUpload from "../components/ImageUpload";
-import { DarkTheme } from "@react-navigation/native";
+import { ImageUpload } from "../components/ImageUpload";
 import Tags from "../components/Tags";
 import Colors, { gradientDark, gradientLight } from "../constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
@@ -55,7 +54,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
 
   const handleTags = (tagList: Tag[]) => {
     setSelectedTags(tagList);
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
   };
 
   const pushReviewToProductsReviewArray = async (id: string) => {
@@ -107,7 +106,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
         createdAt: new Date(),
         tags: selectedTags,
         description: reviewText,
-        photo: firebaseImageURL,
+        photo: firebaseImageURL || null,
         productID: route.params.id,
         rating: rating,
         userID: myUser.id,

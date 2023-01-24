@@ -1,7 +1,7 @@
 export interface Review {
   createdAt: Date;
   description: string;
-  photo: string;
+  photo?: string;
   productID: string;
   rating: number;
   tags: Tag[];

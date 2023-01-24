@@ -67,35 +67,37 @@ export const ProductCard = ({ product }: Props) => {
   });
 
   return (
-    <View style={content.cardWrapper} key={product.id}>
-      <Image source={{ uri: product.photo }} style={card.image} />
-      <View style={{ flex: 3, backgroundColor: "transparent" }}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate("Product", { id: product.id })}
-        >
+    <TouchableOpacity
+      onPress={() => navigation.navigate("Product", { id: product.id })}
+    >
+      <View style={content.cardWrapper} key={product.id}>
+        <Image source={{ uri: product.photo }} style={card.image} />
+
+        <View style={{ flex: 3, backgroundColor: "transparent" }}>
           <Text style={[text.fat, margin.bottom]} lightColor="white">
             {product.name} {product.format}
           </Text>
-        </TouchableOpacity>
-        <Text style={margin.bottom} lightColor="white">
-          {product.description.slice(0, 130)}...
-        </Text>
-        <View
-          style={{
-            flexDirection: "row",
-            backgroundColor: "transparent",
-            padding: 10,
-            borderRadius: 6,
-            width: "80%",
-          }}
-        >
-          <RateInactive rating={product.rating ?? 0} />
-          <Text style={[margin.left, margin.top]} lightColor="white">
-            {product.rating} / 5
+
+          <Text style={margin.bottom} lightColor="white">
+            {product.description.slice(0, 130)}...
           </Text>
+          <View
+            style={{
+              flexDirection: "row",
+              backgroundColor: "transparent",
+              padding: 10,
+              borderRadius: 6,
+              width: "80%",
+            }}
+          >
+            <RateInactive rating={product.rating ?? 0} />
+            <Text style={[margin.left, margin.top]} lightColor="white">
+              {product.rating} / 5
+            </Text>
+          </View>
+          <Text lightColor="white">{product.reviews.length} ratings</Text>
         </View>
-        <Text lightColor="white">{product.reviews.length} ratings</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
