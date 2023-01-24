@@ -1,7 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet, useColorScheme } from "react-native";
 import { Text, View } from "../components/Themed";
-import { getAllDocsInCollection } from "../helper";
+import {
+  getAllDocsInCollection,
+  getDocsWithSpecificValue,
+  getOneDocById,
+} from "../helper";
 import { Review } from "../Interfaces";
 import Tabbar from "../components/Tabbar";
 import { RootStackScreenProps } from "../types";
@@ -9,88 +13,148 @@ import { ActivityCard } from "../components/ActivityCard";
 import { gradientDark, gradientLight } from "../constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
 import { useIsFocused } from "@react-navigation/native";
+import { useSelector } from "react-redux";
+import { currentReduxUser } from "../redux/signin";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function StartScreen({}: RootStackScreenProps<"Root">) {
-  const [reviews, setReviews] = useState<Review[]>([]);
+  const myUser = useSelector(currentReduxUser);
+  const [friendsReviews, setFriendsReviews] = useState<Review[]>([]);
+  const [latestReviews, setLatestReviews] = useState<Review[]>([]);
+  const myFollowingArray: string[] = [];
   const colorScheme: any = useColorScheme();
   let isLight = colorScheme == "light" ? true : false;
   const isFocused = useIsFocused();
 
   useEffect(() => {
     if (isFocused) {
-      getReviews();
+      getMyFollowing();
+      getLatestActivity();
     }
   }, [isFocused]);
 
-  const getReviews = async () => {
-    let newData: Review[] = [];
+  const getMyFollowing = async () => {
     try {
-      let data = await getAllDocsInCollection("recensioner");
-      if (data) {
-        let sorted = sortArray(data);
-        newData = sorted;
-      }
-      setReviews(newData);
+      const user = await getOneDocById("users", myUser.id);
+      let myFollowing = user?.following;
+      myFollowingArray.push(...myFollowing);
+      getReviews();
+    } catch (err) {
+      console.log(err);
+    }
+    return myFollowingArray;
+  };
+
+  const getReviews = async () => {
+    try {
+      let newData: Review[] = [];
+      myFollowingArray.map((id) => {
+        getDocsWithSpecificValue("recensioner", "userID", id)
+          .then((data) => {
+            if (data) {
+              newData.push(...data);
+              let sorted = sortArray(newData);
+              setFriendsReviews(sorted);
+            }
+          })
+          .catch((err) => console.log(err));
+      });
     } catch (err) {
       console.log(err);
     }
   };
 
-  const sortArray = (array: Review[]) => {
+  const sortArray = (array: any) => {
     let sorted = array?.sort((a: any, b: any) => {
       return b.createdAt.toDate() - a.createdAt.toDate();
     });
     return sorted;
   };
 
-  return (
-    <LinearGradient
-      colors={
-        isLight
-          ? [gradientLight.from, gradientLight.to]
-          : [gradientDark.from, gradientDark.to]
-      }
-    >
-      <ScrollView>
-        <View style={styles.container}>
-          <Image
-            style={styles.heroImg}
-            source={require("../assets/images/hero.png")}
-          />
-          <View style={styles.heroTextWrapper}>
-            <Text style={styles.heroText}>äventyr väntar</Text>
-            <Text style={styles.numbers}>
-              20
-              <Text style={styles.specialFont} lightColor="#fff">
-                23
+  const getLatestActivity = async () => {
+    try {
+      let data = await getAllDocsInCollection("recensioner");
+      data = data?.filter((d) => !ifAlreadyInList(d));
+      data = sortArray(data);
+      data = data?.splice(0, 5);
+      setLatestReviews(data as Review[]);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const ifAlreadyInList = (d) => {
+    return friendsReviews.some((r) => r.userID == d.userID);
+  };
+
+  if (friendsReviews) {
+    return (
+      <LinearGradient
+        colors={
+          isLight
+            ? [gradientLight.from, gradientLight.to]
+            : [gradientDark.from, gradientDark.to]
+        }
+      >
+        <ScrollView>
+          <View style={styles.container}>
+            <Image
+              style={styles.heroImg}
+              source={require("../assets/images/hero.png")}
+            />
+            <View style={styles.heroTextWrapper}>
+              <Text style={styles.heroText}>äventyr väntar</Text>
+              <Text style={styles.numbers}>
+                20
+                <Text style={styles.specialFont} lightColor="#fff">
+                  23
+                </Text>
               </Text>
-            </Text>
-            <View style={styles.separator} lightColor="#fff" darkColor="#fff" />
-            <View style={styles.logosWrapper}>
-              <Text style={styles.prilla}>Prilla</Text>
-              <Image
-                style={styles.logo}
-                source={require("../assets/images/loop-logo.png")}
+              <View
+                style={styles.separator}
+                lightColor="#fff"
+                darkColor="#fff"
               />
+              <View style={styles.logosWrapper}>
+                <Text style={styles.prilla}>Prilla</Text>
+                <Image
+                  style={styles.logo}
+                  source={require("../assets/images/loop-logo.png")}
+                />
+              </View>
             </View>
           </View>
-        </View>
-        <Tabbar />
-        <Text style={{ fontWeight: "bold", fontSize: 16, padding: 10 }}>
-          Ny aktivitet
-        </Text>
-        {reviews.map((review) => {
-          return (
-            <ActivityCard
-              key={review.id}
-              review={review}
-              updateReviews={getReviews}
-            />
-          );
-        })}
-      </ScrollView>
-    </LinearGradient>
-  );
+          <Tabbar />
+          <Text style={{ fontWeight: "bold", fontSize: 16, padding: 10 }}>
+            Vänners aktivitet
+          </Text>
+          {friendsReviews.map((review) => {
+            return (
+              <ActivityCard
+                key={review.id}
+                review={review}
+                updateReviews={getReviews}
+              />
+            );
+          })}
+          <Text style={{ fontWeight: "bold", fontSize: 16, padding: 10 }}>
+            Senast aktivitet
+          </Text>
+          {latestReviews.map((review) => {
+            return (
+              <ActivityCard
+                key={review.id}
+                review={review}
+                updateReviews={getReviews}
+              />
+            );
+          })}
+        </ScrollView>
+      </LinearGradient>
+    );
+  } else {
+    return <LoadingSpinner />;
+  }
 }
 
 const styles = StyleSheet.create({
