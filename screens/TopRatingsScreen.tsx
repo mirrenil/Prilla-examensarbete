@@ -33,7 +33,7 @@ const TopRatingsScreen = ({
 
   const getProductData = async () => {
     try {
-      let data = await getAllDocsInCollection("produkter");
+      let data = await getAllDocsInCollection("products");
       sortProducts(data);
     } catch (err) {
       console.log(err);

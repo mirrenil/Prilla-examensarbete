@@ -216,7 +216,7 @@ export default function ProfileScreen({
 
   // get the products with same ID from the favorites array
   const compareLikedIds = async () => {
-    const products = await getAllDocsInCollection("produkter");
+    const products = await getAllDocsInCollection("products");
     let likedProducts: any = [];
     if (!products) return;
     if (products) {

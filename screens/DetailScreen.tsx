@@ -52,7 +52,7 @@ function ProductDetailScreen({
 
   const getProductData = async () => {
     try {
-      let data = await getOneDocById("produkter", route.params.id);
+      let data = await getOneDocById("products", route.params.id);
       if (data) {
         setProduct(data as Product);
       }
@@ -103,6 +103,9 @@ function ProductDetailScreen({
   };
 
   const isAlreadyLiked = () => {
+    if (!usersLikedArray) {
+      return;
+    }
     let selected = usersLikedArray.some((item) => {
       return item == route.params.id;
     });
@@ -312,6 +315,7 @@ function ProductDetailScreen({
       position: "relative",
       height: 200,
       width: "100%",
+      resizeMode: "cover",
     },
     waves: {
       position: "absolute",
@@ -464,6 +468,7 @@ function ProductDetailScreen({
           <ImageBackground
             style={styles.background}
             source={require("../assets/images/detail_Bg.png")}
+            // source={{ uri: "https://www.snusexpress.se/media/magefan_blog/SH-LYFT2_72.png"}}
           >
             {isLight ? (
               <Image

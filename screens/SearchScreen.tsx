@@ -48,7 +48,7 @@ export default function SearchScreen({
   }, [searchInput, isOnProductSearch]);
 
   const getAllProducts = async () => {
-    let data = await getAllDocsInCollection("produkter");
+    let data = await getAllDocsInCollection("products");
     if (data) {
       setAllProducts(data);
       setFilteredProducts(data);

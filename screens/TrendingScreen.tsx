@@ -26,7 +26,7 @@ const TrendingScreen = ({ navigation }: RootStackScreenProps<"Trending">) => {
 
   const getProductData = async () => {
     try {
-      let data = await getAllDocsInCollection("produkter");
+      let data = await getAllDocsInCollection("products");
       filterByRating(data);
     } catch (err) {
       console.log(err);

@@ -49,7 +49,7 @@ export default function StartScreen({}: RootStackScreenProps<"Root">) {
     try {
       let newData: Review[] = [];
       myFollowingArray.map((id) => {
-        getDocsWithSpecificValue("recensioner", "userID", id)
+        getDocsWithSpecificValue("reviews", "userID", id)
           .then((data) => {
             if (data) {
               newData.push(...data);
@@ -73,7 +73,7 @@ export default function StartScreen({}: RootStackScreenProps<"Root">) {
 
   const getLatestActivity = async () => {
     try {
-      let data = await getAllDocsInCollection("recensioner");
+      let data = await getAllDocsInCollection("reviews");
       data = data?.filter((d) => !ifAlreadyInList(d));
       data = sortArray(data);
       data = data?.splice(0, 5);

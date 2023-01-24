@@ -54,7 +54,7 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
 
   const getReview = async () => {
     try {
-      let data = await getOneDocById("recensioner", route.params.id);
+      let data = await getOneDocById("reviews", route.params.id);
       setReview(data as Review);
     } catch (err) {
       console.log(err);
@@ -115,7 +115,7 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
       newObj = { comments: [newData] };
     }
     try {
-      await updateSingleProperty("recensioner", route.params.id, newObj);
+      await updateSingleProperty("reviews", route.params.id, newObj);
     } catch (err) {
       console.log(err);
     }

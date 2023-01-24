@@ -89,7 +89,7 @@ export const ActivityCard = ({ review, updateReviews }: Props) => {
       newData = { likes: [myUser.id] };
     }
     try {
-      await updateSingleProperty("recensioner", review.id, newData);
+      await updateSingleProperty("reviews", review.id, newData);
     } catch (err) {
       console.log(err);
     }
@@ -103,7 +103,7 @@ export const ActivityCard = ({ review, updateReviews }: Props) => {
       let likesArray = review.likes;
       let filteredList = likesArray.filter((id) => id !== myUser.id);
       try {
-        await updateSingleProperty("recensioner", review.id, {
+        await updateSingleProperty("reviews", review.id, {
           likes: filteredList,
         });
       } catch (err) {
@@ -133,7 +133,7 @@ export const ActivityCard = ({ review, updateReviews }: Props) => {
         {
           text: "Ja",
           onPress: () => {
-            deleteDocById("recensioner", id).then(() => updateReviews());
+            deleteDocById("reviews", id).then(() => updateReviews());
           },
         },
       ]
