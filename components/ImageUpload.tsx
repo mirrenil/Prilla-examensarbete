@@ -16,7 +16,6 @@ export const ImageUpload = ({
   changeProfilePicIsTrue,
 }: Props) => {
   const [image, setImage] = useState<any>(null);
-  const [useCamera, setUseCamera] = useState<boolean>(false);
   const isFocused = useIsFocused();
 
   useEffect(() => {
@@ -49,7 +48,6 @@ export const ImageUpload = ({
   };
 
   const takePicture = async () => {
-    setUseCamera(true);
     const result = await ImagePicker.launchCameraAsync();
     if (!result.canceled) {
       setImage(result.assets[0].uri);
@@ -109,7 +107,15 @@ export const ImageUpload = ({
             style={{ alignItems: "center", margin: 10 }}
           >
             {changeProfilePicIsTrue ? (
-              <Text lightColor="#333">Ändra profilbild</Text>
+              <>
+                <MaterialIcons
+                  name="add-photo-alternate"
+                  size={50}
+                  color="white"
+                  style={{ paddingBottom: 10 }}
+                />
+                <Text lightColor="#333">Ändra profilbild</Text>
+              </>
             ) : (
               <>
                 <MaterialIcons
