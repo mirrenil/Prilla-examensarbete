@@ -54,7 +54,8 @@
     "react-redux-firebase": "^3.11.0",
     "redux-thunk": "^2.4.2",
     "yarn": "^1.22.19",
-    "yup": "^0.32.11"
+    "yup": "^0.32.11",
+    "expo-camera": "~13.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
