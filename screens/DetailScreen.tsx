@@ -232,11 +232,20 @@ function ProductDetailScreen({
                   style={styles.reviewTop}
                 >
                   <TouchableOpacity
-                    style={{ marginTop: 10 }}
+                    style={{ marginTop: 10, flexDirection: "row" }}
                     onPress={() => {
                       navigation.navigate("Profile", { id: rev.userID });
                     }}
                   >
+                    <Image
+                      source={{ uri: rev.photo }}
+                      style={{
+                        height: 40,
+                        width: 40,
+                        borderRadius: 100,
+                        marginRight: 10,
+                      }}
+                    />
                     <Text
                       lightColor={Colors[colorScheme].text}
                       style={[styles.fatText, styles.capitalize]}
@@ -244,19 +253,28 @@ function ProductDetailScreen({
                       {rev.author}
                     </Text>
                   </TouchableOpacity>
-                  <RateInactive
-                    rating={rev.rating}
-                    small={{ size: 15, container: 90, single: 17 }}
-                  />
-                  <Text
-                    lightColor={Colors[colorScheme].text}
-                    style={{ marginTop: 10, marginLeft: 30 }}
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
                   >
-                    {rev.rating} / 5
-                  </Text>
+                    <RateInactive
+                      rating={rev.rating}
+                      small={{ size: 15, container: 90, single: 17 }}
+                    />
+                    <Text
+                      lightColor={Colors[colorScheme].text}
+                      style={{
+                        marginLeft: 10,
+                      }}
+                    >
+                      {rev.rating} / 5
+                    </Text>
+                  </View>
                 </View>
                 <Text
-                  style={{ lineHeight: 20 }}
+                  style={{ lineHeight: 20, marginVertical: 10 }}
                   lightColor={Colors[colorScheme].text}
                 >
                   {rev.description}
@@ -285,6 +303,7 @@ function ProductDetailScreen({
   const styles = StyleSheet.create({
     fatText: {
       fontWeight: "bold",
+      alignSelf: "center",
     },
     capitalize: {
       textTransform: "capitalize",
@@ -374,7 +393,7 @@ function ProductDetailScreen({
       borderBottomWidth: 0,
       justifyContent: "center",
       alignItems: "center",
-      backgroundColor: Colors[colorScheme].grey.light,
+      backgroundColor: Colors[colorScheme].section,
     },
     activeTab: {
       backgroundColor: Colors[colorScheme].background,
@@ -387,6 +406,7 @@ function ProductDetailScreen({
       borderLeftWidth: 1,
       borderRightWidth: 1,
       padding: 15,
+      maxHeight: 300,
     },
     folderFacts: {
       flexDirection: "row",
@@ -395,8 +415,9 @@ function ProductDetailScreen({
     },
     reviewTop: {
       flexDirection: "row",
-      width: "50%",
+      width: "100%",
       justifyContent: "space-between",
+      alignItems: "center",
     },
     reviewWrapper: {
       width: "100%",
@@ -407,6 +428,7 @@ function ProductDetailScreen({
     },
     tagsContainer: {
       flexDirection: "row",
+      flexWrap: "wrap",
     },
     tagName: {
       textAlign: "center",
@@ -414,7 +436,7 @@ function ProductDetailScreen({
       fontSize: 12,
     },
     separator: {
-      marginVertical: 15,
+      marginVertical: 10,
       height: 1,
       width: "100%",
     },
@@ -422,11 +444,10 @@ function ProductDetailScreen({
       borderWidth: 1,
       borderColor: Colors[colorScheme].grey.light,
       width: 70,
-      margin: 5,
+      marginRight: 5,
       height: 30,
       padding: 5,
       borderRadius: 6,
-      marginTop: 15,
     },
   });
 
@@ -561,7 +582,9 @@ function ProductDetailScreen({
                   <Text lightColor={Colors[colorScheme].text}>Recensioner</Text>
                 </TouchableOpacity>
               </View>
-              <View style={styles.folderContent}>{renderFolderContent()}</View>
+              <ScrollView style={styles.folderContent}>
+                {renderFolderContent()}
+              </ScrollView>
             </View>
           </View>
         </ScrollView>

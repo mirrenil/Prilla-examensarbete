@@ -239,11 +239,7 @@ function AuthStackNavigator() {
           headerShown: false,
         }}
       />
-      <AuthStack.Screen
-        name="Signup"
-        component={SignupScreen}
-        options={{ headerShown: false }}
-      />
+      <AuthStack.Screen name="Signup" component={SignupScreen} />
 
       <AuthStack.Screen
         name="ForgotPassword"

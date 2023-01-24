@@ -574,7 +574,7 @@ export default function ProfileScreen({
             ) : (
               <View style={styles.box}>
                 <Text lightColor="#333" darkColor="#fff" style={styles.text}>
-                  {user.displayName}'s favoriter
+                  {user.displayName}s favoriter
                   <AntDesign name="right" size={16} color="white" />
                 </Text>
               </View>
@@ -611,22 +611,22 @@ export default function ProfileScreen({
               ) : (
                 <View style={styles.box}>
                   <Text lightColor="#333" darkColor="#fff" style={styles.text}>
-                    {user.displayName}'s aktiviteter
+                    {user.displayName}s aktiviteter
                     <AntDesign name="right" size={16} color="white" />
                   </Text>
                 </View>
               )}
-              {reviews.map((review: Review) => {
-                return (
-                  <ActivityCard
-                    key={review.id}
-                    review={review}
-                    updateReviews={getReviews}
-                  />
-                );
-              })}
             </View>
           </View>
+          {reviews.map((review: Review) => {
+            return (
+              <ActivityCard
+                key={review.id}
+                review={review}
+                updateReviews={getReviews}
+              />
+            );
+          })}
           <View>
             <Modal
               animationType="slide"
@@ -790,12 +790,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     marginBottom: 10,
     marginLeft: 10,
-  },
-  activities: {
-    flexDirection: "column",
-    justifyContent: "center",
-    alignContent: "center",
-    margin: 10,
   },
   row: {
     flexDirection: "row",

@@ -171,7 +171,7 @@ export const ActivityCard = ({ review, updateReviews }: Props) => {
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
-      padding: 10,
+      padding: 30,
     },
     comment: {
       padding: 10,
