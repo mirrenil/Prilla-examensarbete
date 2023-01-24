@@ -10,6 +10,7 @@ This project is a web application for a fictional company called Prilla. The com
 
 You need to have Expo go installed on your phone to run the application. You can download it from the App Store or Google Play Store.
 If you have xcode installed on your mac you can also run the application throug the simulator in xcode.
+If you run the application through the simulator you can't upload images or use the camera.
 Download the project and run
 
 ```
