@@ -8,6 +8,8 @@ This project is a web application for a fictional company called Prilla. The com
 
 ## 📦 Installation
 
+[![runs with Expo Go](https://img.shields.io/badge/Runs%20with%20Expo%20Go-000.svg?style=flat-square&logo=EXPO&labelColor=f3f3f3&logoColor=000)](https://expo.dev/client)
+
 You need to have Expo Go installed on your phone to run the application. You can download it from the App Store or Google Play Store.
 If you have Xcode installed on your mac you can also run the application through the simulator in Xcode.
 If you run the application through the simulator you can't upload images or use the camera.
