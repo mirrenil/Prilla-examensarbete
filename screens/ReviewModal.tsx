@@ -18,8 +18,7 @@ import {
 } from "../helper";
 import { EvilIcons } from "@expo/vector-icons";
 import { RateActive } from "../components/RateActive";
-import ImageUpload from "../components/ImageUpload";
-import { DarkTheme } from "@react-navigation/native";
+import { ImageUpload } from "../components/ImageUpload";
 import Tags from "../components/Tags";
 import Colors, { gradientDark, gradientLight } from "../constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
