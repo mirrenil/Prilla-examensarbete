@@ -19,8 +19,8 @@ export const ImageUpload = ({
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    isFocused ? PermissionImageUpload() : null;
-  }, [isFocused]);
+    PermissionImageUpload();
+  }, []);
 
   const PermissionImageUpload = async () => {
     try {
@@ -30,7 +30,6 @@ export const ImageUpload = ({
         if (status !== "granted") {
           alert("Åtkomst nekad");
         }
-        pickImage();
       }
     } catch (err) {
       console.log(err);
@@ -40,7 +39,6 @@ export const ImageUpload = ({
       if (status !== "granted") {
         alert("För att ta en bild behöver du ge åtkomst till din kamera");
       }
-      takePicture();
     } catch (err) {
       console.log(err);
     }
