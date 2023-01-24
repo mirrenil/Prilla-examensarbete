@@ -40,7 +40,7 @@ const ImageUpload = ({
   const PickImage = async () => {
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         aspect: [4, 3],
         quality: 1,
@@ -89,7 +89,7 @@ const ImageUpload = ({
           style={{ alignItems: "center", margin: 10 }}
         >
           {changeProfilePicIsTrue ? (
-            <Text>Ändra profilbild</Text>
+            <Text lightColor="#333">Ändra profilbild</Text>
           ) : (
             <>
               <MaterialIcons
@@ -98,7 +98,7 @@ const ImageUpload = ({
                 color="white"
                 style={{ paddingBottom: 10 }}
               />
-              <Text>Lägg till foto</Text>
+              <Text lightColor="#333">Lägg till foto</Text>
             </>
           )}
         </TouchableOpacity>

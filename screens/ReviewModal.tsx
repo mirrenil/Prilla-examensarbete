@@ -36,6 +36,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
   const colorScheme: any = useColorScheme();
   let isLight = colorScheme == "light" ? true : false;
   const myUser = useSelector(currentReduxUser);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     getProductData();
@@ -98,7 +99,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
 
   const handleSubmit = async () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-
+    setIsLoading(true);
     try {
       let firebaseImageURL = await uploadImageAndGetURL(myUser.id, image);
       const rating = convertRating();
@@ -117,6 +118,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
       }
       alert("Recension skickad!");
       navigation.goBack();
+      setIsLoading(false);
     } catch (err) {
       console.log(err);
     }
@@ -137,6 +139,11 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
       borderBottomWidth: 1,
       justifyContent: "space-evenly",
       padding: 10,
+    },
+    sectionNoPadding: {
+      borderBottomColor: Colors[colorScheme].grey.light,
+      borderBottomWidth: 1,
+      justifyContent: "space-evenly",
     },
     container: {},
     image: {
@@ -184,7 +191,6 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
       alignItems: "center",
     },
     ratingBackground: {
-      backgroundColor: isLight ? Colors[colorScheme].primary.normal : null,
       borderRadius: 6,
       padding: 10,
     },
@@ -203,7 +209,9 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
       alignItems: "center",
     },
     popUp: {
-      backgroundColor: Colors[colorScheme].primary.dark,
+      backgroundColor: isLight
+        ? Colors[colorScheme].modal
+        : Colors[colorScheme].modal,
       width: "80%",
       height: 250,
       justifyContent: "space-around",
@@ -227,8 +235,6 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
       justifyContent: "center",
       textAlign: "center",
       backgroundColor: "transparent",
-      borderColor: "#783bc9",
-      borderWidth: 0.2,
     },
     input: {
       width: "70%",
@@ -325,7 +331,11 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
               style={styles.reviewText}
               onPress={() => setPopUpOpen(true)}
             >
-              <EvilIcons name="pencil" size={24} color="white" />
+              {isLight ? (
+                <EvilIcons name="pencil" size={24} color="black" />
+              ) : (
+                <EvilIcons name="pencil" size={24} color="white" />
+              )}
               {reviewText ? (
                 <Text>{reviewText}</Text>
               ) : (
@@ -357,6 +367,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
             <TouchableOpacity
               style={styles.submitButton}
               onPress={handleSubmit}
+              disabled={isLoading}
             >
               <Text style={[{ color: "black" }, styles.fatText]}>
                 Publicera

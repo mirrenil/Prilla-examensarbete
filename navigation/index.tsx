@@ -310,7 +310,7 @@ function BottomTabNavigator() {
         headerTitleStyle: {
           color: Colors[colorScheme].text,
         },
-        tabBarActiveTintColor: Colors[colorScheme].tint,
+        tabBarActiveTintColor: Colors[colorScheme].tabIconSelected,
         tabBarInactiveTintColor: Colors[colorScheme].tabIconDefault,
         tabBarStyle: {
           backgroundColor: Colors[colorScheme].menu,
