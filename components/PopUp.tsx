@@ -1,9 +1,8 @@
 import { AntDesign } from "@expo/vector-icons";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { TouchableOpacity, StyleSheet, useColorScheme } from "react-native";
-import { Colors } from "react-native/Libraries/NewAppScreen";
-import { View, Text, TextInput } from "../components/Themed";
-import ImageUpload from "./ImageUpload";
+import { View, Text } from "../components/Themed";
+import { ImageUpload } from "./ImageUpload";
 
 interface Props {
   setProfilePic: (a: any) => void;
