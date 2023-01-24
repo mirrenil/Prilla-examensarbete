@@ -261,6 +261,8 @@ export default function ProfileScreen({
     container: {
       alignItems: "center",
       justifyContent: "center",
+      padding: 0,
+      position: "relative",
     },
 
     followingButton: {
@@ -311,7 +313,6 @@ export default function ProfileScreen({
       flexDirection: "row",
       justifyContent: "flex-start",
       alignContent: "center",
-      marginLeft: 10,
     },
     smallText: {
       fontSize: 9,
@@ -325,9 +326,14 @@ export default function ProfileScreen({
       flexDirection: "column",
       justifyContent: "center",
       alignContent: "center",
-      margin: 10,
+      marginTop: 30,
+      top: 10,
+    },
+    activityCard: {
+      top: 50,
     },
     favorites: {
+      top: 30,
       marginLeft: 20,
     },
     row: {
@@ -345,12 +351,14 @@ export default function ProfileScreen({
       flexDirection: "column",
       alignItems: "center",
       marginBottom: 10,
+      top: 50,
     },
     right: {
       flexDirection: "column",
       alignItems: "center",
     },
     topContainer: {
+      top: 70,
       width: 550,
       flexDirection: "row",
       justifyContent: "space-evenly",
@@ -362,7 +370,8 @@ export default function ProfileScreen({
       width: "100%",
     },
     top: {
-      marginLeft: 340,
+      top: 50,
+      marginLeft: 360,
       marginBottom: 0,
     },
     modalView: {
@@ -373,7 +382,6 @@ export default function ProfileScreen({
     },
     modalText: {
       fontSize: 15,
-
       backgroundColor: "transparent",
     },
     modalTextHeader: {
@@ -563,7 +571,7 @@ export default function ProfileScreen({
             ) : (
               <View style={styles.box}>
                 <Text lightColor="#333" darkColor="#fff" style={styles.text}>
-                  {user.displayName}s favoriter
+                  {user.displayName}'s favoriter
                   <AntDesign name="right" size={16} color="white" />
                 </Text>
               </View>
@@ -607,7 +615,7 @@ export default function ProfileScreen({
               ) : (
                 <View style={styles.box}>
                   <Text lightColor="#333" darkColor="#fff" style={styles.text}>
-                    {user.displayName}s aktiviteter
+                    {user.displayName}'s aktiviteter
                     <AntDesign name="right" size={16} color="white" />
                   </Text>
                 </View>
@@ -616,11 +624,13 @@ export default function ProfileScreen({
           </View>
           {reviews.map((review: Review) => {
             return (
-              <ActivityCard
-                key={review.id}
-                review={review}
-                updateReviews={getReviews}
-              />
+              <View style={styles.activityCard}>
+                <ActivityCard
+                  key={review.id}
+                  review={review}
+                  updateReviews={getReviews}
+                />
+              </View>
             );
           })}
           <View>
@@ -642,12 +652,21 @@ export default function ProfileScreen({
                     >
                       Inställningar
                     </Text>
-                    <Entypo
-                      name="cross"
-                      size={24}
-                      color="black"
-                      onPress={() => setModalVisible(!modalVisible)}
-                    />
+                    {isLight ? (
+                      <Entypo
+                        name="cross"
+                        size={24}
+                        color="black"
+                        onPress={() => setModalVisible(!modalVisible)}
+                      />
+                    ) : (
+                      <Entypo
+                        name="cross"
+                        size={24}
+                        color="white"
+                        onPress={() => setModalVisible(!modalVisible)}
+                      />
+                    )}
                   </View>
                   <View style={styles.column}>
                     <TouchableOpacity style={styles.borderButton}>
