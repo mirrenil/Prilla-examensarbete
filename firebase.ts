@@ -9,8 +9,7 @@ const firebaseConfig = {
   // storageBucket: "prilla-c8eca.appspot.com",
   // messagingSenderId: "267350792334",
   // appId: "1:267350792334:web:614ebc1c0a786003dc51df",
-
-  //BACKUP
+  // backup below
   apiKey: "AIzaSyABzLETtOOPLJVOAwyqGJCDeYSyGAQPjLc",
   authDomain: "prilla-backup.firebaseapp.com",
   projectId: "prilla-backup",

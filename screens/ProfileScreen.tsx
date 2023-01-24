@@ -434,21 +434,19 @@ export default function ProfileScreen({
               />
             </View>
           </View>
-          {myProfile ? (
-            <View style={{ marginLeft: 20, marginTop: 10 }}>
+          <View style={styles.activities}>
+            {myProfile ? (
               <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
                 Mina aktiviteter
                 <AntDesign name="right" size={16} color="white" />
               </Text>
-            </View>
-          ) : (
-            <View style={{ marginLeft: 20, marginTop: 10 }}>
+            ) : (
               <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
                 {user.displayName}'s aktiviteter
                 <AntDesign name="right" size={16} color="white" />
               </Text>
-            </View>
-          )}
+            )}
+          </View>
           <View>
             {reviews.map((review: Review) => {
               return (
