@@ -37,7 +37,6 @@ export const ImageUpload = ({
     }
     try {
       const { status } = await ImagePicker.requestCameraPermissionsAsync();
-      console.log("status camera", status);
       if (status !== "granted") {
         alert("För att ta en bild behöver du ge åtkomst till din kamera");
       }
