@@ -1,4 +1,4 @@
-import { AntDesign, Entypo, Feather, MaterialIcons } from "@expo/vector-icons";
+import { AntDesign, Entypo, Feather } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
@@ -30,7 +30,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth } from "../firebase";
-import Colors, { gradientLight, gradientDark } from "../constants/Colors";
+import { gradientLight, gradientDark } from "../constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
 import { PopUp } from "../components/PopUp";
 import { useIsFocused } from "@react-navigation/native";
@@ -55,7 +55,7 @@ export default function ProfileScreen({
   const [myFollows, setMyFollows] = useState<string[]>([]);
   const [profilePic, setProfilePic] = useState<string>();
   let isMe = route.params.id === myUser.id;
-  const colorScheme = useColorScheme();
+  const colorScheme: any = useColorScheme();
   let isLight = colorScheme == "light" ? true : false;
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
   const isFocused = useIsFocused();
@@ -64,7 +64,6 @@ export default function ProfileScreen({
     if (isFocused) {
       setCurrentUser();
       getMyFollowing();
-      getReviews();
       getReviews();
       getLiked();
       compareLikedIds();
@@ -265,6 +264,173 @@ export default function ProfileScreen({
     }
   };
 
+  const styles = StyleSheet.create({
+    screen: {
+      height: "100%",
+    },
+    container: {
+      alignItems: "center",
+      justifyContent: "center",
+    },
+
+    followingButton: {
+      borderColor: "#575060",
+      borderWidth: 0.2,
+      backgroundColor: "transparent",
+      padding: 10,
+      borderRadius: 6,
+      width: 100,
+      height: 40,
+      marginTop: 10,
+      marginBottom: 10,
+    },
+    buttonText: {
+      textAlign: "center",
+      fontWeight: "bold",
+      fontSize: 17,
+    },
+    btnText: {
+      textAlign: "center",
+    },
+    borderButton: {
+      borderRadius: 6,
+      width: 300,
+      height: 30,
+      marginTop: 10,
+      marginBottom: 10,
+    },
+    borderButtonFollow: {
+      backgroundColor: "#FFFD54",
+      borderWidth: 0.5,
+      borderColor: "#783BC9",
+      padding: 10,
+      borderRadius: 6,
+      width: 100,
+      height: 40,
+      marginTop: 10,
+      marginBottom: 10,
+      textAlign: "center",
+    },
+    borderButtonText: {
+      textAlign: "center",
+      fontWeight: "bold",
+      fontSize: 17,
+    },
+    box: {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "flex-start",
+      alignContent: "center",
+      marginLeft: 10,
+    },
+    smallText: {
+      fontSize: 9,
+      margin: 10,
+    },
+    text: {
+      fontSize: 17,
+      marginBottom: 10,
+    },
+    activities: {
+      flexDirection: "column",
+      justifyContent: "center",
+      alignContent: "center",
+      margin: 10,
+    },
+    favorites: {
+      marginLeft: 20,
+    },
+    row: {
+      flexDirection: "row",
+      justifyContent: "space-evenly",
+      alignItems: "center",
+      height: 80,
+      width: "89%",
+    },
+    left: {
+      flexDirection: "column",
+      alignItems: "center",
+    },
+    center: {
+      flexDirection: "column",
+      alignItems: "center",
+      marginBottom: 10,
+    },
+    right: {
+      flexDirection: "column",
+      alignItems: "center",
+    },
+    topContainer: {
+      width: 550,
+      flexDirection: "row",
+      justifyContent: "space-evenly",
+      alignItems: "center",
+    },
+    column: {
+      flexDirection: "column",
+      justifyContent: "flex-start",
+      width: "100%",
+    },
+    top: {
+      marginLeft: 340,
+      marginBottom: 0,
+    },
+    modalView: {
+      backgroundColor: isLight ? "#fff" : "#2E233C",
+      maxHeight: 400,
+      borderRadius: 6,
+      padding: 35,
+    },
+    modalText: {
+      fontSize: 15,
+
+      backgroundColor: "transparent",
+    },
+    modalTextHeader: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      fontSize: 20,
+      marginBottom: 10,
+      fontWeight: "bold",
+    },
+    image: {
+      width: 100,
+      height: 100,
+      borderRadius: 50,
+      marginBottom: 20,
+    },
+    textMedium: {
+      fontSize: 20,
+      padding: 10,
+    },
+    favoritesImage: {
+      width: 70,
+      height: 70,
+      borderRadius: 50,
+      marginRight: 10,
+    },
+    favoritesScroll: {
+      marginLeft: 10,
+      width: "90%",
+      flexDirection: "row",
+    },
+    layover: {
+      height: "100%",
+      width: "100%",
+      position: "absolute",
+      top: 0,
+      right: 0,
+      backgroundColor: "rgba(0,0,0,0.5)",
+      zIndex: 100,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    loading: {
+      justifyContent: "center",
+      alignItems: "center",
+    },
+  });
+
   if (user) {
     return (
       <LinearGradient
@@ -306,7 +472,7 @@ export default function ProfileScreen({
             ) : null}
             <View style={styles.topContainer}>
               <View style={styles.left}>
-                <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
+                <Text darkColor="#fff" lightColor="#333" style={styles.text}>
                   Recensioner
                 </Text>
                 <Text
@@ -350,13 +516,19 @@ export default function ProfileScreen({
                       <Entypo name="camera" size={15} color="#333333" />
                     </View>
                   </TouchableOpacity>
+
+                  <Text darkColor="#fff" lightColor="#333" style={styles.text}>
+                    {myUser.displayName}
+                  </Text>
                 </>
               ) : (
-                <Image source={{ uri: profilePic }} style={styles.image} />
+                <>
+                  <Image source={{ uri: profilePic }} style={styles.image} />
+                  <Text darkColor="#fff" lightColor="#333" style={styles.text}>
+                    {user.displayName}
+                  </Text>
+                </>
               )}
-              <Text darkColor="#fff" lightColor="#fff" style={styles.text}>
-                {user.displayName}
-              </Text>
             </View>
             {!myProfile && (
               <View>
@@ -391,29 +563,24 @@ export default function ProfileScreen({
             )}
           </View>
 
-          <View
-            style={styles.separator}
-            lightColor="#eee"
-            darkColor="rgba(255,255,255,0.1)"
-          />
           <View style={styles.favorites}>
             {myProfile ? (
               <View style={styles.box}>
-                <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
+                <Text lightColor="#333" darkColor="#fff" style={styles.text}>
                   Mina favoriter
                   <AntDesign name="right" size={16} color="white" />
                 </Text>
               </View>
             ) : (
               <View style={styles.box}>
-                <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
+                <Text lightColor="#333" darkColor="#fff" style={styles.text}>
                   {user.displayName}'s favoriter
                   <AntDesign name="right" size={16} color="white" />
                 </Text>
               </View>
             )}
             <View style={{ flexDirection: "row" }}>
-              <ScrollView horizontal style={styles.favortiesScroll}>
+              <ScrollView horizontal style={styles.favoritesScroll}>
                 <View style={styles.row}>
                   {urls.map((url, index) => (
                     <Image
@@ -433,32 +600,32 @@ export default function ProfileScreen({
                 style={{ marginTop: 20 }}
               />
             </View>
-          </View>
-          <View style={styles.activities}>
-            {myProfile ? (
-              <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
-                Mina aktiviteter
-                <AntDesign name="right" size={16} color="white" />
-              </Text>
-            ) : (
-              <Text lightColor="#fff" darkColor="#fff" style={styles.text}>
-                {user.displayName}'s aktiviteter
-                <AntDesign name="right" size={16} color="white" />
-              </Text>
-            )}
-          </View>
-          <View>
-            {reviews.map((review: Review) => {
-              return (
-                <View style={{ marginLeft: 20, marginTop: 10 }}>
+            <View style={styles.activities}>
+              {myProfile ? (
+                <View style={styles.box}>
+                  <Text lightColor="#333" darkColor="#fff" style={styles.text}>
+                    Mina aktiviteter
+                    <AntDesign name="right" size={16} color="white" />
+                  </Text>
+                </View>
+              ) : (
+                <View style={styles.box}>
+                  <Text lightColor="#333" darkColor="#fff" style={styles.text}>
+                    {user.displayName}'s aktiviteter
+                    <AntDesign name="right" size={16} color="white" />
+                  </Text>
+                </View>
+              )}
+              {reviews.map((review: Review) => {
+                return (
                   <ActivityCard
                     key={review.id}
                     review={review}
                     updateReviews={getReviews}
                   />
-                </View>
-              );
-            })}
+                );
+              })}
+            </View>
           </View>
           <View>
             <Modal
@@ -470,83 +637,46 @@ export default function ProfileScreen({
               }}
             >
               <View style={styles.layover}>
-                <View
-                  lightColor="#FFF"
-                  darkColor="#261F30"
-                  style={styles.modalView}
-                >
-                  <View>
-                    <AntDesign
-                      name="left"
-                      size={20}
-                      color="#fff"
-                      onPress={() => setModalVisible(!modalVisible)}
-                    />
-                    <Text
-                      lightColor="#fff"
-                      darkColor="#fff"
-                      style={styles.modalTextHeader}
-                    >
-                      Inställningar
-                    </Text>
-                  </View>
-                  <View style={styles.column}>
-                    <Text
-                      lightColor="#fff"
-                      darkColor="#fff"
-                      style={styles.modalText}
-                    >
-                      Lösenord
-                    </Text>
-                    <Text
-                      lightColor="#fff"
-                      darkColor="#fff"
-                      style={styles.modalTextHeader}
-                    >
-                      Inställningar
-                    </Text>
-                  </View>
-                  <View style={styles.column}>
+                <View style={styles.modalView}>
+                  <View style={styles.modalTextHeader}>
                     <Text
                       lightColor="#333"
                       darkColor="#fff"
-                      style={styles.modalText}
+                      style={styles.modalTextHeader}
                     >
-                      Lösenord
+                      Inställningar
                     </Text>
-                    <TouchableOpacity>
+                    <Entypo
+                      name="cross"
+                      size={24}
+                      color="black"
+                      onPress={() => setModalVisible(!modalVisible)}
+                    />
+                  </View>
+                  <View style={styles.column}>
+                    <TouchableOpacity style={styles.borderButton}>
                       <Text
-                        lightColor="#fff"
+                        lightColor="#333"
                         darkColor="#fff"
-                        style={styles.borderButton}
                         onPress={() => resetPassword(userEmail as string)}
                       >
                         Skicka återställnings länk till e-post
                       </Text>
                     </TouchableOpacity>
 
-                    <Text
-                      lightColor="#fff"
-                      darkColor="#fff"
-                      style={styles.modalText}
-                    >
-                      Radera konto
-                    </Text>
-                    <TouchableOpacity>
+                    <TouchableOpacity style={styles.borderButton}>
                       <Text
-                        lightColor="#fff"
+                        lightColor="#333"
                         darkColor="#fff"
-                        style={styles.borderButton}
                         onPress={() => deleteAccount()}
                       >
                         Vill du radera ditt konto?
                       </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity>
+                    <TouchableOpacity style={styles.borderButton}>
                       <Text
-                        lightColor="#fff"
+                        lightColor="#333"
                         darkColor="#fff"
-                        style={styles.borderButton}
                         onPress={handleSignOut}
                       >
                         Logga ut
