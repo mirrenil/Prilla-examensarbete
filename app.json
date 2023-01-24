@@ -17,6 +17,15 @@
       "fallbackToCacheTimeout": 0,
       "url": "https://u.expo.dev/f013faad-b3a4-4832-bd3f-130898c235d2"
     },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow Prilla to access your photo library",
+          "cameraPermission": "Allow Prilla to access your camera"
+        }
+      ]
+    ],
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
