@@ -144,6 +144,10 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
       borderBottomColor: isLight ? "rgba(0,0,0,0.1)" : "rgba(255,255,255,0.3)",
       borderBottomWidth: 1,
     },
+    fatText: {
+      fontWeight: "bold",
+      textTransform: "capitalize",
+    },
     image: {
       height: 50,
       width: 50,
@@ -213,7 +217,7 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
               <View style={[styles.border, styles.comment]}>
                 <Image source={{ uri: author?.image }} style={styles.image} />
                 <View style={styles.textWrapper}>
-                  <Text>{author?.name}</Text>
+                  <Text style={styles.fatText}>{author?.name}</Text>
                   <Text>{review?.description}</Text>
                 </View>
               </View>
@@ -230,7 +234,9 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
                             })
                           }
                         >
-                          <Text key={c.id}>{c.author}</Text>
+                          <Text style={styles.fatText} key={c.id}>
+                            {c.author}
+                          </Text>
                         </TouchableOpacity>
                         <Text>{c.text}</Text>
                       </View>
@@ -258,7 +264,9 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
                   <Feather
                     name="send"
                     size={24}
-                    color={isLight ? "black" : "white"}
+                    color={
+                      isLight ? Colors[colorScheme].primary.normal : "white"
+                    }
                   />
                 </TouchableOpacity>
               </View>
@@ -268,7 +276,7 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
         {isAndroid && (
           <View style={styles.inputWrapper}>
             <TextInput
-              placeholderTextColor={"#fff"}
+              placeholderTextColor={isLight ? "black" : "white"}
               placeholder="Lämna en kommentar..."
               style={styles.input}
               value={input}
@@ -276,6 +284,7 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
               multiline={true}
               numberOfLines={1}
               autoFocus={true}
+              lightColor="transparent"
             />
             <TouchableOpacity
               onPress={handleSubmit}
@@ -284,7 +293,7 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
               <Feather
                 name="send"
                 size={24}
-                color="white"
+                color={isLight ? Colors[colorScheme].primary.normal : "white"}
                 style={{ marginTop: 5 }}
               />
             </TouchableOpacity>
