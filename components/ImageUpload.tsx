@@ -1,5 +1,4 @@
 import * as ImagePicker from "expo-image-picker";
-import { Constants } from "expo-constants";
 import React, { useEffect, useState } from "react";
 import { Platform, Image } from "react-native";
 import { View, Text } from "./Themed";
@@ -12,11 +11,7 @@ interface Props {
   changeProfilePicIsTrue?: boolean;
 }
 
-const ImageUpload = ({
-  handleUpload,
-  setChosenImg,
-  changeProfilePicIsTrue,
-}: Props) => {
+const ImageUpload = ({ handleUpload, changeProfilePicIsTrue }: Props) => {
   const [image, setImage] = useState<any>(null);
 
   useEffect(() => {
@@ -50,7 +45,7 @@ const ImageUpload = ({
         handleUpload(result.assets[0].uri);
       }
     } catch (err) {
-      console.log(err);
+      console.log(err, "error");
     }
   };
 

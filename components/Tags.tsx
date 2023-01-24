@@ -15,7 +15,6 @@ const Tags = ({ handleInput }: Props) => {
   const colorScheme: any = useColorScheme();
 
   const styles = StyleSheet.create({
-    tagsSection: {},
     tags: {
       flexDirection: "row",
       flexWrap: "wrap",
@@ -28,7 +27,6 @@ const Tags = ({ handleInput }: Props) => {
       borderRadius: 6,
     },
     selected: {
-      // backgroundColor: "#783BC9",
       backgroundColor: Colors[colorScheme].section,
       color: "white",
       opacity: 0.9,
@@ -86,7 +84,7 @@ const Tags = ({ handleInput }: Props) => {
   };
 
   return (
-    <View style={[styles.tagsSection]}>
+    <View>
       <Text style={styles.sectionTitle}>Välj upp till fyra taggar</Text>
       <View style={styles.tags}>
         {tags.map((tag, index) => {

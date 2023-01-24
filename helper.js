@@ -9,7 +9,6 @@ import {
   addDoc,
   updateDoc,
   deleteDoc,
-  orderBy,
 } from "firebase/firestore";
 import { db } from "./firebase";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -23,16 +22,21 @@ import { Alert } from "react-native";
  * @returns image firebase URL
  */
 export const uploadImageAndGetURL = async (userId, imageName) => {
+  console.log("in upload image and get url", userId, imageName);
   try {
     const response = await fetch(imageName);
+    console.log(JSON.stringify(response), "response");
     const blob = await response.blob();
     const filename = imageName.split("/").pop();
     const storage = getStorage();
     const imageRef = ref(storage, `${userId}/${filename}`);
     await uploadBytes(imageRef, blob);
+    console.log(uploadBytes(imageRef, blob), "upload bytes");
     let imageURL = await getDownloadURL(ref(storage, `${userId}/${filename}`));
+    console.log(JSON.stringify(imageURL), "image url");
     return imageURL;
   } catch (err) {
+    console.log(err);
     switch (err.code) {
       case "storage/object-not-found":
         Alert.alert("Något gick fel! Det verkar som att filen inte existerar.");
@@ -141,6 +145,7 @@ export const addNewDoc = async (collectionName, newData) => {
         return docRef.id;
       }
     );
+    console.log(JSON.stringify(response), "response");
     return response;
   } catch (err) {
     console.log(err);
