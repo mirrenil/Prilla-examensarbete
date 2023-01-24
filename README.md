@@ -1,19 +1,41 @@
-# 🚀 ### Examensarbete, Prilla
+# 🚀 Examensarbete, Prilla
 
-## FED21G
+## 💁‍♀️ By: Linnea Albertsson och Miranda Nilhag, Medieinstitutet FED21G
 
-# Av: Linnea och Miranda
+### 📝 Description
 
-This project has been created using **webpack-cli**, you can now run
+This project is a web application for a fictional company called Prilla. The company provides a platform for users to rate snus they have consumed, share pictures of their snus boxes, see what snus their friends are using, comment and like snus reviews and to follow other users. The application is built in typescript with React Native and Expo go in the frontend and uses Firebase as a backend. The application is built for both iOS and Android.
+
+## 📦 Installation
+
+You need to have Expo go installed on your phone to run the application. You can download it from the App Store or Google Play Store.
+If you have xcode installed on your mac you can also run the application throug the simulator in xcode.
+Download the project and run
 
 ```
-npm run build
+npm install
 ```
 
-or
+then
 
 ```
-yarn build
+npm start
 ```
 
-to bundle your application
+Run on iOS simulator:
+
+```
+i
+```
+
+Run on your IPhone with Expo Go:
+
+```
+i
+```
+
+Run on your Android phone with Expo Go:
+
+```
+a
+```
