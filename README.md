@@ -4,7 +4,7 @@
 
 ### 📝 Description
 
-This project is a web application for a fictional company called Prilla. The company provides a platform for users to rate snus they have consumed, share pictures of their snus boxes, see what snus their friends are using, comment and like snus reviews and to follow other users. The application is built in TypeScript with React Native and Expo Go in the frontend and uses Firebase as a backend. The application is built for both iOS and Android.
+This project is a web application for a fictional company called Prilla. The company provides a platform for users to rate snus they have consumed, share pictures of their snus boxes, see what snus their friends are using, comment and like snus reviews, add snus types to your favorties, and to follow other users. The application is built in TypeScript with React Native and Expo Go in the frontend and uses Firebase as a backend. The application is built for both iOS and Android.
 
 ## 📦 Installation
 
