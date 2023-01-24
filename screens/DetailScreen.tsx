@@ -43,11 +43,12 @@ function ProductDetailScreen({
   const myUser = useSelector(currentReduxUser);
   const [usersLikedArray, setUsersLikedArray] = useState<string[]>([]);
   const isFocused = useIsFocused();
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     getProductReviews();
     getProductData();
-    getLiked();
+    getLiked().then(() => setLoading(false));
   }, [isFocused]);
 
   const getProductData = async () => {
@@ -65,7 +66,7 @@ function ProductDetailScreen({
     let newList: ReviewWithAuthor[] = [];
     try {
       const reviewsDocs = await getDocsWithSpecificValue(
-        "recensioner",
+        "reviews",
         "productID",
         route.params.id
       );
@@ -97,6 +98,11 @@ function ProductDetailScreen({
     try {
       const user = await getOneDocById("users", myUser.id);
       setUsersLikedArray(user?.liked);
+      user?.liked.map((id) => {
+        if (id === route.params.id) {
+          setLiked(true);
+        }
+      });
     } catch (err) {
       console.log(err);
     }
@@ -225,6 +231,13 @@ function ProductDetailScreen({
           </>
         );
       case 3:
+        if (reviews.length < 1) {
+          return (
+            <Text>
+              Den här produkten har inga recensioner än. Skapa en vetja!
+            </Text>
+          );
+        }
         return reviews.map((rev) => {
           return (
             <>
@@ -455,7 +468,7 @@ function ProductDetailScreen({
     },
   });
 
-  if (product && reviews) {
+  if (!loading) {
     return (
       <LinearGradient
         colors={
@@ -516,7 +529,7 @@ function ProductDetailScreen({
                 <View style={styles.interactions}>
                   <TouchableOpacity
                     onPress={() =>
-                      navigation.navigate("Review", { id: product.id })
+                      navigation.navigate("Review", { id: product!.id })
                     }
                   >
                     <View style={styles.button}>
@@ -527,7 +540,7 @@ function ProductDetailScreen({
                   </TouchableOpacity>
 
                   <TouchableOpacity onPress={toggleLike}>
-                    {!isAlreadyLiked() ? (
+                    {!liked ? (
                       <AntDesign name="hearto" size={24} color="white" />
                     ) : (
                       <AntDesign name="heart" size={24} color="red" />
