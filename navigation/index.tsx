@@ -331,6 +331,7 @@ function BottomTabNavigator() {
         name="SearchStack"
         component={SearchStackScreen}
         options={{
+          headerShown: false,
           title: "",
           headerStyle: { height: Constants.statusBarHeight },
           tabBarIcon: ({ color }) => (
@@ -344,6 +345,7 @@ function BottomTabNavigator() {
         component={ProfileStackScreen}
         initialParams={{ id: myUser.id }}
         options={{
+          headerShown: false,
           title: "",
           headerStyle: { height: Constants.statusBarHeight },
           tabBarIcon: ({ color }) => (
