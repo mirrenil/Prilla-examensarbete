@@ -49,7 +49,7 @@ export default function StartScreen({}: RootStackScreenProps<"Root">) {
     try {
       let newData: Review[] = [];
       myFollowingArray.map((id) => {
-        getDocsWithSpecificValue("recensioner", "userID", id)
+        getDocsWithSpecificValue("reviews", "userID", id)
           .then((data) => {
             if (data) {
               newData.push(...data);
@@ -73,7 +73,7 @@ export default function StartScreen({}: RootStackScreenProps<"Root">) {
 
   const getLatestActivity = async () => {
     try {
-      let data = await getAllDocsInCollection("recensioner");
+      let data = await getAllDocsInCollection("reviews");
       data = data?.filter((d) => !ifAlreadyInList(d));
       data = sortArray(data);
       data = data?.splice(0, 5);
@@ -125,9 +125,7 @@ export default function StartScreen({}: RootStackScreenProps<"Root">) {
             </View>
           </View>
           <Tabbar />
-          <Text style={{ fontWeight: "bold", fontSize: 16, padding: 10 }}>
-            Vänners aktivitet
-          </Text>
+          <Text style={styles.headlines}>Vänners aktivitet</Text>
           {friendsReviews.map((review) => {
             return (
               <ActivityCard
@@ -137,9 +135,7 @@ export default function StartScreen({}: RootStackScreenProps<"Root">) {
               />
             );
           })}
-          <Text style={{ fontWeight: "bold", fontSize: 16, padding: 10 }}>
-            Senast aktivitet
-          </Text>
+          <Text style={styles.headlines}>Senast aktivitet</Text>
           {latestReviews.map((review) => {
             return (
               <ActivityCard
@@ -214,5 +210,11 @@ const styles = StyleSheet.create({
     marginVertical: 0.1,
     height: 1,
     width: "50%",
+  },
+  headlines: {
+    fontWeight: "bold",
+    fontSize: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 30,
   },
 });

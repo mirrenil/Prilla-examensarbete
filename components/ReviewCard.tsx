@@ -25,7 +25,7 @@ export const ReviewCard = ({ review }: Props) => {
   }, [isFocused]);
 
   const getProduct = async () => {
-    let data = await getOneDocById("produkter", review.productID);
+    let data = await getOneDocById("products", review.productID);
     if (data) {
       setProduct(data as Product);
     }

@@ -43,16 +43,17 @@ function ProductDetailScreen({
   const myUser = useSelector(currentReduxUser);
   const [usersLikedArray, setUsersLikedArray] = useState<string[]>([]);
   const isFocused = useIsFocused();
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     getProductReviews();
     getProductData();
-    getLiked();
+    getLiked().then(() => setLoading(false));
   }, [isFocused]);
 
   const getProductData = async () => {
     try {
-      let data = await getOneDocById("produkter", route.params.id);
+      let data = await getOneDocById("products", route.params.id);
       if (data) {
         setProduct(data as Product);
       }
@@ -65,7 +66,7 @@ function ProductDetailScreen({
     let newList: ReviewWithAuthor[] = [];
     try {
       const reviewsDocs = await getDocsWithSpecificValue(
-        "recensioner",
+        "reviews",
         "productID",
         route.params.id
       );
@@ -97,12 +98,20 @@ function ProductDetailScreen({
     try {
       const user = await getOneDocById("users", myUser.id);
       setUsersLikedArray(user?.liked);
+      user?.liked.map((id) => {
+        if (id === route.params.id) {
+          setLiked(true);
+        }
+      });
     } catch (err) {
       console.log(err);
     }
   };
 
   const isAlreadyLiked = () => {
+    if (!usersLikedArray) {
+      return;
+    }
     let selected = usersLikedArray.some((item) => {
       return item == route.params.id;
     });
@@ -222,6 +231,13 @@ function ProductDetailScreen({
           </>
         );
       case 3:
+        if (reviews.length < 1) {
+          return (
+            <Text>
+              Den här produkten har inga recensioner än. Skapa en vetja!
+            </Text>
+          );
+        }
         return reviews.map((rev) => {
           return (
             <>
@@ -232,11 +248,20 @@ function ProductDetailScreen({
                   style={styles.reviewTop}
                 >
                   <TouchableOpacity
-                    style={{ marginTop: 10 }}
+                    style={{ marginTop: 10, flexDirection: "row" }}
                     onPress={() => {
                       navigation.navigate("Profile", { id: rev.userID });
                     }}
                   >
+                    <Image
+                      source={{ uri: rev.photo }}
+                      style={{
+                        height: 40,
+                        width: 40,
+                        borderRadius: 100,
+                        marginRight: 10,
+                      }}
+                    />
                     <Text
                       lightColor={Colors[colorScheme].text}
                       style={[styles.fatText, styles.capitalize]}
@@ -244,19 +269,28 @@ function ProductDetailScreen({
                       {rev.author}
                     </Text>
                   </TouchableOpacity>
-                  <RateInactive
-                    rating={rev.rating}
-                    small={{ size: 15, container: 90, single: 17 }}
-                  />
-                  <Text
-                    lightColor={Colors[colorScheme].text}
-                    style={{ marginTop: 10, marginLeft: 30 }}
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
                   >
-                    {rev.rating} / 5
-                  </Text>
+                    <RateInactive
+                      rating={rev.rating}
+                      small={{ size: 15, container: 90, single: 17 }}
+                    />
+                    <Text
+                      lightColor={Colors[colorScheme].text}
+                      style={{
+                        marginLeft: 10,
+                      }}
+                    >
+                      {rev.rating} / 5
+                    </Text>
+                  </View>
                 </View>
                 <Text
-                  style={{ lineHeight: 20 }}
+                  style={{ lineHeight: 20, marginVertical: 10 }}
                   lightColor={Colors[colorScheme].text}
                 >
                   {rev.description}
@@ -285,6 +319,7 @@ function ProductDetailScreen({
   const styles = StyleSheet.create({
     fatText: {
       fontWeight: "bold",
+      alignSelf: "center",
     },
     capitalize: {
       textTransform: "capitalize",
@@ -293,6 +328,7 @@ function ProductDetailScreen({
       position: "relative",
       height: 200,
       width: "100%",
+      resizeMode: "cover",
     },
     waves: {
       position: "absolute",
@@ -374,7 +410,7 @@ function ProductDetailScreen({
       borderBottomWidth: 0,
       justifyContent: "center",
       alignItems: "center",
-      backgroundColor: Colors[colorScheme].grey.light,
+      backgroundColor: Colors[colorScheme].section,
     },
     activeTab: {
       backgroundColor: Colors[colorScheme].background,
@@ -387,6 +423,7 @@ function ProductDetailScreen({
       borderLeftWidth: 1,
       borderRightWidth: 1,
       padding: 15,
+      maxHeight: 300,
     },
     folderFacts: {
       flexDirection: "row",
@@ -395,8 +432,9 @@ function ProductDetailScreen({
     },
     reviewTop: {
       flexDirection: "row",
-      width: "50%",
+      width: "100%",
       justifyContent: "space-between",
+      alignItems: "center",
     },
     reviewWrapper: {
       width: "100%",
@@ -407,6 +445,7 @@ function ProductDetailScreen({
     },
     tagsContainer: {
       flexDirection: "row",
+      flexWrap: "wrap",
     },
     tagName: {
       textAlign: "center",
@@ -414,7 +453,7 @@ function ProductDetailScreen({
       fontSize: 12,
     },
     separator: {
-      marginVertical: 15,
+      marginVertical: 10,
       height: 1,
       width: "100%",
     },
@@ -422,15 +461,14 @@ function ProductDetailScreen({
       borderWidth: 1,
       borderColor: Colors[colorScheme].grey.light,
       width: 70,
-      margin: 5,
+      marginRight: 5,
       height: 30,
       padding: 5,
       borderRadius: 6,
-      marginTop: 15,
     },
   });
 
-  if (product && reviews) {
+  if (!loading) {
     return (
       <LinearGradient
         colors={
@@ -443,6 +481,7 @@ function ProductDetailScreen({
           <ImageBackground
             style={styles.background}
             source={require("../assets/images/detail_Bg.png")}
+            // source={{ uri: "https://www.snusexpress.se/media/magefan_blog/SH-LYFT2_72.png"}}
           >
             {isLight ? (
               <Image
@@ -490,7 +529,7 @@ function ProductDetailScreen({
                 <View style={styles.interactions}>
                   <TouchableOpacity
                     onPress={() =>
-                      navigation.navigate("Review", { id: product.id })
+                      navigation.navigate("Review", { id: product!.id })
                     }
                   >
                     <View style={styles.button}>
@@ -501,7 +540,7 @@ function ProductDetailScreen({
                   </TouchableOpacity>
 
                   <TouchableOpacity onPress={toggleLike}>
-                    {!isAlreadyLiked() ? (
+                    {!liked ? (
                       <AntDesign name="hearto" size={24} color="white" />
                     ) : (
                       <AntDesign name="heart" size={24} color="red" />
@@ -561,7 +600,9 @@ function ProductDetailScreen({
                   <Text lightColor={Colors[colorScheme].text}>Recensioner</Text>
                 </TouchableOpacity>
               </View>
-              <View style={styles.folderContent}>{renderFolderContent()}</View>
+              <ScrollView style={styles.folderContent}>
+                {renderFolderContent()}
+              </ScrollView>
             </View>
           </View>
         </ScrollView>

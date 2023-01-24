@@ -1,6 +1,12 @@
 import { View, Text, TextInput } from "../components/Themed";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Image, Keyboard, Platform } from "react-native";
+import {
+  StyleSheet,
+  Image,
+  Keyboard,
+  Platform,
+  useColorScheme,
+} from "react-native";
 import { Review } from "../Interfaces";
 import { getOneDocById, updateSingleProperty } from "../helper";
 import { RootStackScreenProps } from "../types";
@@ -15,6 +21,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import LoadingSpinner from "../components/LoadingSpinner";
+import Colors from "../constants/Colors";
 
 interface User {
   name: string;
@@ -28,6 +35,8 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
   const [comments, setComments] = useState<CommentWithUsername[]>([]);
   const navigation = useNavigation();
   const myUser = useSelector(currentReduxUser);
+  const colorScheme: any = useColorScheme();
+  let isLight = colorScheme === "dark" ? false : true;
 
   // STYLING VARIABLES
   let inputHeight = 20;
@@ -45,7 +54,7 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
 
   const getReview = async () => {
     try {
-      let data = await getOneDocById("recensioner", route.params.id);
+      let data = await getOneDocById("reviews", route.params.id);
       setReview(data as Review);
     } catch (err) {
       console.log(err);
@@ -106,7 +115,7 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
       newObj = { comments: [newData] };
     }
     try {
-      await updateSingleProperty("recensioner", route.params.id, newObj);
+      await updateSingleProperty("reviews", route.params.id, newObj);
     } catch (err) {
       console.log(err);
     }
@@ -132,8 +141,12 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
       marginBottom: 10,
     },
     border: {
-      borderBottomColor: "rgba(255,255,255,0.3)",
+      borderBottomColor: isLight ? "rgba(0,0,0,0.1)" : "rgba(255,255,255,0.3)",
       borderBottomWidth: 1,
+    },
+    fatText: {
+      fontWeight: "bold",
+      textTransform: "capitalize",
     },
     image: {
       height: 50,
@@ -154,7 +167,7 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
       justifyContent: "space-around",
       borderRadius: 6,
       flexDirection: "row",
-      backgroundColor: "#151416",
+      backgroundColor: Colors[colorScheme].grey.light,
       width: "100%",
       alignItems: "center",
       position: "absolute",
@@ -170,7 +183,7 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
       alignContent: "center",
       borderRadius: 6,
       padding: 10,
-      backgroundColor: "#151416",
+      backgroundColor: Colors[colorScheme].grey.light,
       width: "100%",
       marginBottom: inputHeight,
     },
@@ -204,7 +217,7 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
               <View style={[styles.border, styles.comment]}>
                 <Image source={{ uri: author?.image }} style={styles.image} />
                 <View style={styles.textWrapper}>
-                  <Text>{author?.name}</Text>
+                  <Text style={styles.fatText}>{author?.name}</Text>
                   <Text>{review?.description}</Text>
                 </View>
               </View>
@@ -221,7 +234,9 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
                             })
                           }
                         >
-                          <Text key={c.id}>{c.author}</Text>
+                          <Text style={styles.fatText} key={c.id}>
+                            {c.author}
+                          </Text>
                         </TouchableOpacity>
                         <Text>{c.text}</Text>
                       </View>
@@ -233,9 +248,10 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
             {!isAndroid && (
               <View style={styles.inputWrapperIos}>
                 <TextInput
-                  placeholderTextColor={"#fff"}
+                  placeholderTextColor={isLight ? "black" : "white"}
                   placeholder="Lämna en kommentar..."
                   style={styles.inputIos}
+                  lightColor="transparent"
                   value={input}
                   onChangeText={setInput}
                   multiline={true}
@@ -245,7 +261,13 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
                   onPress={handleSubmit}
                   disabled={input ? false : true}
                 >
-                  <Feather name="send" size={24} color="white" />
+                  <Feather
+                    name="send"
+                    size={24}
+                    color={
+                      isLight ? Colors[colorScheme].primary.normal : "white"
+                    }
+                  />
                 </TouchableOpacity>
               </View>
             )}
@@ -254,7 +276,7 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
         {isAndroid && (
           <View style={styles.inputWrapper}>
             <TextInput
-              placeholderTextColor={"#fff"}
+              placeholderTextColor={isLight ? "black" : "white"}
               placeholder="Lämna en kommentar..."
               style={styles.input}
               value={input}
@@ -262,6 +284,7 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
               multiline={true}
               numberOfLines={1}
               autoFocus={true}
+              lightColor="transparent"
             />
             <TouchableOpacity
               onPress={handleSubmit}
@@ -270,7 +293,7 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
               <Feather
                 name="send"
                 size={24}
-                color="white"
+                color={isLight ? Colors[colorScheme].primary.normal : "white"}
                 style={{ marginTop: 5 }}
               />
             </TouchableOpacity>

@@ -3,6 +3,7 @@ import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { StyleSheet, Image, View } from "react-native";
 import { Text } from "../components/Themed";
+import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 
 const Tabbar = () => {
@@ -31,8 +32,8 @@ const Tabbar = () => {
             <Feather
               style={styles.icon}
               name="trending-up"
-              size={30}
-              color="#FFFD54"
+              size={35}
+              color="black"
             />
           </View>
           <Text
@@ -56,8 +57,8 @@ const Tabbar = () => {
             <Feather
               style={styles.icon}
               name="bar-chart-2"
-              size={34}
-              color="#FFFD54"
+              size={40}
+              color="black"
             />
           </View>
           <Text
@@ -103,18 +104,18 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 6,
     height: 50,
     width: 50,
-    opacity: 0.5,
+    opacity: 0.8,
   },
   logoWrapper: {
     position: "relative",
+    justifyContent: "center",
+    alignItems: "center",
   },
   icon: {
     position: "absolute",
-    top: 10,
-    right: 10,
   },
   lightContainer: {
-    backgroundColor: "#DCC4FD",
+    backgroundColor: "white",
   },
   darkContainer: {
     backgroundColor: "#3D3745",

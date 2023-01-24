@@ -2,7 +2,7 @@ const primaryPurple = "#783BC9";
 const activteColor = "#FFFD54";
 
 export const gradientLight = {
-  from: "#fff",
+  from: "#CEA9FF",
   to: "#783BC9",
 };
 

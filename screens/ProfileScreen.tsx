@@ -14,7 +14,6 @@ import { RootStackScreenProps } from "../types";
 import { useDispatch, useSelector } from "react-redux";
 import { currentReduxUser, setSignOutState } from "../redux/signin";
 import {
-  getAllDocsInCollection,
   getDocsWithSpecificValue,
   getOneDocById,
   updateSingleProperty,
@@ -49,9 +48,6 @@ export default function ProfileScreen({
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const dispatch = useDispatch();
   const userEmail = myUser?.email;
-  const [urls, setUrls] = useState<string[]>([]);
-  const favoritesArray: any = [];
-  let photoURLS: string[] = [];
   const [myFollows, setMyFollows] = useState<string[]>([]);
   const [profilePic, setProfilePic] = useState<string>();
   let isMe = route.params.id === myUser.id;
@@ -59,15 +55,21 @@ export default function ProfileScreen({
   let isLight = colorScheme == "light" ? true : false;
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
   const isFocused = useIsFocused();
+  const [myFavourites, setMyFavourites] = useState<Liked[]>([]);
+  const [loading, setIsLoading] = useState<boolean>(true);
+
+  interface Liked {
+    id: string;
+    image: string;
+  }
 
   useEffect(() => {
     if (isFocused) {
+      setMyFavourites([]);
       setCurrentUser();
       getMyFollowing();
       getReviews();
       getLiked();
-      compareLikedIds();
-      imagesLoaded();
     }
   }, [isFocused]);
 
@@ -87,7 +89,7 @@ export default function ProfileScreen({
   const getReviews = async () => {
     try {
       let data = await getDocsWithSpecificValue(
-        "recensioner",
+        "reviews",
         "userID",
         route.params.id
       );
@@ -204,41 +206,29 @@ export default function ProfileScreen({
 
   // Favorite functionality
   const getLiked = async () => {
+    let newList: Liked[] = [];
     try {
-      const favorites = await getOneDocById("users", route.params?.id);
-      for (let i = 0; i < favorites?.liked.length; i++) {
-        favoritesArray.push(favorites?.liked[i]);
-      }
+      const user = await getOneDocById("users", route.params?.id);
+      await Promise.all(
+        user?.liked.map(async (id: string) => {
+          let product = await fetchLikedProducts(id);
+          if (product) {
+            newList.push({ id: product.id, image: product.photo });
+          }
+        })
+      ).then(() => {
+        setMyFavourites(newList);
+        setIsLoading(false);
+      });
     } catch (err) {
       console.log(err);
     }
   };
 
-  // get the products with same ID from the favorites array
-  const compareLikedIds = async () => {
-    const products = await getAllDocsInCollection("produkter");
-    let likedProducts: any = [];
-    if (!products) return;
-    if (products) {
-      likedProducts = products.filter((product) =>
-        favoritesArray.includes(product.id)
-      );
-      return likedProducts;
-    }
-  };
-
-  const getPhotos = async () => {
-    const products = await compareLikedIds();
-    for (let i = 0; i < products.length; i++) {
-      photoURLS.push(products[i].photo);
-    }
-    return photoURLS;
-  };
-
-  const imagesLoaded = async () => {
+  const fetchLikedProducts = async (id: string) => {
     try {
-      const asyncUrls = await getPhotos();
-      setUrls(asyncUrls);
+      let product = await getOneDocById("products", id);
+      return product;
     } catch (err) {
       console.log(err);
     }
@@ -410,8 +400,7 @@ export default function ProfileScreen({
       marginRight: 10,
     },
     favoritesScroll: {
-      marginLeft: 10,
-      width: "90%",
+      marginHorizontal: 0,
       flexDirection: "row",
     },
     layover: {
@@ -431,7 +420,7 @@ export default function ProfileScreen({
     },
   });
 
-  if (user) {
+  if (!loading && user) {
     return (
       <LinearGradient
         colors={
@@ -574,7 +563,7 @@ export default function ProfileScreen({
             ) : (
               <View style={styles.box}>
                 <Text lightColor="#333" darkColor="#fff" style={styles.text}>
-                  {user.displayName}'s favoriter
+                  {user.displayName}s favoriter
                   <AntDesign name="right" size={16} color="white" />
                 </Text>
               </View>
@@ -582,14 +571,21 @@ export default function ProfileScreen({
             <View style={{ flexDirection: "row" }}>
               <ScrollView horizontal style={styles.favoritesScroll}>
                 <View style={styles.row}>
-                  {urls.map((url, index) => (
-                    <Image
-                      key={index}
-                      style={styles.favoritesImage}
-                      source={{
-                        uri: url,
-                      }}
-                    />
+                  {myFavourites.map((product) => (
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate("Product", { id: product.id })
+                      }
+                      key={product.id}
+                    >
+                      <Image
+                        key={product.id}
+                        style={styles.favoritesImage}
+                        source={{
+                          uri: product.image,
+                        }}
+                      />
+                    </TouchableOpacity>
                   ))}
                 </View>
               </ScrollView>
@@ -611,22 +607,22 @@ export default function ProfileScreen({
               ) : (
                 <View style={styles.box}>
                   <Text lightColor="#333" darkColor="#fff" style={styles.text}>
-                    {user.displayName}'s aktiviteter
+                    {user.displayName}s aktiviteter
                     <AntDesign name="right" size={16} color="white" />
                   </Text>
                 </View>
               )}
-              {reviews.map((review: Review) => {
-                return (
-                  <ActivityCard
-                    key={review.id}
-                    review={review}
-                    updateReviews={getReviews}
-                  />
-                );
-              })}
             </View>
           </View>
+          {reviews.map((review: Review) => {
+            return (
+              <ActivityCard
+                key={review.id}
+                review={review}
+                updateReviews={getReviews}
+              />
+            );
+          })}
           <View>
             <Modal
               animationType="slide"
@@ -788,14 +784,6 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 17,
-    marginBottom: 10,
-    marginLeft: 10,
-  },
-  activities: {
-    flexDirection: "column",
-    justifyContent: "center",
-    alignContent: "center",
-    margin: 10,
   },
   row: {
     flexDirection: "row",
@@ -804,9 +792,6 @@ const styles = StyleSheet.create({
     height: 80,
     marginLeft: 10,
     width: "90%",
-  },
-  favorites: {
-    marginLeft: 20,
   },
   left: {
     flexDirection: "column",

@@ -44,7 +44,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
 
   const getProductData = async () => {
     try {
-      let data = await getOneDocById("produkter", route.params.id);
+      let data = await getOneDocById("products", route.params.id);
       if (data) {
         setProduct(data as Product);
       }
@@ -62,7 +62,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
     product?.reviews.push(id);
     let newData = { reviews: product?.reviews };
     try {
-      await updateSingleProperty("produkter", route.params.id, newData);
+      await updateSingleProperty("products", route.params.id, newData);
     } catch (err) {
       console.log(err);
     }
@@ -83,7 +83,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
       };
 
       try {
-        await updateSingleProperty("produkter", route.params.id, newData);
+        await updateSingleProperty("products", route.params.id, newData);
       } catch (err) {
         console.log(err);
       }
@@ -112,7 +112,7 @@ const ReviewModal = ({ navigation, route }: RootStackScreenProps<"Review">) => {
         rating: rating,
         userID: myUser.id,
       };
-      let docId = await addNewDoc("recensioner", newReview);
+      let docId = await addNewDoc("reviews", newReview);
       if (docId) {
         pushReviewToProductsReviewArray(docId);
       }

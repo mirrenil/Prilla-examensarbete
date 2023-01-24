@@ -16,6 +16,7 @@ import Colors, { gradientDark, gradientLight } from "../constants/Colors";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { RootStackScreenProps } from "../types";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function SearchScreen({
   navigation,
@@ -28,11 +29,12 @@ export default function SearchScreen({
   const [isOnProductSearch, setIsOnProductSearch] = useState<boolean>(true);
   const colorScheme: any = useColorScheme();
   let isLight = colorScheme == "light" ? true : false;
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     getAllProducts();
     getAllUsers();
-  }, []);
+  }, [isFocused]);
 
   useEffect(() => {
     if (!searchInput) {
@@ -48,7 +50,7 @@ export default function SearchScreen({
   }, [searchInput, isOnProductSearch]);
 
   const getAllProducts = async () => {
-    let data = await getAllDocsInCollection("produkter");
+    let data = await getAllDocsInCollection("products");
     if (data) {
       setAllProducts(data);
       setFilteredProducts(data);
