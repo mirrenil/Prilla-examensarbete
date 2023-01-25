@@ -519,7 +519,7 @@ export default function ProfileScreen({
               )}
             </View>
             {!myProfile && (
-              <View>
+              <View style={{ marginTop: 40 }}>
                 {!isAlreadyFollowing() ? (
                   <TouchableOpacity
                     style={styles.borderButtonFollow}
