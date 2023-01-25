@@ -185,7 +185,10 @@ function ProductDetailScreen({
               >
                 Varumärke
               </Text>
-              <Text lightColor={Colors[colorScheme].text}>
+              <Text
+                lightColor={Colors[colorScheme].text}
+                style={styles.marginTop}
+              >
                 {product?.brand}
               </Text>
             </View>
@@ -196,7 +199,12 @@ function ProductDetailScreen({
               >
                 Namn
               </Text>
-              <Text lightColor={Colors[colorScheme].text}>{product?.name}</Text>
+              <Text
+                lightColor={Colors[colorScheme].text}
+                style={styles.marginTop}
+              >
+                {product?.name}
+              </Text>
             </View>
             <View lightColor="transparent" style={styles.folderFacts}>
               <Text
@@ -205,11 +213,11 @@ function ProductDetailScreen({
               >
                 Smak
               </Text>
-              <View lightColor="transparent" style={{ flexDirection: "row" }}>
+              <View lightColor="transparent" style={styles.marginTop}>
                 {product?.flavor.map((f, index) => {
                   return (
                     <Text key={index} lightColor={Colors[colorScheme].text}>
-                      {f}
+                      {f}{" "}
                     </Text>
                   );
                 })}
@@ -222,7 +230,10 @@ function ProductDetailScreen({
               >
                 Nikotinhalt
               </Text>
-              <Text lightColor={Colors[colorScheme].text}>
+              <Text
+                lightColor={Colors[colorScheme].text}
+                style={styles.marginTop}
+              >
                 {product?.nicotine} mg/g
               </Text>
             </View>
@@ -233,7 +244,10 @@ function ProductDetailScreen({
               >
                 Vikt
               </Text>
-              <Text lightColor={Colors[colorScheme].text}>
+              <Text
+                lightColor={Colors[colorScheme].text}
+                style={styles.marginTop}
+              >
                 {product?.weight}g
               </Text>
             </View>
@@ -474,6 +488,10 @@ function ProductDetailScreen({
       height: 30,
       padding: 5,
       borderRadius: 6,
+    },
+    marginTop: {
+      marginTop: 10,
+      flexDirection: "row",
     },
   });
 
