@@ -330,7 +330,7 @@ export default function ProfileScreen({
       top: 10,
     },
     activityCard: {
-      top: 50,
+      marginTop: 50,
     },
     favorites: {
       top: 30,
@@ -371,8 +371,9 @@ export default function ProfileScreen({
     },
     top: {
       top: 50,
-      marginLeft: 360,
+      marginRight: 10,
       marginBottom: 0,
+      alignSelf: "flex-end",
     },
     modalView: {
       backgroundColor: isLight ? "#fff" : "#2E233C",
@@ -449,23 +450,13 @@ export default function ProfileScreen({
         <ScrollView style={styles.screen}>
           <View style={styles.container}>
             {myProfile ? (
-              <View style={styles.top}>
-                {isLight ? (
-                  <Feather
-                    name="settings"
-                    size={24}
-                    color="#783BC9"
-                    onPress={() => setModalVisible(true)}
-                  />
-                ) : (
-                  <Feather
-                    name="settings"
-                    size={24}
-                    color="#FFFD54"
-                    onPress={() => setModalVisible(true)}
-                  />
-                )}
-              </View>
+              <Feather
+                name="settings"
+                size={24}
+                color={isLight ? "#783BC9" : "#FFFD54"}
+                onPress={() => setModalVisible(true)}
+                style={styles.top}
+              />
             ) : null}
             <View style={styles.topContainer}>
               <View style={styles.left}>
@@ -652,21 +643,12 @@ export default function ProfileScreen({
                     >
                       Inställningar
                     </Text>
-                    {isLight ? (
-                      <Entypo
-                        name="cross"
-                        size={24}
-                        color="black"
-                        onPress={() => setModalVisible(!modalVisible)}
-                      />
-                    ) : (
-                      <Entypo
-                        name="cross"
-                        size={24}
-                        color="white"
-                        onPress={() => setModalVisible(!modalVisible)}
-                      />
-                    )}
+                    <Entypo
+                      name="cross"
+                      size={24}
+                      color={isLight ? "black" : "white"}
+                      onPress={() => setModalVisible(!modalVisible)}
+                    />
                   </View>
                   <View style={styles.column}>
                     <TouchableOpacity style={styles.borderButton}>

@@ -17,6 +17,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { RootStackScreenProps } from "../types";
 import { useIsFocused } from "@react-navigation/native";
+import Constants from "expo-constants";
 
 export default function SearchScreen({
   navigation,
@@ -94,7 +95,9 @@ export default function SearchScreen({
       {!allProducts.length || !allUsers.length ? (
         <LoadingSpinner />
       ) : (
-        <ScrollView style={{ height: "100%" }}>
+        <ScrollView
+          style={{ height: "100%", marginTop: Constants.statusBarHeight }}
+        >
           <View style={search.container}>
             <Searchbar
               placeholder="Sök"
