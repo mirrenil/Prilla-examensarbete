@@ -543,7 +543,12 @@ export default function ProfileScreen({
                       lightColor="#333"
                       style={styles.borderButtonText}
                     >
-                      Följer <AntDesign name="down" size={14} color="#333" />
+                      Följer
+                      <AntDesign
+                        name="down"
+                        size={14}
+                        color={isLight ? "black" : "white"}
+                      />
                     </Text>
                   </TouchableOpacity>
                 )}
