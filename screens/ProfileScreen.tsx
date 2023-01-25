@@ -267,7 +267,7 @@ export default function ProfileScreen({
 
     followingButton: {
       borderColor: "#575060",
-      borderWidth: 0.2,
+      borderWidth: 1,
       backgroundColor: "transparent",
       padding: 10,
       borderRadius: 6,
@@ -351,7 +351,7 @@ export default function ProfileScreen({
       flexDirection: "column",
       alignItems: "center",
       marginBottom: 10,
-      top: 50,
+      marginTop: 50,
     },
     right: {
       flexDirection: "column",
@@ -370,7 +370,6 @@ export default function ProfileScreen({
       width: "100%",
     },
     top: {
-      top: 50,
       marginRight: 10,
       marginBottom: 0,
       alignSelf: "flex-end",
