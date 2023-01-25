@@ -28,8 +28,10 @@ export default function StartScreen({}: RootStackScreenProps<"Root">) {
 
   useEffect(() => {
     if (isFocused) {
+      console.log("focus");
       getMyFollowing();
       getLatestActivity();
+      // getFriendsReviews();
     }
   }, [isFocused]);
 
@@ -38,22 +40,25 @@ export default function StartScreen({}: RootStackScreenProps<"Root">) {
       const user = await getOneDocById("users", myUser.id);
       let myFollowing = user?.following;
       myFollowingArray.push(...myFollowing);
-      getReviews();
+      getFriendsReviews();
     } catch (err) {
       console.log(err);
     }
     return myFollowingArray;
   };
 
-  const getReviews = async () => {
+  const getFriendsReviews = async () => {
     try {
       let newData: Review[] = [];
+      console.log(myFollowingArray);
       myFollowingArray.map((id) => {
         getDocsWithSpecificValue("reviews", "userID", id)
           .then((data) => {
+            console.log(data?.length);
             if (data) {
-              newData.push(...data);
+              newData = data;
               let sorted = sortArray(newData);
+              sorted = sorted.splice(0, 5);
               setFriendsReviews(sorted);
             }
           })
@@ -74,7 +79,7 @@ export default function StartScreen({}: RootStackScreenProps<"Root">) {
   const getLatestActivity = async () => {
     try {
       let data = await getAllDocsInCollection("reviews");
-      data = data?.filter((d) => !ifAlreadyInList(d));
+      data = data?.filter((d) => !ifAlreadyInFriendsList(d));
       data = sortArray(data);
       data = data?.splice(0, 5);
       setLatestReviews(data as Review[]);
@@ -83,8 +88,8 @@ export default function StartScreen({}: RootStackScreenProps<"Root">) {
     }
   };
 
-  const ifAlreadyInList = (d) => {
-    return friendsReviews.some((r) => r.userID == d.userID);
+  const ifAlreadyInFriendsList = (review: Review) => {
+    return myFollowingArray.some((id) => id == review.userID);
   };
 
   if (friendsReviews) {
@@ -121,7 +126,7 @@ export default function StartScreen({}: RootStackScreenProps<"Root">) {
             </View>
           </View>
           <Tabbar />
-          <Text style={styles.headlines}>Vänners aktivitet</Text>
+          <Text style={styles.headlines}>Vänners senaste aktivitet</Text>
           {friendsReviews.length == 0 && (
             <Text style={styles.text}>Du följer ingen än...</Text>
           )}
@@ -130,17 +135,17 @@ export default function StartScreen({}: RootStackScreenProps<"Root">) {
               <ActivityCard
                 key={review.id}
                 review={review}
-                updateReviews={getReviews}
+                updateReviews={getFriendsReviews}
               />
             );
           })}
-          <Text style={styles.headlines}>Senast aktivitet</Text>
+          <Text style={styles.headlines}>Upptäck ny aktivitet</Text>
           {latestReviews.map((review) => {
             return (
               <ActivityCard
                 key={review.id}
                 review={review}
-                updateReviews={getReviews}
+                updateReviews={getFriendsReviews}
               />
             );
           })}
