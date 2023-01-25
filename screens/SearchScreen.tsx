@@ -17,6 +17,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { RootStackScreenProps } from "../types";
 import { useIsFocused } from "@react-navigation/native";
+import Constants from "expo-constants";
 
 export default function SearchScreen({
   navigation,
@@ -94,7 +95,9 @@ export default function SearchScreen({
       {!allProducts.length || !allUsers.length ? (
         <LoadingSpinner />
       ) : (
-        <ScrollView style={{ height: "100%" }}>
+        <ScrollView
+          style={{ height: "100%", marginTop: Constants.statusBarHeight }}
+        >
           <View style={search.container}>
             <Searchbar
               placeholder="Sök"
@@ -148,10 +151,15 @@ export default function SearchScreen({
                       style={styles.userInfo}
                     >
                       <Image
+                        key={user.id}
                         source={{ uri: user.photo }}
                         style={styles.profilePic}
                       />
-                      <Text lightColor="#333" style={styles.username}>
+                      <Text
+                        key={user.id}
+                        lightColor="#333"
+                        style={styles.username}
+                      >
                         {user.displayName}
                       </Text>
                     </TouchableOpacity>
@@ -168,7 +176,7 @@ export default function SearchScreen({
               <View>
                 {filteredProducts.length ? (
                   filteredProducts.map((product) => {
-                    return <ProductCard product={product} />;
+                    return <ProductCard key={product.id} product={product} />;
                   })
                 ) : (
                   <Text style={{ alignSelf: "center" }}>

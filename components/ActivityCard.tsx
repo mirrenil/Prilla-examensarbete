@@ -38,6 +38,8 @@ export const ActivityCard = ({ review, updateReviews }: Props) => {
   const [likesCount, setLikesCount] = useState<number>(0);
   let isFocused = useIsFocused();
   const colorScheme: any = useColorScheme();
+  const defaultImage =
+    "https://nonsmoking.se/wp-content/uploads/2021/09/vitt-snus-hand-1439x959.jpg";
 
   useEffect(() => {
     if (review.likes) {
@@ -201,7 +203,7 @@ export const ActivityCard = ({ review, updateReviews }: Props) => {
       </TouchableOpacity>
 
       <ImageBackground
-        source={{ uri: review.photo }}
+        source={{ uri: review.photo ? review.photo : defaultImage }}
         resizeMode="cover"
         style={styles.image}
       >

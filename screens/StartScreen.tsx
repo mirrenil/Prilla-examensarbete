@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet, useColorScheme } from "react-native";
 import { Text, View } from "../components/Themed";
 import {
@@ -38,22 +38,24 @@ export default function StartScreen({}: RootStackScreenProps<"Home">) {
       const user = await getOneDocById("users", myUser.id);
       let myFollowing = user?.following;
       myFollowingArray.push(...myFollowing);
-      getReviews();
+      getFriendsReviews();
     } catch (err) {
       console.log(err);
     }
     return myFollowingArray;
   };
 
-  const getReviews = async () => {
+  const getFriendsReviews = async () => {
     try {
       let newData: Review[] = [];
+
       myFollowingArray.map((id) => {
         getDocsWithSpecificValue("reviews", "userID", id)
           .then((data) => {
             if (data) {
-              newData.push(...data);
+              newData = data;
               let sorted = sortArray(newData);
+              sorted = sorted.splice(0, 5);
               setFriendsReviews(sorted);
             }
           })
@@ -74,7 +76,7 @@ export default function StartScreen({}: RootStackScreenProps<"Home">) {
   const getLatestActivity = async () => {
     try {
       let data = await getAllDocsInCollection("reviews");
-      data = data?.filter((d) => !ifAlreadyInList(d));
+      data = data?.filter((d) => !ifAlreadyInFriendsList(d));
       data = sortArray(data);
       data = data?.splice(0, 5);
       setLatestReviews(data as Review[]);
@@ -83,8 +85,8 @@ export default function StartScreen({}: RootStackScreenProps<"Home">) {
     }
   };
 
-  const ifAlreadyInList = (d) => {
-    return friendsReviews.some((r) => r.userID == d.userID);
+  const ifAlreadyInFriendsList = (review: Review) => {
+    return myFollowingArray.some((id) => id == review.userID);
   };
 
   if (friendsReviews) {
@@ -110,11 +112,7 @@ export default function StartScreen({}: RootStackScreenProps<"Home">) {
                   23
                 </Text>
               </Text>
-              <View
-                style={styles.separator}
-                lightColor="#fff"
-                darkColor="#fff"
-              />
+              <View style={styles.separator} />
               <View style={styles.logosWrapper}>
                 <Text style={styles.prilla}>Prilla</Text>
                 <Image
@@ -125,23 +123,26 @@ export default function StartScreen({}: RootStackScreenProps<"Home">) {
             </View>
           </View>
           <Tabbar />
-          <Text style={styles.headlines}>Vänners aktivitet</Text>
+          <Text style={styles.headlines}>Vänners senaste aktivitet</Text>
+          {friendsReviews.length == 0 && (
+            <Text style={styles.text}>Du följer ingen än...</Text>
+          )}
           {friendsReviews.map((review) => {
             return (
               <ActivityCard
                 key={review.id}
                 review={review}
-                updateReviews={getReviews}
+                updateReviews={getFriendsReviews}
               />
             );
           })}
-          <Text style={styles.headlines}>Senast aktivitet</Text>
+          <Text style={styles.headlines}>Upptäck ny aktivitet</Text>
           {latestReviews.map((review) => {
             return (
               <ActivityCard
                 key={review.id}
                 review={review}
-                updateReviews={getReviews}
+                updateReviews={getFriendsReviews}
               />
             );
           })}
@@ -165,6 +166,7 @@ const styles = StyleSheet.create({
     height: 200,
   },
   heroTextWrapper: {
+    top: 25,
     position: "absolute",
     width: "50%",
     height: "100%",
@@ -186,6 +188,7 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
   },
   numbers: {
+    marginTop: 10,
     fontSize: 40,
     color: "white",
     lineHeight: 60,
@@ -206,15 +209,19 @@ const styles = StyleSheet.create({
     fontSize: 35,
     color: "#FFFD54",
   },
-  separator: {
-    marginVertical: 0.1,
-    height: 1,
-    width: "50%",
-  },
   headlines: {
     fontWeight: "bold",
     fontSize: 16,
     paddingHorizontal: 10,
     paddingVertical: 30,
+  },
+  separator: {
+    marginVertical: 0.1,
+    height: 1,
+    width: "60%",
+    backgroundColor: "white",
+  },
+  text: {
+    marginLeft: 10,
   },
 });
