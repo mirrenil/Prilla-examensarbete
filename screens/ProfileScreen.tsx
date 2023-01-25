@@ -619,7 +619,7 @@ export default function ProfileScreen({
           </View>
           {reviews.map((review: Review) => {
             return (
-              <View style={styles.activityCard}>
+              <View style={styles.activityCard} key={review.id}>
                 <ActivityCard
                   key={review.id}
                   review={review}
