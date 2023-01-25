@@ -3,6 +3,7 @@ import { getAuth, Persistence, ReactNativeAsyncStorage } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
+  //original
   apiKey: "AIzaSyCdpdQ0mUhv3D4fUi6QNPdf39pFLhTNnpA",
   authDomain: "prilla-c8eca.firebaseapp.com",
   projectId: "prilla-c8eca",
