@@ -17,7 +17,7 @@ export default function LoadingScreen({
 
   useEffect(() => {
     setTimeout(() => {
-      navigation.navigate("Signin");
+      navigation.replace("Signin");
     }, 2000);
   }, []);
 
