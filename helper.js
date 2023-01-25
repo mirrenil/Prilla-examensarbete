@@ -140,7 +140,6 @@ export const addNewDoc = async (collectionName, newData) => {
         return docRef.id;
       }
     );
-    console.log(JSON.stringify(response), "response");
     return response;
   } catch (err) {
     console.log(err);
