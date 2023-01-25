@@ -122,6 +122,9 @@ export default function StartScreen({}: RootStackScreenProps<"Root">) {
           </View>
           <Tabbar />
           <Text style={styles.headlines}>Vänners aktivitet</Text>
+          {friendsReviews.length == 0 && (
+            <Text style={styles.text}>Du följer ingen än...</Text>
+          )}
           {friendsReviews.map((review) => {
             return (
               <ActivityCard
@@ -215,5 +218,8 @@ const styles = StyleSheet.create({
     height: 1,
     width: "60%",
     backgroundColor: "white",
+  },
+  text: {
+    marginLeft: 10,
   },
 });
