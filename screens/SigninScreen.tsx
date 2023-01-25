@@ -26,6 +26,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { currentReduxUser, setActiveUser } from "../redux/signin";
 import { LinearGradient } from "expo-linear-gradient";
 import { gradientDark, gradientLight } from "../constants/Colors";
+import { CommonActions } from "@react-navigation/native";
 
 export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
   const myUser = useSelector(currentReduxUser);
@@ -58,7 +59,12 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
         }
       );
       setcurrentUser(myUser.currentUser);
-      navigation.navigate("Root");
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 1,
+          routes: [{ name: "Root" }],
+        })
+      );
     } catch (error) {
       Haptics.NotificationFeedbackType.Error;
       Alert.alert("Felaktig email eller lösenord");
