@@ -370,7 +370,8 @@ export default function ProfileScreen({
       width: "100%",
     },
     top: {
-      marginRight: 10,
+      marginTop: 60,
+      marginRight: 20,
       marginBottom: 0,
       alignSelf: "flex-end",
     },
