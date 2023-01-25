@@ -36,6 +36,7 @@ import { PopUp } from "../components/PopUp";
 import { useIsFocused } from "@react-navigation/native";
 import { ActivityCard } from "../components/ActivityCard";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { CommonActions } from "@react-navigation/native";
 
 export default function ProfileScreen({
   navigation,
@@ -208,7 +209,12 @@ export default function ProfileScreen({
         dispatch(setSignOutState());
         setMyProfile(false);
         setModalVisible(false);
-        navigation.navigate("Signin");
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 1,
+            routes: [{ name: "Auth" }],
+          })
+        );
       })
       .catch((error: any) => {
         console.log(error);
