@@ -14,6 +14,7 @@ import { RootStackScreenProps } from "../types";
 import { useDispatch, useSelector } from "react-redux";
 import { currentReduxUser, setSignOutState } from "../redux/signin";
 import {
+  deleteDocById,
   getDocsWithSpecificValue,
   getOneDocById,
   updateSingleProperty,
@@ -35,6 +36,7 @@ import { PopUp } from "../components/PopUp";
 import { useIsFocused } from "@react-navigation/native";
 import { ActivityCard } from "../components/ActivityCard";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { CommonActions } from "@react-navigation/native";
 
 export default function ProfileScreen({
   navigation,
@@ -164,9 +166,8 @@ export default function ProfileScreen({
     }
   };
 
-  const deleteAccount = async () => {
+  const deleteAccount = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    const userToDelete = myUser;
     Alert.alert(
       "Är du säker på att du vill ta bort ditt konto?",
       "Du kan inte ångra dig!",
@@ -179,7 +180,7 @@ export default function ProfileScreen({
         {
           text: "Ja",
           onPress: () => {
-            deleteUser(userToDelete);
+            removeAccount();
             Alert.alert("Ditt konto har raderats");
             setModalVisible(false);
             navigation.navigate("Signin");
@@ -187,6 +188,17 @@ export default function ProfileScreen({
         },
       ]
     );
+  };
+
+  const removeAccount = async () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    try {
+      await deleteUser(user!);
+      await deleteDocById("users", user!.uid);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleSignOut = () => {
@@ -197,7 +209,12 @@ export default function ProfileScreen({
         dispatch(setSignOutState());
         setMyProfile(false);
         setModalVisible(false);
-        navigation.navigate("Signin");
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 1,
+            routes: [{ name: "Auth" }],
+          })
+        );
       })
       .catch((error: any) => {
         console.log(error);

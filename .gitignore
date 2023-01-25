@@ -30,3 +30,4 @@ dist/metadata.json
 dist/debug.html
 dist/bundles
 dist/assets
+firebase.ts
