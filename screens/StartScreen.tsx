@@ -28,10 +28,8 @@ export default function StartScreen({}: RootStackScreenProps<"Root">) {
 
   useEffect(() => {
     if (isFocused) {
-      console.log("focus");
       getMyFollowing();
       getLatestActivity();
-      // getFriendsReviews();
     }
   }, [isFocused]);
 
@@ -50,11 +48,10 @@ export default function StartScreen({}: RootStackScreenProps<"Root">) {
   const getFriendsReviews = async () => {
     try {
       let newData: Review[] = [];
-      console.log(myFollowingArray);
+
       myFollowingArray.map((id) => {
         getDocsWithSpecificValue("reviews", "userID", id)
           .then((data) => {
-            console.log(data?.length);
             if (data) {
               newData = data;
               let sorted = sortArray(newData);
