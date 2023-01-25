@@ -3,7 +3,6 @@ import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { StyleSheet, Image, View } from "react-native";
 import { Text } from "../components/Themed";
-import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 
 const Tabbar = () => {
@@ -115,7 +114,7 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   lightContainer: {
-    backgroundColor: "white",
+    backgroundColor: "#AE89E0",
   },
   darkContainer: {
     backgroundColor: "#3D3745",

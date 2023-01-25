@@ -518,7 +518,7 @@ export default function ProfileScreen({
               )}
             </View>
             {!myProfile && (
-              <View>
+              <View style={{ marginTop: 40 }}>
                 {!isAlreadyFollowing() ? (
                   <TouchableOpacity
                     style={styles.borderButtonFollow}
@@ -542,7 +542,12 @@ export default function ProfileScreen({
                       lightColor="#333"
                       style={styles.borderButtonText}
                     >
-                      Följer <AntDesign name="down" size={14} color="#333" />
+                      Följer
+                      <AntDesign
+                        name="down"
+                        size={14}
+                        color={isLight ? "black" : "white"}
+                      />
                     </Text>
                   </TouchableOpacity>
                 )}
