@@ -28,6 +28,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 
 interface ReviewWithAuthor extends Review {
   author: string;
+  authorProfilePic: string;
 }
 
 function ProductDetailScreen({
@@ -72,8 +73,12 @@ function ProductDetailScreen({
       );
       if (reviewsDocs) {
         for (let rev of reviewsDocs) {
-          let name = await getReviewAuthor(rev.userID);
-          newList.push({ ...rev, author: name } as ReviewWithAuthor);
+          let author = await getReviewAuthor(rev.userID);
+          newList.push({
+            ...rev,
+            author: author?.name,
+            authorProfilePic: author?.image,
+          });
         }
         setReviews(newList);
       }
@@ -86,8 +91,12 @@ function ProductDetailScreen({
     try {
       const user = await getOneDocById("users", id);
       if (user) {
-        let name = user?.displayName;
-        return name;
+        let author = {
+          name: user?.displayName,
+          image: user.photo,
+        };
+
+        return author;
       }
     } catch (err) {
       console.log(err);
@@ -254,7 +263,7 @@ function ProductDetailScreen({
                     }}
                   >
                     <Image
-                      source={{ uri: rev.photo }}
+                      source={{ uri: rev.authorProfilePic }}
                       style={{
                         height: 40,
                         width: 40,
