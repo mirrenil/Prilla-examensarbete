@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet, useColorScheme } from "react-native";
 import { Text, View } from "../components/Themed";
 import {
