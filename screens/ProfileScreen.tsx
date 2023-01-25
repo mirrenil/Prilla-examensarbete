@@ -14,6 +14,7 @@ import { RootStackScreenProps } from "../types";
 import { useDispatch, useSelector } from "react-redux";
 import { currentReduxUser, setSignOutState } from "../redux/signin";
 import {
+  deleteDocById,
   getDocsWithSpecificValue,
   getOneDocById,
   updateSingleProperty,
@@ -164,9 +165,8 @@ export default function ProfileScreen({
     }
   };
 
-  const deleteAccount = async () => {
+  const deleteAccount = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    const userToDelete = myUser;
     Alert.alert(
       "Är du säker på att du vill ta bort ditt konto?",
       "Du kan inte ångra dig!",
@@ -179,7 +179,7 @@ export default function ProfileScreen({
         {
           text: "Ja",
           onPress: () => {
-            deleteUser(userToDelete);
+            removeAccount();
             Alert.alert("Ditt konto har raderats");
             setModalVisible(false);
             navigation.navigate("Signin");
@@ -187,6 +187,17 @@ export default function ProfileScreen({
         },
       ]
     );
+  };
+
+  const removeAccount = async () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    try {
+      await deleteUser(user!);
+      await deleteDocById("users", user!.uid);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleSignOut = () => {
