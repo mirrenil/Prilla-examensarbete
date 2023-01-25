@@ -64,7 +64,7 @@ function HomeStackNavigator() {
       }}
     >
       <HomeStack.Screen
-        name="Root"
+        name="Home"
         component={StartScreen}
         options={{ headerShown: false }}
       />
@@ -203,11 +203,6 @@ function ProfileStackScreen() {
         component={NotFoundScreen}
         options={{ title: "Hoppsan! Denna sida finns inte!" }}
       />
-      <ProfileStack.Screen
-        name="Signin"
-        component={SigninScreen}
-        options={{ headerShown: false }}
-      />
     </ProfileStack.Navigator>
   );
 }
@@ -218,7 +213,7 @@ function AuthStackNavigator() {
   const colorScheme = useColorScheme();
   return (
     <AuthStack.Navigator
-      initialRouteName="Auth"
+      initialRouteName="Loading"
       screenOptions={{
         headerStyle: {
           backgroundColor: Colors[colorScheme].menu,
@@ -246,11 +241,6 @@ function AuthStackNavigator() {
         component={ForgotPasswordScreen}
         options={{ headerShown: false }}
       />
-      <AuthStack.Screen
-        name="Root"
-        component={BottomTabNavigator}
-        options={{ headerShown: false }}
-      />
     </AuthStack.Navigator>
   );
 }
@@ -270,21 +260,19 @@ function RootNavigator() {
         headerTintColor: Colors[colorScheme].text,
       }}
     >
-      {currentUser.displayName === "" ? (
-        <RootStack.Screen
-          name="Auth"
-          component={AuthStackNavigator}
-          options={{ headerShown: false }}
-        />
-      ) : (
-        <RootStack.Screen
-          name="Root"
-          component={BottomTabNavigator}
-          options={{
-            headerShown: false,
-          }}
-        />
-      )}
+      <RootStack.Screen
+        name="Auth"
+        component={AuthStackNavigator}
+        options={{ headerShown: false }}
+      />
+
+      <RootStack.Screen
+        name="Root"
+        component={BottomTabNavigator}
+        options={{
+          headerShown: false,
+        }}
+      />
     </RootStack.Navigator>
   );
 }

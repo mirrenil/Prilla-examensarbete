@@ -27,24 +27,17 @@ const TrendingScreen = ({ navigation }: RootStackScreenProps<"Trending">) => {
   const getProductData = async () => {
     try {
       let data = await getAllDocsInCollection("products");
-      filterByRating(data);
+
+      sortProducts(data);
     } catch (err) {
       console.log(err);
     }
   };
-  // filter the procucts by highest rating
-  const filterByRating = (data: any) => {
-    let filteredList = data.filter((p: Product) => p.reviews.length >= 3);
-    sortProducts(filteredList);
-  };
-
-  const sortProducts = (filteredList: any) => {
-    let mostRev: Product[] = [];
-    let sorted = filteredList.sort((p: Product) => p.reviews.length >= 4);
-    const backwards = sorted.reverse();
-    for (let i = 0; i < 5; i++) {
-      mostRev.push(backwards[i]);
-    }
+  const sortProducts = (products: any) => {
+    let sorted = products.sort((a: Product, b: Product) => {
+      return b.reviews.length - a.reviews.length;
+    });
+    let mostRev = sorted.splice(0, 5);
     setProducts(mostRev);
   };
 

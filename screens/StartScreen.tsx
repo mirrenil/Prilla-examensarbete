@@ -17,7 +17,7 @@ import { useSelector } from "react-redux";
 import { currentReduxUser } from "../redux/signin";
 import LoadingSpinner from "../components/LoadingSpinner";
 
-export default function StartScreen({}: RootStackScreenProps<"Root">) {
+export default function StartScreen({}: RootStackScreenProps<"Home">) {
   const myUser = useSelector(currentReduxUser);
   const [friendsReviews, setFriendsReviews] = useState<Review[]>([]);
   const [latestReviews, setLatestReviews] = useState<Review[]>([]);

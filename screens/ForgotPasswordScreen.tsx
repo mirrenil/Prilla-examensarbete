@@ -54,7 +54,7 @@ function ForgotPasswordScreen({
         initialValues={{ email: "" }}
         onSubmit={(values) => {}}
         validationSchema={yup.object().shape({
-          email: yup.string().email().required("Please, provide an email!"),
+          email: yup.string().email().required("Ange din email adress"),
         })}
       >
         {({ values, errors, touched, handleChange, handleBlur }) => {
@@ -72,7 +72,7 @@ function ForgotPasswordScreen({
                 lightColor="#fff"
                 darkColor="#413C48"
                 style={styles.input}
-                placeholder="Email"
+                placeholder="Email adress"
                 value={email}
                 onChangeText={handleChange("email")}
                 autoCapitalize="none"
