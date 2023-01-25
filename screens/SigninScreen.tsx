@@ -58,7 +58,7 @@ export default function Signin({ navigation }: RootStackScreenProps<"Signin">) {
         }
       );
       setcurrentUser(myUser.currentUser);
-      navigation.navigate("Root", { screen: "Home" });
+      navigation.navigate("Root");
     } catch (error) {
       Haptics.NotificationFeedbackType.Error;
       Alert.alert("Felaktig email eller lösenord");
