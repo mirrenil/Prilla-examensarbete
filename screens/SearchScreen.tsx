@@ -151,10 +151,15 @@ export default function SearchScreen({
                       style={styles.userInfo}
                     >
                       <Image
+                        key={user.id}
                         source={{ uri: user.photo }}
                         style={styles.profilePic}
                       />
-                      <Text lightColor="#333" style={styles.username}>
+                      <Text
+                        key={user.id}
+                        lightColor="#333"
+                        style={styles.username}
+                      >
                         {user.displayName}
                       </Text>
                     </TouchableOpacity>
@@ -171,7 +176,7 @@ export default function SearchScreen({
               <View>
                 {filteredProducts.length ? (
                   filteredProducts.map((product) => {
-                    return <ProductCard product={product} />;
+                    return <ProductCard key={product.id} product={product} />;
                   })
                 ) : (
                   <Text style={{ alignSelf: "center" }}>
