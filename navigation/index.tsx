@@ -73,6 +73,16 @@ function HomeStackNavigator() {
         component={ProductDetailScreen}
         options={{ title: "Produkt detaljer" }}
       />
+      <HomeStack.Screen
+        options={{ title: "Trendande sorter" }}
+        name="Trending"
+        component={TrendingScreen}
+      />
+      <HomeStack.Screen
+        options={{ title: "Toppbetyg" }}
+        name="TopRating"
+        component={TopRatingsScreen}
+      />
       <HomeStack.Group screenOptions={{ presentation: "modal" }}>
         <HomeStack.Screen
           options={{ title: "Lämna recension" }}
@@ -83,16 +93,6 @@ function HomeStackNavigator() {
           options={{ title: "Lämna kommentar" }}
           name="Comment"
           component={CommentModal}
-        />
-        <HomeStack.Screen
-          options={{ title: "Trendande sorter" }}
-          name="Trending"
-          component={TrendingScreen}
-        />
-        <HomeStack.Screen
-          options={{ title: "Toppbetyg" }}
-          name="TopRating"
-          component={TopRatingsScreen}
         />
       </HomeStack.Group>
       <HomeStack.Screen
