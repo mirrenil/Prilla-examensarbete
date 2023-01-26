@@ -73,7 +73,6 @@ export default function ProfileScreen({
       getMyFollowing();
       getReviews();
       getLiked();
-      deleteUserData();
     }
   }, [isFocused]);
 
@@ -602,21 +601,14 @@ export default function ProfileScreen({
           </View>
 
           <View style={styles.favorites}>
-            {myProfile ? (
-              <View style={styles.box}>
-                <Text lightColor="#333" darkColor="#fff" style={styles.text}>
-                  Mina favoriter
-                  <AntDesign name="right" size={16} color="white" />
-                </Text>
-              </View>
-            ) : (
-              <View style={styles.box}>
-                <Text lightColor="#333" darkColor="#fff" style={styles.text}>
-                  {user.displayName}'s favoriter
-                  <AntDesign name="right" size={16} color="white" />
-                </Text>
-              </View>
-            )}
+            <View style={styles.box}>
+              <Text lightColor="#333" darkColor="#fff" style={styles.text}>
+                {myProfile
+                  ? "Mina favoriter"
+                  : user.displayName + "s favoriter"}
+                <AntDesign name="right" size={16} color="white" />
+              </Text>
+            </View>
             <View style={{ flexDirection: "row" }}>
               <ScrollView horizontal style={styles.favoritesScroll}>
                 <View style={styles.row}>
@@ -646,21 +638,14 @@ export default function ProfileScreen({
               />
             </View>
             <View style={styles.activities}>
-              {myProfile ? (
-                <View style={styles.box}>
-                  <Text lightColor="#333" darkColor="#fff" style={styles.text}>
-                    Mina aktiviteter
-                    <AntDesign name="right" size={16} color="white" />
-                  </Text>
-                </View>
-              ) : (
-                <View style={styles.box}>
-                  <Text lightColor="#333" darkColor="#fff" style={styles.text}>
-                    {user.displayName}'s aktiviteter
-                    <AntDesign name="right" size={16} color="white" />
-                  </Text>
-                </View>
-              )}
+              <View style={styles.box}>
+                <Text lightColor="#333" darkColor="#fff" style={styles.text}>
+                  {myProfile
+                    ? "Mina aktiviteter"
+                    : user.displayName + "s favoriter"}
+                  <AntDesign name="right" size={16} color="white" />
+                </Text>
+              </View>
             </View>
           </View>
           {reviews.map((review: Review) => {
