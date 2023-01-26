@@ -6,7 +6,7 @@ export interface Review {
   rating: number;
   tags: Tag[];
   userID: string;
-  comments?: ReviewComment[];
+  comments?: string[];
   likes: string[];
   id: string;
 }
@@ -46,6 +46,8 @@ export interface Product {
 export interface ReviewComment {
   authorID: string;
   text: string;
+  reviewID: string;
+  id?: string;
 }
 
 export interface CommentWithUsername {
