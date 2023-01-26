@@ -1,4 +1,3 @@
-import * as WebBrowser from "expo-web-browser";
 import React, { useEffect, useState } from "react";
 import {
   Alert,
@@ -128,7 +127,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
 
           <Text style={styles.policyTitle}>Integritetspolicy</Text>
 
-          <ScrollView style={styles.policyTextWrapper}>
+          <ScrollView>
             <Text style={styles.policyText}>
               Integritetspolicy Behandling av personuppgfter på Prilla. För
               Prilla är personlig integritet viktigt. Vi eftersträvar en hög
@@ -281,6 +280,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
                       innerIconStyle={{ borderWidth: 2 }}
                       textStyle={{
                         textDecorationLine: "none",
+                        color: "white",
                       }}
                       onPress={() => {
                         setOldEnough(!oldEnough);
@@ -296,7 +296,9 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
                       innerIconStyle={{ borderWidth: 2 }}
                       textStyle={{
                         textDecorationLine: "none",
+                        color: "white",
                       }}
+                      textContainerStyle={{ width: "90%" }}
                       onPress={() => {
                         setIsAgreeOnPolicy(!isAgreeOnPolicy);
                       }}
@@ -314,20 +316,21 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
                       </Text>
                     </TouchableOpacity>
                   </View>
-
-                  <TouchableOpacity
-                    onPress={() => {
-                      isValid();
-                      Haptics.ImpactFeedbackStyle.Light;
-                    }}
-                    disabled={buttonDisabled}
-                    style={[
-                      styles.button,
-                      buttonDisabled ? styles.disabled : null,
-                    ]}
-                  >
-                    <Text style={styles.buttonText}>Registrera dig</Text>
-                  </TouchableOpacity>
+                  <View style={styles.buttonAlign}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        isValid();
+                        Haptics.ImpactFeedbackStyle.Light;
+                      }}
+                      disabled={buttonDisabled}
+                      style={[
+                        styles.button,
+                        buttonDisabled ? styles.disabled : null,
+                      ]}
+                    >
+                      <Text style={styles.buttonText}>Registrera dig</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </TouchableWithoutFeedback>
             </KeyboardAvoidingView>
@@ -356,10 +359,6 @@ const styles = StyleSheet.create({
     top: 0,
     right: 0,
     padding: 10,
-  },
-  policyTextWrapper: {
-    // width: "80%",
-    // height: "80%",
   },
   policyTitle: {
     color: "black",
@@ -437,9 +436,10 @@ const styles = StyleSheet.create({
   },
   bouncyCheckBox: {
     flexDirection: "column",
-    // alignItems: "center",
     marginBottom: 10,
     width: "100%",
-    // backgroundColor: "red",
+  },
+  buttonAlign: {
+    marginLeft: 35,
   },
 });
