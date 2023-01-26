@@ -25,6 +25,7 @@ export default function StartScreen({}: RootStackScreenProps<"Home">) {
   const colorScheme: any = useColorScheme();
   let isLight = colorScheme == "light" ? true : false;
   const isFocused = useIsFocused();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (isFocused) {
@@ -80,6 +81,7 @@ export default function StartScreen({}: RootStackScreenProps<"Home">) {
       data = sortArray(data);
       data = data?.splice(0, 5);
       setLatestReviews(data as Review[]);
+      setIsLoading(false);
     } catch (err) {
       console.log(err);
     }
@@ -89,7 +91,7 @@ export default function StartScreen({}: RootStackScreenProps<"Home">) {
     return myFollowingArray.some((id) => id == review.userID);
   };
 
-  if (friendsReviews) {
+  if (!isLoading) {
     return (
       <LinearGradient
         colors={

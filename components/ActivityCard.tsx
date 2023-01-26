@@ -7,10 +7,20 @@ import {
   useColorScheme,
   View,
 } from "react-native";
-import { CommentWithUsername, Review, User } from "../Interfaces";
+import {
+  CommentWithUsername,
+  Review,
+  ReviewComment,
+  User,
+} from "../Interfaces";
 import { ReviewCard } from "./ReviewCard";
 import React, { useEffect, useState } from "react";
-import { deleteDocById, getOneDocById, updateSingleProperty } from "../helper";
+import {
+  deleteDocById,
+  getDocsWithSpecificValue,
+  getOneDocById,
+  updateSingleProperty,
+} from "../helper";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import {
@@ -58,23 +68,30 @@ export const ActivityCard = ({ review, updateReviews }: Props) => {
   };
 
   const getCommentsData = async () => {
-    if (review?.comments?.length) {
-      try {
+    try {
+      let comments = await getDocsWithSpecificValue(
+        "comments",
+        "reviewID",
+        review.id
+      );
+      if (comments?.length) {
+        let latestComment = comments.length - 1;
         let user = await getOneDocById(
           "users",
-          review.comments[review.comments.length - 1].authorID
+          comments[latestComment].authorID
         );
+
         if (user) {
           setComment({
             author: user.displayName,
             image: user.photo,
-            text: review.comments[0].text,
+            text: comments[latestComment].text,
             id: user.id,
           });
         }
-      } catch (err) {
-        console.log(err);
       }
+    } catch (err) {
+      console.log(err);
     }
   };
 

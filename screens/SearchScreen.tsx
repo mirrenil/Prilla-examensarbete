@@ -149,17 +149,13 @@ export default function SearchScreen({
                         navigation.navigate("Profile", { id: user.id });
                       }}
                       style={styles.userInfo}
+                      key={user.id}
                     >
                       <Image
-                        key={user.id}
                         source={{ uri: user.photo }}
                         style={styles.profilePic}
                       />
-                      <Text
-                        key={user.id}
-                        lightColor="#333"
-                        style={styles.username}
-                      >
+                      <Text lightColor="#333" style={styles.username}>
                         {user.displayName}
                       </Text>
                     </TouchableOpacity>
