@@ -8,7 +8,7 @@ import {
   useColorScheme,
 } from "react-native";
 import { Review } from "../Interfaces";
-import { getOneDocById, updateSingleProperty } from "../helper";
+import { addNewDoc, getOneDocById, updateSingleProperty } from "../helper";
 import { RootStackScreenProps } from "../types";
 import {
   TouchableOpacity,
@@ -72,64 +72,60 @@ export const CommentModal = ({ route }: RootStackScreenProps<"Comment">) => {
     }
   };
 
-  const getCommentAuthor = async (id: string) => {
-    try {
-      let user = await getOneDocById("users", id);
-      return user;
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   const getCommentData = async () => {
-    if (review?.comments?.length) {
-      let commentsArray: CommentWithUsername[] = [];
-      for (let i = 0; i < review?.comments.length; i++) {
-        try {
-          let user = await getCommentAuthor(review?.comments[i].authorID);
-          if (user) {
+    let commentsArray: CommentWithUsername[] = [];
+    if (review?.comments) {
+      await Promise.all(
+        review?.comments.map(async (id) => {
+          await getOneDocById("comments", id).then(async (comment) => {
+            let user = await getOneDocById("users", comment?.authorID);
             commentsArray.push({
-              author: user.displayName,
-              image: user.photo,
-              text: review?.comments[i].text,
-              id: user.id,
+              author: user?.displayName,
+              image: user?.photo,
+              text: comment?.text,
+              id: comment?.id,
             });
-          }
-        } catch (err) {
-          console.log(err);
-        }
-      }
-      setComments(commentsArray);
+          });
+        })
+      );
     }
+    setComments(commentsArray);
   };
 
   const handleSubmit = async () => {
-    let newObj = {};
+    let updatedComments: string[] = [];
+    if (review?.comments) {
+      updatedComments = review?.comments;
+    }
+
     let newData: ReviewComment = {
       authorID: myUser.id,
       text: input!,
+      reviewID: review!.id,
     };
-    if (review?.comments) {
-      newObj = { comments: [...review.comments, newData] };
-    } else {
-      newObj = { comments: [newData] };
-    }
     try {
-      await updateSingleProperty("reviews", route.params.id, newObj);
+      await addNewDoc("comments", newData).then((commentId) => {
+        if (commentId) {
+          updatedComments?.push(commentId);
+        }
+        updateSingleProperty("reviews", review?.id, {
+          comments: updatedComments,
+        });
+        setComments([
+          ...comments,
+          {
+            author: myUser.displayName,
+            image: myUser.photo,
+            text: input!,
+            id: commentId!,
+          },
+        ]);
+        setInput("");
+        getReview();
+      });
     } catch (err) {
       console.log(err);
     }
-    setComments([
-      ...comments,
-      {
-        author: myUser.displayName,
-        image: myUser.photo,
-        text: input!,
-        id: myUser.id,
-      },
-    ]);
-    setInput("");
-    getReview();
   };
 
   const styles = StyleSheet.create({
