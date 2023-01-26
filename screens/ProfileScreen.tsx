@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { currentReduxUser, setSignOutState } from "../redux/signin";
 import {
   deleteDocById,
+  getAllDocsInCollection,
   getDocsWithSpecificValue,
   getOneDocById,
   updateSingleProperty,
@@ -72,6 +73,7 @@ export default function ProfileScreen({
       getMyFollowing();
       getReviews();
       getLiked();
+      deleteUserData();
     }
   }, [isFocused]);
 
@@ -166,7 +168,7 @@ export default function ProfileScreen({
     }
   };
 
-  const deleteAccount = () => {
+  const handleDeleteAccount = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     Alert.alert(
       "Är du säker på att du vill ta bort ditt konto?",
@@ -180,22 +182,43 @@ export default function ProfileScreen({
         {
           text: "Ja",
           onPress: () => {
-            removeAccount();
+            deleteAccount();
             Alert.alert("Ditt konto har raderats");
             setModalVisible(false);
-            navigation.navigate("Signin");
+            resetNavigationAndGoToStart();
           },
         },
       ]
     );
   };
 
-  const removeAccount = async () => {
+  const deleteAccount = async () => {
     const auth = getAuth();
     const user = auth.currentUser;
     try {
       await deleteUser(user!);
       await deleteDocById("users", user!.uid);
+      deleteUserData();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const deleteUserData = async () => {
+    try {
+      reviews.map((review) => {
+        deleteDocById("reviews", review.id);
+      });
+
+      let comments = await getDocsWithSpecificValue(
+        "comments",
+        "authorID",
+        myUser.id
+      );
+
+      comments?.map((comment) => {
+        deleteDocById("comments", comment.id);
+      });
     } catch (err) {
       console.log(err);
     }
@@ -209,12 +232,7 @@ export default function ProfileScreen({
         dispatch(setSignOutState());
         setMyProfile(false);
         setModalVisible(false);
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 1,
-            routes: [{ name: "Auth" }],
-          })
-        );
+        resetNavigationAndGoToStart();
       })
       .catch((error: any) => {
         console.log(error);
@@ -226,6 +244,7 @@ export default function ProfileScreen({
     let newList: Liked[] = [];
     try {
       const user = await getOneDocById("users", route.params?.id);
+
       await Promise.all(
         user?.liked.map(async (id: string) => {
           let product = await fetchLikedProducts(id);
@@ -269,6 +288,15 @@ export default function ProfileScreen({
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const resetNavigationAndGoToStart = () => {
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 1,
+        routes: [{ name: "Auth" }],
+      })
+    );
   };
 
   const styles = StyleSheet.create({
@@ -687,7 +715,7 @@ export default function ProfileScreen({
                       <Text
                         lightColor="#333"
                         darkColor="#fff"
-                        onPress={() => deleteAccount()}
+                        onPress={() => handleDeleteAccount()}
                       >
                         Vill du radera ditt konto?
                       </Text>
