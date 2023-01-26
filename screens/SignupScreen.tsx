@@ -1,4 +1,3 @@
-import * as WebBrowser from "expo-web-browser";
 import React, { useEffect, useState } from "react";
 import {
   Alert,
@@ -8,6 +7,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   useColorScheme,
+  ScrollView,
 } from "react-native";
 import { Text, View, TextInput } from "../components/Themed";
 import { Formik } from "formik";
@@ -20,17 +20,44 @@ import * as Haptics from "expo-haptics";
 import { LinearGradient } from "expo-linear-gradient";
 import { gradientDark, gradientLight } from "../constants/Colors";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import { AntDesign } from "@expo/vector-icons";
 
 let inputHeight = 20;
 
 export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
   const [oldEnough, setOldEnough] = useState<boolean>(false);
+  const [isAgreeOnPolicy, setIsAgreeOnPolicy] = useState<boolean>(false);
+  const [policyOpen, setPolicyOpen] = useState<boolean>(false);
+  const [buttonDisabled, setButtonIsDisabled] = useState<boolean>(true);
+
   const [user, setUser] = useState({
     email: "",
     displayName: "",
     password: "",
     passwordConfirmation: "",
   });
+
+  useEffect(() => {
+    if (
+      user.displayName !== "" &&
+      user.email !== "" &&
+      user.password !== "" &&
+      user.passwordConfirmation !== "" &&
+      isAgreeOnPolicy &&
+      oldEnough
+    ) {
+      setButtonIsDisabled(false);
+    } else {
+      setButtonIsDisabled(true);
+    }
+  }, [
+    user.displayName,
+    user.email,
+    user.password,
+    user.passwordConfirmation,
+    isAgreeOnPolicy,
+    oldEnough,
+  ]);
 
   const colorScheme: any = useColorScheme();
   let isLight = colorScheme == "light" ? true : false;
@@ -89,6 +116,56 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
       }
       style={styles.screen}
     >
+      {policyOpen && (
+        <View style={styles.policyWrapper}>
+          <TouchableOpacity
+            onPress={() => setPolicyOpen(false)}
+            style={styles.policyCloseIcon}
+          >
+            <AntDesign name="close" size={24} color="black" />
+          </TouchableOpacity>
+
+          <Text style={styles.policyTitle}>Integritetspolicy</Text>
+
+          <ScrollView>
+            <Text style={styles.policyText}>
+              Integritetspolicy Behandling av personuppgfter på Prilla. För
+              Prilla är personlig integritet viktigt. Vi eftersträvar en hög
+              nivå av dataskydd. I denna policy förklarar vi hur vi samlar in
+              och använder personuppgifter. Vi beskriver också dina rättigheter
+              och hur du kan göra dem gällande. Du är alltid välkommen att
+              kontakta oss om du har frågor om hur vi behandlar dina
+              personuppgifter. Kontaktuppgifter står sist i denna text. Vad är
+              en personuppgift och vad är en behandling av personuppgifter?
+              Personuppgifter är alla uppgifter om en levande fysisk person som
+              direkt eller indirekt kan kopplas till den personen. Det handlar
+              inte bara om namn och personnummer utan även om till exempel
+              bilder och e-postadresser. Behandling av personuppgifter är allt
+              som sker med personuppgifterna i IT-systemen, oavsett om det
+              handlar om mobila enheter eller datorer. Det handlar om till
+              exempel insamling, registrering, strukturering, lagring,
+              bearbetning och överföring. I vissa fall kan även manuella
+              register omfattas. Personuppgiftsansvarig För de behandlingar som
+              sker inom Prillas verksamhet är Prilla personuppgiftsansvarig.
+              Vilka personuppgifter samlar vi in om dig och varför? Vi behandlar
+              i huvudsak din email och bilder. Hur länge sparar vi dina
+              personuppgifter? Vi sparar aldrig dina personuppgifter längre än
+              vad som är nödvändigt för respektive ändamål. Vad är dina
+              rättigheter som registrerad? Som registrerad har du enligt
+              gällande lagstiftning ett antal rättigheter. Du har rätt till att
+              få ett utdrag som visar vilka personuppgifter vi har registrerade
+              om dig. Du kan begära rättelse av felaktiga uppgifter. Kontakta
+              oss vid frågor om hur vi behandlar personuppgifter. Om du har
+              frågor om hur vi behandlar personuppgifter kontakta n.n. som är
+              ansvarig för personuppgiftsfrågor. Vi kan komma att göra ändringar
+              i vår integritetspolicy. Den senaste versionen av
+              integritetspolicyn finns alltid här i applikationen
+              info@prilla.com
+            </Text>
+          </ScrollView>
+        </View>
+      )}
+
       <Text style={styles.title}>Prilla</Text>
       <Text style={styles.slogan}>GOTTA SNUS THEM ALL</Text>
       <View
@@ -127,7 +204,12 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
           return (
             <KeyboardAvoidingView>
               <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <View>
+                <View
+                  style={{
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
                   <View style={styles.inputWrapperIos}>
                     {touched.displayName && errors.displayName && (
                       <Text style={styles.error}>{errors.displayName}</Text>
@@ -194,6 +276,7 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
                   </View>
                   <View style={styles.bouncyCheckBox}>
                     <BouncyCheckbox
+                      style={{ margin: 10 }}
                       size={25}
                       fillColor="green"
                       unfillColor="transparent"
@@ -202,26 +285,52 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
                       innerIconStyle={{ borderWidth: 2 }}
                       textStyle={{
                         textDecorationLine: "none",
+                        color: "white",
                       }}
                       onPress={() => {
-                        setOldEnough(true);
+                        setOldEnough(!oldEnough);
                       }}
                     />
+                    <BouncyCheckbox
+                      style={{ margin: 10 }}
+                      size={25}
+                      fillColor="green"
+                      unfillColor="transparent"
+                      text="Jag godkänner att mina uppgifter behandlas efter Prillas integritetspolicy."
+                      iconStyle={{ borderColor: "green" }}
+                      innerIconStyle={{ borderWidth: 2 }}
+                      textStyle={{
+                        textDecorationLine: "none",
+                        color: "white",
+                      }}
+                      textContainerStyle={{ width: "90%" }}
+                      onPress={() => {
+                        setIsAgreeOnPolicy(!isAgreeOnPolicy);
+                      }}
+                    />
+                    <TouchableOpacity onPress={() => setPolicyOpen(true)}>
+                      <Text
+                        style={{
+                          width: "100%",
+                          textAlign: "center",
+                          color: "white",
+                          textDecorationLine: "underline",
+                        }}
+                      >
+                        Integritetspolicy
+                      </Text>
+                    </TouchableOpacity>
                   </View>
-
                   <TouchableOpacity
-                    style={styles.button}
                     onPress={() => {
                       isValid();
                       Haptics.ImpactFeedbackStyle.Light;
                     }}
-                    disabled={
-                      !values.email &&
-                      !values.displayName &&
-                      !values.password &&
-                      !values.passwordConfirmation &&
-                      !oldEnough
-                    }
+                    disabled={buttonDisabled}
+                    style={[
+                      styles.button,
+                      buttonDisabled ? styles.disabled : null,
+                    ]}
                   >
                     <Text style={styles.buttonText}>Registrera dig</Text>
                   </TouchableOpacity>
@@ -236,6 +345,33 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
 }
 
 const styles = StyleSheet.create({
+  policyWrapper: {
+    position: "absolute",
+    zIndex: 100,
+    width: "80%",
+    height: 400,
+    backgroundColor: "white",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 30,
+    borderRadius: 6,
+  },
+  policyCloseIcon: {
+    alignSelf: "flex-end",
+    position: "absolute",
+    top: 0,
+    right: 0,
+    padding: 10,
+  },
+  policyTitle: {
+    color: "black",
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  policyText: {
+    color: "black",
+  },
   screen: {
     alignItems: "center",
     justifyContent: "center",
@@ -257,6 +393,9 @@ const styles = StyleSheet.create({
     width: 300,
     height: 50,
     marginTop: 10,
+  },
+  disabled: {
+    backgroundColor: "grey",
   },
   buttonText: {
     color: "#201A28",
@@ -300,8 +439,7 @@ const styles = StyleSheet.create({
   },
   bouncyCheckBox: {
     flexDirection: "column",
-    alignItems: "center",
-    alignContent: "center",
     marginBottom: 10,
+    width: "90%",
   },
 });
