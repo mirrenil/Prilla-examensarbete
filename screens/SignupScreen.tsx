@@ -204,7 +204,12 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
           return (
             <KeyboardAvoidingView>
               <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <View style={{ padding: 35 }}>
+                <View
+                  style={{
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
                   <View style={styles.inputWrapperIos}>
                     {touched.displayName && errors.displayName && (
                       <Text style={styles.error}>{errors.displayName}</Text>
@@ -316,21 +321,19 @@ export default function Signup({ navigation }: RootStackScreenProps<"Signup">) {
                       </Text>
                     </TouchableOpacity>
                   </View>
-                  <View style={styles.buttonAlign}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        isValid();
-                        Haptics.ImpactFeedbackStyle.Light;
-                      }}
-                      disabled={buttonDisabled}
-                      style={[
-                        styles.button,
-                        buttonDisabled ? styles.disabled : null,
-                      ]}
-                    >
-                      <Text style={styles.buttonText}>Registrera dig</Text>
-                    </TouchableOpacity>
-                  </View>
+                  <TouchableOpacity
+                    onPress={() => {
+                      isValid();
+                      Haptics.ImpactFeedbackStyle.Light;
+                    }}
+                    disabled={buttonDisabled}
+                    style={[
+                      styles.button,
+                      buttonDisabled ? styles.disabled : null,
+                    ]}
+                  >
+                    <Text style={styles.buttonText}>Registrera dig</Text>
+                  </TouchableOpacity>
                 </View>
               </TouchableWithoutFeedback>
             </KeyboardAvoidingView>
@@ -437,9 +440,6 @@ const styles = StyleSheet.create({
   bouncyCheckBox: {
     flexDirection: "column",
     marginBottom: 10,
-    width: "100%",
-  },
-  buttonAlign: {
-    marginLeft: 35,
+    width: "90%",
   },
 });
