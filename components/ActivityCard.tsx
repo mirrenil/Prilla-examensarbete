@@ -75,17 +75,12 @@ export const ActivityCard = ({ review, updateReviews }: Props) => {
         review.id
       );
       if (comments?.length) {
-        let latestComment = comments.length - 1;
-        let user = await getOneDocById(
-          "users",
-          comments[latestComment].authorID
-        );
-
+        let user = await getOneDocById("users", comments[0].authorID);
         if (user) {
           setComment({
             author: user.displayName,
             image: user.photo,
-            text: comments[latestComment].text,
+            text: comments[0].text,
             id: user.id,
           });
         }
